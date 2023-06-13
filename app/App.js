@@ -11,6 +11,7 @@ const App = () => {
 				style={styles.input}
 				onChangeText={onChangeText}
 				value={text}
+				testID="inputText"
 			/>
 			<TextInput
 				style={styles.input}
@@ -18,6 +19,7 @@ const App = () => {
 				value={number}
 				placeholder="Please Input"
 				keyboardType="numeric"
+				testID="inputNumber"
 			/>
 		</SafeAreaView>
 	);
