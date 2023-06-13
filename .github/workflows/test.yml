@@ -11,17 +11,21 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
+      - name: 🏗 Checkout repository
         uses: actions/checkout@v3
-      - name: Setup node
+
+      - name: 🏗 Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: "16"
-      - name: Install dependencies
+          node-version: 18.x
+          cache: npm
+
+      - name: 📦 Install dependencies
         run: |
           cd ./app/
           npm install
-      - name: Run test
+
+      - name: 🚀 Run test
         run: |
           cd ./app/
           npm test
