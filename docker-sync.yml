@@ -1,0 +1,5 @@
+---
+version: "3.9"
+syncs:
+  nmis-mobile-docker-sync:
+    src: "./app/node_modules"
