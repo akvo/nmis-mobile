@@ -11,10 +11,10 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: 🏗 Checkout repository
+      - name: 🏗  Checkout repository
         uses: actions/checkout@v3
 
-      - name: 🏗 Setup node
+      - name: 🏗  Setup node
         uses: actions/setup-node@v3
         with:
           node-version: 18.x
@@ -23,10 +23,16 @@ jobs:
         run: |
           cd ./app/
           npm install
-          make test-coverage
 
-      - name: 🚀 Run test
-        uses: coverallsapp/github-action@v2
+      - name: 📦 Run Test
         run: |
           cd ./app/
           npm run test-ci
+
+      - name: 🚀 Send Coveralls
+        uses: coverallsapp/github-action@v2
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN}}
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: ./app/coverage/lcov.info
