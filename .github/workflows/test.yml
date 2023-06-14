@@ -1,0 +1,30 @@
+name: Test
+on:
+  push:
+    brances:
+      - main
+      - feature*
+  pull_request:
+    branches:
+      - main
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🏗 Checkout repository
+        uses: actions/checkout@v3
+
+      - name: 🏗 Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+
+      - name: 📦 Install dependencies
+        run: |
+          cd ./app/
+          npm install
+
+      - name: 🚀 Run test
+        run: |
+          cd ./app/
+          npm test
