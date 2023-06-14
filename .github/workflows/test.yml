@@ -23,8 +23,10 @@ jobs:
         run: |
           cd ./app/
           npm install
+          make test-coverage
 
       - name: 🚀 Run test
+        uses: coverallsapp/github-action@v2
         run: |
           cd ./app/
-          npm test-ci
+          npm run test-ci
