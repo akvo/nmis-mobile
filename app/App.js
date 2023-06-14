@@ -1,37 +1,26 @@
-import React from "react";
-import { SafeAreaView, StyleSheet, TextInput } from "react-native";
+import React from 'react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { StartScreen, AuthFormScreen, HomeScreen } from './src/pages';
+const Stack = createNativeStackNavigator();
 
 const App = () => {
-	const [text, onChangeText] = React.useState("Testing");
-	const [number, onChangeNumber] = React.useState("");
-
-	return (
-		<SafeAreaView>
-			<TextInput
-				style={styles.input}
-				onChangeText={onChangeText}
-				value={text}
-				testID="inputText"
-			/>
-			<TextInput
-				style={styles.input}
-				onChangeText={onChangeNumber}
-				value={number}
-				placeholder="Please Input"
-				keyboardType="numeric"
-				testID="inputNumber"
-			/>
-		</SafeAreaView>
-	);
+  return (
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <Stack.Navigator
+          screenOptions={{
+            headerShown: false,
+          }}
+        >
+          <Stack.Screen name="Start" component={StartScreen} />
+          <Stack.Screen name="AuthForm" component={AuthFormScreen} />
+          <Stack.Screen name="Home" component={HomeScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </SafeAreaProvider>
+  );
 };
-
-const styles = StyleSheet.create({
-	input: {
-		height: 40,
-		margin: 12,
-		borderWidth: 1,
-		padding: 10,
-	},
-});
 
 export default App;
