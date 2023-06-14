@@ -27,4 +27,4 @@ jobs:
       - name: 🚀 Run test
         run: |
           cd ./app/
-          npm test
+          npm test-ci
