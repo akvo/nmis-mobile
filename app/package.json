@@ -7,7 +7,8 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "prettier": "prettier --check ."
   },
   "dependencies": {
     "expo": "~48.0.18",
