@@ -24,10 +24,15 @@ jobs:
           cd ./app/
           npm install
 
-      - name: 📦 Run Test
+      - name: ✔️ Run Test
         run: |
           cd ./app/
           npm run test
+
+      - name: 🕵️ Run Prettier
+        run: |
+          cd ./app/
+          npm run prettier
 
       - name: 🚀 Send Coveralls
         uses: coverallsapp/github-action@v2
