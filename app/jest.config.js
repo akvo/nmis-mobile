@@ -23,7 +23,7 @@ module.exports = {
   // collectCoverageFrom: undefined,
 
   // The directory where Jest should output its coverage files
-  coverageDirectory: "coverage",
+  coverageDirectory: 'coverage',
 
   // An array of regexp pattern strings used to skip coverage collection
   // coveragePathIgnorePatterns: [
@@ -71,20 +71,18 @@ module.exports = {
   // maxWorkers: "50%",
 
   // An array of directory names to be searched recursively up from the requiring module's location
-  moduleDirectories: [
-    "node_modules"
-  ],
+  moduleDirectories: ['node_modules'],
 
   // An array of file extensions your modules use
   moduleFileExtensions: [
-    "js",
+    'js',
     // "mjs",
     // "cjs",
-    "jsx",
+    'jsx',
     // "ts",
     // "tsx",
-    "json",
-    "node"
+    'json',
+    'node',
   ],
 
   // A map from regular expressions to module names or to arrays of module names that allow to stub out resources with a single module
@@ -100,7 +98,7 @@ module.exports = {
   // notifyMode: "failure-change",
 
   // A preset that is used as a base for Jest's configuration
-  preset: "react-native",
+  preset: 'jest-expo',
 
   // Run tests from one or more projects
   // projects: undefined,
@@ -164,7 +162,7 @@ module.exports = {
   // ],
 
   // The regexp pattern or array of patterns that Jest uses to detect test files
-  testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.(js?|jsx?)?$",
+  testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.(js?|jsx?)?$',
 
   // This option allows the use of a custom results processor
   // testResultsProcessor: undefined,
@@ -176,9 +174,7 @@ module.exports = {
   // transform: undefined,
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
-  transformIgnorePatterns: [
-    "node_modules/(?!react-native|react-navigation)/"
-  ],
+  transformIgnorePatterns: ['node_modules/(?!react-native|react-navigation)/'],
 
   // An array of regexp pattern strings that are matched against all modules before the module loader will automatically return a mock for them
   // unmockedModulePathPatterns: undefined,
