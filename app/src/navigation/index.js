@@ -1,6 +1,5 @@
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { GetStartedPage, HomePage } from '../pages';
 
 export default function Navigation({ colorScheme }) {
@@ -11,9 +10,7 @@ export default function Navigation({ colorScheme }) {
   );
 }
 
-// A root stack navigator is often used for displaying modals on top of all other content
-// Read more here: https://reactnavigation.org/docs/modal
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 function RootNavigator() {
   return (
