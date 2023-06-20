@@ -3,7 +3,8 @@ import { View } from 'react-native';
 import { styles } from './styles';
 
 const Stack = ({ children, row = false, reverse = false, background = '#f9fafb' }) => {
-  const flexDir = `{row ? 'row' : 'column'}{reverse ? '-reverse' : ''}`;
+  let flexDir = row ? 'row' : 'column';
+  flexDir += reverse ? '-reverse' : '';
   return (
     <View
       style={{
