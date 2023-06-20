@@ -4,7 +4,7 @@ import Navigation from './src/navigation';
 const App = () => {
   return (
     <SafeAreaProvider>
-      <Navigation />
+      <Navigation testID="navigation-element" />
     </SafeAreaProvider>
   );
 };
