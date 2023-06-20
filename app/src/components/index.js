@@ -1,3 +1,3 @@
 export { default as Stack } from './Stack';
-export { default as Carousel } from './Carousel';
-export { default as DividerLayout } from './DividerLayout';
+export { default as BaseLayout } from './BaseLayout';
+export { default as Card } from './Card';
