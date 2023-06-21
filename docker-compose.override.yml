@@ -4,6 +4,24 @@ services:
   mobileapp:
     volumes:
       - nmis-mobile-sync:/app/node_modules:nocopy
+  backend:
+    image: nginx:1.25.1-alpine
+    ports:
+      - 8080:80
+    volumes:
+      - ./backend/json:/var/www/html
+      - ./backend/conf.d/nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - api-network
+  php:
+    image: php:7.4-fpm-alpine
+    volumes:
+      - ./backend/php:/var/www/html
+    networks:
+      - api-network
 volumes:
   nmis-mobile-sync:
     external: true
+networks:
+  api-network:
+    driver: bridge
