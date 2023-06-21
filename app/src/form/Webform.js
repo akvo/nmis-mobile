@@ -5,6 +5,7 @@ import { Text, Input, CheckBox, Button } from '@rneui/themed';
 import { Formik } from 'formik';
 import { styles } from './styles';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { Dropdown } from 'react-native-element-dropdown';
 
 const FieldLabel = ({ label = '' }) => <Text style={styles.fieldLabel}>{label}</Text>;
 
@@ -73,6 +74,28 @@ const Webform = ({ navigation, route }) => {
                     title="Female"
                     checkedIcon="dot-circle-o"
                     uncheckedIcon="circle-o"
+                  />
+                </>
+                {/* Single Select Dropdown */}
+                <>
+                  <FieldLabel label="Last Education" />
+                  <Dropdown
+                    style={[styles.dropdownField]}
+                    data={[
+                      { label: 'Senior High School', value: 'Senior High School' },
+                      { label: 'Bachelor', value: 'Bachelor' },
+                      { label: 'Master', value: 'Master' },
+                      { label: 'Doctor', value: 'Doctor' },
+                    ]}
+                    search
+                    maxHeight={300}
+                    labelField="label"
+                    valueField="value"
+                    searchPlaceholder="Search..."
+                    value={values.education || []}
+                    onChange={({ value }) => {
+                      setFieldValue('education', value);
+                    }}
                   />
                 </>
                 {/* Checkbox */}

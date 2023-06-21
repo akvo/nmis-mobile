@@ -5,10 +5,18 @@ export const styles = StyleSheet.create({
     flex: 1,
   },
   fieldLabel: {
-    marginTop: 10,
+    marginTop: 20,
     marginLeft: 10,
-    marginBottom: 5,
+    marginBottom: 8,
     fontWeight: 600,
     fontSize: 14,
+  },
+  dropdownField: {
+    marginLeft: 10,
+    marginRight: 10,
+    borderColor: 'gray',
+    borderWidth: 0.5,
+    paddingHorizontal: 10,
+    paddingVertical: 2,
   },
 });
