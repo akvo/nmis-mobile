@@ -5,6 +5,7 @@ exports[`GetStartedPage renders correctly 1`] = `
   style={
     {
       "alignItems": "center",
+      "backgroundColor": "#f9fafb",
       "display": "flex",
       "flex": 1,
       "flexDirection": "column",
@@ -13,16 +14,18 @@ exports[`GetStartedPage renders correctly 1`] = `
       "paddingHorizontal": 16,
     }
   }
+  testID="center-layout"
 >
   <View
     style={
       {
         "backgroundColor": "#e5e7eb",
         "borderRadius": 4,
-        "height": 120,
-        "width": 120,
+        "height": 110,
+        "width": 110,
       }
     }
+    testID="image-skeleton"
   />
   <View
     style={
@@ -31,6 +34,7 @@ exports[`GetStartedPage renders correctly 1`] = `
         "display": "flex",
       }
     }
+    testID="center-layout-items"
   >
     <Text
       accessibilityRole="text"
