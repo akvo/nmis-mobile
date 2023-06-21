@@ -1,8 +1,11 @@
 import React from 'react';
 import { BaseLayout } from '../components';
-import { ScrollView } from 'react-native';
-import { Input, Button } from '@rneui/themed';
+import { ScrollView, View } from 'react-native';
+import { Text, Input, CheckBox, Button } from '@rneui/themed';
 import { Formik } from 'formik';
+import { styles } from './styles';
+
+const FieldLabel = ({ label = '' }) => <Text style={styles.fieldLabel}>{label}</Text>;
 
 const Webform = ({ navigation, route }) => {
   const goBack = () => {
@@ -13,25 +16,50 @@ const Webform = ({ navigation, route }) => {
     <BaseLayout title={route?.params?.name} back={goBack}>
       <BaseLayout.Content>
         <Formik initialValues={{}} onSubmit={(values) => console.log(values)}>
-          {({ handleChange, handleSubmit, values }) => (
+          {({ handleChange, handleSubmit, setFieldValue, values }) => (
             <ScrollView>
               {/* Text */}
-              <Input label="Name" onChangeText={handleChange('name')} value={values.name} />
+              <>
+                <FieldLabel label="Name" />
+                <Input onChangeText={handleChange('name')} value={values.name} />
+              </>
               {/* Number */}
-              <Input
-                label="Age"
-                keyboardType="numeric"
-                onChangeText={handleChange('age')}
-                value={values.age}
-              />
+              <>
+                <FieldLabel label="Age" />
+                <Input
+                  keyboardType="numeric"
+                  onChangeText={handleChange('age')}
+                  value={values.age}
+                />
+              </>
+              {/* Radio */}
+              <>
+                <FieldLabel label="Gender" />
+                <CheckBox
+                  checked={values.gender === 'male'}
+                  onPress={() => setFieldValue('gender', 'male')}
+                  title="Male"
+                  checkedIcon="dot-circle-o"
+                  uncheckedIcon="circle-o"
+                />
+                <CheckBox
+                  checked={values.gender === 'female'}
+                  onPress={() => setFieldValue('gender', 'female')}
+                  title="Female"
+                  checkedIcon="dot-circle-o"
+                  uncheckedIcon="circle-o"
+                />
+              </>
               {/* TextArea */}
-              <Input
-                label="Comment"
-                multiline={true}
-                numberOfLines={4}
-                onChangeText={handleChange('comment')}
-                value={values.comment}
-              />
+              <>
+                <FieldLabel label="Comment" />
+                <Input
+                  multiline={true}
+                  numberOfLines={4}
+                  onChangeText={handleChange('comment')}
+                  value={values.comment}
+                />
+              </>
               <Button onPress={handleSubmit} title="Submit" />
             </ScrollView>
           )}
