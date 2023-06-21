@@ -1,13 +1,17 @@
 import React from 'react';
 import { BaseLayout } from '../components';
-import { ScrollView, View } from 'react-native';
+import { ScrollView } from 'react-native';
 import { Text, Input, CheckBox, Button } from '@rneui/themed';
 import { Formik } from 'formik';
 import { styles } from './styles';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const FieldLabel = ({ label = '' }) => <Text style={styles.fieldLabel}>{label}</Text>;
 
 const Webform = ({ navigation, route }) => {
+  const now = new Date();
+  const [showDatepicker, setShowDatePicker] = React.useState(false);
+
   const goBack = () => {
     navigation.navigate('FormAction', { ...route?.params });
   };
@@ -22,6 +26,26 @@ const Webform = ({ navigation, route }) => {
               <>
                 <FieldLabel label="Name" />
                 <Input onChangeText={handleChange('name')} value={values.name} />
+              </>
+              {/* DatePicker */}
+              <>
+                <FieldLabel label="Birth Date" />
+                <Input
+                  onPressIn={() => setShowDatePicker(true)}
+                  showSoftInputOnFocus={false}
+                  value={values.birthDate?.toLocaleDateString()}
+                />
+                {showDatepicker && (
+                  <DateTimePicker
+                    testID="dateTimePicker"
+                    value={values.birthDate || now}
+                    mode="date"
+                    onChange={({ nativeEvent: val }) => {
+                      setShowDatePicker(false);
+                      setFieldValue('birthDate', new Date(val.timestamp));
+                    }}
+                  />
+                )}
               </>
               {/* Number */}
               <>
