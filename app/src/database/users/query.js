@@ -7,6 +7,8 @@ export const updateUserName = 'UPDATE users SET name = ? WHERE id = ?;';
 
 export const updateUserPassword = 'UPDATE users SET password = ? WHERE id = ?;';
 
-export const getCurrentUser = 'SELECT id, name FROM users WHERE id = ?;';
+export const getUserById = 'SELECT id, name FROM users WHERE id = ?;';
 
-export const verifyUser = 'SELECT id, name FROM users WHERE password = ?;';
+export const getAllUsers = 'SELECT * from users';
+
+export const verifyUser = 'SELECT id, name FROM users WHERE name = ? and password = ?;';
