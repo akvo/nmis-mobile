@@ -1,0 +1,3 @@
+export { default as HomePage } from './Home';
+export { default as FormActionPage } from './FormAction';
+export { default as FormDataPage } from './FormData';
