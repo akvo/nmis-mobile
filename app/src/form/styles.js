@@ -19,4 +19,8 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 2,
   },
+  dropdownSelectedList: {
+    marginLeft: 10,
+    marginRight: 0,
+  },
 });

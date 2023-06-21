@@ -5,7 +5,7 @@ import { Text, Input, CheckBox, Button } from '@rneui/themed';
 import { Formik } from 'formik';
 import { styles } from './styles';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { Dropdown } from 'react-native-element-dropdown';
+import { Dropdown, MultiSelect } from 'react-native-element-dropdown';
 
 const FieldLabel = ({ label = '' }) => <Text style={styles.fieldLabel}>{label}</Text>;
 
@@ -113,6 +113,31 @@ const Webform = ({ navigation, route }) => {
                       title={val}
                     />
                   ))}
+                </>
+                {/* Multiple Select Dropdown */}
+                <>
+                  <FieldLabel label="Favorite Foods" />
+                  <MultiSelect
+                    style={[styles.dropdownField]}
+                    selectedStyle={styles.dropdownSelectedList}
+                    data={[
+                      { label: 'Fried Rice', value: 'Fried Rice' },
+                      { label: 'Roasted Chicken', value: 'Roasted Chicken' },
+                      { label: 'Rendang', value: 'Rendang' },
+                      { label: 'Pork Ribs', value: 'Pork Ribs' },
+                      { label: 'KFC', value: 'KFC' },
+                      { label: 'McD', value: 'McD' },
+                    ]}
+                    search
+                    maxHeight={300}
+                    labelField="label"
+                    valueField="value"
+                    searchPlaceholder="Search..."
+                    value={values.foods || []}
+                    onChange={(value) => {
+                      setFieldValue('foods', value);
+                    }}
+                  />
                 </>
                 {/* TextArea */}
                 <>
