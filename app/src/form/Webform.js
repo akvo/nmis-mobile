@@ -50,6 +50,22 @@ const Webform = ({ navigation, route }) => {
                   uncheckedIcon="circle-o"
                 />
               </>
+              {/* Checkbox */}
+              <>
+                <FieldLabel label="Hobby" />
+                {['Reading', 'Traveling', 'Programming'].map((val, ival) => (
+                  <CheckBox
+                    key={ival}
+                    checked={values.hobby?.[ival] === val}
+                    onPress={() => {
+                      values.hobby?.[ival] === val
+                        ? setFieldValue(`hobby.${ival}`, null)
+                        : setFieldValue(`hobby.${ival}`, val);
+                    }}
+                    title={val}
+                  />
+                ))}
+              </>
               {/* TextArea */}
               <>
                 <FieldLabel label="Comment" />
