@@ -261,6 +261,7 @@ exports[`AuthFormPage renders correctly 1`] = `
           {
             "alignItems": "center",
             "flexDirection": "row",
+            "justifyContent": "center",
           }
         }
       >
@@ -271,7 +272,7 @@ exports[`AuthFormPage renders correctly 1`] = `
             {
               "color": "#43484d",
               "fontWeight": "bold",
-              "marginLeft": 10,
+              "marginLeft": 8,
               "marginRight": 10,
             }
           }

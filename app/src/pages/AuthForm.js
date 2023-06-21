@@ -38,7 +38,9 @@ const AuthForm = ({ navigation }) => {
           checked={checked}
           onPress={() => setChecked(!checked)}
           containerStyle={styles.checkbox}
+          textStyle={styles.text}
           testID="auth-checkbox-field"
+          center
         />
       </View>
       <Button title="primary" onPress={goToHome} testID="auth-login-button">
@@ -55,6 +57,9 @@ const styles = StyleSheet.create({
   },
   checkbox: {
     backgroundColor: '#f9fafb',
+  },
+  text: {
+    marginLeft: 8,
   },
 });
 
