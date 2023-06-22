@@ -3,6 +3,10 @@ import { StyleSheet } from 'react-native';
 export const styles = StyleSheet.create({
   formContainer: {
     flex: 1,
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingTop: 10,
+    paddingBottom: 10,
   },
   fieldLabel: {
     marginTop: 20,
@@ -11,10 +15,24 @@ export const styles = StyleSheet.create({
     fontWeight: 600,
     fontSize: 14,
   },
+  inputFieldContainer: {
+    borderColor: 'grey',
+    borderWidth: 0.5,
+    paddingLeft: 10,
+    paddingRight: 10,
+    borderRadius: 5,
+    borderBottomWidth: 0.5,
+  },
+  radioFieldContainer: {
+    backgroundColor: 'transparent',
+  },
+  radioFieldText: {
+    fontWeight: 'normal',
+  },
   dropdownField: {
     marginLeft: 10,
     marginRight: 10,
-    borderColor: 'gray',
+    borderColor: 'grey',
     borderWidth: 0.5,
     paddingHorizontal: 10,
     paddingVertical: 2,

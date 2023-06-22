@@ -28,12 +28,17 @@ const Webform = ({ navigation, route }) => {
                 {/* Text */}
                 <>
                   <FieldLabel label="Name" />
-                  <Input onChangeText={handleChange('name')} value={values.name} />
+                  <Input
+                    inputContainerStyle={styles.inputFieldContainer}
+                    onChangeText={handleChange('name')}
+                    value={values.name}
+                  />
                 </>
                 {/* DatePicker */}
                 <>
                   <FieldLabel label="Birth Date" />
                   <Input
+                    inputContainerStyle={styles.inputFieldContainer}
                     onPressIn={() => setShowDatePicker(true)}
                     showSoftInputOnFocus={false}
                     value={values.birthDate?.toLocaleDateString()}
@@ -54,6 +59,7 @@ const Webform = ({ navigation, route }) => {
                 <>
                   <FieldLabel label="Age" />
                   <Input
+                    inputContainerStyle={styles.inputFieldContainer}
                     keyboardType="numeric"
                     onChangeText={handleChange('age')}
                     value={values.age}
@@ -63,6 +69,8 @@ const Webform = ({ navigation, route }) => {
                 <>
                   <FieldLabel label="Gender" />
                   <CheckBox
+                    containerStyle={styles.radioFieldContainer}
+                    textStyle={styles.radioFieldText}
                     checked={values.gender === 'male'}
                     onPress={() => setFieldValue('gender', 'male')}
                     title="Male"
@@ -70,6 +78,8 @@ const Webform = ({ navigation, route }) => {
                     uncheckedIcon="circle-o"
                   />
                   <CheckBox
+                    containerStyle={styles.radioFieldContainer}
+                    textStyle={styles.radioFieldText}
                     checked={values.gender === 'female'}
                     onPress={() => setFieldValue('gender', 'female')}
                     title="Female"
@@ -104,6 +114,8 @@ const Webform = ({ navigation, route }) => {
                   <FieldLabel label="Hobby" />
                   {['Reading', 'Traveling', 'Programming'].map((val, ival) => (
                     <CheckBox
+                      containerStyle={styles.radioFieldContainer}
+                      textStyle={styles.radioFieldText}
                       key={ival}
                       checked={values.hobby?.[ival] === val}
                       onPress={() => {
@@ -146,13 +158,13 @@ const Webform = ({ navigation, route }) => {
                 <>
                   <FieldLabel label="Comment" />
                   <Input
+                    inputContainerStyle={styles.inputFieldContainer}
                     multiline={true}
                     numberOfLines={4}
                     onChangeText={handleChange('comment')}
                     value={values.comment}
                   />
                 </>
-                {/* <Button ref={submitButtonRef}  title="Submit" /> */}
               </View>
             )}
           </Formik>
