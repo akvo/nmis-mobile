@@ -15,10 +15,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'syncToken' => 'Bearer eyjtoken',
         ));
     } else {
-        http_response_code(403);
+        http_response_code(401);
         echo json_encode(["error" => "Invalid credentials"]);
     }
 } else {
     http_response_code(405);
 }
-?>

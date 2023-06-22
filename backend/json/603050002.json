@@ -1,6 +1,7 @@
 {
   "id": 603050002,
   "form": "Urban Sanitation",
+  "version": "1.0.0",
   "type": 1,
   "question_groups": [
     {
@@ -14,10 +15,7 @@
           "order": 4,
           "required": true,
           "type": "administration",
-          "attributes": [
-            "table",
-            "chart"
-          ],
+          "attributes": ["table", "chart"],
           "options": null
         },
         {
@@ -67,9 +65,7 @@
           "order": 1,
           "required": true,
           "type": "option",
-          "attributes": [
-            "advanced_filter"
-          ],
+          "attributes": ["advanced_filter"],
           "options": [
             {
               "name": "Sewarage system"
@@ -93,9 +89,7 @@
           "order": 2,
           "required": true,
           "type": "option",
-          "attributes": [
-            "advanced_filter"
-          ],
+          "attributes": ["advanced_filter"],
           "options": [
             {
               "name": "through the sewer system"
@@ -113,10 +107,7 @@
           "dependency": [
             {
               "id": 603080002,
-              "options": [
-                "Sewarage system",
-                "Septic tanks"
-              ]
+              "options": ["Sewarage system", "Septic tanks"]
             }
           ]
         },
