@@ -25,7 +25,11 @@ const FormNavigation = ({ onSubmit, activeGroup, setActiveGroup, totalGroup = 2 
         iconContainerStyle={styles.formNavigationIcon}
         titleStyle={styles.formNavigationTitle}
       />
-      <Tab.Item disabled title="1/1" titleStyle={styles.formNavigationTitle} />
+      <Tab.Item
+        disabled
+        title={`${activeGroup + 1}/${totalGroup}`}
+        titleStyle={styles.formNavigationTitle}
+      />
       {activeGroup < totalGroup - 1 ? (
         <Tab.Item
           title="Next"
