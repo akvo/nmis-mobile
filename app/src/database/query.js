@@ -13,14 +13,14 @@ const insert = (table, data = {}) => {
   return query;
 };
 
-const update = (table, data = {}) => {
+const update = (table, id, data = {}) => {
   const fields = Object.keys(data)
     .map((k) => {
       const val = data[k];
       return `${k} = ${val}`;
     })
     .join(', ');
-  const query = `UPDATE ${table} SET ${fields} WHERE id = ?`;
+  const query = `UPDATE ${table} SET ${fields} WHERE id = ${id}`;
   return query;
 };
 

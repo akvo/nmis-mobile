@@ -49,18 +49,17 @@ describe('conn.tx', () => {
     const data = {
       name,
     };
-    const updateQuery = query.update(table, data);
-    const updateParams = [1];
+    const updateQuery = query.update(table, 1, data);
 
     // Execute the update transaction
-    const updateResultSet = await conn.tx(db, updateQuery, updateParams);
+    const updateResultSet = await conn.tx(db, updateQuery);
 
     // Assertions
     expect(updateResultSet).toEqual(mockResultSet);
     expect(db.transaction).toHaveBeenCalled();
     expect(mockExecuteSql).toHaveBeenCalledWith(
       updateQuery,
-      updateParams,
+      [],
       expect.any(Function),
       expect.any(Function),
     );
