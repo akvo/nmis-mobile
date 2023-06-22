@@ -3,6 +3,7 @@ import { View, PermissionsAndroid, StyleSheet, ActivityIndicator } from 'react-n
 import { Image, Button, Dialog } from '@rneui/themed';
 import * as ImagePicker from 'expo-image-picker';
 import { Stack } from '../../components';
+import { FieldLabel } from '../support';
 
 // TODO: getImageBase64 (ARF)
 // TODO: convertImageToBase64 (ARF)
@@ -99,34 +100,38 @@ const TypeImage = ({ onChange }) => {
   }
 
   return (
-    <View style={styles.fieldImageContainer}>
-      {selectedImage != null ? (
-        <Image
-          source={{ uri: selectedImage?.uri }}
-          containerStyle={styles.imagePreview}
-          PlaceholderContent={<ActivityIndicator />}
-        />
-      ) : null}
-      <Stack row columns={2}>
-        <Button title="Select File" onPress={handleShowDialog} />
-        <Button
-          containerStyle={styles.buttonRemoveFile}
-          title="Remove"
-          color="secondary"
-          onPress={() => setSelectedImage(null)}
-          disabled={!selectedImage}
-        />
-      </Stack>
-      <Dialog isVisible={showDialog} onBackdropPress={() => setShowDialog(false)}>
-        <Button title="Use Camera" type="outline" onPress={handleCamera} />
-        <Button
-          containerStyle={styles.buttonFromGallery}
-          title="From Gallery"
-          type="outline"
-          onPress={selectFile}
-        />
-      </Dialog>
-    </View>
+    <>
+      <FieldLabel label="Image" />
+
+      <View style={styles.fieldImageContainer}>
+        {selectedImage != null ? (
+          <Image
+            source={{ uri: selectedImage?.uri }}
+            containerStyle={styles.imagePreview}
+            PlaceholderContent={<ActivityIndicator />}
+          />
+        ) : null}
+        <Stack row columns={2}>
+          <Button title="Select File" onPress={handleShowDialog} />
+          <Button
+            containerStyle={styles.buttonRemoveFile}
+            title="Remove"
+            color="secondary"
+            onPress={() => setSelectedImage(null)}
+            disabled={!selectedImage}
+          />
+        </Stack>
+        <Dialog isVisible={showDialog} onBackdropPress={() => setShowDialog(false)}>
+          <Button title="Use Camera" type="outline" onPress={handleCamera} />
+          <Button
+            containerStyle={styles.buttonFromGallery}
+            title="From Gallery"
+            type="outline"
+            onPress={selectFile}
+          />
+        </Dialog>
+      </View>
+    </>
   );
 };
 

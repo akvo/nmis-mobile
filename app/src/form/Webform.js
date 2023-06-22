@@ -1,15 +1,13 @@
 import React from 'react';
 import { BaseLayout } from '../components';
 import { ScrollView, View } from 'react-native';
-import { Text, Input, CheckBox, Button } from '@rneui/themed';
+import { Input, CheckBox } from '@rneui/themed';
 import { Formik } from 'formik';
 import { styles } from './styles';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Dropdown, MultiSelect } from 'react-native-element-dropdown';
-import { FormNavigation } from './support';
+import { FieldLabel, FormNavigation } from './support';
 import { TypeImage } from './fields';
-
-const FieldLabel = ({ label = '' }) => <Text style={styles.fieldLabel}>{label}</Text>;
 
 const Webform = ({ navigation, route }) => {
   const now = new Date();
@@ -143,10 +141,7 @@ const Webform = ({ navigation, route }) => {
                   />
                 </>
                 {/* Image/File Input */}
-                <>
-                  <FieldLabel label="Image" />
-                  <TypeImage onChange={setFieldValue} />
-                </>
+                <TypeImage onChange={setFieldValue} />
                 {/* TextArea */}
                 <>
                   <FieldLabel label="Comment" />
