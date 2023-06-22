@@ -19,7 +19,6 @@ const Webform = ({ navigation, route }) => {
     navigation.navigate('FormAction', { ...route?.params });
   };
 
-  console.log(activeGroup);
   return (
     <BaseLayout title={route?.params?.name} back={goBack}>
       <ScrollView>

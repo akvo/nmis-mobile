@@ -1,5 +1,6 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
+jest.useFakeTimers();
 import { Webform } from '../../src/form';
 
 describe('Webform component', () => {
