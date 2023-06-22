@@ -145,7 +145,7 @@ const Webform = ({ navigation, route }) => {
                 {/* Image/File Input */}
                 <>
                   <FieldLabel label="Image" />
-                  <TypeImage />
+                  <TypeImage onChange={setFieldValue} />
                 </>
                 {/* TextArea */}
                 <>

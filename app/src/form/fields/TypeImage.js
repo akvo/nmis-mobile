@@ -2,9 +2,16 @@ import React from 'react';
 import { View, PermissionsAndroid, StyleSheet, ActivityIndicator } from 'react-native';
 import { Image, Button } from '@rneui/themed';
 import * as ImagePicker from 'expo-image-picker';
+import { Stack } from '../../components';
 
-const TypeImage = () => {
-  const [singleFile, setSingleFile] = React.useState(null);
+const TypeImage = ({ onChange }) => {
+  const [selectedImage, setSelectedImage] = React.useState(null);
+
+  React.useEffect(() => {
+    if (onChange) {
+      onChange('image', selectedImage);
+    }
+  }, [selectedImage, onChange]);
 
   const checkPermissions = async () => {
     try {
@@ -55,27 +62,34 @@ const TypeImage = () => {
           return;
         }
         // Setting the state to show single file attributes
-        setSingleFile(result.assets[0]);
+        setSelectedImage(result.assets[0]);
       }
     } catch (err) {
-      setSingleFile(null);
+      setSelectedImage(null);
       console.warn(err);
       return false;
     }
   }
 
-  console.log(singleFile);
-
   return (
     <View style={styles.fieldImageContainer}>
-      {singleFile != null ? (
+      {selectedImage != null ? (
         <Image
-          source={{ uri: singleFile?.uri }}
+          source={{ uri: selectedImage?.uri }}
           containerStyle={styles.imagePreview}
           PlaceholderContent={<ActivityIndicator />}
         />
       ) : null}
-      <Button title="Select File" type="outline" onPress={selectFile} />
+      <Stack row columns={2}>
+        <Button title="Select File" onPress={selectFile} />
+        <Button
+          containerStyle={styles.buttonRemoveFile}
+          title="Remove"
+          color="secondary"
+          onPress={() => setSelectedImage(null)}
+          disabled={!selectedImage}
+        />
+      </Stack>
     </View>
   );
 };
@@ -89,4 +103,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   imagePreview: { aspectRatio: 1, width: '100%', flex: 1, marginBottom: 15 },
+  buttonRemoveFile: {
+    marginLeft: 12,
+  },
 });
