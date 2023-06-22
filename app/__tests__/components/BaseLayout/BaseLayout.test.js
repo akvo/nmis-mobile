@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
-import BaseLayout from '../../../src/components/BaseLayout';
+import { BaseLayout } from '../../../src/components';
 
 describe('BaseLayout component', () => {
   it('renders page without props correctly', () => {
