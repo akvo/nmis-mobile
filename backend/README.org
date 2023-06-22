@@ -2575,7 +2575,7 @@ curl -s http://localhost:8080/519630048 | jq
 curl -s -X POST \
      --header "Content-Type: application/json" \
      --header "Authorization: Bearer eyjtoken" \
-     --data '{"duration":2,"submittedAt": "2023-06-22T01:52:57.357Z","submitter":"Iwan Firmawan","answers":[{"12352546":"value1", "307454380":"value2"}]}' \
+     --data '{"name": "Iwan - 30 - Purbalingga","duration":2,"submittedAt": "2023-06-22T01:52:57.357Z","submitter":"Iwan Firmawan","answers":[{"12352546":"value1", "307454380":"value2"}]}' \
      http://localhost:8080/sync
 #+end_src
 
