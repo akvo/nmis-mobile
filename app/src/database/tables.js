@@ -3,14 +3,13 @@ export const createUsersTable =
 
 export const createConfigTable =
   'CREATE TABLE IF NOT EXISTS config( \
-userId INTEGER NOT NULL,\
+    id INTEGER PRIMARY KEY NOT NUll,\
 appVersion INTEGER NOT NULL,\
 authenticationCode TEXT NOT NULL,\
 serverURL TEXT NOT NULL,\
 syncInterval REAL,\
 syncWifiOnly TINYINT,\
-lang VARCHAR(255) DEFAULT "en" NOT NULL,\
-UNIQUE(userId));';
+lang VARCHAR(255) DEFAULT "en" NOT NULL);';
 
 export const createFormsTable =
   'CREATE TABLE IF NOT EXISTS forms( \
