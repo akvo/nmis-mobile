@@ -44,5 +44,4 @@ if (json_last_error() !== JSON_ERROR_NONE) {
 
 // Send response
 http_response_code(200);
-echo json_encode(["message" => "Success"]);
-?>
+echo json_encode(["message" => "Success", "id" => 123]);

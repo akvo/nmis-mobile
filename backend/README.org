@@ -4,16 +4,15 @@
 #+title: Mode Bash
 #+author: Deden Bangkit
 
-#+PROPERTY: header-args:sh    :exports both
-#+PROPERTY: header-args:sh+   :results output verbatim
-#+PROPERTY: header-args:sh+   :noweb strip-export
+#+PROPERTY: header-args:bash    :exports both
+#+PROPERTY: header-args:bash+   :results pp replace
 
-* Assignment
+* Authentication
 
-** Credentials Success
+** Auth Success
 #+name: Example Auth Success
-#+begin_src sh
-curl -X POST -d "code=testing123" -s http://localhost:8080/assignment | jq
+#+begin_src bash
+curl -X POST -d "code=testing123" -s http://localhost:8080/auth | jq
 #+end_src
 
 #+RESULTS: Example Auth Success
@@ -31,22 +30,47 @@ curl -X POST -d "code=testing123" -s http://localhost:8080/assignment | jq
 }
 #+end_example
 
-** Credentials Failed
+** Auth Failed
 
 #+name: Example Auth Failed
-#+begin_src sh
-curl -s --verbose -X POST -d "code=wrong-password" -s http://localhost:8080/assignment
+#+begin_src emacs-lisp :results replace
+(shell-command-to-string
+ "curl -s --verbose -X POST -d \"code=wrong-password\" -s http://localhost:8080/auth"
+ )
 #+end_src
 
 #+RESULTS: Example Auth Failed
-: {"error":"Invalid credentials"}
+#+begin_example
+,*   Trying 127.0.0.1:8080...
+,* Connected to localhost (127.0.0.1) port 8080 (#0)
+> POST /auth HTTP/1.1
+> Host: localhost:8080
+> User-Agent: curl/7.85.0
+> Accept: */*
+> Content-Length: 19
+> Content-Type: application/x-www-form-urlencoded
+> 
+} [19 bytes data]
+,* Mark bundle as not supporting multiuse
+< HTTP/1.1 403 Forbidden
+< Server: nginx/1.25.1
+< Date: Thu, 22 Jun 2023 01:30:39 GMT
+< Content-Type: application/json
+< Transfer-Encoding: chunked
+< Connection: keep-alive
+< X-Powered-By: PHP/7.4.33
+< 
+{ [42 bytes data]
+,* Connection #0 to host localhost left intact
+{"error":"Invalid credentials"}
+#+end_example
 
 
 * Get Forms
 
 ** Get Form Success
 #+name: List of Forms
-#+begin_src sh
+#+begin_src bash
 ls ./json
 #+end_src
 
@@ -2547,8 +2571,8 @@ curl -s http://localhost:8080/519630048 | jq
 ** Sync Success
 
 #+name: Example Sync Success
-#+begin_src sh
-curl -S -X POST \
+#+begin_src bash
+curl -s -X POST \
      --header "Content-Type: application/json" \
      --header "Authorization: Bearer eyjtoken" \
      --data '{"key1":"value1", "key2":"value2"}' \
@@ -2556,18 +2580,56 @@ curl -S -X POST \
 #+end_src
 
 #+RESULTS: Example Sync Success
-: {"message":"Success"}
+: {"message":"Success","id":123}
 
 ** Sync Failed
 
 #+name: Example Sync Failed
-#+begin_src sh
-curl --verbose -S -X POST \
-     --header "Content-Type: application/json" \
-     --header "Authorization: Bearer falsetoken" \
-     --data '{"key1":"value1", "key2":"value2"}' \
-     http://localhost:8080/sync
+#+begin_src sh :results output replace
+curl --verbose -s -X POST \
+    --header "Content-Type: application/json" \
+    --header "Authorization: Bearer falsetoken" \
+    --data '{"key1":"value1", "key2":"value2"}' \
+    http://localhost:8080/sync
 #+end_src
 
 #+RESULTS: Example Sync Failed
 : {"error":"Invalid token"}
+
+#+name: Example Sync Failed Detail
+#+begin_src emacs-lisp :results replace
+(shell-command-to-string
+    "curl --verbose -s -X POST \
+        --header \"Content-Type: application/json\" \
+        --header \"Authorization: Bearer falsetoken\" \
+        --data '{\"key1\":\"value1\", \"key2\":\"value2\"}' \
+        http://localhost:8080/sync"
+ )
+#+end_src
+
+#+RESULTS: Example Sync Failed Detail
+#+begin_example
+,*   Trying 127.0.0.1:8080...
+,* Connected to localhost (127.0.0.1) port 8080 (#0)
+> POST /sync HTTP/1.1
+> Host: localhost:8080
+> User-Agent: curl/7.85.0
+> Accept: */*
+> Content-Type: application/json
+> Authorization: Bearer falsetoken
+> Content-Length: 34
+> 
+} [34 bytes data]
+,* Mark bundle as not supporting multiuse
+< HTTP/1.1 403 Forbidden
+< Server: nginx/1.25.1
+< Date: Thu, 22 Jun 2023 01:39:21 GMT
+< Content-Type: application/json
+< Transfer-Encoding: chunked
+< Connection: keep-alive
+< X-Powered-By: PHP/7.4.33
+< 
+{ [36 bytes data]
+,* Connection #0 to host localhost left intact
+{"error":"Invalid token"}
+#+end_example
