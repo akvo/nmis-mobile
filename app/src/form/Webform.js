@@ -6,11 +6,13 @@ import { Formik } from 'formik';
 import { styles } from './styles';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Dropdown, MultiSelect } from 'react-native-element-dropdown';
+import FormNavigation from './FormNavigation';
 
 const FieldLabel = ({ label = '' }) => <Text style={styles.fieldLabel}>{label}</Text>;
 
 const Webform = ({ navigation, route }) => {
   const now = new Date();
+  const formRef = React.useRef();
   const [showDatepicker, setShowDatePicker] = React.useState(false);
 
   const goBack = () => {
@@ -21,7 +23,7 @@ const Webform = ({ navigation, route }) => {
     <BaseLayout title={route?.params?.name} back={goBack}>
       <ScrollView>
         <BaseLayout.Content>
-          <Formik initialValues={{}} onSubmit={(values) => console.log(values)}>
+          <Formik innerRef={formRef} initialValues={{}} onSubmit={(values) => console.log(values)}>
             {({ handleChange, handleSubmit, setFieldValue, values }) => (
               <View style={styles.formContainer}>
                 {/* Text */}
@@ -139,6 +141,7 @@ const Webform = ({ navigation, route }) => {
                     }}
                   />
                 </>
+                {/* TODO: Image/File Input */}
                 {/* TextArea */}
                 <>
                   <FieldLabel label="Comment" />
@@ -149,12 +152,21 @@ const Webform = ({ navigation, route }) => {
                     value={values.comment}
                   />
                 </>
-                <Button onPress={handleSubmit} title="Submit" />
+                {/* <Button ref={submitButtonRef}  title="Submit" /> */}
               </View>
             )}
           </Formik>
         </BaseLayout.Content>
       </ScrollView>
+      <View>
+        <FormNavigation
+          onSubmit={() => {
+            if (formRef.current) {
+              formRef.current.handleSubmit();
+            }
+          }}
+        />
+      </View>
     </BaseLayout>
   );
 };

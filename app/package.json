@@ -8,7 +8,8 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "test": "jest --coverage",
-    "prettier": "prettier --check ."
+    "prettier": "prettier --check .",
+    "prettier-write": "prettier --write ."
   },
   "dependencies": {
     "@react-native-community/netinfo": "^9.3.10",

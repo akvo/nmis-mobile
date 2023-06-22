@@ -23,4 +23,19 @@ export const styles = StyleSheet.create({
     marginLeft: 10,
     marginRight: 0,
   },
+  formNavigationButton: {
+    borderTopColor: 'grey',
+    borderTopWidth: 0.5,
+  },
+  formNavigationIcon: {
+    paddingTop: 9,
+  },
+  formNavigationTitle: {
+    paddingTop: 9,
+    color: 'grey',
+    fontWeight: 'normal',
+    fontSize: 14,
+    marginRight: -10,
+    marginLeft: -10,
+  },
 });
