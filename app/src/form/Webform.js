@@ -7,6 +7,7 @@ import { styles } from './styles';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Dropdown, MultiSelect } from 'react-native-element-dropdown';
 import { FormNavigation } from './support';
+import { TypeImage } from './fields';
 
 const FieldLabel = ({ label = '' }) => <Text style={styles.fieldLabel}>{label}</Text>;
 
@@ -141,7 +142,11 @@ const Webform = ({ navigation, route }) => {
                     }}
                   />
                 </>
-                {/* TODO: Image/File Input */}
+                {/* Image/File Input */}
+                <>
+                  <FieldLabel label="Image" />
+                  <TypeImage />
+                </>
                 {/* TextArea */}
                 <>
                   <FieldLabel label="Comment" />
