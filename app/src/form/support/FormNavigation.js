@@ -24,6 +24,7 @@ const FormNavigation = ({ onSubmit, activeGroup, setActiveGroup, totalGroup = 2 
         iconPosition="left"
         iconContainerStyle={styles.formNavigationIcon}
         titleStyle={styles.formNavigationTitle}
+        testID="form-nav-btn-back"
       />
       <Tab.Item
         disabled
