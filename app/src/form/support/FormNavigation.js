@@ -30,6 +30,7 @@ const FormNavigation = ({ onSubmit, activeGroup, setActiveGroup, totalGroup = 2 
         disabled
         title={`${activeGroup + 1}/${totalGroup}`}
         titleStyle={styles.formNavigationTitle}
+        testID="form-nav-group-count"
       />
       {activeGroup < totalGroup - 1 ? (
         <Tab.Item
@@ -38,6 +39,7 @@ const FormNavigation = ({ onSubmit, activeGroup, setActiveGroup, totalGroup = 2 
           iconPosition="right"
           iconContainerStyle={styles.formNavigationIcon}
           titleStyle={styles.formNavigationTitle}
+          testID="form-nav-btn-next"
         />
       ) : (
         <Tab.Item
@@ -46,6 +48,7 @@ const FormNavigation = ({ onSubmit, activeGroup, setActiveGroup, totalGroup = 2 
           iconPosition="right"
           iconContainerStyle={styles.formNavigationIcon}
           titleStyle={styles.formNavigationTitle}
+          testID="form-btn-submit"
         />
       )}
     </Tab>
