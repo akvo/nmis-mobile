@@ -1,10 +1,14 @@
 import React from 'react';
 import { View, PermissionsAndroid, StyleSheet, ActivityIndicator } from 'react-native';
-import { Image, Button } from '@rneui/themed';
+import { Image, Button, Dialog } from '@rneui/themed';
 import * as ImagePicker from 'expo-image-picker';
 import { Stack } from '../../components';
 
+// TODO: getImageBase64 (ARF)
+// TODO: convertImageToBase64 (ARF)
+
 const TypeImage = ({ onChange }) => {
+  const [showDialog, setShowDialog] = React.useState(false);
   const [selectedImage, setSelectedImage] = React.useState(null);
 
   React.useEffect(() => {
@@ -49,21 +53,44 @@ const TypeImage = ({ onChange }) => {
     }
   };
 
-  async function selectFile() {
-    try {
-      const result = await checkPermissions();
-      if (result) {
-        const result = await ImagePicker.launchImageLibraryAsync({
-          quality: 1,
-        });
+  async function handleShowDialog() {
+    const result = await checkPermissions();
+    if (result) {
+      setShowDialog(true);
+      return true;
+    }
+    console.warn('Access not granted!');
+  }
 
-        if (result?.canceled) {
-          console.warn('You did not select any image.');
-          return;
-        }
-        // Setting the state to show single file attributes
-        setSelectedImage(result.assets[0]);
+  async function selectFile() {
+    setShowDialog(false);
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        quality: 1,
+      });
+      if (result?.canceled) {
+        console.warn('You did not select any image.');
+        return false;
       }
+      setSelectedImage(result.assets[0]);
+    } catch (err) {
+      setSelectedImage(null);
+      console.warn(err);
+      return false;
+    }
+  }
+
+  async function handleCamera() {
+    setShowDialog(false);
+    try {
+      const result = await ImagePicker.launchCameraAsync({
+        quality: 1,
+      });
+      if (result?.canceled) {
+        console.warn('You did not select any image.');
+        return false;
+      }
+      setSelectedImage(result.assets[0]);
     } catch (err) {
       setSelectedImage(null);
       console.warn(err);
@@ -81,7 +108,7 @@ const TypeImage = ({ onChange }) => {
         />
       ) : null}
       <Stack row columns={2}>
-        <Button title="Select File" onPress={selectFile} />
+        <Button title="Select File" onPress={handleShowDialog} />
         <Button
           containerStyle={styles.buttonRemoveFile}
           title="Remove"
@@ -90,6 +117,15 @@ const TypeImage = ({ onChange }) => {
           disabled={!selectedImage}
         />
       </Stack>
+      <Dialog isVisible={showDialog} onBackdropPress={() => setShowDialog(false)}>
+        <Button title="Use Camera" type="outline" onPress={handleCamera} />
+        <Button
+          containerStyle={styles.buttonFromGallery}
+          title="From Gallery"
+          type="outline"
+          onPress={selectFile}
+        />
+      </Dialog>
     </View>
   );
 };
@@ -105,5 +141,8 @@ const styles = StyleSheet.create({
   imagePreview: { aspectRatio: 1, width: '100%', flex: 1, marginBottom: 15 },
   buttonRemoveFile: {
     marginLeft: 12,
+  },
+  buttonFromGallery: {
+    marginTop: 12,
   },
 });
