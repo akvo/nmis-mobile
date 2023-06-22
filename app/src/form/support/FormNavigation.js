@@ -1,6 +1,6 @@
 import React from 'react';
 import { Tab } from '@rneui/themed';
-import { styles } from './styles';
+import { styles } from '../styles';
 
 const FormNavigation = ({ onSubmit }) => {
   return (

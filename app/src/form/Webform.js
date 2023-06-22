@@ -6,7 +6,7 @@ import { Formik } from 'formik';
 import { styles } from './styles';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Dropdown, MultiSelect } from 'react-native-element-dropdown';
-import FormNavigation from './FormNavigation';
+import { FormNavigation } from './support';
 
 const FieldLabel = ({ label = '' }) => <Text style={styles.fieldLabel}>{label}</Text>;
 
