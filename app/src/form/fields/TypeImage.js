@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, PermissionsAndroid, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import * as DocumentPicker from 'expo-document-picker';
+import { View, PermissionsAndroid, StyleSheet, ActivityIndicator } from 'react-native';
+import { Image, Button } from '@rneui/themed';
+import * as ImagePicker from 'expo-image-picker';
 
 const TypeImage = () => {
   const [singleFile, setSingleFile] = React.useState(null);
@@ -41,64 +42,20 @@ const TypeImage = () => {
     }
   };
 
-  const uploadImage = async () => {
-    const BASE_URL = 'xxxx';
-
-    if (!singleFile) {
-      console.info('Please Select File first');
-      return;
-    }
-
-    // Check if any file is selected or not
-    // If file selected then create FormData
-    const data = new FormData();
-
-    data.append('file_attachment', {
-      uri: singleFile.uri,
-      name: singleFile.name,
-      type: singleFile.mimeType,
-    });
-    return data;
-
-    // return
-    try {
-      let res = await fetch(BASE_URL + 'tutorial/upload.php', {
-        method: 'post',
-        body: data,
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'multipart/form-data',
-        },
-        timeout: 5000,
-      });
-
-      const result = await res.json();
-      console.log('result', result);
-      if (result.status == 1) {
-        Alert.alert('Info', result.msg);
-      }
-    } catch (error) {
-      // Error retrieving data
-      // Alert.alert('Error', error.message);
-      console.log('error upload', error);
-    }
-  };
-
   async function selectFile() {
     try {
       const result = await checkPermissions();
       if (result) {
-        const result = await DocumentPicker.getDocumentAsync({
-          copyToCacheDirectory: false,
-          type: 'image/*',
+        const result = await ImagePicker.launchImageLibraryAsync({
+          quality: 1,
         });
 
-        if (result.type === 'success') {
-          // Printing the log realted to the file
-          console.log('res : ' + JSON.stringify(result));
-          // Setting the state to show single file attributes
-          setSingleFile(result);
+        if (result?.canceled) {
+          console.warn('You did not select any image.');
+          return;
         }
+        // Setting the state to show single file attributes
+        setSingleFile(result.assets[0]);
       }
     } catch (err) {
       setSingleFile(null);
@@ -107,25 +64,18 @@ const TypeImage = () => {
     }
   }
 
-  return (
-    <View style={styles.mainBody}>
-      {/*Showing the data of selected Single file*/}
-      {singleFile != null ? (
-        <Text style={styles.textStyle}>
-          File Name: {singleFile.name ? singleFile.name : ''}
-          {'\n'}
-          Type: {singleFile.type ? singleFile.type : ''}
-          {'\n'}
-          File Size: {singleFile.size ? singleFile.size : ''}
-          {'\n'}
-          URI: {singleFile.uri ? singleFile.uri : ''}
-          {'\n'}
-        </Text>
-      ) : null}
+  console.log(singleFile);
 
-      <TouchableOpacity style={styles.buttonStyle} activeOpacity={0.5} onPress={selectFile}>
-        <Text style={styles.buttonTextStyle}>Select File</Text>
-      </TouchableOpacity>
+  return (
+    <View style={styles.fieldImageContainer}>
+      {singleFile != null ? (
+        <Image
+          source={{ uri: singleFile?.uri }}
+          containerStyle={styles.imagePreview}
+          PlaceholderContent={<ActivityIndicator />}
+        />
+      ) : null}
+      <Button title="Select File" type="outline" onPress={selectFile} />
     </View>
   );
 };
@@ -133,34 +83,10 @@ const TypeImage = () => {
 export default TypeImage;
 
 const styles = StyleSheet.create({
-  mainBody: {
+  fieldImageContainer: {
     flex: 1,
     justifyContent: 'center',
-    padding: 20,
+    padding: 10,
   },
-  buttonStyle: {
-    backgroundColor: '#307ecc',
-    borderWidth: 0,
-    color: '#FFFFFF',
-    borderColor: '#307ecc',
-    height: 40,
-    alignItems: 'center',
-    borderRadius: 30,
-    marginLeft: 35,
-    marginRight: 35,
-    marginTop: 15,
-  },
-  buttonTextStyle: {
-    color: '#FFFFFF',
-    paddingVertical: 10,
-    fontSize: 16,
-  },
-  textStyle: {
-    backgroundColor: '#fff',
-    fontSize: 15,
-    marginTop: 16,
-    marginLeft: 35,
-    marginRight: 35,
-    textAlign: 'center',
-  },
+  imagePreview: { aspectRatio: 1, width: '100%', flex: 1, marginBottom: 15 },
 });
