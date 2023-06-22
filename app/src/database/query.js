@@ -5,37 +5,25 @@ import {
   createDatapointsTable,
 } from './tables';
 const insert = (table, data = {}) => {
-  const fields = Object.keys(data).join(', ');
-  const values = Object.values(data)
-    .map((d) => d)
-    .join(', ');
-  const query = `INSERT INTO ${table}(${fields}) VALUES (${values})`;
-  return query;
+  const fields = Object.keys(data);
+  const valuesString = fields.map((key) => data[key]).join(', ');
+  const fieldsString = fields.join(', ');
+  return `INSERT INTO ${table}(${fieldsString}) VALUES (${valuesString})`;
 };
 
-const update = (table, id, data = {}) => {
-  const fields = Object.keys(data)
-    .map((k) => {
-      const val = data[k];
-      return `${k} = ${val}`;
-    })
+const update = (table, where = {}, data = {}) => {
+  const fieldString = Object.keys(data)
+    .map((key) => `${key} = ${data[key]}`)
     .join(', ');
-  const query = `UPDATE ${table} SET ${fields} WHERE id = ${id}`;
-  return query;
+  const conditions = Object.keys(where).map((key) => `${key} = ?`);
+  const conditionString = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+  return `UPDATE ${table} SET ${fieldString} ${conditionString}`;
 };
 
 const read = (table, where = {}) => {
-  let query = `SELECT * FROM ${table}`;
-  if (Object.keys(where).length) {
-    Object.keys(where).forEach((k, kx) => {
-      if (kx === 0) {
-        query += ` WHERE ${k} = ?`;
-      } else {
-        query += ` AND ${k} = ?`;
-      }
-    });
-  }
-  return query;
+  const conditions = Object.keys(where).map((key) => `${key} = ?`);
+  const conditionString = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+  return `SELECT * FROM ${table} ${conditionString}`;
 };
 
 export const query = {

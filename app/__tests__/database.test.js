@@ -27,16 +27,16 @@ describe('conn.tx', () => {
       password,
     };
     const insertQuery = query.insert(table, data);
-
+    const insertParams = [];
     // Execute the insert transaction
-    const insertResultSet = await conn.tx(db, insertQuery);
+    const insertResultSet = await conn.tx(db, insertQuery, insertParams);
 
     // Assertions
     expect(insertResultSet).toEqual(mockResultSet);
     expect(db.transaction).toHaveBeenCalled();
     expect(mockExecuteSql).toHaveBeenCalledWith(
       insertQuery,
-      [],
+      insertParams,
       expect.any(Function),
       expect.any(Function),
     );
@@ -46,20 +46,20 @@ describe('conn.tx', () => {
     // Define the query and parameters for update
     const table = 'users';
     const name = 'Jhon Lenon';
-    const data = {
-      name,
-    };
-    const updateQuery = query.update(table, 1, data);
+    const where = { id: 1 };
+    const data = { name };
+    const updateQuery = query.update(table, where, data);
+    const updateParams = [];
 
     // Execute the update transaction
-    const updateResultSet = await conn.tx(db, updateQuery);
+    const updateResultSet = await conn.tx(db, updateQuery, updateParams);
 
     // Assertions
     expect(updateResultSet).toEqual(mockResultSet);
     expect(db.transaction).toHaveBeenCalled();
     expect(mockExecuteSql).toHaveBeenCalledWith(
       updateQuery,
-      [],
+      updateParams,
       expect.any(Function),
       expect.any(Function),
     );
@@ -67,9 +67,6 @@ describe('conn.tx', () => {
 
   test('should execute the select transaction successfully', async () => {
     // Mock the result set for select
-    const table = 'users';
-    const id = 1;
-    const where = { id };
     const mockRows = [{ id, name: 'John Lenon' }];
     const mockSelectSql = jest.fn((query, params, successCallback) => {
       successCallback(null, { rows: { length: mockRows.length, _array: mockRows } });
@@ -81,10 +78,14 @@ describe('conn.tx', () => {
     });
 
     // Define the query and parameters for select
+    const table = 'users';
+    const id = 1;
+    const where = { id };
     const selectQuery = query.read(table, where);
+    const selectParams = [id];
 
     // Execute the select transaction
-    const result = await conn.tx(db, selectQuery);
+    const result = await conn.tx(db, selectQuery, selectParams);
 
     // Assertions
     expect(result.rows).toHaveLength(mockRows.length);
@@ -92,7 +93,7 @@ describe('conn.tx', () => {
     expect(db.transaction).toHaveBeenCalled();
     expect(mockSelectSql).toHaveBeenCalledWith(
       selectQuery,
-      [],
+      selectParams,
       expect.any(Function),
       expect.any(Function),
     );
