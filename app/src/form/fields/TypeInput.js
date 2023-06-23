@@ -4,10 +4,10 @@ import { FieldLabel } from '../support';
 import { styles } from '../styles';
 import { Input } from '@rneui/themed';
 
-const TypeInput = ({ onChange, values, id }) => {
+const TypeInput = ({ onChange, values, id, name }) => {
   return (
     <View style={styles.questionContainer}>
-      <FieldLabel label={id} />
+      <FieldLabel label={name} />
       <Input
         inputContainerStyle={styles.inputFieldContainer}
         onChangeText={() => {

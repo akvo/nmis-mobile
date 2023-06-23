@@ -4,10 +4,9 @@ import { ScrollView, View } from 'react-native';
 import { Input, CheckBox } from '@rneui/themed';
 import { Formik } from 'formik';
 import { styles } from './styles';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import { Dropdown, MultiSelect } from 'react-native-element-dropdown';
 import { FieldGroupHeader, FieldLabel, FormNavigation } from './support';
-import { TypeImage, TypeInput } from './fields';
+import { TypeImage, TypeInput, TypeDate } from './fields';
 
 const fakeInitialValues = {
   name: 'John Doe',
@@ -21,10 +20,8 @@ const fakeInitialValues = {
 };
 
 const Webform = ({ navigation, route, initialValues = fakeInitialValues }) => {
-  const now = new Date();
   const formRef = React.useRef();
   const [activeGroup, setActiveGroup] = React.useState(0);
-  const [showDatepicker, setShowDatePicker] = React.useState(false);
 
   const goBack = () => {
     navigation.navigate('FormAction', { ...route?.params });
@@ -49,28 +46,14 @@ const Webform = ({ navigation, route, initialValues = fakeInitialValues }) => {
                       description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dapibus."
                     />
                     {/* Text */}
-                    <TypeInput onChange={handleChange} values={values} id="name" />
+                    <TypeInput onChange={handleChange} values={values} id="name" name="Name" />
                     {/* DatePicker */}
-                    <View style={styles.questionContainer}>
-                      <FieldLabel label="Birth Date" />
-                      <Input
-                        inputContainerStyle={styles.inputFieldContainer}
-                        onPressIn={() => setShowDatePicker(true)}
-                        showSoftInputOnFocus={false}
-                        value={values.birthDate?.toLocaleDateString()}
-                      />
-                      {showDatepicker && (
-                        <DateTimePicker
-                          testID="dateTimePicker"
-                          value={values.birthDate || now}
-                          mode="date"
-                          onChange={({ nativeEvent: val }) => {
-                            setShowDatePicker(false);
-                            setFieldValue('birthDate', new Date(val.timestamp));
-                          }}
-                        />
-                      )}
-                    </View>
+                    <TypeDate
+                      onChange={setFieldValue}
+                      values={values}
+                      id="birthDate"
+                      name="Birth Date"
+                    />
                     {/* Number */}
                     <View style={styles.questionContainer}>
                       <FieldLabel label="Age" />
