@@ -103,6 +103,7 @@ exports[`Webform component renders correctly 1`] = `
                     "paddingHorizontal": 10,
                   }
                 }
+                testID="field-label"
               >
                 Name
               </Text>
@@ -180,6 +181,7 @@ exports[`Webform component renders correctly 1`] = `
                     "paddingHorizontal": 10,
                   }
                 }
+                testID="field-label"
               >
                 Birth Date
               </Text>
@@ -258,6 +260,7 @@ exports[`Webform component renders correctly 1`] = `
                     "paddingHorizontal": 10,
                   }
                 }
+                testID="field-label"
               >
                 Age
               </Text>
@@ -336,6 +339,7 @@ exports[`Webform component renders correctly 1`] = `
                     "paddingHorizontal": 10,
                   }
                 }
+                testID="field-label"
               >
                 Gender
               </Text>
@@ -499,6 +503,7 @@ exports[`Webform component renders correctly 1`] = `
                     "paddingHorizontal": 10,
                   }
                 }
+                testID="field-label"
               >
                 Last Education
               </Text>

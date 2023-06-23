@@ -102,23 +102,24 @@ const TypeImage = ({ onChange }) => {
   return (
     <>
       <FieldLabel label="Image" />
-
       <View style={styles.fieldImageContainer}>
         {selectedImage != null ? (
           <Image
             source={{ uri: selectedImage?.uri }}
             containerStyle={styles.imagePreview}
             PlaceholderContent={<ActivityIndicator />}
+            testID="image-preview"
           />
         ) : null}
         <Stack row columns={2}>
-          <Button title="Select File" onPress={handleShowDialog} />
+          <Button title="Select File" onPress={handleShowDialog} testID="btn-select-file" />
           <Button
             containerStyle={styles.buttonRemoveFile}
             title="Remove"
             color="secondary"
             onPress={() => setSelectedImage(null)}
             disabled={!selectedImage}
+            testID="btn-remove"
           />
         </Stack>
         <Dialog isVisible={showDialog} onBackdropPress={() => setShowDialog(false)}>
