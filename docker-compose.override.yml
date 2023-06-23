@@ -17,6 +17,7 @@ services:
     image: php:7.4-fpm-alpine
     volumes:
       - ./backend/php:/var/www/html
+      - ./backend/json:/var/www/html/json:ro
     networks:
       - api-network
 volumes:

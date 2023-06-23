@@ -2,16 +2,22 @@
 header('Content-Type: application/json');
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['code']) && $_POST['code'] === 'testing123') {
+        $json_dir = __DIR__ . '/json';
+        $json_files = glob($json_dir . '/*.json');
+        $form_list = [];
+        foreach ($json_files as $json_file) {
+            $contents = file_get_contents($json_file);
+            $form = json_decode($contents, true);
+            $form_list[] = [
+                'id'      => $form['id'],
+                'url'     => '/forms/' . $form['id'],
+                'version' => $form['version'],
+            ];
+        }
         http_response_code(200);
         echo json_encode(array(
             'message' => 'Success',
-            'formsUrl' => array(
-                ["id" => 519630048, "url" => '/forms/519630048', "version" => "1.0.0"],
-                ["id" => 533560002, "url" => '/forms/533560002', "version" => "1.0.0"],
-                ["id" => 563350033, "url" => '/forms/563350033', "version" => "1.0.0"],
-                ["id" => 567490004, "url" => '/forms/567490004', "version" => "1.0.0"],
-                ["id" => 603050002, "url" => '/forms/603050002', "version" => "1.0.0"],
-            ),
+            'formsUrl' => $form_list,
             'syncToken' => 'Bearer eyjtoken',
         ));
     } else {
