@@ -59,14 +59,18 @@ export const styles = StyleSheet.create({
     marginRight: 0,
   },
   formNavigationButton: {
+    // backgroundColor:'red',
     borderTopColor: 'grey',
     borderTopWidth: 0.5,
+    borderBottomWidth: 0,
   },
   formNavigationIcon: {
     paddingTop: 9,
+    paddingBottom: 10,
   },
   formNavigationTitle: {
     paddingTop: 9,
+    paddingBottom: 10,
     color: 'grey',
     fontWeight: 'normal',
     fontSize: 14,

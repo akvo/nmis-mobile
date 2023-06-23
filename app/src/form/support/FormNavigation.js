@@ -20,7 +20,7 @@ const FormNavigation = ({ onSubmit, activeGroup, setActiveGroup, totalGroup = 2 
     >
       <Tab.Item
         title="Back"
-        icon={{ name: 'chevron-back-outline', type: 'ionicon', color: 'grey', size: 14 }}
+        icon={{ name: 'chevron-back-outline', type: 'ionicon', color: 'grey', size: 20 }}
         iconPosition="left"
         iconContainerStyle={styles.formNavigationIcon}
         titleStyle={styles.formNavigationTitle}
@@ -28,6 +28,7 @@ const FormNavigation = ({ onSubmit, activeGroup, setActiveGroup, totalGroup = 2 
       />
       <Tab.Item
         disabled
+        disabledStyle={{ backgroundColor: 'transparent' }}
         title={`${activeGroup + 1}/${totalGroup}`}
         titleStyle={styles.formNavigationTitle}
         testID="form-nav-group-count"
@@ -35,7 +36,7 @@ const FormNavigation = ({ onSubmit, activeGroup, setActiveGroup, totalGroup = 2 
       {activeGroup < totalGroup - 1 ? (
         <Tab.Item
           title="Next"
-          icon={{ name: 'chevron-forward-outline', type: 'ionicon', color: 'grey', size: 14 }}
+          icon={{ name: 'chevron-forward-outline', type: 'ionicon', color: 'grey', size: 20 }}
           iconPosition="right"
           iconContainerStyle={styles.formNavigationIcon}
           titleStyle={styles.formNavigationTitle}
@@ -44,7 +45,7 @@ const FormNavigation = ({ onSubmit, activeGroup, setActiveGroup, totalGroup = 2 
       ) : (
         <Tab.Item
           title="Submit"
-          icon={{ name: 'paper-plane-outline', type: 'ionicon', color: 'grey', size: 14 }}
+          icon={{ name: 'paper-plane-outline', type: 'ionicon', color: 'grey', size: 20 }}
           iconPosition="right"
           iconContainerStyle={styles.formNavigationIcon}
           titleStyle={styles.formNavigationTitle}

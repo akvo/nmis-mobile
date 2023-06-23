@@ -667,6 +667,7 @@ exports[`Webform component renders correctly 1`] = `
               {
                 "alignItems": "center",
                 "backgroundColor": "transparent",
+                "borderBottomWidth": 0,
                 "borderColor": "#2089dc",
                 "borderRadius": 0,
                 "borderTopColor": "grey",
@@ -684,6 +685,7 @@ exports[`Webform component renders correctly 1`] = `
                 {
                   "marginHorizontal": 5,
                   "overflow": "hidden",
+                  "paddingBottom": 10,
                   "paddingTop": 9,
                 }
               }
@@ -723,6 +725,7 @@ exports[`Webform component renders correctly 1`] = `
                   "fontWeight": "normal",
                   "marginLeft": -10,
                   "marginRight": -10,
+                  "paddingBottom": 10,
                   "paddingHorizontal": 16,
                   "paddingTop": 9,
                   "paddingVertical": 2,
@@ -798,7 +801,8 @@ exports[`Webform component renders correctly 1`] = `
             style={
               {
                 "alignItems": "center",
-                "backgroundColor": "hsl(208, 8%, 90%)",
+                "backgroundColor": "transparent",
+                "borderBottomWidth": 0,
                 "borderColor": "#2089dc",
                 "borderRadius": 0,
                 "borderTopColor": "grey",
@@ -819,6 +823,7 @@ exports[`Webform component renders correctly 1`] = `
                   "fontWeight": "normal",
                   "marginLeft": -10,
                   "marginRight": -10,
+                  "paddingBottom": 10,
                   "paddingHorizontal": 16,
                   "paddingTop": 9,
                   "paddingVertical": 8,
@@ -895,6 +900,7 @@ exports[`Webform component renders correctly 1`] = `
               {
                 "alignItems": "center",
                 "backgroundColor": "transparent",
+                "borderBottomWidth": 0,
                 "borderColor": "#2089dc",
                 "borderRadius": 0,
                 "borderTopColor": "grey",
@@ -912,6 +918,7 @@ exports[`Webform component renders correctly 1`] = `
                 {
                   "marginHorizontal": 5,
                   "overflow": "hidden",
+                  "paddingBottom": 10,
                   "paddingTop": 9,
                 }
               }
@@ -951,6 +958,7 @@ exports[`Webform component renders correctly 1`] = `
                   "fontWeight": "normal",
                   "marginLeft": -10,
                   "marginRight": -10,
+                  "paddingBottom": 10,
                   "paddingHorizontal": 16,
                   "paddingTop": 9,
                   "paddingVertical": 2,
