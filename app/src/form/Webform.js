@@ -4,9 +4,9 @@ import { ScrollView, View } from 'react-native';
 import { Input, CheckBox } from '@rneui/themed';
 import { Formik } from 'formik';
 import { styles } from './styles';
-import { Dropdown, MultiSelect } from 'react-native-element-dropdown';
+import { MultiSelect } from 'react-native-element-dropdown';
 import { FieldGroupHeader, FieldLabel, FormNavigation } from './support';
-import { TypeImage, TypeInput, TypeDate } from './fields';
+import { TypeImage, TypeInput, TypeDate, TypeOption } from './fields';
 
 const fakeInitialValues = {
   name: 'John Doe',
@@ -65,49 +65,29 @@ const Webform = ({ navigation, route, initialValues = fakeInitialValues }) => {
                       />
                     </View>
                     {/* Radio */}
-                    <View style={styles.questionContainer}>
-                      <FieldLabel label="Gender" />
-                      <CheckBox
-                        containerStyle={styles.radioFieldContainer}
-                        textStyle={styles.radioFieldText}
-                        checked={values.gender === 'male'}
-                        onPress={() => setFieldValue('gender', 'male')}
-                        title="Male"
-                        checkedIcon="dot-circle-o"
-                        uncheckedIcon="circle-o"
-                      />
-                      <CheckBox
-                        containerStyle={styles.radioFieldContainer}
-                        textStyle={styles.radioFieldText}
-                        checked={values.gender === 'female'}
-                        onPress={() => setFieldValue('gender', 'female')}
-                        title="Female"
-                        checkedIcon="dot-circle-o"
-                        uncheckedIcon="circle-o"
-                      />
-                    </View>
+                    <TypeOption
+                      onChange={setFieldValue}
+                      values={values}
+                      id="gender"
+                      name="Gender"
+                      option={[
+                        { label: 'Male', name: 'male' },
+                        { label: 'Female', name: 'female' },
+                      ]}
+                    />
                     {/* Single Select Dropdown */}
-                    <View style={styles.questionContainer}>
-                      <FieldLabel label="Last Education" />
-                      <Dropdown
-                        style={[styles.dropdownField]}
-                        data={[
-                          { label: 'Senior High School', value: 'Senior High School' },
-                          { label: 'Bachelor', value: 'Bachelor' },
-                          { label: 'Master', value: 'Master' },
-                          { label: 'Doctor', value: 'Doctor' },
-                        ]}
-                        search
-                        maxHeight={300}
-                        labelField="label"
-                        valueField="value"
-                        searchPlaceholder="Search..."
-                        value={values.education || []}
-                        onChange={({ value }) => {
-                          setFieldValue('education', value);
-                        }}
-                      />
-                    </View>
+                    <TypeOption
+                      onChange={setFieldValue}
+                      values={values}
+                      id="education"
+                      name="Last Education"
+                      option={[
+                        { label: 'Senior High School', name: 'Senior High School' },
+                        { label: 'Bachelor', name: 'Bachelor' },
+                        { label: 'Master', name: 'Master' },
+                        { label: 'Doctor', name: 'Doctor' },
+                      ]}
+                    />
                   </View>
                 )}
 

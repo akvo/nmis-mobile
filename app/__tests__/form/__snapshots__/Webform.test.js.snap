@@ -551,6 +551,7 @@ exports[`Webform component should render component correctly 1`] = `
                       "justifyContent": "space-between",
                     }
                   }
+                  testID="type-option-dropdown"
                 >
                   <Text
                     style={
