@@ -105,7 +105,7 @@ exports[`Webform component should render component correctly 1`] = `
                 }
                 testID="field-label"
               >
-                Name
+                name
               </Text>
               <View
                 style={
@@ -147,7 +147,7 @@ exports[`Webform component should render component correctly 1`] = `
                         "minHeight": 40,
                       }
                     }
-                    testID="RNE__Input__text-input"
+                    testID="type-input"
                     underlineColorAndroid="transparent"
                     value="John Doe"
                   />

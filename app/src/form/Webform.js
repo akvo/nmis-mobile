@@ -7,7 +7,7 @@ import { styles } from './styles';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Dropdown, MultiSelect } from 'react-native-element-dropdown';
 import { FieldGroupHeader, FieldLabel, FormNavigation } from './support';
-import { TypeImage } from './fields';
+import { TypeImage, TypeInput } from './fields';
 
 const fakeInitialValues = {
   name: 'John Doe',
@@ -49,14 +49,7 @@ const Webform = ({ navigation, route, initialValues = fakeInitialValues }) => {
                       description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dapibus."
                     />
                     {/* Text */}
-                    <View style={styles.questionContainer}>
-                      <FieldLabel label="Name" />
-                      <Input
-                        inputContainerStyle={styles.inputFieldContainer}
-                        onChangeText={handleChange('name')}
-                        value={values.name}
-                      />
-                    </View>
+                    <TypeInput onChange={handleChange} values={values} id="name" />
                     {/* DatePicker */}
                     <View style={styles.questionContainer}>
                       <FieldLabel label="Birth Date" />
