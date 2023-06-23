@@ -6,11 +6,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode(array(
             'message' => 'Success',
             'formsUrl' => array(
-                '/forms/519630048',
-                '/forms/533560002',
-                '/forms/563350033',
-                '/forms/567490004',
-                '/forms/603050002',
+                ["id" => 519630048, "url" => '/forms/519630048', "version" => "1.0.0"],
+                ["id" => 533560002, "url" => '/forms/533560002', "version" => "1.0.0"],
+                ["id" => 563350033, "url" => '/forms/563350033', "version" => "1.0.0"],
+                ["id" => 567490004, "url" => '/forms/567490004', "version" => "1.0.0"],
+                ["id" => 603050002, "url" => '/forms/603050002', "version" => "1.0.0"],
             ),
             'syncToken' => 'Bearer eyjtoken',
         ));

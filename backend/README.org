@@ -20,15 +20,31 @@ curl -X POST -d "code=testing123" -s http://localhost:8080/auth | jq
 {
   "message": "Success",
   "formsUrl": [
-    "/forms/519630048",
-    "/forms/533560002",
-    "/forms/563350033",
-    "/forms/567490004",
-    "/forms/603050002"
+    {
+      "url": "/forms/519630048",
+      "version": "1.0.0"
+    },
+    {
+      "url": "/forms/533560002",
+      "version": "1.0.0"
+    },
+    {
+      "url": "/forms/563350033",
+      "version": "1.0.0"
+    },
+    {
+      "url": "/forms/567490004",
+      "version": "1.0.0"
+    },
+    {
+      "url": "/forms/603050002",
+      "version": "1.0.0"
+    }
   ],
   "syncToken": "Bearer eyjtoken"
 }
 #+end_example
+
 
 ** Auth Failed
 
