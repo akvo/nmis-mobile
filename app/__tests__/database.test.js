@@ -50,7 +50,34 @@ describe('conn.tx', () => {
     );
   });
 
-  test('should execute the update transaction successfully', async () => {
+  test('should execute the update with multiple conditions successfully', async () => {
+    // Define the query and parameters for update
+    const table = 'users';
+    const id = 2;
+    const name = 'Leo';
+    const where = { id, name };
+    const data = { password: 'secret123' };
+    const updateQuery = query.update(table, where, data);
+    const updateParams = [id, name];
+
+    // Execute the update transaction
+    const updateResultSet = await conn.tx(db, updateQuery, updateParams);
+
+    // Assertions
+    expect(updateQuery).toEqual(
+      "UPDATE users SET password = 'secret123' WHERE id = ? AND name = ?;",
+    );
+    expect(updateResultSet).toEqual({ rowsAffected: 1 });
+    expect(db.transaction).toHaveBeenCalled();
+    expect(mockExecuteSql).toHaveBeenCalledWith(
+      updateQuery,
+      updateParams,
+      expect.any(Function),
+      expect.any(Function),
+    );
+  });
+
+  test('should execute the update with single condition successfully', async () => {
     // Define the query and parameters for update
     const table = 'users';
     const name = 'Jhon Lenon';
@@ -113,7 +140,7 @@ describe('conn.tx', () => {
       },
       {
         name: 'Leo',
-        password: 'secret',
+        password: 'secret123',
       },
     ];
     const mockSelectSql = jest.fn((query, params, successCallback) => {
@@ -151,7 +178,7 @@ describe('conn.tx', () => {
     const userData = [
       {
         name: 'Leo',
-        password: 'secret',
+        password: 'secret123',
       },
     ];
     const mockSelectSql = jest.fn((query, params, successCallback) => {
@@ -165,7 +192,7 @@ describe('conn.tx', () => {
 
     // Define the query and parameters for select
     const table = 'users';
-    const password = 'secret';
+    const password = 'secret123';
     const name = 'Leo';
     const where = { password, name };
     const selectQuery = query.read(table, where);
