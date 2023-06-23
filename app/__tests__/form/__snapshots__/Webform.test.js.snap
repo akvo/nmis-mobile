@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Webform component renders correctly 1`] = `
+exports[`Webform component should render component correctly 1`] = `
 <View
   style={
     {
@@ -149,6 +149,7 @@ exports[`Webform component renders correctly 1`] = `
                     }
                     testID="RNE__Input__text-input"
                     underlineColorAndroid="transparent"
+                    value="John Doe"
                   />
                 </View>
                 <Text
@@ -228,6 +229,7 @@ exports[`Webform component renders correctly 1`] = `
                     }
                     testID="RNE__Input__text-input"
                     underlineColorAndroid="transparent"
+                    value="1/1/1991"
                   />
                 </View>
                 <Text
@@ -307,6 +309,7 @@ exports[`Webform component renders correctly 1`] = `
                     }
                     testID="RNE__Input__text-input"
                     underlineColorAndroid="transparent"
+                    value="32"
                   />
                 </View>
                 <Text
@@ -348,7 +351,7 @@ exports[`Webform component renders correctly 1`] = `
                 accessibilityState={
                   {
                     "busy": undefined,
-                    "checked": false,
+                    "checked": true,
                     "disabled": false,
                     "expanded": undefined,
                     "selected": undefined,

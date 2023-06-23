@@ -9,7 +9,18 @@ import { Dropdown, MultiSelect } from 'react-native-element-dropdown';
 import { FieldGroupHeader, FieldLabel, FormNavigation } from './support';
 import { TypeImage } from './fields';
 
-const Webform = ({ navigation, route }) => {
+const fakeInitialValues = {
+  name: 'John Doe',
+  birthDate: new Date('01-01-1991'),
+  age: '32',
+  gender: 'male',
+  education: 'Bachelor',
+  hobby: ['Traveling'],
+  foods: ['Fried Rice', 'Rendang'],
+  comment: 'Lorem ipsum...',
+};
+
+const Webform = ({ navigation, route, initialValues = fakeInitialValues }) => {
   const now = new Date();
   const formRef = React.useRef();
   const [activeGroup, setActiveGroup] = React.useState(0);
@@ -23,7 +34,11 @@ const Webform = ({ navigation, route }) => {
     <BaseLayout title={route?.params?.name} back={goBack}>
       <ScrollView>
         <BaseLayout.Content>
-          <Formik innerRef={formRef} initialValues={{}} onSubmit={(values) => console.log(values)}>
+          <Formik
+            innerRef={formRef}
+            initialValues={initialValues}
+            onSubmit={(values) => console.log(values)}
+          >
             {({ handleChange, setFieldValue, values }) => (
               <View style={styles.formContainer}>
                 {/* Group 1 */}
@@ -135,9 +150,9 @@ const Webform = ({ navigation, route }) => {
                           containerStyle={styles.radioFieldContainer}
                           textStyle={styles.radioFieldText}
                           key={ival}
-                          checked={values.hobby?.[ival] === val}
+                          checked={values.hobby?.includes(val)}
                           onPress={() => {
-                            values.hobby?.[ival] === val
+                            values.hobby?.includes(val)
                               ? setFieldValue(`hobby.${ival}`, null)
                               : setFieldValue(`hobby.${ival}`, val);
                           }}
