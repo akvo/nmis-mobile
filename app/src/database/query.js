@@ -1,13 +1,15 @@
 const insert = (table, data = {}) => {
   const fields = Object.keys(data);
-  const valuesString = fields.map((key) => isNaN(data[key]) ? `'${data[key]}'` : data[key]).join(', ');
+  const valuesString = fields
+    .map((key) => (isNaN(data[key]) ? `'${data[key]}'` : data[key]))
+    .join(', ');
   const fieldsString = fields.join(', ');
   return `INSERT INTO ${table}(${fieldsString}) VALUES (${valuesString});`;
 };
 
 const update = (table, where = {}, data = {}) => {
   const fieldString = Object.keys(data)
-    .map((key) => isNaN(data[key]) ? `${key} = '${data[key]}'` : `${key} = ${data[key]}`)
+    .map((key) => (isNaN(data[key]) ? `${key} = '${data[key]}'` : `${key} = ${data[key]}`))
     .join(', ');
   const conditions = Object.keys(where).map((key) => `${key} = ?`);
   const conditionString = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
