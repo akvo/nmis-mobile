@@ -1,12 +1,11 @@
 import React from 'react';
 import { BaseLayout } from '../components';
 import { ScrollView, View } from 'react-native';
-import { Input, CheckBox } from '@rneui/themed';
+import { Input } from '@rneui/themed';
 import { Formik } from 'formik';
 import { styles } from './styles';
-import { MultiSelect } from 'react-native-element-dropdown';
 import { FieldGroupHeader, FieldLabel, FormNavigation } from './support';
-import { TypeImage, TypeInput, TypeDate, TypeOption, TypeMultipleOption } from './fields';
+import { TypeImage, TypeInput, TypeDate, TypeOption, TypeMultipleOption, TypeText } from './fields';
 
 const fakeInitialValues = {
   name: 'John Doe',
@@ -126,20 +125,9 @@ const Webform = ({ navigation, route, initialValues = fakeInitialValues }) => {
                       ]}
                     />
                     {/* Image/File Input */}
-                    <View style={styles.questionContainer}>
-                      <TypeImage onChange={setFieldValue} />
-                    </View>
+                    <TypeImage onChange={setFieldValue} id="image" name="Image" />
                     {/* TextArea */}
-                    <View style={styles.questionContainer}>
-                      <FieldLabel label="Comment" />
-                      <Input
-                        inputContainerStyle={styles.inputFieldContainer}
-                        multiline={true}
-                        numberOfLines={4}
-                        onChangeText={handleChange('comment')}
-                        value={values.comment}
-                      />
-                    </View>
+                    <TypeText onChange={handleChange} values={values} id="comment" name="Comment" />
                   </View>
                 )}
               </View>

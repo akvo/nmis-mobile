@@ -4,17 +4,18 @@ import { Image, Button, Dialog } from '@rneui/themed';
 import * as ImagePicker from 'expo-image-picker';
 import { Stack } from '../../components';
 import { FieldLabel } from '../support';
+import { styles as formStyle } from '../styles';
 
 // TODO: getImageBase64 (ARF)
 // TODO: convertImageToBase64 (ARF)
 
-const TypeImage = ({ onChange }) => {
+const TypeImage = ({ onChange, id, name }) => {
   const [showDialog, setShowDialog] = React.useState(false);
   const [selectedImage, setSelectedImage] = React.useState(null);
 
   React.useEffect(() => {
     if (onChange) {
-      onChange('image', selectedImage);
+      onChange(id, selectedImage);
     }
   }, [selectedImage, onChange]);
 
@@ -100,8 +101,8 @@ const TypeImage = ({ onChange }) => {
   }
 
   return (
-    <>
-      <FieldLabel label="Image" />
+    <View style={formStyle.questionContainer}>
+      <FieldLabel label={name} />
       <View style={styles.fieldImageContainer}>
         {selectedImage != null ? (
           <Image
@@ -142,7 +143,7 @@ const TypeImage = ({ onChange }) => {
           />
         </Dialog>
       </View>
-    </>
+    </View>
   );
 };
 
