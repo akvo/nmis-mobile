@@ -46,10 +46,10 @@ const TypeImage = ({ onChange }) => {
         return true;
       }
 
-      console.warn('Camera permission denied');
+      console.info('Camera permission denied');
       return false;
     } catch (err) {
-      console.warn(err);
+      console.error(err);
       return false;
     }
   };
@@ -60,7 +60,7 @@ const TypeImage = ({ onChange }) => {
       setShowDialog(true);
       return true;
     }
-    console.warn('Access not granted!');
+    console.info('Access not granted!');
   }
 
   async function selectFile() {
@@ -70,13 +70,13 @@ const TypeImage = ({ onChange }) => {
         quality: 1,
       });
       if (result?.canceled) {
-        console.warn('You did not select any image.');
+        console.info('You did not select any image.');
         return false;
       }
       setSelectedImage(result.assets[0]);
     } catch (err) {
       setSelectedImage(null);
-      console.warn(err);
+      console.error(err);
       return false;
     }
   }
@@ -88,13 +88,13 @@ const TypeImage = ({ onChange }) => {
         quality: 1,
       });
       if (result?.canceled) {
-        console.warn('You did not select any image.');
+        console.info('You did not select any image.');
         return false;
       }
       setSelectedImage(result.assets[0]);
     } catch (err) {
       setSelectedImage(null);
-      console.warn(err);
+      console.error(err);
       return false;
     }
   }
@@ -122,13 +122,23 @@ const TypeImage = ({ onChange }) => {
             testID="btn-remove"
           />
         </Stack>
-        <Dialog isVisible={showDialog} onBackdropPress={() => setShowDialog(false)}>
-          <Button title="Use Camera" type="outline" onPress={handleCamera} />
+        <Dialog
+          isVisible={showDialog}
+          onBackdropPress={() => setShowDialog(false)}
+          testID="popup-dialog"
+        >
+          <Button
+            title="Use Camera"
+            type="outline"
+            onPress={handleCamera}
+            testID="btn-use-camera"
+          />
           <Button
             containerStyle={styles.buttonFromGallery}
             title="From Gallery"
             type="outline"
             onPress={selectFile}
+            testID="btn-from-gallery"
           />
         </Dialog>
       </View>
