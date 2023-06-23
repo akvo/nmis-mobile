@@ -104,13 +104,51 @@ describe('conn.tx', () => {
     );
   });
 
-  test('should execute the select transaction successfully', async () => {
+  test('should execute the select without filtering transaction successfully', async () => {
     // Mock the result set for select
     const userData = [
       {
         name: 'John',
         password: 'password',
       },
+      {
+        name: 'Leo',
+        password: 'secret',
+      },
+    ];
+    const mockSelectSql = jest.fn((query, params, successCallback) => {
+      successCallback(null, { rows: { length: userData.length, _array: userData } });
+    });
+    db.transaction.mockImplementation((transactionFunction) => {
+      transactionFunction({
+        executeSql: mockSelectSql,
+      });
+    });
+
+    // Define the query and parameters for select
+    const table = 'users';
+    const selectQuery = query.read(table);
+    const selectParams = [];
+
+    // Execute the select transaction
+    const result = await conn.tx(db, selectQuery, selectParams);
+
+    // Assertions
+    expect(selectQuery).toEqual('SELECT * FROM users ;');
+    expect(result.rows).toHaveLength(userData.length);
+    expect(result.rows._array).toEqual(userData);
+    expect(db.transaction).toHaveBeenCalled();
+    expect(mockSelectSql).toHaveBeenCalledWith(
+      selectQuery,
+      selectParams,
+      expect.any(Function),
+      expect.any(Function),
+    );
+  });
+
+  test('should execute the select with two filter transaction successfully', async () => {
+    // Mock the result set for select
+    const userData = [
       {
         name: 'Leo',
         password: 'secret',
