@@ -1,72 +1,51 @@
 {
   "id": 533560002,
-  "version": "1.0.0",
   "name": "Health Facilities",
+  "version": "1.0.0",
   "question_group": [
     {
-      "id": 162,
       "name": "Demographics",
       "question": [
         {
           "id": 603580004,
-          "form": 533560002,
-          "question_group": 162,
-          "name": "Enumerator",
-          "text": "Name of the data collector (Enumerator)",
+          "name": "Name of the data collector (Enumerator)",
           "order": 1,
-          "meta": true,
           "type": "text",
           "required": true,
-          "attributes": []
+          "meta": true
         },
         {
           "id": 5335600021,
-          "form": 533560002,
-          "question_group": 162,
           "name": "Organisation",
-          "text": "Organisation",
           "order": 2,
-          "meta": false,
-          "api": {
-            "endpoint": "/api/v1/organisations?attributes=2"
-          },
           "type": "cascade",
           "required": true,
-          "attributes": []
+          "meta": false
         },
         {
           "id": 547720002,
-          "form": 533560002,
-          "question_group": 162,
-          "name": "Geolocation",
-          "text": "Take the GPS location",
+          "name": "Take the GPS location",
           "order": 3,
-          "meta": true,
           "type": "geo",
           "required": false,
-          "option": [],
-          "attributes": ["table"]
+          "center": {
+            "lat": 9.145,
+            "lng": 40.4897
+          },
+          "meta": true
         },
         {
           "id": 547720003,
-          "form": 533560002,
-          "question_group": 162,
           "name": "Location",
-          "text": "Location",
           "order": 4,
-          "meta": true,
           "type": "cascade",
           "required": true,
-          "attributes": ["chart", "table"]
+          "meta": true
         },
         {
           "id": 545980002,
-          "form": 533560002,
-          "question_group": 162,
-          "name": "Whether Urban, Peri Urban or Rural",
-          "text": "Is the Health Care facility in an urban, peri-urban or rural setup?",
+          "name": "Is the Health Care facility in an urban, peri-urban or rural setup?",
           "order": 5,
-          "meta": false,
           "type": "option",
           "required": true,
           "option": [
@@ -86,40 +65,28 @@
               "order": 3
             }
           ],
-          "attributes": ["advanced_filter"]
+          "meta": false
         },
         {
           "id": 547740002,
-          "form": 533560002,
-          "question_group": 162,
-          "name": "Health facility Name",
-          "text": "What is the name of the health care facility?",
+          "name": "What is the name of the health care facility?",
           "order": 6,
-          "meta": false,
           "type": "text",
           "required": true,
-          "attributes": ["table"]
+          "meta": false
         },
         {
           "id": 609030002,
-          "form": 533560002,
-          "question_group": 162,
           "name": "What is the health facility code?",
-          "text": "What is the health facility code?",
           "order": 7,
-          "meta": true,
           "type": "text",
           "required": true,
-          "attributes": []
+          "meta": true
         },
         {
           "id": 547720005,
-          "form": 533560002,
-          "question_group": 162,
-          "name": "Health facility level",
-          "text": "Level of the health care facility",
+          "name": "Level of the health care facility",
           "order": 8,
-          "meta": true,
           "type": "option",
           "required": true,
           "option": [
@@ -159,58 +126,44 @@
               "order": 7
             }
           ],
-          "attributes": ["chart", "table", "advanced_filter"]
+          "meta": true,
+          "extra": {
+            "allowOther": true
+          }
         },
         {
           "id": 610980068,
-          "form": 533560002,
-          "question_group": 162,
-          "name": "Assessment date",
-          "text": "Date of assessment?",
+          "name": "Date of assessment?",
           "order": 9,
-          "meta": false,
           "type": "date",
           "required": true,
-          "attributes": []
+          "meta": false
         },
         {
           "id": 611820069,
-          "form": 533560002,
-          "question_group": 162,
           "name": "Approximately how many out patients do you serve in a day?",
-          "text": "Approximately how many out patients do you serve in a day?",
           "order": 9,
-          "meta": false,
           "type": "text",
           "required": true,
-          "attributes": []
+          "meta": false
         },
         {
           "id": 546020004,
-          "form": 533560002,
-          "question_group": 162,
           "name": "How many in patient beds does the health care facility have?",
-          "text": "How many in patient beds does the health care facility have?",
           "order": 10,
-          "meta": false,
           "type": "number",
           "required": true,
-          "attributes": []
+          "meta": false
         }
       ]
     },
     {
-      "id": 163,
       "name": "Water",
       "question": [
         {
           "id": 605940002,
-          "form": 533560002,
-          "question_group": 163,
           "name": "Is water available at the health facility?",
-          "text": "Is water available at the health facility?",
           "order": 1,
-          "meta": false,
           "type": "option",
           "required": true,
           "option": [
@@ -225,18 +178,22 @@
               "order": 2
             }
           ],
-          "attributes": []
+          "meta": false
         },
         {
           "id": 563310061,
-          "form": 533560002,
-          "question_group": 163,
-          "name": "Main water supply",
-          "text": "What is the main water source for the health facility? (Tick one)",
+          "name": "What is the main water source for the health facility? (Tick one)",
           "order": 2,
-          "meta": false,
           "type": "option",
           "required": true,
+          "dependency": [
+            {
+              "id": 605940002,
+              "options": [
+                "Yes"
+              ]
+            }
+          ],
           "option": [
             {
               "id": 14360,
@@ -289,24 +246,28 @@
               "order": 10
             }
           ],
-          "dependency": [
-            {
-              "id": 605940002,
-              "options": ["Yes"]
-            }
-          ],
-          "attributes": ["chart", "table", "advanced_filter"]
+          "meta": false
         },
         {
           "id": 563310062,
-          "form": 533560002,
-          "question_group": 163,
-          "name": "Water supply location",
-          "text": "Where is the main water supply for the facility located?",
+          "name": "Where is the main water supply for the facility located?",
           "order": 3,
-          "meta": false,
           "type": "option",
           "required": true,
+          "dependency": [
+            {
+              "id": 563310061,
+              "options": [
+                "Tube well / Borehole",
+                "Protected dug well",
+                "Unprotected dug well",
+                "Protected spring",
+                "Unprotected spring",
+                "Rain water",
+                "Surface water (river/dam/lake/pond)"
+              ]
+            }
+          ],
           "option": [
             {
               "id": 14370,
@@ -324,32 +285,22 @@
               "order": 3
             }
           ],
-          "dependency": [
-            {
-              "id": 563310061,
-              "options": [
-                "Tube well / Borehole",
-                "Protected dug well",
-                "Unprotected dug well",
-                "Protected spring",
-                "Unprotected spring",
-                "Rain water",
-                "Surface water (river/dam/lake/pond)"
-              ]
-            }
-          ],
-          "attributes": ["chart", "aggregate", "table"]
+          "meta": false
         },
         {
           "id": 563310064,
-          "form": 533560002,
-          "question_group": 163,
-          "name": "Water supply availability (during the survey)",
-          "text": "Is water available at the health facility at all times?",
+          "name": "Is water available at the health facility at all times?",
           "order": 4,
-          "meta": true,
           "type": "option",
           "required": true,
+          "dependency": [
+            {
+              "id": 605940002,
+              "options": [
+                "Yes"
+              ]
+            }
+          ],
           "option": [
             {
               "id": 14373,
@@ -362,24 +313,22 @@
               "order": 2
             }
           ],
-          "dependency": [
-            {
-              "id": 605940002,
-              "options": ["Yes"]
-            }
-          ],
-          "attributes": ["chart", "aggregate", "table"]
+          "meta": true
         },
         {
           "id": 604160004,
-          "form": 533560002,
-          "question_group": 163,
           "name": "Is the water available enough for all uses at the health facility?",
-          "text": "Is the water available enough for all uses at the health facility?",
           "order": 5,
-          "meta": false,
           "type": "option",
           "required": true,
+          "dependency": [
+            {
+              "id": 605940002,
+              "options": [
+                "Yes"
+              ]
+            }
+          ],
           "option": [
             {
               "id": 14375,
@@ -392,22 +341,12 @@
               "order": 2
             }
           ],
-          "dependency": [
-            {
-              "id": 605940002,
-              "options": ["Yes"]
-            }
-          ],
-          "attributes": []
+          "meta": false
         },
         {
           "id": 563310060,
-          "form": 533560002,
-          "question_group": 163,
-          "name": "Water is always availabe",
-          "text": "Is the water always available at the water source",
+          "name": "Is the water always available at the water source",
           "order": 6,
-          "meta": false,
           "type": "option",
           "required": true,
           "option": [
@@ -422,16 +361,12 @@
               "order": 2
             }
           ],
-          "attributes": []
+          "meta": false
         },
         {
           "id": 610930004,
-          "form": 533560002,
-          "question_group": 163,
           "name": "Is safe, clean water available from a tap or container",
-          "text": "Is safe, clean water available from a tap or container",
           "order": 6,
-          "meta": false,
           "type": "option",
           "required": true,
           "option": [
@@ -446,22 +381,17 @@
               "order": 2
             }
           ],
-          "attributes": []
+          "meta": false
         }
       ]
     },
     {
-      "id": 164,
       "name": "Sanitation",
       "question": [
         {
           "id": 611790061,
-          "form": 533560002,
-          "question_group": 164,
           "name": "Are there toilets at the health facility?",
-          "text": "Are there toilets at the health facility?",
           "order": 1,
-          "meta": false,
           "type": "option",
           "required": true,
           "option": [
@@ -476,18 +406,22 @@
               "order": 2
             }
           ],
-          "attributes": ["jmp"]
+          "meta": false
         },
         {
           "id": 555370004,
-          "form": 533560002,
-          "question_group": 164,
-          "name": "Type of toilets / latrines",
-          "text": "What type of toilets/latrines are at the facility for patients?",
+          "name": "What type of toilets/latrines are at the facility for patients?",
           "order": 2,
-          "meta": false,
           "type": "multiple_option",
           "required": true,
+          "dependency": [
+            {
+              "id": 611790061,
+              "options": [
+                "Yes"
+              ]
+            }
+          ],
           "option": [
             {
               "id": 14381,
@@ -515,24 +449,22 @@
               "order": 5
             }
           ],
-          "dependency": [
-            {
-              "id": 611790061,
-              "options": ["Yes"]
-            }
-          ],
-          "attributes": ["chart", "table", "jmp", "advanced_filter"]
+          "meta": false
         },
         {
           "id": 612020023,
-          "form": 533560002,
-          "question_group": 164,
           "name": "If Flush/pour flush, where does it flush to?",
-          "text": "If Flush/pour flush, where does it flush to?",
           "order": 3,
-          "meta": false,
           "type": "option",
           "required": true,
+          "dependency": [
+            {
+              "id": 555370004,
+              "options": [
+                "Flush / Pour-flush toilet"
+              ]
+            }
+          ],
           "option": [
             {
               "id": 14386,
@@ -560,24 +492,22 @@
               "order": 5
             }
           ],
-          "dependency": [
-            {
-              "id": 555370004,
-              "options": ["Flush / Pour-flush toilet"]
-            }
-          ],
-          "attributes": []
+          "meta": false
         },
         {
           "id": 530250002,
-          "form": 533560002,
-          "question_group": 164,
-          "name": "Usablility of the toilets",
-          "text": "Are the toilets at the health facility useable (accessible, functional and private)?",
+          "name": "Are the toilets at the health facility useable (accessible, functional and private)?",
           "order": 4,
-          "meta": false,
           "type": "option",
           "required": true,
+          "dependency": [
+            {
+              "id": 611790061,
+              "options": [
+                "Yes"
+              ]
+            }
+          ],
           "option": [
             {
               "id": 14391,
@@ -590,48 +520,38 @@
               "order": 2
             }
           ],
-          "dependency": [
-            {
-              "id": 611790061,
-              "options": ["Yes"]
-            }
-          ],
-          "attributes": [
-            "chart",
-            "aggregate",
-            "table",
-            "jmp",
-            "advanced_filter"
-          ]
+          "meta": false
         },
         {
           "id": 555370007,
-          "form": 533560002,
-          "question_group": 164,
-          "name": "Number of usable toilets",
-          "text": "How many toilets are available at the outpatient department?",
+          "name": "How many toilets are available at the outpatient department?",
           "order": 5,
-          "meta": false,
           "type": "number",
           "required": true,
           "dependency": [
             {
               "id": 611790061,
-              "options": ["Yes"]
+              "options": [
+                "Yes"
+              ]
             }
           ],
-          "attributes": ["chart", "table"]
+          "meta": false
         },
         {
           "id": 555370009,
-          "form": 533560002,
-          "question_group": 164,
-          "name": "Dedicated for staff toilets",
-          "text": "Are there toilets that are dedicated for staff?",
+          "name": "Are there toilets that are dedicated for staff?",
           "order": 6,
-          "meta": false,
           "type": "option",
           "required": true,
+          "dependency": [
+            {
+              "id": 611790061,
+              "options": [
+                "Yes"
+              ]
+            }
+          ],
           "option": [
             {
               "id": 14393,
@@ -644,24 +564,22 @@
               "order": 2
             }
           ],
-          "dependency": [
-            {
-              "id": 611790061,
-              "options": ["Yes"]
-            }
-          ],
-          "attributes": ["chart", "aggregate", "table", "jmp"]
+          "meta": false
         },
         {
           "id": 555370003,
-          "form": 533560002,
-          "question_group": 164,
-          "name": "Gender-separated toilets",
-          "text": "Are there toilets separated by gender?",
+          "name": "Are there toilets separated by gender?",
           "order": 7,
-          "meta": false,
           "type": "option",
           "required": true,
+          "dependency": [
+            {
+              "id": 611790061,
+              "options": [
+                "Yes"
+              ]
+            }
+          ],
           "option": [
             {
               "id": 14395,
@@ -674,28 +592,12 @@
               "order": 2
             }
           ],
-          "dependency": [
-            {
-              "id": 611790061,
-              "options": ["Yes"]
-            }
-          ],
-          "attributes": [
-            "chart",
-            "aggregate",
-            "table",
-            "jmp",
-            "advanced_filter"
-          ]
+          "meta": false
         },
         {
           "id": 603540061,
-          "form": 533560002,
-          "question_group": 164,
           "name": "Is there at least one toilet or improved latrine that provides the means to manage menstrual hygiene needs?",
-          "text": "Is there at least one toilet or improved latrine that provides the means to manage menstrual hygiene needs?",
           "order": 8,
-          "meta": false,
           "type": "option",
           "required": true,
           "option": [
@@ -710,18 +612,22 @@
               "order": 2
             }
           ],
-          "attributes": []
+          "meta": false
         },
         {
           "id": 555370005,
-          "form": 533560002,
-          "question_group": 164,
-          "name": "The toilets having menstrual hygiene facilities",
-          "text": "Are there toilets that have menstrual hygiene facilities?",
+          "name": "Are there toilets that have menstrual hygiene facilities?",
           "order": 8,
-          "meta": false,
           "type": "option",
           "required": true,
+          "dependency": [
+            {
+              "id": 611790061,
+              "options": [
+                "Yes"
+              ]
+            }
+          ],
           "option": [
             {
               "id": 14397,
@@ -734,30 +640,22 @@
               "order": 2
             }
           ],
-          "dependency": [
-            {
-              "id": 611790061,
-              "options": ["Yes"]
-            }
-          ],
-          "attributes": [
-            "chart",
-            "aggregate",
-            "table",
-            "jmp",
-            "advanced_filter"
-          ]
+          "meta": false
         },
         {
           "id": 555370006,
-          "form": 533560002,
-          "question_group": 164,
-          "name": "The toilets accessible for people with limited mobility",
-          "text": "Are there toilets that are accessible for people with special needs and disabilities?",
+          "name": "Are there toilets that are accessible for people with special needs and disabilities?",
           "order": 9,
-          "meta": false,
           "type": "option",
           "required": true,
+          "dependency": [
+            {
+              "id": 611790061,
+              "options": [
+                "Yes"
+              ]
+            }
+          ],
           "option": [
             {
               "id": 14399,
@@ -770,30 +668,22 @@
               "order": 2
             }
           ],
-          "dependency": [
-            {
-              "id": 611790061,
-              "options": ["Yes"]
-            }
-          ],
-          "attributes": [
-            "chart",
-            "aggregate",
-            "table",
-            "jmp",
-            "advanced_filter"
-          ]
+          "meta": false
         },
         {
           "id": 585890004,
-          "form": 533560002,
-          "question_group": 164,
           "name": "Is there a cleaning roster displayed?",
-          "text": "Is there a cleaning roster displayed?",
           "order": 10,
-          "meta": false,
           "type": "option",
           "required": true,
+          "dependency": [
+            {
+              "id": 611790061,
+              "options": [
+                "Yes"
+              ]
+            }
+          ],
           "option": [
             {
               "id": 14401,
@@ -806,28 +696,17 @@
               "order": 2
             }
           ],
-          "dependency": [
-            {
-              "id": 611790061,
-              "options": ["Yes"]
-            }
-          ],
-          "attributes": []
+          "meta": false
         }
       ]
     },
     {
-      "id": 165,
       "name": "Hygiene",
       "question": [
         {
           "id": 551560007,
-          "form": 533560002,
-          "question_group": 165,
-          "name": "Functional hand hygiene facility availabilty",
-          "text": "Are functioning hand hygiene stations (that is, alcohol-based hand rub solution or soap and water and clean single-use towels) available at all points of care?",
+          "name": "Are functioning hand hygiene stations (that is, alcohol-based hand rub solution or soap and water and clean single-use towels) available at all points of care?",
           "order": 1,
-          "meta": false,
           "type": "option",
           "required": true,
           "option": [
@@ -852,16 +731,12 @@
               "order": 4
             }
           ],
-          "attributes": ["chart", "table", "jmp"]
+          "meta": false
         },
         {
           "id": 544570062,
-          "form": 533560002,
-          "question_group": 165,
           "name": "Are there Functioning hand hygiene stations within 5 m of latrines?",
-          "text": "Are there Functioning hand hygiene stations within 5 m of latrines?",
           "order": 2,
-          "meta": false,
           "type": "option",
           "required": true,
           "option": [
@@ -876,18 +751,22 @@
               "order": 2
             }
           ],
-          "attributes": []
+          "meta": false
         },
         {
           "id": 551560004,
-          "form": 533560002,
-          "question_group": 165,
-          "name": "Functional handwashing facility availabilty at toilets",
-          "text": "Is there a functional handwashing facility at one or more toilets on the day of the survey?",
+          "name": "Is there a functional handwashing facility at one or more toilets on the day of the survey?",
           "order": 3,
-          "meta": false,
           "type": "option",
           "required": true,
+          "dependency": [
+            {
+              "id": 611790061,
+              "options": [
+                "Yes"
+              ]
+            }
+          ],
           "option": [
             {
               "id": 14409,
@@ -905,22 +784,12 @@
               "order": 3
             }
           ],
-          "dependency": [
-            {
-              "id": 611790061,
-              "options": ["Yes"]
-            }
-          ],
-          "attributes": ["chart", "table", "jmp"]
+          "meta": false
         },
         {
           "id": 561830111,
-          "form": 533560002,
-          "question_group": 165,
           "name": "Are Functioning hand hygiene stations available in waste disposal area?",
-          "text": "Are Functioning hand hygiene stations available in waste disposal area?",
           "order": 4,
-          "meta": false,
           "type": "option",
           "required": true,
           "option": [
@@ -935,16 +804,12 @@
               "order": 2
             }
           ],
-          "attributes": []
+          "meta": false
         },
         {
           "id": 551560009,
-          "form": 533560002,
-          "question_group": 165,
-          "name": "Cleaning protocols is available",
-          "text": "Does the facility have a hygiene protocol?",
+          "name": "Does the facility have a hygiene protocol?",
           "order": 5,
-          "meta": false,
           "type": "option",
           "required": true,
           "option": [
@@ -959,22 +824,12 @@
               "order": 2
             }
           ],
-          "attributes": [
-            "chart",
-            "aggregate",
-            "table",
-            "jmp",
-            "advanced_filter"
-          ]
+          "meta": false
         },
         {
           "id": 585900065,
-          "form": 533560002,
-          "question_group": 165,
           "name": "Does the hygiene protocol have a dedicated staff roster?",
-          "text": "Does the hygiene protocol have a dedicated staff roster?",
           "order": 6,
-          "meta": false,
           "type": "option",
           "required": true,
           "option": [
@@ -989,16 +844,12 @@
               "order": 2
             }
           ],
-          "attributes": []
+          "meta": false
         },
         {
           "id": 551560005,
-          "form": 533560002,
-          "question_group": 165,
-          "name": "Cleaning staff is trained",
-          "text": "Have all staff responsible for cleaning received training?",
+          "name": "Have all staff responsible for cleaning received training?",
           "order": 7,
-          "meta": true,
           "type": "option",
           "required": true,
           "option": [
@@ -1023,16 +874,12 @@
               "order": 4
             }
           ],
-          "attributes": ["chart", "table", "jmp"]
+          "meta": true
         },
         {
           "id": 551560006,
-          "form": 533560002,
-          "question_group": 165,
-          "name": "Staff cleaning responsible to equipped PPEs",
-          "text": "Are the staff responsible for cleaning equipped with all the necessary PPEs?",
+          "name": "Are the staff responsible for cleaning equipped with all the necessary PPEs?",
           "order": 8,
-          "meta": false,
           "type": "option",
           "required": true,
           "option": [
@@ -1047,16 +894,12 @@
               "order": 2
             }
           ],
-          "attributes": ["chart", "aggregate", "table", "advanced_filter"]
+          "meta": false
         },
         {
           "id": 583960109,
-          "form": 533560002,
-          "question_group": 165,
           "name": "Do you have single patient rooms or rooms for cohorting patients with similar pathogens (for example, TB, measles, cholera, Ebola, SARS)?",
-          "text": "Do you have single patient rooms or rooms for cohorting patients with similar pathogens (for example, TB, measles, cholera, Ebola, SARS)?",
           "order": 9,
-          "meta": false,
           "type": "option",
           "required": true,
           "option": [
@@ -1076,16 +919,12 @@
               "order": 3
             }
           ],
-          "attributes": []
+          "meta": false
         },
         {
           "id": 605420144,
-          "form": 533560002,
-          "question_group": 165,
           "name": "Is PPE available at all times and in sufficient quantity for all uses for all health care workers?",
-          "text": "Is PPE available at all times and in sufficient quantity for all uses for all health care workers?",
           "order": 10,
-          "meta": false,
           "type": "option",
           "required": true,
           "option": [
@@ -1105,16 +944,12 @@
               "order": 3
             }
           ],
-          "attributes": []
+          "meta": false
         },
         {
           "id": 551560008,
-          "form": 533560002,
-          "question_group": 165,
-          "name": "Sanitary products available for patiens in case of emergency",
-          "text": "Does the facility have menstrual hygiene materials available for patients who needs?",
+          "name": "Does the facility have menstrual hygiene materials available for patients who needs?",
           "order": 11,
-          "meta": false,
           "type": "option",
           "required": true,
           "option": [
@@ -1129,16 +964,12 @@
               "order": 2
             }
           ],
-          "attributes": ["chart", "aggregate", "table"]
+          "meta": false
         },
         {
           "id": 599600003,
-          "form": 533560002,
-          "question_group": 165,
           "name": "Does the facility have Hand hygiene promotion materials clearly visible and understandable at key places?",
-          "text": "Does the facility have Hand hygiene promotion materials clearly visible and understandable at key places?",
           "order": 12,
-          "meta": false,
           "type": "option",
           "required": true,
           "option": [
@@ -1158,16 +989,12 @@
               "order": 3
             }
           ],
-          "attributes": []
+          "meta": false
         },
         {
           "id": 587820065,
-          "form": 533560002,
-          "question_group": 165,
           "name": "For floors and horizontal work surfaces, is there an accessible record of cleaning, signed by the cleaners?",
-          "text": "For floors and horizontal work surfaces, is there an accessible record of cleaning, signed by the cleaners?",
           "order": 13,
-          "meta": false,
           "type": "option",
           "required": true,
           "option": [
@@ -1182,18 +1009,22 @@
               "order": 2
             }
           ],
-          "attributes": []
+          "meta": false
         },
         {
           "id": 588160129,
-          "form": 533560002,
-          "question_group": 165,
           "name": "For floors and horizontal work surfaces, is there an accessible record of cleaning, counter signed by supervisors each day?",
-          "text": "For floors and horizontal work surfaces, is there an accessible record of cleaning, counter signed by supervisors each day?",
           "order": 14,
-          "meta": false,
           "type": "option",
           "required": true,
+          "dependency": [
+            {
+              "id": 587820065,
+              "options": [
+                "Yes"
+              ]
+            }
+          ],
           "option": [
             {
               "id": 14437,
@@ -1206,22 +1037,12 @@
               "order": 2
             }
           ],
-          "dependency": [
-            {
-              "id": 587820065,
-              "options": ["Yes"]
-            }
-          ],
-          "attributes": []
+          "meta": false
         },
         {
           "id": 550620146,
-          "form": 533560002,
-          "question_group": 165,
           "name": "Are there appropriate and well-maintained materials for cleaning (for example, detergent, mops, buckets, etc.) available?",
-          "text": "Are there appropriate and well-maintained materials for cleaning (for example, detergent, mops, buckets, etc.) available?",
           "order": 15,
-          "meta": false,
           "type": "option",
           "required": true,
           "option": [
@@ -1241,22 +1062,17 @@
               "order": 3
             }
           ],
-          "attributes": []
+          "meta": false
         }
       ]
     },
     {
-      "id": 166,
       "name": "Waste management",
       "question": [
         {
           "id": 597260126,
-          "form": 533560002,
-          "question_group": 166,
           "name": "Does your health care facility provide a dedicated decontamination area and/or sterile supply department?",
-          "text": "Does your health care facility provide a dedicated decontamination area and/or sterile supply department?",
           "order": 1,
-          "meta": false,
           "type": "option",
           "required": true,
           "option": [
@@ -1276,16 +1092,12 @@
               "order": 3
             }
           ],
-          "attributes": []
+          "meta": false
         },
         {
           "id": 609000060,
-          "form": 533560002,
-          "question_group": 166,
           "name": "Do you always have sterile and disinfected equipment ready for use?",
-          "text": "Do you always have sterile and disinfected equipment ready for use?",
           "order": 2,
-          "meta": false,
           "type": "option",
           "required": true,
           "option": [
@@ -1300,16 +1112,12 @@
               "order": 2
             }
           ],
-          "attributes": []
+          "meta": false
         },
         {
           "id": 541950008,
-          "form": 533560002,
-          "question_group": 166,
-          "name": "Waste correctly segregated into at least thee labelled bins",
-          "text": "Is waste correctly segregated into at least three labelled bins in the consultation area?",
+          "name": "Is waste correctly segregated into at least three labelled bins in the consultation area?",
           "order": 3,
-          "meta": false,
           "type": "option",
           "required": true,
           "option": [
@@ -1329,16 +1137,12 @@
               "order": 3
             }
           ],
-          "attributes": ["chart", "table", "jmp", "advanced_filter"]
+          "meta": false
         },
         {
           "id": 603490120,
-          "form": 533560002,
-          "question_group": 166,
           "name": "Do you have a reliable sterilization and disinfection equipment?",
-          "text": "Do you have a reliable sterilization and disinfection equipment?",
           "order": 3,
-          "meta": false,
           "type": "option",
           "required": true,
           "option": [
@@ -1358,18 +1162,23 @@
               "order": 3
             }
           ],
-          "attributes": []
+          "meta": false
         },
         {
           "id": 541950007,
-          "form": 533560002,
-          "question_group": 166,
-          "name": "Having edequate waste collection bins",
-          "text": "Does the health facility have adequate waste collection bins",
+          "name": "Does the health facility have adequate waste collection bins",
           "order": 4,
-          "meta": false,
           "type": "option",
           "required": true,
+          "dependency": [
+            {
+              "id": 541950008,
+              "options": [
+                "Yes, waste is segregated into three labelled bins",
+                "No, bins are present but do not meet all requirements or waste is not correctly segregated"
+              ]
+            }
+          ],
           "option": [
             {
               "id": 14450,
@@ -1382,25 +1191,12 @@
               "order": 2
             }
           ],
-          "dependency": [
-            {
-              "id": 541950008,
-              "options": [
-                "Yes, waste is segregated into three labelled bins",
-                "No, bins are present but do not meet all requirements or waste is not correctly segregated"
-              ]
-            }
-          ],
-          "attributes": ["chart", "table"]
+          "meta": false
         },
         {
           "id": 566440065,
-          "form": 533560002,
-          "question_group": 166,
           "name": "Is there appropriate personal protective equipment for all staff handling health care waste (heat/heavy duty protective gloves, googles, respirators, heavy duty boots,protective foot wear, overalls and helmet)?",
-          "text": "Is there appropriate personal protective equipment for all staff handling health care waste (heat/heavy duty protective gloves, googles, respirators, heavy duty boots,protective foot wear, overalls and helmet)?",
           "order": 5,
-          "meta": false,
           "type": "option",
           "required": true,
           "option": [
@@ -1420,16 +1216,12 @@
               "order": 3
             }
           ],
-          "attributes": []
+          "meta": false
         },
         {
           "id": 541950003,
-          "form": 533560002,
-          "question_group": 166,
-          "name": "Functional incinerator is present",
-          "text": "Is there a functional  incinerator  present at the facility?",
+          "name": "Is there a functional  incinerator  present at the facility?",
           "order": 6,
-          "meta": false,
           "type": "option",
           "required": true,
           "option": [
@@ -1449,16 +1241,12 @@
               "order": 3
             }
           ],
-          "attributes": ["chart", "table", "advanced_filter"]
+          "meta": false
         },
         {
           "id": 541950009,
-          "form": 533560002,
-          "question_group": 166,
-          "name": "Functional placenta pits is present",
-          "text": "Are there functional placenta pits  present at the facility?",
+          "name": "Are there functional placenta pits  present at the facility?",
           "order": 7,
-          "meta": false,
           "type": "option",
           "required": true,
           "option": [
@@ -1478,16 +1266,12 @@
               "order": 3
             }
           ],
-          "attributes": ["chart", "table"]
+          "meta": false
         },
         {
           "id": 541950011,
-          "form": 533560002,
-          "question_group": 166,
-          "name": "Dispose of infectious waste",
-          "text": "How does this facility usually treat/ dispose of infectious waste?",
+          "name": "How does this facility usually treat/ dispose of infectious waste?",
           "order": 8,
-          "meta": false,
           "type": "option",
           "required": true,
           "option": [
@@ -1522,16 +1306,15 @@
               "order": 6
             }
           ],
-          "attributes": ["chart", "table", "jmp", "advanced_filter"]
+          "meta": false,
+          "extra": {
+            "allowOther": true
+          }
         },
         {
           "id": 541950005,
-          "form": 533560002,
-          "question_group": 166,
-          "name": "Dispose of sharps waste",
-          "text": "How does this facility usually treat/ dispose of sharps waste?",
+          "name": "How does this facility usually treat/ dispose of sharps waste?",
           "order": 9,
-          "meta": false,
           "type": "option",
           "required": true,
           "option": [
@@ -1566,16 +1349,15 @@
               "order": 6
             }
           ],
-          "attributes": ["chart", "table", "jmp"]
+          "meta": false,
+          "extra": {
+            "allowOther": true
+          }
         },
         {
           "id": 541950010,
-          "form": 533560002,
-          "question_group": 166,
-          "name": "Trained staff on HCWM",
-          "text": "Are there trained staff on HCWM",
+          "name": "Are there trained staff on HCWM",
           "order": 10,
-          "meta": false,
           "type": "option",
           "required": true,
           "option": [
@@ -1590,16 +1372,12 @@
               "order": 2
             }
           ],
-          "attributes": ["chart", "table", "advanced_filter"]
+          "meta": false
         },
         {
           "id": 541950006,
-          "form": 533560002,
-          "question_group": 166,
-          "name": "Staff members are vaccinated against hepatitis B",
-          "text": "Are staff members vaccinated against hepatitis B",
+          "name": "Are staff members vaccinated against hepatitis B",
           "order": 11,
-          "meta": false,
           "type": "option",
           "required": true,
           "option": [
@@ -1614,16 +1392,12 @@
               "order": 2
             }
           ],
-          "attributes": ["chart", "table", "advanced_filter"]
+          "meta": false
         },
         {
           "id": 541950004,
-          "form": 533560002,
-          "question_group": 166,
-          "name": "Having transportation trolys",
-          "text": "Does the health facility have waste transportation trolys",
+          "name": "Does the health facility have waste transportation trolys",
           "order": 12,
-          "meta": false,
           "type": "option",
           "required": true,
           "option": [
@@ -1638,16 +1412,12 @@
               "order": 2
             }
           ],
-          "attributes": ["chart", "table"]
+          "meta": false
         },
         {
           "id": 541950012,
-          "form": 533560002,
-          "question_group": 166,
-          "name": "Having transportation vehicles",
-          "text": "Does the health facilty have waste transportation vehicles",
+          "name": "Does the health facilty have waste transportation vehicles",
           "order": 13,
-          "meta": false,
           "type": "option",
           "required": true,
           "option": [
@@ -1662,16 +1432,12 @@
               "order": 2
             }
           ],
-          "attributes": ["chart", "table"]
+          "meta": false
         },
         {
           "id": 610900063,
-          "form": 533560002,
-          "question_group": 166,
           "name": "Is a wastewater treatment system (for example, septic tank followed by drainage pit) present?",
-          "text": "Is a wastewater treatment system (for example, septic tank followed by drainage pit) present?",
           "order": 14,
-          "meta": false,
           "type": "option",
           "required": true,
           "option": [
@@ -1686,18 +1452,22 @@
               "order": 2
             }
           ],
-          "attributes": []
+          "meta": false
         },
         {
           "id": 609500049,
-          "form": 533560002,
-          "question_group": 166,
           "name": "Is a wastewater treatment system functioning reliably?",
-          "text": "Is a wastewater treatment system functioning reliably?",
           "order": 15,
-          "meta": false,
           "type": "option",
           "required": true,
+          "dependency": [
+            {
+              "id": 610900063,
+              "options": [
+                "Yes"
+              ]
+            }
+          ],
           "option": [
             {
               "id": 14483,
@@ -1710,22 +1480,12 @@
               "order": 2
             }
           ],
-          "dependency": [
-            {
-              "id": 610900063,
-              "options": ["Yes"]
-            }
-          ],
-          "attributes": []
+          "meta": false
         },
         {
           "id": 596270130,
-          "form": 533560002,
-          "question_group": 166,
           "name": "Is a functional burial pit/fenced waste dump or municipal pick-up available for disposal of non-infectious (non-hazardous/ general waste)?",
-          "text": "Is a functional burial pit/fenced waste dump or municipal pick-up available for disposal of non-infectious (non-hazardous/ general waste)?",
           "order": 15,
-          "meta": false,
           "type": "option",
           "required": true,
           "option": [
@@ -1745,16 +1505,12 @@
               "order": 3
             }
           ],
-          "attributes": []
+          "meta": false
         },
         {
           "id": 607260066,
-          "form": 533560002,
-          "question_group": 166,
           "name": "Are staff handling waste vaccinated against Hepatitis B,COVID-19 and Tetanus?",
-          "text": "Are staff handling waste vaccinated against Hepatitis B,COVID-19 and Tetanus?",
           "order": 17,
-          "meta": false,
           "type": "option",
           "required": true,
           "option": [
@@ -1774,37 +1530,28 @@
               "order": 3
             }
           ],
-          "attributes": []
+          "meta": false
         }
       ]
     },
     {
-      "id": 167,
       "name": "General remarks",
       "question": [
         {
           "id": 531310004,
-          "form": 533560002,
-          "question_group": 167,
-          "name": "General comments",
-          "text": "Any general comments / concerns during the data collection by the respondent?",
+          "name": "Any general comments / concerns during the data collection by the respondent?",
           "order": 1,
-          "meta": false,
           "type": "text",
           "required": false,
-          "attributes": ["table"]
+          "meta": false
         },
         {
           "id": 616860073,
-          "form": 533560002,
-          "question_group": 167,
           "name": "Any general comments / concerns during the data collection by the enumerator?",
-          "text": "Any general comments / concerns during the data collection by the enumerator?",
           "order": 2,
-          "meta": false,
           "type": "text",
           "required": false,
-          "attributes": []
+          "meta": false
         }
       ]
     }

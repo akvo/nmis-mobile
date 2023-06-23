@@ -1,77 +1,52 @@
 {
   "id": 603050002,
-  "version": "1.0.0",
   "name": "Urban Sanitation",
+  "version": "1.0.0",
   "question_group": [
     {
-      "id": 177,
       "name": "Introduction",
       "question": [
         {
           "id": 583740003,
-          "form": 603050002,
-          "question_group": 177,
           "name": "Location",
-          "text": "Location",
           "order": 1,
-          "meta": true,
           "type": "cascade",
           "required": true,
-          "attributes": ["chart", "table"]
+          "meta": true
         },
         {
           "id": 589590005,
-          "form": 603050002,
-          "question_group": 177,
-          "name": "Village",
-          "text": "Name of the Estate / Village?",
+          "name": "Name of the Estate / Village?",
           "order": 2,
-          "meta": true,
           "type": "text",
           "required": true,
-          "attributes": []
+          "meta": true
         },
         {
           "id": 605040004,
-          "form": 603050002,
-          "question_group": 177,
           "name": "Name of the respondent",
-          "text": "Name of the respondent",
           "order": 3,
-          "meta": true,
           "type": "text",
           "required": true,
-          "attributes": []
+          "meta": true
         },
         {
           "id": 6030500021,
-          "form": 603050002,
-          "question_group": 177,
           "name": "Organisation",
-          "text": "Organisation",
           "order": 4,
-          "meta": false,
-          "api": {
-            "endpoint": "/api/v1/organisations?attributes=2"
-          },
           "type": "cascade",
           "required": true,
-          "attributes": []
+          "meta": false
         }
       ]
     },
     {
-      "id": 178,
       "name": "Fecal sludge management",
       "question": [
         {
           "id": 603080002,
-          "form": 603050002,
-          "question_group": 178,
-          "name": "Type of Sanitation / Faecal sludge management",
-          "text": "What is the main type of sanitation/faecal sludge management exists in the town/city",
+          "name": "What is the main type of sanitation/faecal sludge management exists in the town/city",
           "order": 1,
-          "meta": false,
           "type": "option",
           "required": true,
           "option": [
@@ -96,18 +71,23 @@
               "order": 4
             }
           ],
-          "attributes": ["jmp", "advanced_filter"]
+          "meta": false
         },
         {
           "id": 587530063,
-          "form": 603050002,
-          "question_group": 178,
-          "name": "Fecal matter/sludge treatment plant transport",
-          "text": "How is feacal matter/sludge transported to the treatment plant?",
+          "name": "How is feacal matter/sludge transported to the treatment plant?",
           "order": 2,
-          "meta": false,
           "type": "option",
           "required": true,
+          "dependency": [
+            {
+              "id": 603080002,
+              "options": [
+                "Sewarage system",
+                "Septic tanks"
+              ]
+            }
+          ],
           "option": [
             {
               "id": 14344,
@@ -130,49 +110,31 @@
               "order": 4
             }
           ],
-          "dependency": [
-            {
-              "id": 603080002,
-              "options": ["Sewarage system", "Septic tanks"]
-            }
-          ],
-          "attributes": ["jmp", "advanced_filter"]
+          "meta": false
         },
         {
           "id": 601660002,
-          "form": 603050002,
-          "question_group": 178,
           "name": "What is the proportion of Feacal Sludge reaching treatment plants which is treated to standard?",
-          "text": "What is the proportion of Feacal Sludge reaching treatment plants which is treated to standard?",
           "order": 3,
-          "meta": false,
           "type": "number",
           "required": true,
-          "attributes": []
+          "meta": false
         },
         {
           "id": 544720002,
-          "form": 603050002,
-          "question_group": 178,
           "name": "What is the proportion of improved piped to sewers which Reach treatment plants ?",
-          "text": "What is the proportion of improved piped to sewers which Reach treatment plants ?",
           "order": 4,
-          "meta": false,
           "type": "number",
           "required": true,
-          "attributes": []
+          "meta": false
         },
         {
           "id": 611500068,
-          "form": 603050002,
-          "question_group": 178,
           "name": "What is the proportion of waste water reaching treatment plants which is treated to standards",
-          "text": "What is the proportion of waste water reaching treatment plants which is treated to standards",
           "order": 5,
-          "meta": false,
           "type": "number",
           "required": true,
-          "attributes": []
+          "meta": false
         }
       ]
     }
