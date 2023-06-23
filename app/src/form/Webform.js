@@ -6,7 +6,7 @@ import { Formik } from 'formik';
 import { styles } from './styles';
 import { MultiSelect } from 'react-native-element-dropdown';
 import { FieldGroupHeader, FieldLabel, FormNavigation } from './support';
-import { TypeImage, TypeInput, TypeDate, TypeOption } from './fields';
+import { TypeImage, TypeInput, TypeDate, TypeOption, TypeMultipleOption } from './fields';
 
 const fakeInitialValues = {
   name: 'John Doe',
@@ -99,48 +99,32 @@ const Webform = ({ navigation, route, initialValues = fakeInitialValues }) => {
                       description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi dapibus."
                     />
                     {/* Checkbox */}
-                    <View style={styles.questionContainer}>
-                      <FieldLabel label="Hobby" />
-                      {['Reading', 'Traveling', 'Programming'].map((val, ival) => (
-                        <CheckBox
-                          containerStyle={styles.radioFieldContainer}
-                          textStyle={styles.radioFieldText}
-                          key={ival}
-                          checked={values.hobby?.includes(val)}
-                          onPress={() => {
-                            values.hobby?.includes(val)
-                              ? setFieldValue(`hobby.${ival}`, null)
-                              : setFieldValue(`hobby.${ival}`, val);
-                          }}
-                          title={val}
-                        />
-                      ))}
-                    </View>
+                    <TypeMultipleOption
+                      onChange={setFieldValue}
+                      values={values}
+                      id="hobby"
+                      name="Hobby"
+                      option={[
+                        { label: 'Reading', name: 'Reading' },
+                        { label: 'Traveling', name: 'Traveling' },
+                        { label: 'Programming', name: 'Programming' },
+                      ]}
+                    />
                     {/* Multiple Select Dropdown */}
-                    <View style={styles.questionContainer}>
-                      <FieldLabel label="Favorite Foods" />
-                      <MultiSelect
-                        style={[styles.dropdownField]}
-                        selectedStyle={styles.dropdownSelectedList}
-                        data={[
-                          { label: 'Fried Rice', value: 'Fried Rice' },
-                          { label: 'Roasted Chicken', value: 'Roasted Chicken' },
-                          { label: 'Rendang', value: 'Rendang' },
-                          { label: 'Pork Ribs', value: 'Pork Ribs' },
-                          { label: 'KFC', value: 'KFC' },
-                          { label: 'McD', value: 'McD' },
-                        ]}
-                        search
-                        maxHeight={300}
-                        labelField="label"
-                        valueField="value"
-                        searchPlaceholder="Search..."
-                        value={values.foods || []}
-                        onChange={(value) => {
-                          setFieldValue('foods', value);
-                        }}
-                      />
-                    </View>
+                    <TypeMultipleOption
+                      onChange={setFieldValue}
+                      values={values}
+                      id="foods"
+                      name="Favorite Foods"
+                      option={[
+                        { label: 'Fried Rice', name: 'Fried Rice' },
+                        { label: 'Roasted Chicken', name: 'Roasted Chicken' },
+                        { label: 'Rendang', name: 'Rendang' },
+                        { label: 'Pork Ribs', name: 'Pork Ribs' },
+                        { label: 'KFC', name: 'KFC' },
+                        { label: 'McD', name: 'McD' },
+                      ]}
+                    />
                     {/* Image/File Input */}
                     <View style={styles.questionContainer}>
                       <TypeImage onChange={setFieldValue} />
