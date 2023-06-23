@@ -1,5 +1,5 @@
-import { mockExecuteSql, mockResultSet } from 'expo-sqlite';
-import { conn, query, initialQuery } from '../src/database';
+import { mockExecuteSql } from 'expo-sqlite';
+import { conn, query, tables } from '../src/database';
 jest.mock('expo-sqlite');
 
 // Create or open a mock database connection
@@ -10,7 +10,8 @@ describe('conn.tx', () => {
   });
 
   beforeAll(async () => {
-    await conn.tx(db, initialQuery());
+    const userTable = tables[0];
+    await conn.tx(db, query.initialQuery(userTable.name, userTable.fields));
   });
 
   afterAll(async () => {
@@ -20,19 +21,26 @@ describe('conn.tx', () => {
   test('should execute the insert transaction successfully', async () => {
     // Define the query and parameters for insert
     const table = 'users';
-    const name = 'Jhon doe';
-    const password = 'secret';
-    const data = {
-      name,
-      password,
-    };
-    const insertQuery = query.insert(table, data);
+    const data = [
+      {
+        name: 'Jhon',
+        password: 'password',
+      },
+      {
+        name: 'Leo',
+        password: 'secret',
+      },
+    ];
+    const insertQuery = data.map((d) => query.insert(table, d)).join(' ');
     const insertParams = [];
     // Execute the insert transaction
     const insertResultSet = await conn.tx(db, insertQuery, insertParams);
 
     // Assertions
-    expect(insertResultSet).toEqual(mockResultSet);
+    expect(insertQuery).toEqual(
+      "INSERT INTO users(name, password) VALUES ('Jhon', 'password'); INSERT INTO users(name, password) VALUES ('Leo', 'secret');",
+    );
+    expect(insertResultSet).toEqual({ rowsAffected: 1 });
     expect(db.transaction).toHaveBeenCalled();
     expect(mockExecuteSql).toHaveBeenCalledWith(
       insertQuery,
@@ -49,13 +57,14 @@ describe('conn.tx', () => {
     const where = { id: 1 };
     const data = { name };
     const updateQuery = query.update(table, where, data);
-    const updateParams = [];
+    const updateParams = [1];
 
     // Execute the update transaction
     const updateResultSet = await conn.tx(db, updateQuery, updateParams);
 
     // Assertions
-    expect(updateResultSet).toEqual(mockResultSet);
+    expect(updateQuery).toEqual("UPDATE users SET name = 'Jhon Lenon' WHERE id = ?;");
+    expect(updateResultSet).toEqual({ rowsAffected: 1 });
     expect(db.transaction).toHaveBeenCalled();
     expect(mockExecuteSql).toHaveBeenCalledWith(
       updateQuery,
@@ -65,11 +74,50 @@ describe('conn.tx', () => {
     );
   });
 
+  test('should execute the truncate transaction successfully', async () => {
+    const table = 'users';
+    const truncateQuery = query.clear(table);
+    await conn.tx(db, truncateQuery);
+
+    expect(truncateQuery).toEqual('DELETE FROM users;');
+    expect(db.transaction).toHaveBeenCalled();
+    expect(mockExecuteSql).toHaveBeenCalledWith(
+      truncateQuery,
+      [],
+      expect.any(Function),
+      expect.any(Function),
+    );
+  });
+
+  test('should execute the drop transaction successfully', async () => {
+    const table = 'users';
+    const dropQuery = query.drop(table);
+    await conn.tx(db, dropQuery);
+
+    expect(dropQuery).toEqual('DROP TABLE IF EXISTS users;');
+    expect(db.transaction).toHaveBeenCalled();
+    expect(mockExecuteSql).toHaveBeenCalledWith(
+      dropQuery,
+      [],
+      expect.any(Function),
+      expect.any(Function),
+    );
+  });
+
   test('should execute the select transaction successfully', async () => {
     // Mock the result set for select
-    const mockRows = [{ id, name: 'John Lenon' }];
+    const userData = [
+      {
+        name: 'John',
+        password: 'password',
+      },
+      {
+        name: 'Leo',
+        password: 'secret',
+      },
+    ];
     const mockSelectSql = jest.fn((query, params, successCallback) => {
-      successCallback(null, { rows: { length: mockRows.length, _array: mockRows } });
+      successCallback(null, { rows: { length: userData.length, _array: userData } });
     });
     db.transaction.mockImplementation((transactionFunction) => {
       transactionFunction({
@@ -79,17 +127,19 @@ describe('conn.tx', () => {
 
     // Define the query and parameters for select
     const table = 'users';
-    const id = 1;
-    const where = { id };
+    const password = 'secret';
+    const name = 'Leo';
+    const where = { password, name };
     const selectQuery = query.read(table, where);
-    const selectParams = [id];
+    const selectParams = [password, name];
 
     // Execute the select transaction
     const result = await conn.tx(db, selectQuery, selectParams);
 
     // Assertions
-    expect(result.rows).toHaveLength(mockRows.length);
-    expect(result.rows._array).toEqual(mockRows);
+    expect(selectQuery).toEqual('SELECT * FROM users WHERE password = ? AND name = ?;');
+    expect(result.rows).toHaveLength(userData.length);
+    expect(result.rows._array).toEqual(userData);
     expect(db.transaction).toHaveBeenCalled();
     expect(mockSelectSql).toHaveBeenCalledWith(
       selectQuery,
