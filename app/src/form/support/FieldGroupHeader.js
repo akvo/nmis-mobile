@@ -9,7 +9,7 @@ const FieldGroupHeader = ({ index, name = '', description = '' }) => {
       <View style={styles.fieldGroupHeader}>
         <Text style={styles.fieldGroupName}>{!isNaN(index) ? `${index + 1}. ${name}` : name}</Text>
       </View>
-      <Text style={styles.fieldGroupDescription}>{description}</Text>
+      {description && <Text style={styles.fieldGroupDescription}>{description}</Text>}
     </View>
   );
 };

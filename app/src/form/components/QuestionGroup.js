@@ -5,7 +5,7 @@ import { FieldGroupHeader } from '../support';
 
 const QuestionGroup = ({ index, group, setFieldValue, values }) => {
   return (
-    <View key={`group-${index}`}>
+    <View>
       <FieldGroupHeader index={index} {...group} />
       <Question group={group} setFieldValue={setFieldValue} values={values} />
     </View>

@@ -10,6 +10,7 @@ export const styles = StyleSheet.create({
   fieldGroupHeader: {
     paddingHorizontal: 20,
     paddingVertical: 15,
+    marginBottom: 20,
     borderColor: 'grey',
     borderTopWidth: 0.5,
     borderBottomWidth: 0.5,
@@ -19,7 +20,7 @@ export const styles = StyleSheet.create({
     fontSize: 14,
   },
   fieldGroupDescription: {
-    paddingHorizontal: 20,
+    paddingTop: 20,
     paddingVertical: 15,
     fontSize: 14,
   },

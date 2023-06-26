@@ -1,3 +1,29 @@
+const intersection = (array1, array2) => {
+  const set1 = new Set(array1);
+  const result = [];
+  for (const item of array2) {
+    if (set1.has(item)) {
+      result.push(item);
+    }
+  }
+  return result;
+};
+
+const getDependencyAncestors = (questions, current, dependencies) => {
+  const ids = dependencies.map((x) => x.id);
+  const ancestors = questions.filter((q) => ids.includes(q.id)).filter((q) => q?.dependency);
+  if (ancestors.length) {
+    dependencies = ancestors.map((x) => x.dependency);
+    current = [current, ...dependencies].flatMap((x) => x);
+    ancestors.forEach((a) => {
+      if (a?.dependency) {
+        current = getDependencyAncestors(questions, current, a.dependency);
+      }
+    });
+  }
+  return current;
+};
+
 export const transformForm = (forms) => {
   const questions = forms?.question_group
     .map((x) => {
@@ -14,6 +40,16 @@ export const transformForm = (forms) => {
       }
       return x;
     });
+
+  const transformed = questions.map((x) => {
+    if (x?.dependency) {
+      return {
+        ...x,
+        dependency: getDependencyAncestors(questions, x.dependency, x.dependency),
+      };
+    }
+    return x;
+  });
 
   return {
     ...forms,
@@ -33,9 +69,42 @@ export const transformForm = (forms) => {
           question: qg.question
             ?.sort((a, b) => a.order - b.order)
             ?.map((q) => {
-              return questions.find((t) => t.id === q.id);
+              return transformed.find((t) => t.id === q.id);
             }),
         };
       }),
   };
+};
+
+export const modifyDependency = ({ question }, { dependency }, repeat) => {
+  const questions = question.map((q) => q.id);
+  return dependency.map((d) => {
+    if (questions.includes(d.id) && repeat) {
+      return { ...d, id: `${d.id}-${repeat}` };
+    }
+    return d;
+  });
+};
+
+export const validateDependency = (dependency, value) => {
+  if (dependency?.options && value) {
+    if (typeof value === 'string') {
+      value = [value];
+    }
+    return intersection(dependency.options, value)?.length > 0;
+  }
+  let valid = false;
+  if (dependency?.min) {
+    valid = value >= dependency.min;
+  }
+  if (dependency?.max) {
+    valid = value <= dependency.max;
+  }
+  if (dependency?.equal) {
+    valid = value === dependency.equal;
+  }
+  if (dependency?.notEqual) {
+    valid = value !== dependency.notEqual && !!value;
+  }
+  return valid;
 };
