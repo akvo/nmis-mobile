@@ -7,7 +7,6 @@ import { Content } from './Content';
 const BaseLayout = ({
   children,
   title = null,
-  back = null,
   search = {
     placeholder: null,
     show: false,
@@ -24,7 +23,7 @@ const BaseLayout = ({
   }
   return (
     <Stack>
-      {title && <PageTitle text={title} back={back} />}
+      {title && <PageTitle text={title} />}
       {search.show && <SearchBar {...searchProps} testID="search-bar" />}
       {children}
     </Stack>

@@ -5,10 +5,6 @@ import { ListItem } from '@rneui/themed';
 import { BaseLayout } from '../components';
 
 const FormAction = ({ navigation, route }) => {
-  const goBack = () => {
-    navigation.navigate('Home');
-  };
-
   const goToData = () => {
     navigation.navigate('FormData', { ...route?.params });
   };
@@ -31,7 +27,7 @@ const FormAction = ({ navigation, route }) => {
     },
   ];
   return (
-    <BaseLayout title={route?.params?.name} back={goBack}>
+    <BaseLayout title={route?.params?.name}>
       <BaseLayout.Content>
         <View
           style={{

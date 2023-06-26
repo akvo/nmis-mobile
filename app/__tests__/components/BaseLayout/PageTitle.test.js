@@ -17,7 +17,7 @@ describe('PageTitle component', () => {
   test('calls onPress function when back button is pressed', () => {
     const title = 'Example Title';
     const onPressMock = jest.fn();
-    const { getByTestId } = render(<PageTitle text={title} back={onPressMock} />);
+    const { getByTestId } = render(<PageTitle text={title} />);
     const button = getByTestId('arrow-back-button');
 
     fireEvent.press(button);

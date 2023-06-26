@@ -33,7 +33,7 @@ describe('BaseLayout component', () => {
   test('calls onPress function when back button is pressed', () => {
     const title = 'Example Title';
     const onPressMock = jest.fn();
-    const { getByTestId } = render(<BaseLayout title={title} back={onPressMock} />);
+    const { getByTestId } = render(<BaseLayout title={title} />);
     const button = getByTestId('arrow-back-button');
 
     fireEvent.press(button);
