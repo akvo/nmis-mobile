@@ -5,14 +5,14 @@ import { styles } from '../styles';
 import { CheckBox } from '@rneui/themed';
 import { MultiSelect } from 'react-native-element-dropdown';
 
-const TypeMultipleOption = ({ onChange, values, id, name, option = [] }) => {
+const TypeMultipleOption = ({ onChange, values, keyform, id, name, option = [] }) => {
   const isCheckBox = React.useMemo(() => {
     return option.length <= 3;
   }, [option]);
 
   return (
-    <View style={styles.questionContainer}>
-      <FieldLabel label={name} />
+    <View>
+      <FieldLabel keyform={keyform} name={name} />
       {isCheckBox ? (
         option.map((opt, opti) => (
           <CheckBox

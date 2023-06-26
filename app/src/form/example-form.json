@@ -1,0 +1,56 @@
+{
+  "name": "Health Center Facilities",
+  "languages": ["en", "id"],
+  "defaultLanguage": "en",
+  "translations": [
+    {
+      "name": "Fasilitas Kesehatan",
+      "language": "id"
+    }
+  ],
+  "question_group": [
+    {
+      "name": "Registration",
+      "order": 1,
+      "translations": [
+        {
+          "name": "Registrasi",
+          "language": "id"
+        }
+      ],
+      "question": [
+        {
+          "id": 1,
+          "name": "Weight",
+          "order": 1,
+          "type": "number",
+          "required": true,
+          "tooltip": {
+            "text": "Information Text"
+          },
+          "rule": {
+            "min": 5,
+            "max": 10
+          },
+          "meta": true,
+          "dependency": [
+            {
+              "id": 9,
+              "options": ["Yes"]
+            },
+            {
+              "id": 10,
+              "min": 8
+            }
+          ],
+          "translations": [
+            {
+              "name": "Berat Badan",
+              "language": "id"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

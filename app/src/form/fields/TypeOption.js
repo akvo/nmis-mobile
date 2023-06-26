@@ -5,14 +5,14 @@ import { styles } from '../styles';
 import { CheckBox } from '@rneui/themed';
 import { Dropdown } from 'react-native-element-dropdown';
 
-const TypeOption = ({ onChange, values, id, name, option = [] }) => {
+const TypeOption = ({ onChange, values, keyform, id, name, option = [] }) => {
   const isRadioGroup = React.useMemo(() => {
     return option.length <= 3;
   }, [option]);
 
   return (
-    <View style={styles.questionContainer}>
-      <FieldLabel label={name} />
+    <View>
+      <FieldLabel keyform={keyform} name={name} />
       {isRadioGroup ? (
         option.map((opt, opti) => (
           <CheckBox

@@ -1,11 +1,19 @@
 import React from 'react';
 import { BaseLayout } from '../components';
 import { ScrollView, View } from 'react-native';
-import { Input } from '@rneui/themed';
 import { Formik } from 'formik';
 import { styles } from './styles';
-import { FieldGroupHeader, FieldLabel, FormNavigation } from './support';
-import { TypeImage, TypeInput, TypeDate, TypeOption, TypeMultipleOption, TypeText } from './fields';
+import { FieldGroupHeader, FormNavigation } from './support';
+import {
+  TypeImage,
+  TypeInput,
+  TypeDate,
+  TypeOption,
+  TypeMultipleOption,
+  TypeText,
+  TypeNumber,
+} from './fields';
+import QuestionGroup from './components/QuestionGroup';
 
 const fakeInitialValues = {
   name: 'John Doe',
@@ -18,16 +26,16 @@ const fakeInitialValues = {
   comment: 'Lorem ipsum...',
 };
 
-const Webform = ({ navigation, route, initialValues = fakeInitialValues }) => {
+const Webform = ({ forms, initialValues = fakeInitialValues }) => {
   const formRef = React.useRef();
   const [activeGroup, setActiveGroup] = React.useState(0);
 
-  const goBack = () => {
-    navigation.navigate('FormAction', { ...route?.params });
-  };
+  const formDefinition = React.useMemo(() => {
+    return forms;
+  }, [forms]);
 
   return (
-    <BaseLayout title={route?.params?.name} back={goBack}>
+    <>
       <ScrollView>
         <BaseLayout.Content>
           <Formik
@@ -37,6 +45,10 @@ const Webform = ({ navigation, route, initialValues = fakeInitialValues }) => {
           >
             {({ handleChange, setFieldValue, values }) => (
               <View style={styles.formContainer}>
+                {formDefinition?.question_group?.map((group, groupIndex) => {
+                  return <QuestionGroup index={groupIndex} group={group} />;
+                })}
+
                 {/* Group 1 */}
                 {activeGroup === 0 && (
                   <View style={styles.questionGroupContainer}>
@@ -54,15 +66,7 @@ const Webform = ({ navigation, route, initialValues = fakeInitialValues }) => {
                       name="Birth Date"
                     />
                     {/* Number */}
-                    <View style={styles.questionContainer}>
-                      <FieldLabel label="Age" />
-                      <Input
-                        inputContainerStyle={styles.inputFieldContainer}
-                        keyboardType="numeric"
-                        onChangeText={handleChange('age')}
-                        value={values.age}
-                      />
-                    </View>
+                    <TypeNumber onChange={handleChange} values={values} id="age" name="Age" />
                     {/* Radio */}
                     <TypeOption
                       onChange={setFieldValue}
@@ -146,7 +150,7 @@ const Webform = ({ navigation, route, initialValues = fakeInitialValues }) => {
           setActiveGroup={setActiveGroup}
         />
       </View>
-    </BaseLayout>
+    </>
   );
 };
 

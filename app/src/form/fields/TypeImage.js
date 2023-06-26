@@ -9,7 +9,7 @@ import { styles as formStyle } from '../styles';
 // TODO: getImageBase64 (ARF)
 // TODO: convertImageToBase64 (ARF)
 
-const TypeImage = ({ onChange, id, name }) => {
+const TypeImage = ({ onChange, keyform, id, name }) => {
   const [showDialog, setShowDialog] = React.useState(false);
   const [selectedImage, setSelectedImage] = React.useState(null);
 
@@ -101,8 +101,8 @@ const TypeImage = ({ onChange, id, name }) => {
   }
 
   return (
-    <View style={formStyle.questionContainer}>
-      <FieldLabel label={name} />
+    <View>
+      <FieldLabel keyform={keyform} name={name} />
       <View style={styles.fieldImageContainer}>
         {selectedImage != null ? (
           <Image

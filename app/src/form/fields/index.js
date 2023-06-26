@@ -4,3 +4,4 @@ export { default as TypeDate } from './TypeDate';
 export { default as TypeOption } from './TypeOption';
 export { default as TypeMultipleOption } from './TypeMultipleOption';
 export { default as TypeText } from './TypeText';
+export { default as TypeNumber } from './TypeNumber';
