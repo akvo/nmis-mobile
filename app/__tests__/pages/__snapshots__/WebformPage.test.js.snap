@@ -488,6 +488,89 @@ exports[`WebformPage component should render component correctly 1`] = `
                 </View>
               </View>
             </View>
+            <View
+              style={
+                {
+                  "paddingHorizontal": 10,
+                  "paddingVertical": 10,
+                }
+              }
+            >
+              <View>
+                <View>
+                  <Text
+                    accessibilityRole="text"
+                    style={
+                      {
+                        "color": "#242424",
+                        "fontSize": 14,
+                        "fontWeight": 600,
+                        "marginBottom": 8,
+                        "paddingHorizontal": 10,
+                      }
+                    }
+                    testID="field-label"
+                  >
+                    5. Number between 1 to 9 (decimal allowed)
+                  </Text>
+                  <View
+                    style={
+                      {
+                        "paddingHorizontal": 10,
+                        "width": "100%",
+                      }
+                    }
+                    testID="RNE__Input__view-wrapper"
+                  >
+                    <View
+                      collapsable={false}
+                      style={
+                        {
+                          "alignItems": "center",
+                          "borderBottomWidth": 0.5,
+                          "borderColor": "grey",
+                          "borderRadius": 5,
+                          "borderWidth": 0.5,
+                          "flexDirection": "row",
+                          "paddingHorizontal": 10,
+                          "transform": [
+                            {
+                              "translateX": 0,
+                            },
+                          ],
+                        }
+                      }
+                    >
+                      <TextInput
+                        editable={true}
+                        keyboardType="numeric"
+                        onChangeText={[Function]}
+                        placeholderTextColor="#86939e"
+                        style={
+                          {
+                            "color": "#242424",
+                            "flex": 1,
+                            "fontSize": 18,
+                            "minHeight": 40,
+                          }
+                        }
+                        testID="type-number"
+                        underlineColorAndroid="transparent"
+                      />
+                    </View>
+                    <Text
+                      style={
+                        {
+                          "color": "#ff190c",
+                          "fontSize": 12,
+                          "margin": 5,
+                        }
+                      }
+                    />
+                  </View>
+                </View>
+              </View>
+            </View>
           </View>
         </View>
       </View>

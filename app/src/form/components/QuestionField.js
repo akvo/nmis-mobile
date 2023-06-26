@@ -14,11 +14,6 @@ import { styles } from '../styles';
 
 const QuestionField = ({ keyform, field: questionField, setFieldValue, values, ...props }) => {
   const [field, meta, helpers] = useField(questionField.id);
-  // if (questionField?.id === 364240038) {
-  //   console.log('field', field);
-  //   console.log('meta', meta.error);
-  // }
-  // console.log(helpers, 'helpers');
 
   const renderField = () => {
     switch (questionField?.type) {

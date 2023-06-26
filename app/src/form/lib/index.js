@@ -1,3 +1,5 @@
+import * as Yup from 'yup';
+
 const intersection = (array1, array2) => {
   const set1 = new Set(array1);
   const result = [];
@@ -107,4 +109,46 @@ export const validateDependency = (dependency, value) => {
     valid = value !== dependency.notEqual && !!value;
   }
   return valid;
+};
+
+export const generateValidationSchema = (forms) => {
+  const questions = forms?.question_group?.flatMap((qg) => qg.question);
+  const validations = questions.reduce((res, curr) => {
+    const { id, name, type, required, rule } = curr;
+    let yupType;
+    switch (type) {
+      case 'number':
+        // number rules
+        yupType = Yup.number();
+        if (rule?.min) {
+          yupType = yupType.min(rule.min);
+        }
+        if (rule?.max) {
+          yupType = yupType.max(rule.max);
+        }
+        if (!rule?.allowDecimal) {
+          // by default decimal is allowed
+          yupType = yupType.integer();
+        }
+        break;
+      case 'date':
+        yupType = Yup.date();
+        break;
+      case 'option':
+        yupType = Yup.array();
+        break;
+      case 'multiple_option':
+        yupType = Yup.array();
+        break;
+      default:
+        yupType = Yup.string();
+        break;
+    }
+    const requiredError = `${name} is required.`;
+    return {
+      ...res,
+      [id]: required ? yupType.required(requiredError) : yupType,
+    };
+  }, {});
+  return Yup.object().shape(validations);
 };

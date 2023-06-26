@@ -49,6 +49,19 @@
             }
           ],
           "meta": false
+        },
+        {
+          "id": 517600099,
+          "name": "Number between 1 to 9 (decimal allowed)",
+          "order": 5,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "rule": {
+            "min": 1,
+            "max": 9,
+            "allowDecimal": true
+          }
         }
       ]
     },

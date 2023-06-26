@@ -5,8 +5,7 @@ import { Formik } from 'formik';
 import { styles } from './styles';
 import { FormNavigation } from './support';
 import QuestionGroup from './components/QuestionGroup';
-import { transformForm } from './lib';
-import * as Yup from 'yup';
+import { transformForm, generateValidationSchema } from './lib';
 
 const Webform = ({ forms, initialValues = {} }) => {
   const formRef = React.useRef();
@@ -17,34 +16,7 @@ const Webform = ({ forms, initialValues = {} }) => {
   }, [forms]);
 
   const validationSchema = React.useMemo(() => {
-    const questions = formDefinition?.question_group?.flatMap((qg) => qg.question);
-    const validations = questions.reduce((res, curr) => {
-      const { id, name, type, required } = curr;
-      let yupType;
-      switch (type) {
-        case 'number':
-          yupType = Yup.string();
-          break;
-        case 'date':
-          yupType = Yup.date();
-          break;
-        case 'option':
-          yupType = Yup.array();
-          break;
-        case 'multiple_option':
-          yupType = Yup.array();
-          break;
-        default:
-          yupType = Yup.string();
-          break;
-      }
-      const requiredError = `${name} is required.`;
-      return {
-        ...res,
-        [id]: required ? yupType.required(requiredError) : yupType,
-      };
-    }, {});
-    return Yup.object().shape(validations);
+    return generateValidationSchema(formDefinition);
   }, [formDefinition]);
 
   return (
