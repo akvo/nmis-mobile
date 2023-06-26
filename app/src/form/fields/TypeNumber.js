@@ -11,9 +11,9 @@ const TypeNumber = ({ onChange, values, keyform, id, name }) => {
       <Input
         inputContainerStyle={styles.inputFieldContainer}
         keyboardType="numeric"
-        onChangeText={() => {
+        onChangeText={(val) => {
           if (onChange) {
-            onChange(id);
+            onChange(id, val);
           }
         }}
         value={values?.[id]}

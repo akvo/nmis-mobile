@@ -10,9 +10,9 @@ const TypeInput = ({ onChange, values, keyform, id, name }) => {
       <FieldLabel keyform={keyform} name={name} />
       <Input
         inputContainerStyle={styles.inputFieldContainer}
-        onChangeText={() => {
+        onChangeText={(val) => {
           if (onChange) {
-            onChange(id);
+            onChange(id, val);
           }
         }}
         value={values?.[id]}

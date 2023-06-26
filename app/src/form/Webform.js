@@ -14,6 +14,7 @@ import {
   TypeNumber,
 } from './fields';
 import QuestionGroup from './components/QuestionGroup';
+import { transformForm } from './lib';
 
 const fakeInitialValues = {
   name: 'John Doe',
@@ -31,7 +32,7 @@ const Webform = ({ forms, initialValues = fakeInitialValues }) => {
   const [activeGroup, setActiveGroup] = React.useState(0);
 
   const formDefinition = React.useMemo(() => {
-    return forms;
+    return transformForm(forms);
   }, [forms]);
 
   return (
@@ -46,11 +47,21 @@ const Webform = ({ forms, initialValues = fakeInitialValues }) => {
             {({ handleChange, setFieldValue, values }) => (
               <View style={styles.formContainer}>
                 {formDefinition?.question_group?.map((group, groupIndex) => {
-                  return <QuestionGroup index={groupIndex} group={group} />;
+                  if (activeGroup !== groupIndex) {
+                    return '';
+                  }
+                  return (
+                    <QuestionGroup
+                      index={groupIndex}
+                      group={group}
+                      setFieldValue={setFieldValue}
+                      values={values}
+                    />
+                  );
                 })}
 
                 {/* Group 1 */}
-                {activeGroup === 0 && (
+                {activeGroup === 99 && (
                   <View style={styles.questionGroupContainer}>
                     <FieldGroupHeader
                       name="Group 1"
@@ -95,7 +106,7 @@ const Webform = ({ forms, initialValues = fakeInitialValues }) => {
                 )}
 
                 {/* Group 2 */}
-                {activeGroup === 1 && (
+                {activeGroup === 100 && (
                   <View style={styles.questionGroupContainer}>
                     <FieldGroupHeader
                       name="Group 2"
@@ -148,6 +159,7 @@ const Webform = ({ forms, initialValues = fakeInitialValues }) => {
           }}
           activeGroup={activeGroup}
           setActiveGroup={setActiveGroup}
+          totalGroup={formDefinition?.question_group?.length || 0}
         />
       </View>
     </>

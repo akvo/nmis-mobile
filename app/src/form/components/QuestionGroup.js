@@ -3,11 +3,11 @@ import { View } from 'react-native';
 import Question from './Question';
 import { FieldGroupHeader } from '../support';
 
-const QuestionGroup = ({ index, group }) => {
+const QuestionGroup = ({ index, group, setFieldValue, values }) => {
   return (
     <View key={`group-${index}`}>
       <FieldGroupHeader index={index} {...group} />
-      <Question group={group} />
+      <Question group={group} setFieldValue={setFieldValue} values={values} />
     </View>
   );
 };

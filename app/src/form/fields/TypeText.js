@@ -12,7 +12,11 @@ const TypeText = ({ onChange, values, keyform, id, name }) => {
         inputContainerStyle={styles.inputFieldContainer}
         multiline={true}
         numberOfLines={4}
-        onChangeText={onChange(id)}
+        onChangeText={(val) => {
+          if (onChange) {
+            onChange(id, val);
+          }
+        }}
         value={values?.[id]}
         testID="type-text"
       />

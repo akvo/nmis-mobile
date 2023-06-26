@@ -11,7 +11,7 @@ import {
 import { useField } from 'formik';
 import { View } from 'react-native';
 
-const QuestionField = ({ keyform, field: questionField }) => {
+const QuestionField = ({ keyform, field: questionField, setFieldValue, values }) => {
   const [field, meta, helpers] = useField(questionField);
   // console.log(field, 'field');
   // console.log(meta, 'meta');
@@ -20,19 +20,58 @@ const QuestionField = ({ keyform, field: questionField }) => {
   const renderField = () => {
     switch (questionField?.type) {
       case 'date':
-        return <TypeDate keyform={keyform} {...questionField} />;
+        return (
+          <TypeDate keyform={keyform} onChange={setFieldValue} values={values} {...questionField} />
+        );
       case 'image':
-        return <TypeImage keyform={keyform} {...questionField} />;
+        return (
+          <TypeImage
+            keyform={keyform}
+            onChange={setFieldValue}
+            values={values}
+            {...questionField}
+          />
+        );
       case 'multiple_option':
-        return <TypeMultipleOption keyform={keyform} {...questionField} />;
+        return (
+          <TypeMultipleOption
+            keyform={keyform}
+            onChange={setFieldValue}
+            values={values}
+            {...questionField}
+          />
+        );
       case 'option':
-        return <TypeOption keyform={keyform} {...questionField} />;
+        return (
+          <TypeOption
+            keyform={keyform}
+            onChange={setFieldValue}
+            values={values}
+            {...questionField}
+          />
+        );
       case 'text':
-        return <TypeText keyform={keyform} {...questionField} />;
+        return (
+          <TypeText keyform={keyform} onChange={setFieldValue} values={values} {...questionField} />
+        );
       case 'number':
-        return <TypeNumber keyform={keyform} {...questionField} />;
+        return (
+          <TypeNumber
+            keyform={keyform}
+            onChange={setFieldValue}
+            values={values}
+            {...questionField}
+          />
+        );
       default:
-        return <TypeInput keyform={keyform} {...questionField} />;
+        return (
+          <TypeInput
+            keyform={keyform}
+            onChange={setFieldValue}
+            values={values}
+            {...questionField}
+          />
+        );
     }
   };
 
