@@ -1,14 +1,14 @@
-import { renderHook, act } from '@testing-library/react-hooks';
+import { renderHook, act } from '@testing-library/react-native';
 import { UserStore } from '../../src/store';
 
 describe('UserStore', () => {
   it('should initialize with the correct default state', () => {
     const { result } = renderHook(() => UserStore.useState());
-    const { id, name, token, preferences, forms } = result.current;
+    const { id, name, token, syncWifiOnly, forms } = result.current;
     expect(id).toBe(null);
     expect(name).toBe('');
     expect(token).toBe(null);
-    expect(preferences).toEqual({});
+    expect(syncWifiOnly).toBe(false);
     expect(forms).toEqual([]);
   });
 
@@ -36,15 +36,17 @@ describe('UserStore', () => {
         s.id = userData.id;
         s.name = userData.name;
         s.token = userData.token;
-        s.preferences = userPreferences;
+        s.syncInterval = userPreferences.syncInterval;
+        s.syncWifiOnly = userPreferences.syncWifiOnly;
         s.forms = userData.forms;
       });
     });
-    const { id, name, token, preferences, forms } = result.current;
+    const { id, name, token, syncInterval, syncWifiOnly, forms } = result.current;
     expect(id).toBe(userData.id);
     expect(name).toBe(userData.name);
     expect(token).toBe(userData.token);
-    expect(preferences).toBe(userPreferences);
     expect(forms).toBe(userData.forms);
+    expect(syncInterval).toBe(userPreferences.syncInterval);
+    expect(syncWifiOnly).toBe(userPreferences.syncWifiOnly);
   });
 });
