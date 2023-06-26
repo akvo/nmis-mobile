@@ -4,5 +4,7 @@ export const FormStore = new Store({
   form: {},
   questionGroups: [],
   questions: [],
-  allSynced: false,
+  currentGroup: 1,
+  saved: false,
+  submitted: false,
 });

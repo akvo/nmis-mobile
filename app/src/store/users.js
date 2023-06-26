@@ -5,4 +5,5 @@ export const UserStore = new Store({
   name: '',
   token: null,
   preferences: {},
+  forms: [],
 });
