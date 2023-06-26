@@ -4,6 +4,7 @@ export const UserStore = new Store({
   id: null,
   name: '',
   token: null,
-  preferences: {},
+  syncWifiOnly: false,
+  syncInterval: 300,
   forms: [],
 });
