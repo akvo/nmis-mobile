@@ -12,7 +12,7 @@ import { useField } from 'formik';
 import { View, Text } from 'react-native';
 import { styles } from '../styles';
 
-const QuestionField = ({ keyform, field: questionField, setFieldValue, values, ...props }) => {
+const QuestionField = ({ keyform, field: questionField, setFieldValue, values }) => {
   const [field, meta, helpers] = useField(questionField.id);
 
   const renderField = () => {

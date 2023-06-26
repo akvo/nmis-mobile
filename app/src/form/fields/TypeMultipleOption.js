@@ -21,9 +21,11 @@ const TypeMultipleOption = ({ onChange, values, keyform, id, name, option = [] }
             textStyle={styles.radioFieldText}
             checked={values?.[id]?.includes(opt.name)}
             onPress={() => {
-              values?.[id]?.includes(opt.name)
-                ? onChange(`${id}.${opti}`, null)
-                : onChange(`${id}.${opti}`, opt.name);
+              if (onChange) {
+                values?.[id]?.includes(opt.name)
+                  ? onChange(`${id}.${opti}`, null)
+                  : onChange(`${id}.${opti}`, opt.name);
+              }
             }}
             title={opt.label}
           />
@@ -40,7 +42,9 @@ const TypeMultipleOption = ({ onChange, values, keyform, id, name, option = [] }
           searchPlaceholder="Search..."
           value={values?.[id] || []}
           onChange={(value) => {
-            onChange(id, value);
+            if (onChange) {
+              onChange(id, value);
+            }
           }}
           testID="type-multiple-option-dropdown"
         />

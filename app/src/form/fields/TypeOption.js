@@ -20,7 +20,11 @@ const TypeOption = ({ onChange, values, keyform, id, name, option = [] }) => {
             containerStyle={styles.radioFieldContainer}
             textStyle={styles.radioFieldText}
             checked={values?.[id]?.includes(opt.name)}
-            onPress={() => onChange(id, [opt.name])}
+            onPress={() => {
+              if (onChange) {
+                onChange(id, [opt.name]);
+              }
+            }}
             title={opt.label}
             checkedIcon="dot-circle-o"
             uncheckedIcon="circle-o"
@@ -35,9 +39,11 @@ const TypeOption = ({ onChange, values, keyform, id, name, option = [] }) => {
           labelField="label"
           valueField="value"
           searchPlaceholder="Search..."
-          value={values?.[id] || []}
+          value={values?.[id]?.[0] || []}
           onChange={({ value }) => {
-            setFieldValue(id, value);
+            if (onChange) {
+              onChange(id, [value]);
+            }
           }}
           testID="type-option-dropdown"
         />
