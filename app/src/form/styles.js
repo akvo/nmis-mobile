@@ -28,6 +28,12 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 10,
   },
+  validationErrorText: {
+    paddingHorizontal: 10,
+    marginTop: -15,
+    color: 'red',
+    fontStyle: 'italic',
+  },
   fieldLabel: {
     paddingHorizontal: 10,
     marginBottom: 8,
@@ -43,9 +49,17 @@ export const styles = StyleSheet.create({
   },
   radioFieldContainer: {
     backgroundColor: 'transparent',
+    paddingVertical: 5,
+    marginBottom: 0,
   },
   radioFieldText: {
     fontWeight: 'normal',
+  },
+  optionContainer: {
+    marginBottom: 25,
+  },
+  multipleOptionContainer: {
+    marginBottom: 25,
   },
   dropdownField: {
     marginHorizontal: 10,

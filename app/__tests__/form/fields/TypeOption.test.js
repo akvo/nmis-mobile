@@ -31,7 +31,7 @@ describe('TypeOption component', () => {
 
     fireEvent.press(radioOption2);
 
-    expect(onChangeMock).toHaveBeenCalledWith('radioField', 'option2');
+    expect(onChangeMock).toHaveBeenCalledWith('radioField', ['option2']);
   });
 
   test('renders dropdown options correctly', async () => {

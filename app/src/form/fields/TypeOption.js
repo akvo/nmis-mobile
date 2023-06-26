@@ -11,7 +11,7 @@ const TypeOption = ({ onChange, values, keyform, id, name, option = [] }) => {
   }, [option]);
 
   return (
-    <View>
+    <View style={styles.optionContainer}>
       <FieldLabel keyform={keyform} name={name} />
       {isRadioGroup ? (
         option.map((opt, opti) => (
@@ -19,8 +19,8 @@ const TypeOption = ({ onChange, values, keyform, id, name, option = [] }) => {
             key={opti}
             containerStyle={styles.radioFieldContainer}
             textStyle={styles.radioFieldText}
-            checked={values?.[id] === opt.name}
-            onPress={() => onChange(id, opt.name)}
+            checked={values?.[id]?.includes(opt.name)}
+            onPress={() => onChange(id, [opt.name])}
             title={opt.label}
             checkedIcon="dot-circle-o"
             uncheckedIcon="circle-o"

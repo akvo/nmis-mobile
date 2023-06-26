@@ -20,10 +20,10 @@ const Webform = ({ forms, initialValues = {} }) => {
     const questions = formDefinition?.question_group?.flatMap((qg) => qg.question);
     const validations = questions.reduce((res, curr) => {
       const { id, name, type, required } = curr;
-      let yupType = null;
+      let yupType;
       switch (type) {
         case 'number':
-          yupType = Yup.number();
+          yupType = Yup.string();
           break;
         case 'date':
           yupType = Yup.date();
@@ -41,9 +41,9 @@ const Webform = ({ forms, initialValues = {} }) => {
       const requiredError = `${name} is required.`;
       return {
         ...res,
-        [id]: Yup.string().required(requiredError),
+        [id]: required ? yupType.required(requiredError) : yupType,
       };
-    });
+    }, {});
     return Yup.object().shape(validations);
   }, [formDefinition]);
 
@@ -54,7 +54,7 @@ const Webform = ({ forms, initialValues = {} }) => {
           <Formik
             innerRef={formRef}
             initialValues={initialValues}
-            // validationSchema={validationSchema}
+            validationSchema={validationSchema}
             onSubmit={(values) => console.log(values)}
           >
             {({ setFieldValue, values }) => (

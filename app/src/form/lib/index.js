@@ -87,7 +87,7 @@ export const modifyDependency = ({ question }, { dependency }, repeat) => {
 };
 
 export const validateDependency = (dependency, value) => {
-  if (dependency?.options && value) {
+  if (dependency?.options && typeof value !== 'undefined') {
     if (typeof value === 'string') {
       value = [value];
     }

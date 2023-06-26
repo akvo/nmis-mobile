@@ -9,12 +9,15 @@ import {
   TypeNumber,
 } from '../fields';
 import { useField } from 'formik';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
+import { styles } from '../styles';
 
-const QuestionField = ({ keyform, field: questionField, setFieldValue, values }) => {
-  const [field, meta, helpers] = useField(questionField);
-  // console.log(field, 'field');
-  // console.log(meta, 'meta');
+const QuestionField = ({ keyform, field: questionField, setFieldValue, values, ...props }) => {
+  const [field, meta, helpers] = useField(questionField.id);
+  // if (questionField?.id === 364240038) {
+  //   console.log('field', field);
+  //   console.log('meta', meta.error);
+  // }
   // console.log(helpers, 'helpers');
 
   const renderField = () => {
@@ -78,7 +81,7 @@ const QuestionField = ({ keyform, field: questionField, setFieldValue, values })
   return (
     <View>
       {renderField()}
-      {meta.touched && meta.error ? <Text>{meta.error}</Text> : null}
+      {meta.error ? <Text style={styles.validationErrorText}>{meta.error}</Text> : null}
     </View>
   );
 };

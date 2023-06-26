@@ -11,7 +11,7 @@ const TypeMultipleOption = ({ onChange, values, keyform, id, name, option = [] }
   }, [option]);
 
   return (
-    <View>
+    <View style={styles.multipleOptionContainer}>
       <FieldLabel keyform={keyform} name={name} />
       {isCheckBox ? (
         option.map((opt, opti) => (
