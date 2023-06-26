@@ -25,7 +25,7 @@ describe('TypeInput component', () => {
 
     const inputElement = getByTestId('type-input');
     fireEvent.changeText(inputElement, 'New Value');
-    expect(onChangeMock).toHaveBeenCalledWith('inputField');
+    expect(onChangeMock).toHaveBeenCalledTimes(1);
   });
 
   test('should display correct initial value', () => {

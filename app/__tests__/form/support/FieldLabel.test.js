@@ -4,11 +4,8 @@ import { FieldLabel } from '../../../src/form/support';
 
 describe('FieldLabel component', () => {
   it('renders label correctly', () => {
-    const label = 'Question';
-
-    const { getByText } = render(<FieldLabel label={label} />);
-
-    const labelElement = getByText(label);
+    const { getByText } = render(<FieldLabel keyform={0} name="Question Name" />);
+    const labelElement = getByText('1. Question Name');
     expect(labelElement).toBeDefined();
   });
 });
