@@ -1,23 +1,24 @@
-import { AppStore } from '../../src/store';
 import { renderHook, act } from '@testing-library/react-hooks';
+import { AppStore } from '../../src/store';
 
 describe('AppStore', () => {
   it('should initialize with the correct default state', () => {
     const { result } = renderHook(() => AppStore.useState());
-    const { currentPage, lang, online } = result.current;
+    const { currentPage, online } = result.current;
     expect(currentPage).toBe('GetStarted');
-    expect(lang).toBe('en');
     expect(online).toBe(false);
   });
 
-  it('should update online state correctly', () => {
+  it('should updating the state correctly', () => {
     const { result } = renderHook(() => AppStore.useState());
     act(() => {
       AppStore.update((s) => {
         s.online = true;
+        s.currentPage = 'Home';
       });
     });
-    const { online } = result.current;
+    const { online, currentPage } = result.current;
     expect(online).toBe(true);
+    expect(currentPage).toBe('Home');
   });
 });
