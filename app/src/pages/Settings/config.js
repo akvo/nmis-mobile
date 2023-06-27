@@ -53,11 +53,21 @@ export const config = [
     fields: [
       {
         id: 21,
-        type: 'text',
+        type: 'dropdown',
         name: 'lang',
         label: 'Language',
         description: 'Application language',
         key: 'UIState.lang',
+        options: [
+          {
+            label: 'English',
+            value: 'en',
+          },
+          {
+            label: 'French',
+            value: 'fr',
+          },
+        ],
       },
       {
         id: 22,
@@ -75,8 +85,8 @@ export const config = [
         description: null,
         key: 'UIState.fontSize',
         slider: {
-          min: 0,
-          max: 12,
+          minimumValue: 12,
+          maximumValue: 24,
           step: 4,
         },
       },
