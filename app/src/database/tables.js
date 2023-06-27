@@ -11,7 +11,7 @@ export const tables = [
     name: 'config',
     fields: {
       id: 'INTEGER PRIMARY KEY NOT NULL',
-      appVersion: 'INTEGER NOT NULL',
+      appVersion: 'VARCHAR(255) NOT NULL',
       authenticationCode: 'TEXT NOT NULL',
       serverURL: 'TEXT NOT NULL',
       syncInterval: 'REAL',

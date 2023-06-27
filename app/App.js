@@ -1,7 +1,10 @@
 import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import NetInfo from '@react-native-community/netinfo';
+
 import Navigation from './src/navigation';
 import { conn, query, tables } from './src/database';
+import { UIState } from './src/store';
 
 const db = conn.init;
 
@@ -11,6 +14,18 @@ const App = () => {
     conn.tx(db, queries).then((res) => {
       console.log('results', res);
     });
+  }, []);
+
+  React.useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      UIState.update((s) => {
+        s.online = state.isConnected;
+      });
+    });
+
+    return () => {
+      unsubscribe();
+    };
   }, []);
   return (
     <SafeAreaProvider>

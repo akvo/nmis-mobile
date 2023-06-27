@@ -11,6 +11,7 @@
     "prettier": "prettier --check ."
   },
   "dependencies": {
+    "@react-native-community/netinfo": "^9.3.10",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
     "@rneui/base": "^4.0.0-rc.7",
@@ -19,10 +20,12 @@
     "expo-crypto": "^12.2.2",
     "expo-sqlite": "^11.1.1",
     "expo-status-bar": "~1.4.4",
+    "pullstate": "^1.25.0",
     "react": "18.2.0",
     "react-native": "0.71.8",
     "react-native-safe-area-context": "^4.5.0",
     "react-native-screens": "~3.20.0",
+    "react-native-snackbar": "^2.6.2",
     "react-native-vector-icons": "^9.2.0"
   },
   "devDependencies": {
