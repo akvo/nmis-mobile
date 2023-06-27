@@ -196,6 +196,24 @@
               "language": "id"
             }
           ]
+        },
+        {
+          "id": 9,
+          "name": "Give Rating from 1 - 9 for Rendang",
+          "order": 5,
+          "type": "number",
+          "required": true,
+          "dependency": [
+            {
+              "id": 7,
+              "options": ["Rendang"]
+            }
+          ],
+          "rule": {
+            "min": 1,
+            "max": 9,
+            "allowDecimal": true
+          }
         }
       ]
     }
