@@ -4,7 +4,7 @@ import NetInfo from '@react-native-community/netinfo';
 
 import Navigation from './src/navigation';
 import { conn, query, tables } from './src/database';
-import { AppStore } from './src/store';
+import { UIState } from './src/store';
 
 const db = conn.init;
 
@@ -18,7 +18,7 @@ const App = () => {
 
   React.useEffect(() => {
     const unsubscribe = NetInfo.addEventListener((state) => {
-      AppStore.update((s) => {
+      UIState.update((s) => {
         s.online = state.isConnected;
       });
     });

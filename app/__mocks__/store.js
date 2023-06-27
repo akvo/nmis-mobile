@@ -1,3 +1,3 @@
-export const AppStore = {
+export const UIState = {
   update: jest.fn(),
 };
