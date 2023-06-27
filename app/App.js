@@ -10,10 +10,11 @@ const db = conn.init;
 
 const App = () => {
   React.useEffect(() => {
-    const queries = tables.map((t) => query.initialQuery(t.name, t.fields)).join(' ');
-    conn.tx(db, queries).then((res) => {
-      console.log('results', res);
+    const queries = tables.map((t) => {
+      const queryString = query.initialQuery(t.name, t.fields);
+      return conn.tx(db, queryString);
     });
+    Promise.all(queries);
   }, []);
 
   React.useEffect(() => {
