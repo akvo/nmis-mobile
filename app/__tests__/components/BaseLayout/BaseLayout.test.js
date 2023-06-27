@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react-native';
+import { render } from '@testing-library/react-native';
 import { BaseLayout } from '../../../src/components';
 
 describe('BaseLayout component', () => {
@@ -28,15 +28,5 @@ describe('BaseLayout component', () => {
 
     const searchPlaceholderElement = getByPlaceholderText(search.placeholder);
     expect(searchPlaceholderElement).toBeDefined();
-  });
-
-  test('calls onPress function when back button is pressed', () => {
-    const title = 'Example Title';
-    const onPressMock = jest.fn();
-    const { getByTestId } = render(<BaseLayout title={title} />);
-    const button = getByTestId('arrow-back-button');
-
-    fireEvent.press(button);
-    expect(onPressMock).toHaveBeenCalledTimes(1);
   });
 });

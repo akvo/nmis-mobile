@@ -7,6 +7,7 @@ import App from '../App';
 import { UIState } from 'store';
 
 jest.mock('@react-native-community/netinfo', () => mockRNCNetInfo);
+jest.mock('@react-navigation/native-stack');
 
 describe('App', () => {
   it('should update UIState on NetInfo change', async () => {
