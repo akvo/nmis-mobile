@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react-native';
-import FormState from './forms';
+import FormState from '../forms';
 
 describe('FormState', () => {
   it('should initialize with the correct default state', () => {

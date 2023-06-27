@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react-native';
-import AuthState from './auth';
+import AuthState from '../auth';
 
 describe('AuthState', () => {
   it('should initialize with the correct default state', () => {

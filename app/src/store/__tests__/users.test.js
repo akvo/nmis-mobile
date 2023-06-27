@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react-native';
-import UserState from './users';
+import UserState from '../users';
 
 describe('UserState', () => {
   it('should initialize with the correct default state', () => {

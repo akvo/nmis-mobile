@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react-native';
-import UIState from './ui';
+import UIState from '../ui';
 
 describe('UIState', () => {
   it('should initialize with the correct default state', () => {
