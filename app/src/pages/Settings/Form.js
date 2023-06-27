@@ -1,17 +1,20 @@
 import React from 'react';
 import { View } from 'react-native';
-import { ListItem, Switch, Input, Dialog } from '@rneui/themed';
+import { ListItem, Switch } from '@rneui/themed';
 import { BaseLayout } from '../../components';
 import { config } from './config';
 import { BuildParamsState, UIState, AuthState, UserState } from '../../store';
+import { conn, query } from '../../database';
+import DialogForm from './DialogForm';
+
+const db = conn.init;
 
 const SettingsForm = ({ route }) => {
   const [edit, setEdit] = React.useState(null);
   const [list, setList] = React.useState([]);
-  const [input, setInput] = React.useState(null);
   const [showDialog, setShowDialog] = React.useState(false);
 
-  const serverURL = BuildParamsState.useState((s) => s.serverURL);
+  const { serverURL, appVersion } = BuildParamsState.useState((s) => s);
   const { username, password, authenticationCode, useAuthenticationCode } = AuthState.useState(
     (s) => s,
   );
@@ -23,7 +26,7 @@ const SettingsForm = ({ route }) => {
     UIState,
     UserState,
   };
-  const settingsState = {
+  const [settingsState, setSettingsState] = React.useState({
     serverURL,
     username,
     password,
@@ -34,7 +37,8 @@ const SettingsForm = ({ route }) => {
     fontSize,
     syncInterval,
     syncWifiOnly,
-  };
+  });
+
   const editState = React.useMemo(() => {
     if (edit && edit?.key) {
       const [stateName, stateKey] = edit?.key?.split('.');
@@ -44,18 +48,44 @@ const SettingsForm = ({ route }) => {
   }, [edit]);
 
   const handleEditPress = (id) => {
-    setShowDialog(true);
     const findEdit = list.find((item) => item.id === id);
-    setEdit(findEdit);
+    if (findEdit) {
+      setEdit({
+        ...findEdit,
+        value: settingsState[findEdit?.name] || null,
+      });
+      setShowDialog(true);
+    }
   };
 
-  const handleOKPress = () => {
+  const handleUpdateOnDB = (field, value) => {
+    const dbFields = [
+      'apVersion',
+      'authenticationCode',
+      'serverURL',
+      'syncInterval',
+      'syncWifiOnly',
+      'lang',
+    ];
+    if (dbFields.includes(field)) {
+      const id = 1;
+      const updateQuery = query.update('config', { id }, { [field]: value });
+      conn.tx(db, updateQuery, [id]);
+    }
+  };
+
+  const handleOKPress = (inputValue) => {
     setShowDialog(false);
-    if (edit && input) {
+    if (edit && inputValue) {
       const [stateData, stateKey] = editState;
       stateData.update((d) => {
-        d[stateKey] = input;
+        d[stateKey] = inputValue;
       });
+      setSettingsState({
+        ...settingsState,
+        [stateKey]: inputValue,
+      });
+      handleUpdateOnDB(stateKey, inputValue);
       setEdit(null);
     }
   };
@@ -69,7 +99,26 @@ const SettingsForm = ({ route }) => {
     store[stateName].update((s) => {
       s[stateKey] = value;
     });
+    setSettingsState({
+      ...settingsState,
+      [stateKey]: value,
+    });
+    handleUpdateOnDB(stateKey, value);
   };
+
+  const handleCreateNewConfig = () => {
+    const insertQuery = query.insert('config', {
+      id: 1,
+      appVersion,
+      authenticationCode: 'testing',
+      serverURL,
+      syncInterval,
+      syncWifiOnly,
+      lang,
+    });
+    conn.tx(db, insertQuery, []);
+  };
+
   const settingsID = React.useMemo(() => {
     return route?.params?.id;
   }, [route]);
@@ -80,55 +129,52 @@ const SettingsForm = ({ route }) => {
     setList(fields);
   }, [settingsID]);
 
-  // React.useEffect(() => {
-  //   const selectQuery = query.read('config');
-  //   conn.tx(db, selectQuery, []).then((res) => {
-  //     console.log('res', res);
-  //   });
-  // }, []);
-
-  const inputTypes = ['text', 'number', 'password', 'date', 'option'];
-  const isPassword = edit?.type === 'password' || false;
+  React.useEffect(() => {
+    const selectQuery = query.read('config', { id: 1 });
+    conn.tx(db, selectQuery, [1]).then(({ rows }) => {
+      if (rows.length) {
+        const configRows = rows._array[0];
+        setSettingsState({
+          ...settingsState,
+          ...configRows,
+        });
+      } else {
+        handleCreateNewConfig();
+      }
+    });
+  }, []);
   return (
     <BaseLayout title={route?.params?.name}>
       <BaseLayout.Content>
         <View>
-          {list.map((l, i) =>
-            inputTypes.includes(l.type) ? (
-              <ListItem key={i} onPress={() => handleEditPress(l.id)} bottomDivider>
+          {list.map((l, i) => {
+            const switchValue =
+              l.type === 'switch' && (settingsState[l.name] || false) ? true : false;
+            const listProps = l.type === 'switch' ? {} : { onPress: () => handleEditPress(l.id) };
+            const subtitle =
+              l.type === 'switch' ? l.description : settingsState[l.name] || l.description;
+            return (
+              <ListItem key={i} {...listProps} bottomDivider>
                 <ListItem.Content>
                   <ListItem.Title>{l.label}</ListItem.Title>
-                  <ListItem.Subtitle>{settingsState[l.name] || l.description}</ListItem.Subtitle>
-                </ListItem.Content>
-              </ListItem>
-            ) : (
-              <ListItem key={i} bottomDivider>
-                <ListItem.Content>
-                  <ListItem.Title>{l.label}</ListItem.Title>
-                  <ListItem.Subtitle>{l.description}</ListItem.Subtitle>
+                  <ListItem.Subtitle>{subtitle}</ListItem.Subtitle>
                 </ListItem.Content>
                 {l.type === 'switch' && (
                   <Switch
-                    value={settingsState[l.name] || false}
                     onValueChange={(value) => handleOnSwitch(value, l.key)}
+                    value={switchValue}
                   />
                 )}
               </ListItem>
-            ),
-          )}
+            );
+          })}
         </View>
-        <Dialog isVisible={showDialog}>
-          <Input
-            placeholder={edit?.label}
-            secureTextEntry={isPassword}
-            onChangeText={setInput}
-            value={settingsState[edit?.name]}
-          />
-          <Dialog.Actions>
-            <Dialog.Button onPress={handleOKPress}>OK</Dialog.Button>
-            <Dialog.Button onPress={handleCancelPress}>Cancel</Dialog.Button>
-          </Dialog.Actions>
-        </Dialog>
+        <DialogForm
+          onOk={handleOKPress}
+          onCancel={handleCancelPress}
+          showDialog={showDialog}
+          edit={edit}
+        />
       </BaseLayout.Content>
     </BaseLayout>
   );
