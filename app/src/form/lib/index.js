@@ -1,6 +1,7 @@
 import * as Yup from 'yup';
 
-const intersection = (array1, array2) => {
+const intersection = (array1, array2, from = '') => {
+  console.log(array1, array2, from);
   const set1 = new Set(array1);
   const result = [];
   for (const item of array2) {
@@ -112,12 +113,23 @@ export const validateDependency = (dependency, value) => {
 };
 
 export const generateValidationSchema = (forms) => {
-  const questions = forms?.question_group?.flatMap((qg) => qg.question);
+  const questions = forms?.question_group
+    ?.map((qg) => {
+      const qs = qg.question.map((q) => {
+        return {
+          ...q,
+          group: qg,
+        };
+      });
+      return qs;
+    })
+    .flat();
   // TODO:: Validation for dependency question not supported yet
-  const validations = questions
-    .filter((q) => !q?.dependency)
-    .reduce((res, curr) => {
-      const { id, name, type, required, rule } = curr;
+  // TODO:: Check for chaining dependency
+  const schema = Yup.object().shape(
+    questions.reduce((res, curr) => {
+      const { id, name, type, required, rule, group, dependency } = curr;
+      const requiredError = `${name} is required.`;
       let yupType;
       switch (type) {
         case 'number':
@@ -147,11 +159,69 @@ export const generateValidationSchema = (forms) => {
           yupType = Yup.string();
           break;
       }
-      const requiredError = `${name} is required.`;
+      // dependency & required check
+      let yupRule = yupType;
+      if (required && dependency && dependency?.length) {
+        const repeat = 0;
+        const modifiedDependency = modifyDependency(group, curr, repeat);
+        modifiedDependency.forEach(({ id, options }) => {
+          yupRule = yupRule.when(`${id}`, {
+            is: (value) => intersection(value, options, '-----4444'),
+            then: yupType.required(requiredError),
+          });
+        });
+      } else if (required) {
+        yupRule = yupRule.required(requiredError);
+      }
       return {
         ...res,
-        [id]: required ? yupType.required(requiredError) : yupType,
+        [id]: yupRule,
       };
-    }, {});
-  return Yup.object().shape(validations);
+    }, {}),
+  );
+  return schema;
+};
+
+export const generateValidationSchemaFieldLevel = (currentValue, field) => {
+  const { id, name, type, required, rule } = field;
+  let yupType;
+  switch (type) {
+    case 'number':
+      // number rules
+      yupType = Yup.number();
+      if (rule?.min) {
+        yupType = yupType.min(rule.min);
+      }
+      if (rule?.max) {
+        yupType = yupType.max(rule.max);
+      }
+      if (!rule?.allowDecimal) {
+        // by default decimal is allowed
+        yupType = yupType.integer();
+      }
+      break;
+    case 'date':
+      yupType = Yup.date();
+      break;
+    case 'option':
+      yupType = Yup.array();
+      break;
+    case 'multiple_option':
+      yupType = Yup.array();
+      break;
+    default:
+      yupType = Yup.string();
+      break;
+  }
+  if (required) {
+    const requiredError = `${name} is required.`;
+    yupType = yupType.required(requiredError);
+  } else {
+    yupType = yupType.notRequired();
+  }
+  try {
+    yupType.validateSync(currentValue);
+  } catch (error) {
+    return error.message;
+  }
 };

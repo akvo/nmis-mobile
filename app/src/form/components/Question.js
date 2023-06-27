@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import QuestionField from './QuestionField';
 import { styles } from '../styles';
-import { modifyDependency, validateDependency } from '../lib';
+import { modifyDependency, validateDependency, generateValidationSchemaFieldLevel } from '../lib';
 
 const Question = ({ group, setFieldValue, values }) => {
   const fields = group?.question || [];
@@ -22,6 +22,7 @@ const Question = ({ group, setFieldValue, values }) => {
             field={field}
             setFieldValue={setFieldValue}
             values={values}
+            validate={(currentValue) => generateValidationSchemaFieldLevel(currentValue, field)}
           />
         </View>
       );
@@ -33,6 +34,7 @@ const Question = ({ group, setFieldValue, values }) => {
           field={field}
           setFieldValue={setFieldValue}
           values={values}
+          validate={(currentValue) => generateValidationSchemaFieldLevel(currentValue, field)}
         />
       </View>
     );

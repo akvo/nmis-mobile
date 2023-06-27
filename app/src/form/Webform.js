@@ -11,10 +11,11 @@ import { transformForm, generateValidationSchema } from './lib';
 // TODO:: Repeat group not supported yet
 // TODO:: Cascade not supported yet
 // TODO:: Geo not supported yet
-
 // TODO:: Validation for dependency question not supported yet
 
 const Webform = ({ forms, initialValues = {} }) => {
+  //TODO:: Rename Webform component
+  // TRY TO USE FIELD LEVEL VALIDATION
   const formRef = React.useRef();
   const [activeGroup, setActiveGroup] = React.useState(0);
 
@@ -33,7 +34,9 @@ const Webform = ({ forms, initialValues = {} }) => {
           <Formik
             innerRef={formRef}
             initialValues={initialValues}
-            validationSchema={validationSchema}
+            // validationSchema={validationSchema}
+            // validateOnChange={false}
+            // validateOnBlur={true}
             onSubmit={(values) => console.log(values)}
           >
             {({ setFieldValue, values }) => (

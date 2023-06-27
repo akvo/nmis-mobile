@@ -12,8 +12,13 @@ import { useField } from 'formik';
 import { View, Text } from 'react-native';
 import { styles } from '../styles';
 
-const QuestionField = ({ keyform, field: questionField, setFieldValue, values }) => {
-  const [field, meta, helpers] = useField(questionField.id);
+const QuestionField = ({ keyform, field: questionField, setFieldValue, values, validate }) => {
+  const [field, meta, helpers] = useField({ name: questionField.id, validate });
+
+  if (meta.error && questionField.id === 364240038) {
+    console.log(field, 'FIELD');
+    console.log(meta, 'META');
+  }
 
   const renderField = () => {
     switch (questionField?.type) {
