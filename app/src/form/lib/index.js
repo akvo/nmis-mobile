@@ -57,7 +57,7 @@ export const transformForm = (forms) => {
     ...forms,
     question_group: forms?.question_group
       ?.sort((a, b) => a.order - b.order)
-      ?.map((qg) => {
+      ?.map((qg, qgi) => {
         let repeat = {};
         let repeats = {};
         if (qg?.repeatable) {
@@ -68,6 +68,7 @@ export const transformForm = (forms) => {
           ...qg,
           ...repeat,
           ...repeats,
+          groupIndex: qgi,
           question: qg.question
             ?.sort((a, b) => a.order - b.order)
             ?.map((q) => {

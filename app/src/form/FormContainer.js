@@ -1,7 +1,7 @@
 import React from 'react';
 import { BaseLayout } from '../components';
 import { ScrollView, View } from 'react-native';
-import { Formik } from 'formik';
+import { Formik, setNestedObjectValues } from 'formik';
 import { styles } from './styles';
 import { FormNavigation } from './support';
 import QuestionGroup from './components/QuestionGroup';
@@ -19,6 +19,10 @@ const FormContainer = ({ forms, initialValues = {} }) => {
   const formDefinition = React.useMemo(() => {
     return transformForm(forms);
   }, [forms]);
+
+  const currentGroup = React.useMemo(() => {
+    return formDefinition.question_group.find((qg) => qg.groupIndex === activeGroup);
+  }, [formDefinition, activeGroup]);
 
   const handleOnSubmitForm = (values) => {
     const results = Object.keys(values)
@@ -57,14 +61,14 @@ const FormContainer = ({ forms, initialValues = {} }) => {
           >
             {({ setFieldValue, values }) => (
               <View style={styles.formContainer}>
-                {formDefinition?.question_group?.map((group, groupIndex) => {
-                  if (activeGroup !== groupIndex) {
+                {formDefinition?.question_group?.map((group) => {
+                  if (activeGroup !== group.groupIndex) {
                     return '';
                   }
                   return (
                     <QuestionGroup
-                      key={`group-${groupIndex}`}
-                      index={groupIndex}
+                      key={`group-${group.groupIndex}`}
+                      index={group.groupIndex}
                       group={group}
                       setFieldValue={setFieldValue}
                       values={values}
@@ -78,6 +82,8 @@ const FormContainer = ({ forms, initialValues = {} }) => {
       </ScrollView>
       <View>
         <FormNavigation
+          currentGroup={currentGroup}
+          formRef={formRef}
           onSubmit={() => {
             if (formRef.current) {
               formRef.current.handleSubmit();
