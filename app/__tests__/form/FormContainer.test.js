@@ -14,9 +14,9 @@ describe('FormContainer component', () => {
       3: '31',
       4: ['Male'],
       5: ['Bachelor'],
-      6: ['Traveling'],
+      6: [undefined, 'Traveling'],
       7: ['Fried Rice', 'Rendang'],
-      8: 'Lorem ipsum...',
+      8: ' ',
     };
 
     const { queryByTestId } = render(
@@ -40,7 +40,6 @@ describe('FormContainer component', () => {
       5: ['Bachelor'],
       6: ['Traveling'],
       7: ['Fried Rice', 'Rendang'],
-      8: 'Lorem ipsum...',
     });
 
     consoleSpy.mockRestore();

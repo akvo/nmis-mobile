@@ -21,8 +21,12 @@ const FormContainer = ({ forms, initialValues = {} }) => {
   }, [forms]);
 
   const handleOnSubmitForm = (values) => {
-    const results = Object.keys(values).reduce((res, key) => {
+    const results = Object.keys(values).map((key) => {
       let value = values[key]
+      // check empty
+      if (typeof value === 'undefined'  || value === null || (typeof value === "string" && value.trim() === '')) {
+        return false;
+      }
       // check array
       if (value && Array.isArray(value)) {
         const check = value.filter(
@@ -30,11 +34,8 @@ const FormContainer = ({ forms, initialValues = {} }) => {
         );
         value = check.length ? check : null;
       }
-      return {
-        ...res,
-        [key]: value
-      }
-    }, {})
+      return {[key]: value}
+    }).filter(v => v).reduce((res, current) => ({...res, ...current}), {})
     console.log(results)
   }
 
