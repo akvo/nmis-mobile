@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
-import { TypeText } from '../../../src/form/fields';
+import TypeText from '../TypeText';
 
 describe('TypeText component', () => {
   test('renders correctly', () => {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent } from 'react-native-testing-library';
-import { TypeNumber } from '../../../src/form/fields';
+import TypeNumber from '../TypeNumber';
 
 describe('TypeNumber component', () => {
   it('should render the component correctly', () => {

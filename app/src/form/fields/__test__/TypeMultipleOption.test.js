@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
-import { TypeMultipleOption } from '../../../src/form/fields';
+import TypeMultipleOption from '../TypeMultipleOption';
 
 describe('TypeMultipleOption', () => {
   test('renders checkbox options correctly when option length is less than or equal to 3', () => {

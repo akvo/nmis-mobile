@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
-import { TypeDate } from '../../../src/form/fields';
+import TypeDate from '../TypeDate';
 
 describe('TypeDate component', () => {
   it('should render the component correctly', () => {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent, waitFor } from 'react-native-testing-library';
-import { FormNavigation } from '../../../src/form/support';
+import FormNavigation from '../FormNavigation';
 
 describe('FormNavigation component', () => {
   it('renders form navigation correctly', async () => {

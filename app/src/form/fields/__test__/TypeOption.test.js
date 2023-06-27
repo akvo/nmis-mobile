@@ -1,6 +1,6 @@
 import React from 'react';
-import { render, fireEvent, waitFor } from '@testing-library/react-native';
-import { TypeOption } from '../../../src/form/fields';
+import { render, fireEvent } from '@testing-library/react-native';
+import TypeOption from '../TypeOption';
 
 describe('TypeOption component', () => {
   test('renders radio group options correctly', () => {

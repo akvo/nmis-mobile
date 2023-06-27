@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent } from 'react-native-testing-library';
-import { TypeInput } from '../../../src/form/fields';
+import TypeInput from '../TypeInput';
 
 describe('TypeInput component', () => {
   it('should render the component correctly', () => {

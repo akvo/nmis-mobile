@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from 'react-native-testing-library';
-import { FieldLabel } from '../../../src/form/support';
+import FieldLabel from '../FieldLabel';
 
 describe('FieldLabel component', () => {
   it('renders label correctly', () => {

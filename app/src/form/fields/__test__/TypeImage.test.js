@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent, waitFor, act } from 'react-native-testing-library';
 import * as ImagePicker from 'expo-image-picker';
-import { TypeImage } from '../../../src/form/fields';
+import TypeImage from '../TypeImage';
 
 jest.mock('react-native/Libraries/PermissionsAndroid/PermissionsAndroid', () => {
   return {

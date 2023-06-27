@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent, waitFor } from '@testing-library/react-native';
 jest.useFakeTimers();
-import { FormContainer } from '../../src/form';
+import FormContainer from '../FormContainer';
 import * as exampleTestForm from './example-test-form.json';
 
 describe('FormContainer component', () => {
