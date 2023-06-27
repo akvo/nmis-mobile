@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`WebformPage component should render component correctly 1`] = `
+exports[`FormPage component should render component correctly 1`] = `
 <View
   style={
     {

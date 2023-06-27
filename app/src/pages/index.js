@@ -3,4 +3,4 @@ export { default as FormActionPage } from './FormAction';
 export { default as FormDataPage } from './FormData';
 export { default as GetStartedPage } from './GetStarted';
 export { default as AuthFormPage } from './AuthForm';
-export { default as WebformPage } from './WebformPage';
+export { default as FormPage } from './FormPage';

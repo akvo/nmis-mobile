@@ -1,10 +1,10 @@
 import React from 'react';
 import { render, fireEvent, waitFor } from '@testing-library/react-native';
 jest.useFakeTimers();
-import { Webform } from '../../src/form';
+import { FormContainer } from '../../src/form';
 import * as exampleTestForm from './example-test-form.json';
 
-describe('Webform component', () => {
+describe('FormContainer component', () => {
   test('submits form data correctly', async () => {
     const consoleSpy = jest.spyOn(console, 'log');
 
@@ -20,7 +20,7 @@ describe('Webform component', () => {
     };
 
     const { queryByTestId } = render(
-      <Webform forms={exampleTestForm} initialValues={modifiedInitialValues} />,
+      <FormContainer forms={exampleTestForm} initialValues={modifiedInitialValues} />,
     );
 
     const nextBtn = queryByTestId('form-nav-btn-next');

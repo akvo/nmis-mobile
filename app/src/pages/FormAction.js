@@ -18,7 +18,7 @@ const FormAction = ({ navigation, route }) => {
       id: 1,
       text: 'New Blank Form',
       icon: 'add',
-      navigation: 'Webform',
+      navigation: 'FormPage',
     },
     {
       id: 2,

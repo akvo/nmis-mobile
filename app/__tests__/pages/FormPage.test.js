@@ -1,11 +1,11 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 jest.useFakeTimers();
-import { WebformPage } from '../../src/pages';
+import { FormPage } from '../../src/pages';
 
-describe('WebformPage component', () => {
+describe('FormPage component', () => {
   test('should render component correctly', () => {
-    const tree = renderer.create(<WebformPage />).toJSON();
+    const tree = renderer.create(<FormPage />).toJSON();
     expect(tree).toMatchSnapshot();
   });
 });

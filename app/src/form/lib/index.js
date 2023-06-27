@@ -1,7 +1,6 @@
 import * as Yup from 'yup';
 
-const intersection = (array1, array2, from = '') => {
-  console.log(array1, array2, from);
+const intersection = (array1, array2) => {
   const set1 = new Set(array1);
   const result = [];
   for (const item of array2) {
@@ -124,66 +123,67 @@ export const generateValidationSchema = (forms) => {
       return qs;
     })
     .flat();
-  // TODO:: Validation for dependency question not supported yet
-  // TODO:: Check for chaining dependency
   const schema = Yup.object().shape(
-    questions.reduce((res, curr) => {
-      const { id, name, type, required, rule, group, dependency } = curr;
-      const requiredError = `${name} is required.`;
-      let yupType;
-      switch (type) {
-        case 'number':
-          // number rules
-          yupType = Yup.number();
-          if (rule?.min) {
-            yupType = yupType.min(rule.min);
-          }
-          if (rule?.max) {
-            yupType = yupType.max(rule.max);
-          }
-          if (!rule?.allowDecimal) {
-            // by default decimal is allowed
-            yupType = yupType.integer();
-          }
-          break;
-        case 'date':
-          yupType = Yup.date();
-          break;
-        case 'option':
-          yupType = Yup.array();
-          break;
-        case 'multiple_option':
-          yupType = Yup.array();
-          break;
-        default:
-          yupType = Yup.string();
-          break;
-      }
-      // dependency & required check
-      let yupRule = yupType;
-      if (required && dependency && dependency?.length) {
-        const repeat = 0;
-        const modifiedDependency = modifyDependency(group, curr, repeat);
-        modifiedDependency.forEach(({ id, options }) => {
-          yupRule = yupRule.when(`${id}`, {
-            is: (value) => intersection(value, options, '-----4444'),
-            then: yupType.required(requiredError),
+    questions
+      .filter((q) => !q?.dependency)
+      .reduce((res, curr) => {
+        const { id, name, type, required, rule, group, dependency } = curr;
+        const requiredError = `${name} is required.`;
+        let yupType;
+        switch (type) {
+          case 'number':
+            // number rules
+            yupType = Yup.number();
+            if (rule?.min) {
+              yupType = yupType.min(rule.min);
+            }
+            if (rule?.max) {
+              yupType = yupType.max(rule.max);
+            }
+            if (!rule?.allowDecimal) {
+              // by default decimal is allowed
+              yupType = yupType.integer();
+            }
+            break;
+          case 'date':
+            yupType = Yup.date();
+            break;
+          case 'option':
+            yupType = Yup.array();
+            break;
+          case 'multiple_option':
+            yupType = Yup.array();
+            break;
+          default:
+            yupType = Yup.string();
+            break;
+        }
+        // dependency & required check
+        let yupRule = yupType;
+        if (required && dependency && dependency?.length) {
+          const repeat = 0;
+          const modifiedDependency = modifyDependency(group, curr, repeat);
+          modifiedDependency.forEach(({ id, options }) => {
+            yupRule = yupRule.when(`${id}`, {
+              is: (value) => intersection(value, options),
+              then: yupType.required(requiredError),
+            });
           });
-        });
-      } else if (required) {
-        yupRule = yupRule.required(requiredError);
-      }
-      return {
-        ...res,
-        [id]: yupRule,
-      };
-    }, {}),
+        } else if (required) {
+          yupRule = yupRule.required(requiredError);
+        }
+        return {
+          ...res,
+          [id]: yupRule,
+        };
+      }, {}),
   );
   return schema;
 };
 
+// TODO:: Check for chaining dependency
 export const generateValidationSchemaFieldLevel = (currentValue, field) => {
-  const { id, name, type, required, rule } = field;
+  const { name, type, required, rule } = field;
   let yupType;
   switch (type) {
     case 'number':
