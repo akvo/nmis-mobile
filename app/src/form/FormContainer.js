@@ -20,6 +20,24 @@ const FormContainer = ({ forms, initialValues = {} }) => {
     return transformForm(forms);
   }, [forms]);
 
+  const handleOnSubmitForm = (values) => {
+    const results = Object.keys(values).reduce((res, key) => {
+      let value = values[key]
+      // check array
+      if (value && Array.isArray(value)) {
+        const check = value.filter(
+          (y) => typeof y !== 'undefined' && (y || isNaN(y))
+        );
+        value = check.length ? check : null;
+      }
+      return {
+        ...res,
+        [key]: value
+      }
+    }, {})
+    console.log(results)
+  }
+
   return (
     <>
       <ScrollView>
@@ -27,7 +45,7 @@ const FormContainer = ({ forms, initialValues = {} }) => {
           <Formik
             innerRef={formRef}
             initialValues={initialValues}
-            onSubmit={(values) => console.log(values)}
+            onSubmit={handleOnSubmitForm}
           >
             {({ setFieldValue, values }) => (
               <View style={styles.formContainer}>
