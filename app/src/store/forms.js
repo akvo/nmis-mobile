@@ -1,6 +1,6 @@
 import { Store } from 'pullstate';
 
-export const FormStore = new Store({
+const FormState = new Store({
   form: {},
   questionGroups: [],
   questions: [],
@@ -8,3 +8,5 @@ export const FormStore = new Store({
   saved: false,
   submitted: false,
 });
+
+export default FormState;

@@ -1,6 +1,6 @@
 import { Store } from 'pullstate';
 
-export const UserStore = new Store({
+const UserState = new Store({
   id: null,
   name: '',
   token: null,
@@ -8,3 +8,5 @@ export const UserStore = new Store({
   syncInterval: 300,
   forms: [],
 });
+
+export default UserState;
