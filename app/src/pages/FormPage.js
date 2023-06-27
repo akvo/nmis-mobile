@@ -12,7 +12,7 @@ const FormPage = ({ navigation, route }) => {
 
   return (
     <BaseLayout title={route?.params?.name} back={goBack}>
-      <FormContainer forms={formDefinition} initialValues={initialValues} />
+      <FormContainer forms={formDefinition} initialValues={{}} />
     </BaseLayout>
   );
 };

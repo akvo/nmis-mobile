@@ -15,7 +15,15 @@ const Question = ({ group, setFieldValue, values }) => {
           return validateDependency(x, values?.[x.id]);
         })
         .filter((x) => x === false);
-      return unmatches.length ? null : (
+      if (unmatches.length) {
+        // delete hidden field value
+        if (values?.[field.id]) {
+          delete values[field.id];
+          setFieldValue(field.id, '');
+        }
+        return null;
+      }
+      return (
         <View key={`question-${field.id}`} style={styles.questionContainer}>
           <QuestionField
             keyform={keyform}

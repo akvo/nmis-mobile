@@ -129,7 +129,6 @@ exports[`FormPage component should render component correctly 1`] = `
                         }
                         testID="type-text"
                         underlineColorAndroid="transparent"
-                        value="Name"
                       />
                     </View>
                     <Text
@@ -212,7 +211,6 @@ exports[`FormPage component should render component correctly 1`] = `
                         }
                         testID="type-input"
                         underlineColorAndroid="transparent"
-                        value="org"
                       />
                     </View>
                     <Text
@@ -297,7 +295,6 @@ exports[`FormPage component should render component correctly 1`] = `
                         }
                         testID="type-text"
                         underlineColorAndroid="transparent"
-                        value="household"
                       />
                     </View>
                     <Text
@@ -421,7 +418,7 @@ exports[`FormPage component should render component correctly 1`] = `
                     accessibilityState={
                       {
                         "busy": undefined,
-                        "checked": true,
+                        "checked": false,
                         "disabled": false,
                         "expanded": undefined,
                         "selected": undefined,
@@ -559,7 +556,6 @@ exports[`FormPage component should render component correctly 1`] = `
                         }
                         testID="type-number"
                         underlineColorAndroid="transparent"
-                        value="2"
                       />
                     </View>
                     <Text
@@ -768,7 +764,7 @@ exports[`FormPage component should render component correctly 1`] = `
               "max": undefined,
               "min": undefined,
               "now": undefined,
-              "text": "1/10",
+              "text": "1/2",
             }
           }
           accessible={true}
@@ -823,7 +819,7 @@ exports[`FormPage component should render component correctly 1`] = `
                 }
               }
             >
-              1/10
+              1/2
             </Text>
           </View>
         </View>

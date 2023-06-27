@@ -111,6 +111,8 @@ export const validateDependency = (dependency, value) => {
   return valid;
 };
 
+{
+  /** TODO:: Delete if no longer required
 export const generateValidationSchema = (forms) => {
   const questions = forms?.question_group
     ?.map((qg) => {
@@ -180,6 +182,8 @@ export const generateValidationSchema = (forms) => {
   );
   return schema;
 };
+*/
+}
 
 // TODO:: Check for chaining dependency
 export const generateValidationSchemaFieldLevel = (currentValue, field) => {
@@ -188,14 +192,15 @@ export const generateValidationSchemaFieldLevel = (currentValue, field) => {
   switch (type) {
     case 'number':
       // number rules
-      yupType = Yup.number();
-      if (rule?.min) {
+      const isEmpyCurrentValue = currentValue === '';
+      yupType = isEmpyCurrentValue ? Yup.string() : Yup.number();
+      if (!isEmpyCurrentValue && rule?.min) {
         yupType = yupType.min(rule.min);
       }
-      if (rule?.max) {
+      if (!isEmpyCurrentValue && rule?.max) {
         yupType = yupType.max(rule.max);
       }
-      if (!rule?.allowDecimal) {
+      if (!isEmpyCurrentValue && !rule?.allowDecimal) {
         // by default decimal is allowed
         yupType = yupType.integer();
       }
@@ -216,8 +221,6 @@ export const generateValidationSchemaFieldLevel = (currentValue, field) => {
   if (required) {
     const requiredError = `${name} is required.`;
     yupType = yupType.required(requiredError);
-  } else {
-    yupType = yupType.notRequired();
   }
   try {
     yupType.validateSync(currentValue);

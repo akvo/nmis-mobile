@@ -21,23 +21,28 @@ const FormContainer = ({ forms, initialValues = {} }) => {
   }, [forms]);
 
   const handleOnSubmitForm = (values) => {
-    const results = Object.keys(values).map((key) => {
-      let value = values[key]
-      // check empty
-      if (typeof value === 'undefined'  || value === null || (typeof value === "string" && value.trim() === '')) {
-        return false;
-      }
-      // check array
-      if (value && Array.isArray(value)) {
-        const check = value.filter(
-          (y) => typeof y !== 'undefined' && (y || isNaN(y))
-        );
-        value = check.length ? check : null;
-      }
-      return {[key]: value}
-    }).filter(v => v).reduce((res, current) => ({...res, ...current}), {})
-    console.log(results)
-  }
+    const results = Object.keys(values)
+      .map((key) => {
+        let value = values[key];
+        // check empty
+        if (
+          typeof value === 'undefined' ||
+          value === null ||
+          (typeof value === 'string' && value.trim() === '')
+        ) {
+          return false;
+        }
+        // check array
+        if (value && Array.isArray(value)) {
+          const check = value.filter((y) => typeof y !== 'undefined' && (y || isNaN(y)));
+          value = check.length ? check : null;
+        }
+        return { [key]: value };
+      })
+      .filter((v) => v)
+      .reduce((res, current) => ({ ...res, ...current }), {});
+    console.log(results);
+  };
 
   return (
     <>
@@ -47,6 +52,8 @@ const FormContainer = ({ forms, initialValues = {} }) => {
             innerRef={formRef}
             initialValues={initialValues}
             onSubmit={handleOnSubmitForm}
+            validateOnBlur={true}
+            validateOnChange={true}
           >
             {({ setFieldValue, values }) => (
               <View style={styles.formContainer}>

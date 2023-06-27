@@ -15,22 +15,27 @@ import { styles } from '../styles';
 const QuestionField = ({ keyform, field: questionField, setFieldValue, values, validate }) => {
   const [field, meta, helpers] = useField({ name: questionField.id, validate });
 
-  if (meta.error && questionField.id === 364240038) {
-    console.log(field, 'FIELD');
-    console.log(meta, 'META');
-  }
+  const handleOnChangeField = (id, value) => {
+    helpers.setTouched({ [field.name]: true });
+    setFieldValue(id, value);
+  };
 
   const renderField = () => {
     switch (questionField?.type) {
       case 'date':
         return (
-          <TypeDate keyform={keyform} onChange={setFieldValue} values={values} {...questionField} />
+          <TypeDate
+            keyform={keyform}
+            onChange={handleOnChangeField}
+            values={values}
+            {...questionField}
+          />
         );
       case 'image':
         return (
           <TypeImage
             keyform={keyform}
-            onChange={setFieldValue}
+            onChange={handleOnChangeField}
             values={values}
             {...questionField}
           />
@@ -39,7 +44,7 @@ const QuestionField = ({ keyform, field: questionField, setFieldValue, values, v
         return (
           <TypeMultipleOption
             keyform={keyform}
-            onChange={setFieldValue}
+            onChange={handleOnChangeField}
             values={values}
             {...questionField}
           />
@@ -48,20 +53,25 @@ const QuestionField = ({ keyform, field: questionField, setFieldValue, values, v
         return (
           <TypeOption
             keyform={keyform}
-            onChange={setFieldValue}
+            onChange={handleOnChangeField}
             values={values}
             {...questionField}
           />
         );
       case 'text':
         return (
-          <TypeText keyform={keyform} onChange={setFieldValue} values={values} {...questionField} />
+          <TypeText
+            keyform={keyform}
+            onChange={handleOnChangeField}
+            values={values}
+            {...questionField}
+          />
         );
       case 'number':
         return (
           <TypeNumber
             keyform={keyform}
-            onChange={setFieldValue}
+            onChange={handleOnChangeField}
             values={values}
             {...questionField}
           />
@@ -70,7 +80,7 @@ const QuestionField = ({ keyform, field: questionField, setFieldValue, values, v
         return (
           <TypeInput
             keyform={keyform}
-            onChange={setFieldValue}
+            onChange={handleOnChangeField}
             values={values}
             {...questionField}
           />
@@ -81,7 +91,9 @@ const QuestionField = ({ keyform, field: questionField, setFieldValue, values, v
   return (
     <View>
       {renderField()}
-      {meta.error ? <Text style={styles.validationErrorText}>{meta.error}</Text> : null}
+      {meta.touched && meta.error ? (
+        <Text style={styles.validationErrorText}>{meta.error}</Text>
+      ) : null}
     </View>
   );
 };
