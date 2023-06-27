@@ -2,7 +2,7 @@ import { renderHook, act } from '@testing-library/react-native';
 import BuildParamsState from './buildParams';
 
 describe('BuildParamsState', () => {
-  it('should initialize with the correct default state', () => {
+  it('should initialize with the correct default state from build.json', () => {
     const { result } = renderHook(() => BuildParamsState.useState());
     const {
       authenticationType,
