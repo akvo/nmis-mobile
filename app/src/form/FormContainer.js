@@ -1,7 +1,7 @@
 import React from 'react';
 import { BaseLayout } from '../components';
 import { ScrollView, View } from 'react-native';
-import { Formik, setNestedObjectValues } from 'formik';
+import { Formik } from 'formik';
 import { styles } from './styles';
 import { FormNavigation } from './support';
 import QuestionGroup from './components/QuestionGroup';

@@ -8,9 +8,9 @@ const FormNavigation = ({
   onSubmit,
   activeGroup,
   setActiveGroup,
-  totalGroup = 2,
+  totalGroup,
 }) => {
-  const validateOnFormNavigation = () => {
+  const validateOnFormNavigation = async () => {
     let errors = false;
     if (formRef?.current) {
       const touched = currentGroup?.question?.reduce(
@@ -18,25 +18,30 @@ const FormNavigation = ({
         {},
       );
       formRef.current.setTouched(touched);
-      formRef.current.validateForm();
-      errors = Object.keys(formRef.current.errors)?.length;
+      await formRef.current.validateForm();
+      errors = Object.keys(formRef.current.errors)?.length > 0;
     }
     return errors;
+  };
+
+  const handleFormNavigation = (index) => {
+    validateOnFormNavigation()
+      .then((errors) => {
+        if (!errors && index === 2 && activeGroup === totalGroup - 1) {
+          return onSubmit();
+        }
+        if (!errors && activeGroup <= totalGroup - 1) {
+          const newValue = index === 0 ? activeGroup - 1 : activeGroup + 1;
+          return setActiveGroup(newValue < 0 ? 0 : newValue);
+        }
+      })
+      .catch((err) => console.error(err));
   };
 
   return (
     <Tab
       buttonStyle={styles.formNavigationButton}
-      onChange={(e) => {
-        const errors = validateOnFormNavigation();
-        if (!errors && e === 2 && activeGroup === totalGroup - 1) {
-          return onSubmit();
-        }
-        if (!errors && activeGroup <= totalGroup - 1) {
-          const newValue = e === 0 ? activeGroup - 1 : activeGroup + 1;
-          return setActiveGroup(newValue < 0 ? 0 : newValue);
-        }
-      }}
+      onChange={handleFormNavigation}
       disableIndicator={true}
       value={activeGroup}
     >

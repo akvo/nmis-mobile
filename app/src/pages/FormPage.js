@@ -3,7 +3,6 @@ import { FormContainer } from '../form';
 import { BaseLayout } from '../components';
 // TODO:: todelete
 import * as formDefinition from '../form/example-form.json';
-import * as initialValues from '../form/initial-values.json';
 
 const FormPage = ({ navigation, route }) => {
   const goBack = () => {

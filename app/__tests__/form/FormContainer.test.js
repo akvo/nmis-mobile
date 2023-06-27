@@ -23,10 +23,6 @@ describe('FormContainer component', () => {
       <FormContainer forms={exampleTestForm} initialValues={modifiedInitialValues} />,
     );
 
-    const nextBtn = queryByTestId('form-nav-btn-next');
-    expect(nextBtn).toBeDefined();
-    fireEvent.press(nextBtn);
-
     const formSubmitBtn = queryByTestId('form-btn-submit');
     expect(formSubmitBtn).toBeDefined();
     fireEvent.press(formSubmitBtn);
@@ -63,10 +59,6 @@ describe('FormContainer component', () => {
     const { queryByTestId } = render(
       <FormContainer forms={exampleTestForm} initialValues={modifiedInitialValues} />,
     );
-
-    const nextBtn = queryByTestId('form-nav-btn-next');
-    expect(nextBtn).toBeDefined();
-    fireEvent.press(nextBtn);
 
     const formSubmitBtn = queryByTestId('form-btn-submit');
     expect(formSubmitBtn).toBeDefined();

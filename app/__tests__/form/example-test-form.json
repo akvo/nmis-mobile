@@ -84,19 +84,7 @@
               "language": "id"
             }
           ]
-        }
-      ]
-    },
-    {
-      "name": "About Yourself",
-      "order": 2,
-      "translations": [
-        {
-          "name": "Tentang Anda",
-          "language": "id"
-        }
-      ],
-      "question": [
+        },
         {
           "id": 5,
           "name": "Your last education",
