@@ -6,7 +6,7 @@ import { config } from './Settings/config';
 const Settings = ({ navigation }) => {
   const goToForm = (id) => {
     const findConfig = config.find((c) => c?.id === id);
-    navigation.navigate('SettingsForm', { id, name: `Settings ${findConfig?.name}` });
+    navigation.navigate('SettingsForm', { id, name: findConfig?.name });
   };
   const list = config.map((c) => ({ id: c?.id, name: c?.name, description: c?.description }));
   return (
