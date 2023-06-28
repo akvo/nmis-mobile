@@ -14,4 +14,11 @@ describe('Titles component', () => {
     const titleElement2 = getByText(items[1]);
     expect(titleElement2).toBeDefined();
   });
+
+  it('renders titles without params correctly', () => {
+    const { getByTestId } = render(<Titles />);
+
+    const layoutEl = getByTestId('center-layout-items');
+    expect(layoutEl).toBeDefined();
+  });
 });
