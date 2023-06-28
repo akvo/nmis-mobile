@@ -46,4 +46,11 @@ export const tables = [
       json: 'TEXT',
     },
   },
+  {
+    name: 'sessions',
+    fields: {
+      id: 'INTEGER PRIMARY KEY NOT NULL',
+      token: 'TEXT',
+    },
+  },
 ];

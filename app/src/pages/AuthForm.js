@@ -5,6 +5,9 @@ import { Input, CheckBox, Button, Text } from '@rneui/themed';
 import { CenterLayout, Image } from '../components';
 import { api } from '../lib';
 import { AuthState } from '../store';
+import { conn, query } from '../database';
+
+const db = conn.init;
 
 const ToggleEye = ({ hidden, onPress }) => {
   const iconName = hidden ? 'eye' : 'eye-off';
@@ -37,12 +40,45 @@ const AuthForm = ({ navigation }) => {
     data.append('code', passcode);
     api
       .post('/auth', data, { headers: { 'Content-Type': 'multipart/form-data' } })
-      .then((res) => {
-        console.log(res.data); // save to tables
-        AuthState.update((s) => {
-          s.authenticationCode = passcode;
-        });
-        goToHome();
+      .then(async (res) => {
+        try {
+          const { data } = res;
+          // save session
+          const token = data.syncToken;
+          const checkTokenExist = await conn.tx(db, query.read('sessions', { token }, [token]));
+          if (!checkTokenExist?.rows?.length) {
+            await conn.tx(db, query.insert('sessions', { token: data.syncToken }), []);
+          }
+          // save forms
+          await data.formsUrl.map(({ id: formId, url, version }) => {
+            const table = 'forms';
+            // check exist
+            conn
+              .tx(db, query.read(table, { formId, version }), [formId, version])
+              .then(async (res) => {
+                const { rows } = res;
+                if (rows.length) {
+                  return false;
+                }
+                // insert
+                const insertQuery = query.insert(table, {
+                  formId: id,
+                  version: version,
+                  latest: 1,
+                  createdAt: new Date().toISOString(),
+                });
+                return await conn.tx(db, insertQuery, []);
+              });
+          });
+          // update state
+          AuthState.update((s) => {
+            s.authenticationCode = passcode;
+          });
+          // go to home page
+          goToHome();
+        } catch (err) {
+          console.error(err);
+        }
       })
       .catch((err) => {
         setError(err?.message);
@@ -78,7 +114,7 @@ const AuthForm = ({ navigation }) => {
       </View>
       <Button
         title="primary"
-        disabled={disableLoginButton}
+        disabled={disableLoginButton || loading}
         onPress={handleOnPressLogin}
         testID="auth-login-button"
         loading={loading}
