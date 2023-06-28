@@ -12,22 +12,22 @@ const GetStarted = ({ navigation }) => {
 
   React.useEffect(() => {
     // check session
-    conn.tx(db, query.read('sessions', [])).then(sessions => {
+    conn.tx(db, query.read('sessions', [])).then((sessions) => {
       if (!sessions?.rows?.length) {
         setShowSplashScreen(false);
         return false;
       }
       // get last session
-      const session = sessions?.rows?._array[sessions?.rows?.length - 1]
-      console.info('Session =>', session)
-      UIState.update(s => {
-        s.currentPage = 'Home'
-      })
+      const session = sessions?.rows?._array[sessions?.rows?.length - 1];
+      console.info('Session =>', session);
+      UIState.update((s) => {
+        s.currentPage = 'Home';
+      });
       setTimeout(() => {
         navigation.navigate('Home');
       }, 100);
-    })
-  }, [])
+    });
+  }, []);
 
   const goToLogin = () => {
     navigation.navigate('AuthForm');
