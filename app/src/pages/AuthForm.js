@@ -44,10 +44,12 @@ const AuthForm = ({ navigation }) => {
         try {
           const { data } = res;
           // save session
-          const token = data.syncToken;
-          const checkTokenExist = await conn.tx(db, query.read('sessions', { token }, [token]));
-          if (!checkTokenExist?.rows?.length) {
-            await conn.tx(db, query.insert('sessions', { token: data.syncToken }), []);
+          const bearerToken = data.syncToken;
+          const selectSessions = await conn.tx(db, query.read('sessions', []));
+          const checkTokenExist = selectSessions?.rows?.length ? selectSessions?.rows?._array[selectSessions?.rows?.length - 1] : {}
+          if (checkTokenExist?.token !== bearerToken) {
+            console.info('Saving tokens...')
+            await conn.tx(db, query.insert('sessions', { token: bearerToken }), []);
           }
           // save forms
           await data.formsUrl.map(({ id: formId, url, version }) => {
