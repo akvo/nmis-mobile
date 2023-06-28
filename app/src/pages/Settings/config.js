@@ -13,22 +13,6 @@ export const config = [
         key: 'BuildParamsState.serverURL',
       },
       {
-        id: 12,
-        type: 'text',
-        name: 'username',
-        label: 'Username',
-        description: null,
-        key: 'AuthState.username',
-      },
-      {
-        id: 13,
-        type: 'password',
-        name: 'password',
-        label: 'Password',
-        description: null,
-        key: 'AuthState.password',
-      },
-      {
         id: 4,
         type: 'text',
         name: 'authenticationCode',

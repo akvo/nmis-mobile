@@ -15,9 +15,7 @@ const SettingsForm = ({ route }) => {
   const [showDialog, setShowDialog] = React.useState(false);
 
   const { serverURL, appVersion } = BuildParamsState.useState((s) => s);
-  const { username, password, authenticationCode, useAuthenticationCode } = AuthState.useState(
-    (s) => s,
-  );
+  const { authenticationCode, useAuthenticationCode } = AuthState.useState((s) => s);
   const { lang, isDarkMode, fontSize } = UIState.useState((s) => s);
   const { syncInterval, syncWifiOnly } = UserState.useState((s) => s);
   const store = {
@@ -28,8 +26,6 @@ const SettingsForm = ({ route }) => {
   };
   const [settingsState, setSettingsState] = React.useState({
     serverURL,
-    username,
-    password,
     authenticationCode,
     useAuthenticationCode,
     lang,
