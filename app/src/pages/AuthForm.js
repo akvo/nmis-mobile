@@ -12,7 +12,7 @@ const db = conn.init;
 const ToggleEye = ({ hidden, onPress }) => {
   const iconName = hidden ? 'eye' : 'eye-off';
   return (
-    <Button type="clear" onPress={onPress} testID="auth-toggle-eye-buton">
+    <Button type="clear" onPress={onPress} testID="auth-toggle-eye-button">
       <Icon name={iconName} size={24} />
     </Button>
   );
@@ -106,7 +106,7 @@ const AuthForm = ({ navigation }) => {
           value={passcode}
           onChangeText={setPasscode}
         />
-        {error && <Text style={styles.errorText}>{error}</Text>}
+        {error && <Text style={styles.errorText} testID="auth-error-text">{error}</Text>}
         <CheckBox
           title="I accept the Terms or Conditions"
           checked={checked}

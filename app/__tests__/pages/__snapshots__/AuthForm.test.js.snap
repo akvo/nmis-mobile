@@ -182,7 +182,7 @@ exports[`AuthFormPage renders correctly 1`] = `
                   "opacity": 1,
                 }
               }
-              testID="auth-toggle-eye-buton"
+              testID="auth-toggle-eye-button"
             >
               <View
                 style={
