@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react-native';
+import { render, fireEvent } from '@testing-library/react-native';
 import PageTitle from '../../../src/components/BaseLayout/PageTitle';
 import { useNavigation } from '@react-navigation/native';
 
@@ -17,13 +17,24 @@ describe('PageTitle component', () => {
     expect(moreOptionsEl).toBeDefined();
   });
 
-  test('calls onPress function when back button is pressed', () => {
+  test('goback and more options is pressed', () => {
     const navigation = useNavigation();
     navigation.canGoBack.mockReturnValue(true);
     expect(navigation.canGoBack()).toEqual(true);
     const title = 'Example Title';
     const { getByTestId } = render(<PageTitle text={title} />);
-    const button = getByTestId('arrow-back-button');
-    expect(button).toBeDefined();
+
+    const backButton = getByTestId('arrow-back-button');
+    expect(backButton).toBeDefined();
+
+    fireEvent.press(backButton);
+    expect(navigation.goBack).toHaveBeenCalledTimes(1);
+
+    const kebabButton = getByTestId('more-options-button');
+    expect(kebabButton).toBeDefined();
+
+    fireEvent.press(kebabButton);
+    expect(navigation.navigate).toHaveBeenCalledTimes(1);
+    expect(navigation.navigate).toHaveBeenCalledWith('Settings');
   });
 });
