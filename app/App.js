@@ -28,6 +28,7 @@ const App = () => {
       unsubscribe();
     };
   }, []);
+
   return (
     <SafeAreaProvider>
       <Navigation testID="navigation-element" />

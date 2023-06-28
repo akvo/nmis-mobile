@@ -46,9 +46,11 @@ const AuthForm = ({ navigation }) => {
           // save session
           const bearerToken = data.syncToken;
           const selectSessions = await conn.tx(db, query.read('sessions', []));
-          const checkTokenExist = selectSessions?.rows?.length ? selectSessions?.rows?._array[selectSessions?.rows?.length - 1] : {}
+          const checkTokenExist = selectSessions?.rows?.length
+            ? selectSessions?.rows?._array[selectSessions?.rows?.length - 1]
+            : {};
           if (checkTokenExist?.token !== bearerToken) {
-            console.info('Saving tokens...')
+            console.info('Saving tokens...');
             await conn.tx(db, query.insert('sessions', { token: bearerToken }), []);
           }
           // save forms
@@ -108,7 +110,11 @@ const AuthForm = ({ navigation }) => {
           value={passcode}
           onChangeText={setPasscode}
         />
-        {error && <Text style={styles.errorText} testID="auth-error-text">{error}</Text>}
+        {error && (
+          <Text style={styles.errorText} testID="auth-error-text">
+            {error}
+          </Text>
+        )}
         <CheckBox
           title="I accept the Terms or Conditions"
           checked={checked}

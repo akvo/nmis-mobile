@@ -45,29 +45,7 @@ exports[`GetStartedPage renders correctly 1`] = `
         }
       }
     >
-      Get Started
-    </Text>
-    <Text
-      accessibilityRole="text"
-      style={
-        {
-          "color": "#242424",
-          "fontSize": 28.285714285714285,
-        }
-      }
-    >
-      collecting data the
-    </Text>
-    <Text
-      accessibilityRole="text"
-      style={
-        {
-          "color": "#242424",
-          "fontSize": 28.285714285714285,
-        }
-      }
-    >
-      smart way
+      Splash Screen
     </Text>
   </View>
   <Text
@@ -78,87 +56,7 @@ exports[`GetStartedPage renders correctly 1`] = `
       }
     }
   >
-    Lorem Ipsum dolor sit amet dolor random
+    Welcome
   </Text>
-  <View
-    style={
-      [
-        {
-          "overflow": "hidden",
-        },
-        {
-          "borderRadius": 2,
-        },
-        undefined,
-        false,
-      ]
-    }
-    testID="RNE_BUTTON_WRAPPER"
-  >
-    <View
-      accessibilityRole="button"
-      accessibilityState={
-        {
-          "busy": false,
-          "checked": undefined,
-          "disabled": false,
-          "expanded": undefined,
-          "selected": undefined,
-        }
-      }
-      accessibilityValue={
-        {
-          "max": undefined,
-          "min": undefined,
-          "now": undefined,
-          "text": undefined,
-        }
-      }
-      accessible={true}
-      collapsable={false}
-      focusable={true}
-      onClick={[Function]}
-      onResponderGrant={[Function]}
-      onResponderMove={[Function]}
-      onResponderRelease={[Function]}
-      onResponderTerminate={[Function]}
-      onResponderTerminationRequest={[Function]}
-      onStartShouldSetResponder={[Function]}
-      style={
-        {
-          "opacity": 1,
-        }
-      }
-    >
-      <View
-        style={
-          {
-            "alignItems": "center",
-            "backgroundColor": "#2089dc",
-            "borderColor": "#2089dc",
-            "borderRadius": 2,
-            "borderWidth": 0,
-            "flexDirection": "row",
-            "justifyContent": "center",
-            "padding": 8,
-            "paddingHorizontal": 10,
-          }
-        }
-      >
-        <Text
-          style={
-            {
-              "color": "white",
-              "fontSize": 18,
-              "paddingVertical": 1,
-              "textAlign": "center",
-            }
-          }
-        >
-          Get Started
-        </Text>
-      </View>
-    </View>
-  </View>
 </View>
 `;
