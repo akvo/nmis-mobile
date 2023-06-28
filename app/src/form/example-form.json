@@ -1,0 +1,297 @@
+{
+  "id": 519630048,
+  "name": "Household",
+  "version": "1.0.0",
+  "question_group": [
+    {
+      "name": "Introduction",
+      "question": [
+        {
+          "id": 364240038,
+          "name": "Name of the data collector (Enumerator)",
+          "order": 1,
+          "type": "text",
+          "required": true,
+          "meta": true
+        },
+        {
+          "id": 5196300481,
+          "name": "Organisation",
+          "order": 2,
+          "type": "cascade",
+          "required": true,
+          "meta": false
+        },
+        {
+          "id": 517690051,
+          "name": "Household code",
+          "order": 3,
+          "type": "text",
+          "required": true,
+          "meta": true
+        },
+        {
+          "id": 444670046,
+          "name": "Are you willing to participate in the survey?",
+          "order": 4,
+          "type": "option",
+          "required": true,
+          "option": [
+            {
+              "id": 14485,
+              "name": "Yes",
+              "order": 1
+            },
+            {
+              "id": 14486,
+              "name": "No",
+              "order": 2
+            }
+          ],
+          "meta": false
+        },
+        {
+          "id": 517600099,
+          "name": "Number between 1 to 9 (decimal allowed)",
+          "order": 5,
+          "type": "number",
+          "required": true,
+          "meta": false,
+          "rule": {
+            "min": 1,
+            "max": 9,
+            "allowDecimal": true
+          }
+        }
+      ]
+    },
+    {
+      "name": "Demographics",
+      "question": [
+        {
+          "id": 517600060,
+          "name": "Take the GPS location of the Household",
+          "order": 1,
+          "type": "geo",
+          "required": false,
+          "center": {
+            "lat": 9.145,
+            "lng": 40.4897
+          },
+          "meta": true
+        },
+        {
+          "id": 603100002,
+          "name": "Is the household in an urban, peri-urban or rural setup?",
+          "order": 4,
+          "type": "option",
+          "required": true,
+          "option": [
+            {
+              "id": 14487,
+              "name": "Rural",
+              "order": 1
+            },
+            {
+              "id": 14488,
+              "name": "Peri-urban",
+              "order": 2
+            },
+            {
+              "id": 14489,
+              "name": "Urban",
+              "order": 3
+            }
+          ],
+          "meta": false
+        },
+        {
+          "id": 517600053,
+          "name": "Age of the respondent",
+          "order": 5,
+          "type": "number",
+          "required": true,
+          "meta": false
+        },
+        {
+          "id": 517600056,
+          "name": "Respondent relationship to the household head",
+          "order": 7,
+          "type": "option",
+          "required": true,
+          "option": [
+            {
+              "id": 14492,
+              "name": "Head",
+              "order": 1
+            },
+            {
+              "id": 14493,
+              "name": "Spouse",
+              "order": 2
+            },
+            {
+              "id": 14494,
+              "name": "Offspring (Above 18 years)",
+              "order": 3
+            },
+            {
+              "id": 14495,
+              "name": "sibling",
+              "order": 4
+            },
+            {
+              "id": 14496,
+              "name": "Parent",
+              "order": 5
+            }
+          ],
+          "meta": false
+        },
+        {
+          "id": 608890003,
+          "name": "What age are the members of the household?",
+          "order": 11,
+          "type": "multiple_option",
+          "required": true,
+          "option": [
+            {
+              "id": 14499,
+              "name": "0-5",
+              "order": 1
+            },
+            {
+              "id": 14500,
+              "name": "6-12",
+              "order": 2
+            },
+            {
+              "id": 14501,
+              "name": "13-24",
+              "order": 3
+            },
+            {
+              "id": 14502,
+              "name": "25-59",
+              "order": 4
+            },
+            {
+              "id": 14503,
+              "name": "60+",
+              "order": 5
+            }
+          ],
+          "meta": false
+        },
+        {
+          "id": 519660048,
+          "name": "How many members are 0-5 years",
+          "order": 12,
+          "type": "number",
+          "required": true,
+          "dependency": [
+            {
+              "id": 608890003,
+              "options": ["0-5"]
+            }
+          ],
+          "meta": false
+        },
+        {
+          "id": 517600058,
+          "name": "How many members are between the age of 6-12 years?",
+          "order": 13,
+          "type": "number",
+          "required": true,
+          "dependency": [
+            {
+              "id": 608890003,
+              "options": ["6-12"]
+            }
+          ],
+          "meta": false
+        },
+        {
+          "id": 519660050,
+          "name": "how many member are between the age of 13-24 years?",
+          "order": 14,
+          "type": "number",
+          "required": true,
+          "dependency": [
+            {
+              "id": 608890003,
+              "options": ["13-24"]
+            }
+          ],
+          "meta": false
+        },
+        {
+          "id": 600180100,
+          "name": "How many members are between the age of 25-59 years?",
+          "order": 15,
+          "type": "number",
+          "required": true,
+          "dependency": [
+            {
+              "id": 608890003,
+              "options": ["25-59"]
+            }
+          ],
+          "meta": false
+        },
+        {
+          "id": 519660054,
+          "name": "How many members are above 60 years?",
+          "order": 16,
+          "type": "number",
+          "required": true,
+          "dependency": [
+            {
+              "id": 608890003,
+              "options": ["60+"]
+            }
+          ],
+          "meta": false
+        },
+        {
+          "id": 519660052,
+          "name": "Residential status of this household in the community",
+          "order": 17,
+          "type": "option",
+          "required": true,
+          "option": [
+            {
+              "id": 14504,
+              "name": "Permanent",
+              "order": 1
+            },
+            {
+              "id": 14505,
+              "name": "Seasonal migrant",
+              "order": 2
+            },
+            {
+              "id": 14506,
+              "name": "Nomadic",
+              "order": 3
+            },
+            {
+              "id": 14507,
+              "name": "Tenant",
+              "order": 4
+            },
+            {
+              "id": 14508,
+              "name": "Refugee/IDPs",
+              "order": 5
+            }
+          ],
+          "meta": false,
+          "extra": {
+            "allowOther": true
+          }
+        }
+      ]
+    }
+  ]
+}

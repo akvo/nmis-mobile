@@ -8,6 +8,7 @@ import {
   AuthFormPage,
   SettingsPage,
   SettingsFormPage,
+  FormPage,
 } from '../pages';
 
 const Stack = createNativeStackNavigator();
@@ -22,6 +23,7 @@ const RootNavigator = () => {
       <Stack.Screen name="FormData" component={FormDataPage} />
       <Stack.Screen name="Settings" component={SettingsPage} />
       <Stack.Screen name="SettingsForm" component={SettingsFormPage} />
+      <Stack.Screen name="FormPage" component={FormPage} />
     </Stack.Navigator>
   );
 };
