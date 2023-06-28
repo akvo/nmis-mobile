@@ -9,8 +9,8 @@ const FormAction = ({ navigation, route }) => {
     navigation.navigate('Home');
   };
 
-  const goToData = () => {
-    navigation.navigate('FormData', { ...route?.params });
+  const goTo = (page) => {
+    navigation.navigate(page, { ...route?.params });
   };
 
   const items = [
@@ -18,16 +18,19 @@ const FormAction = ({ navigation, route }) => {
       id: 1,
       text: 'New Blank Form',
       icon: 'add',
+      navigation: 'FormPage',
     },
     {
       id: 2,
       text: 'Edit Saved Form',
       icon: 'folder-open',
+      navigation: 'FormData',
     },
     {
       id: 3,
       text: 'View Submitted',
       icon: 'eye',
+      navigation: 'FormData',
     },
   ];
   return (
@@ -41,7 +44,7 @@ const FormAction = ({ navigation, route }) => {
           }}
         >
           {items.map((i, ix) => (
-            <ListItem key={ix} onPress={goToData}>
+            <ListItem key={ix} onPress={() => goTo(i.navigation)}>
               <Icon name={i.icon} color="grey" size={18} />
               <ListItem.Content>
                 <ListItem.Title>{i.text}</ListItem.Title>

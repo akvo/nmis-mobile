@@ -8,28 +8,35 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "test": "jest --coverage",
-    "prettier": "prettier --check ."
+    "prettier": "prettier --check .",
+    "prettier-write": "prettier --write ."
   },
   "dependencies": {
     "@react-native-community/netinfo": "^9.3.10",
+    "@react-native-community/datetimepicker": "6.7.3",
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
     "@rneui/base": "^4.0.0-rc.7",
     "@rneui/themed": "^4.0.0-rc.7",
     "expo": "~48.0.18",
     "expo-crypto": "^12.2.2",
+    "expo-image-picker": "~14.1.1",
     "expo-sqlite": "^11.1.1",
     "expo-status-bar": "~1.4.4",
     "pullstate": "^1.25.0",
+    "formik": "^2.4.2",
     "react": "18.2.0",
     "react-native": "0.71.8",
+    "react-native-element-dropdown": "^2.9.0",
     "react-native-safe-area-context": "^4.5.0",
     "react-native-screens": "~3.20.0",
     "react-native-snackbar": "^2.6.2",
-    "react-native-vector-icons": "^9.2.0"
+    "react-native-vector-icons": "^9.2.0",
+    "yup": "^1.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@babel/plugin-transform-flow-strip-types": "^7.22.5",
     "@babel/plugin-transform-private-methods": "^7.22.5",
     "@testing-library/react-native": "^12.1.2",
     "babel-jest": "^29.5.0",
