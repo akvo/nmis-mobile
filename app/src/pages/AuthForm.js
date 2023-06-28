@@ -1,7 +1,7 @@
 import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { View, StyleSheet } from 'react-native';
-import { Input, CheckBox, Button, Text } from '@rneui/themed';
+import { Input, CheckBox, Button, Text, Dialog } from '@rneui/themed';
 import { CenterLayout, Image } from '../components';
 import { api } from '../lib';
 import { AuthState } from '../store';
@@ -60,13 +60,18 @@ const AuthForm = ({ navigation }) => {
                 if (rows.length) {
                   return false;
                 }
+                // Fetch form detail
+                const formRes = await api.get(url);
                 // insert
                 const insertQuery = query.insert(table, {
-                  formId: id,
+                  formId: formId,
                   version: version,
                   latest: 1,
+                  name: formRes?.data?.name || null,
+                  json: formRes?.data ? formRes?.data : null,
                   createdAt: new Date().toISOString(),
                 });
+                console.info('Saving Forms...', formId);
                 return await conn.tx(db, insertQuery, []);
               });
           });
@@ -117,10 +122,14 @@ const AuthForm = ({ navigation }) => {
         disabled={disableLoginButton || loading}
         onPress={handleOnPressLogin}
         testID="auth-login-button"
-        loading={loading}
       >
         LOG IN
       </Button>
+      {/* Loading dialog */}
+      <Dialog isVisible={loading} style={styles.dialogLoadingContainer}>
+        <Dialog.Loading />
+        <Text style={styles.dialogLoadingText}>Fetching data</Text>
+      </Dialog>
     </CenterLayout>
   );
 };
@@ -137,6 +146,13 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   errorText: { color: 'red', fontStyle: 'italic', marginHorizontal: 10, marginTop: -8 },
+  dialogLoadingContainer: {
+    flex: 1,
+  },
+  dialogLoadingText: {
+    textAlign: 'center',
+    fontStyle: 'italic',
+  },
 });
 
 export default AuthForm;

@@ -366,5 +366,17 @@ exports[`AuthFormPage renders correctly 1`] = `
       </View>
     </View>
   </View>
+  <Modal
+    hardwareAccelerated={false}
+    onRequestClose={[Function]}
+    style={
+      {
+        "flex": 1,
+      }
+    }
+    testID="Internal__Overlay"
+    transparent={true}
+    visible={false}
+  />
 </View>
 `;
