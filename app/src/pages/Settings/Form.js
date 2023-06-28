@@ -154,7 +154,7 @@ const SettingsForm = ({ route }) => {
             const subtitle =
               l.type === 'switch' ? l.description : settingsState[l.name] || l.description;
             return (
-              <ListItem key={i} {...listProps} bottomDivider>
+              <ListItem key={i} {...listProps} testID={`settings-form-item-${i}`} bottomDivider>
                 <ListItem.Content>
                   <ListItem.Title>{l.label}</ListItem.Title>
                   <ListItem.Subtitle>{subtitle}</ListItem.Subtitle>
@@ -163,6 +163,7 @@ const SettingsForm = ({ route }) => {
                   <Switch
                     onValueChange={(value) => handleOnSwitch(value, l.key)}
                     value={switchValue}
+                    testID={`settings-form-switch-${i}`}
                   />
                 )}
               </ListItem>

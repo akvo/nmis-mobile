@@ -10,7 +10,7 @@ const DialogForm = ({ onOk, onCancel, showDialog, edit }) => {
   const isPassword = type === 'password' || false;
 
   return (
-    <Dialog isVisible={showDialog}>
+    <Dialog isVisible={showDialog} testID="settings-form-dialog">
       {type === 'slider' && (
         <Slider
           {...slider}
@@ -21,6 +21,7 @@ const DialogForm = ({ onOk, onCancel, showDialog, edit }) => {
           thumbProps={{
             children: <Icon name="ellipse" size={20} color="#2089dc" />,
           }}
+          testID="settings-form-slider"
         />
       )}
       {['text', 'number', 'password'].includes(type) && (
@@ -29,6 +30,7 @@ const DialogForm = ({ onOk, onCancel, showDialog, edit }) => {
           secureTextEntry={isPassword}
           onChangeText={setValue}
           defaultValue={defaultValue?.toString()}
+          testID="settings-form-input"
         />
       )}
       {type === 'dropdown' && (
@@ -42,11 +44,16 @@ const DialogForm = ({ onOk, onCancel, showDialog, edit }) => {
           onChange={(item) => {
             setValue(item.value);
           }}
+          testID="settings-form-dropdown"
         />
       )}
       <Dialog.Actions>
-        <Dialog.Button onPress={() => onOk(value)}>OK</Dialog.Button>
-        <Dialog.Button onPress={onCancel}>Cancel</Dialog.Button>
+        <Dialog.Button onPress={() => onOk(value)} testID="settings-form-dialog-ok">
+          OK
+        </Dialog.Button>
+        <Dialog.Button onPress={onCancel} testID="settings-form-dialog-cancel">
+          Cancel
+        </Dialog.Button>
       </Dialog.Actions>
     </Dialog>
   );
