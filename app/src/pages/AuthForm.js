@@ -1,8 +1,10 @@
 import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { View, StyleSheet } from 'react-native';
-import { Input, CheckBox, Button } from '@rneui/themed';
+import { Input, CheckBox, Button, Text } from '@rneui/themed';
 import { CenterLayout, Image } from '../components';
+import { api } from '../lib';
+import { AuthState } from '../store';
 
 const ToggleEye = ({ hidden, onPress }) => {
   const iconName = hidden ? 'eye' : 'eye-off';
@@ -14,11 +16,39 @@ const ToggleEye = ({ hidden, onPress }) => {
 };
 
 const AuthForm = ({ navigation }) => {
+  const [passcode, setPasscode] = React.useState(null);
   const [hidden, setHidden] = React.useState(true);
   const [checked, setChecked] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState(null);
 
   const toggleHidden = () => setHidden(!hidden);
   const goToHome = () => navigation.navigate('Home');
+
+  const disableLoginButton = React.useMemo(
+    () => !passcode || passcode === '' || !checked,
+    [passcode, checked],
+  );
+
+  const handleOnPressLogin = () => {
+    setError(null);
+    setLoading(true);
+    const data = new FormData();
+    data.append('code', passcode);
+    api
+      .post('/auth', data, { headers: { 'Content-Type': 'multipart/form-data' } })
+      .then((res) => {
+        console.log(res.data); // save to tables
+        AuthState.update((s) => {
+          s.authenticationCode = passcode;
+        });
+        goToHome();
+      })
+      .catch((err) => {
+        setError(err?.message);
+      })
+      .finally(() => setLoading(false));
+  };
 
   const titles = ['Use the Enumerator ID', 'provided to you by your', 'project admin'];
   return (
@@ -32,7 +62,10 @@ const AuthForm = ({ navigation }) => {
           rightIcon={<ToggleEye hidden={hidden} onPress={toggleHidden} />}
           testID="auth-password-field"
           autoFocus
+          value={passcode}
+          onChangeText={setPasscode}
         />
+        {error && <Text style={styles.errorText}>{error}</Text>}
         <CheckBox
           title="I accept the Terms or Conditions"
           checked={checked}
@@ -43,7 +76,13 @@ const AuthForm = ({ navigation }) => {
           center
         />
       </View>
-      <Button title="primary" onPress={goToHome} testID="auth-login-button">
+      <Button
+        title="primary"
+        disabled={disableLoginButton}
+        onPress={handleOnPressLogin}
+        testID="auth-login-button"
+        loading={loading}
+      >
         LOG IN
       </Button>
     </CenterLayout>
@@ -61,6 +100,7 @@ const styles = StyleSheet.create({
   text: {
     marginLeft: 8,
   },
+  errorText: { color: 'red', fontStyle: 'italic', marginHorizontal: 10, marginTop: -8 },
 });
 
 export default AuthForm;
