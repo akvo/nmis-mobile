@@ -1,6 +1,6 @@
 import React from 'react';
 import { View } from 'react-native';
-import { ListItem, Text } from '@rneui/themed';
+import { ListItem } from '@rneui/themed';
 import { BaseLayout } from '../components';
 import { config } from './Settings/config';
 const Settings = ({ navigation }) => {
