@@ -1,31 +1,26 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
 import { Text, Button } from '@rneui/themed';
 import { CenterLayout, Image } from '../components';
-import { conn, query } from '../database';
+import { crudSessions } from '../database/crud';
 import { UIState } from '../store';
-
-const db = conn.init;
 
 const GetStarted = ({ navigation }) => {
   const [showSplashScreen, setShowSplashScreen] = React.useState(true);
 
   React.useEffect(() => {
     // check session
-    conn.tx(db, query.read('sessions', [])).then((sessions) => {
-      if (!sessions?.rows?.length) {
+    crudSessions.selectLastSession().then((res) => {
+      if (!res) {
         setShowSplashScreen(false);
         return false;
       }
-      // get last session
-      const session = sessions?.rows?._array[sessions?.rows?.length - 1];
-      console.info('Session =>', session);
+      console.info('Session =>', res);
       UIState.update((s) => {
         s.currentPage = 'Home';
       });
       setTimeout(() => {
         navigation.navigate('Home');
-      }, 100);
+      }, 50);
     });
   }, []);
 

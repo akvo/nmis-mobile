@@ -6,6 +6,7 @@ import { CenterLayout, Image } from '../components';
 import { api } from '../lib';
 import { AuthState } from '../store';
 import { conn, query } from '../database';
+import { crudSessions } from '../database/crud';
 
 const db = conn.init;
 
@@ -45,13 +46,10 @@ const AuthForm = ({ navigation }) => {
           const { data } = res;
           // save session
           const bearerToken = data.syncToken;
-          const selectSessions = await conn.tx(db, query.read('sessions', []));
-          const checkTokenExist = selectSessions?.rows?.length
-            ? selectSessions?.rows?._array[selectSessions?.rows?.length - 1]
-            : {};
-          if (checkTokenExist?.token !== bearerToken) {
+          const lastSession = await crudSessions.selectLastSession();
+          if (!lastSession && lastSession?.token !== bearerToken) {
             console.info('Saving tokens...');
-            await conn.tx(db, query.insert('sessions', { token: bearerToken }), []);
+            await crudSessions.addSession({ token: bearerToken });
           }
           // save forms
           await data.formsUrl.map(({ id: formId, url, version }) => {
