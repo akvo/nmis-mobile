@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { render, waitFor } from 'react-native-testing-library';
+import { render } from 'react-native-testing-library';
 import { renderHook, fireEvent, act } from '@testing-library/react-native';
-import { route, MockNavigationProvider } from '@react-navigation/native';
+import { route } from '@react-navigation/native';
 import SettingsForm from '../Form';
 import { config } from '../config';
 import { BuildParamsState } from '../../../store';
@@ -13,18 +13,12 @@ jest.mock('expo-sqlite');
 db = conn.init;
 
 describe('SettingsForm', () => {
-  it('renders correctly', async () => {
+  it('renders correctly', () => {
     const params = { id: 2, name: 'User Interface' };
     route.params = params;
     const findConfig = config.find((c) => c?.id === params.id);
 
-    const { unmount, getByText, getByTestId } = await waitFor(() =>
-      render(
-        <MockNavigationProvider>
-          <SettingsForm route={route} />
-        </MockNavigationProvider>,
-      ),
-    );
+    const { unmount, getByText, getByTestId } = render(<SettingsForm route={route} />);
 
     const isDarkModeEl = getByTestId('settings-form-switch-1');
     expect(isDarkModeEl).toBeDefined();
@@ -48,13 +42,7 @@ describe('SettingsForm', () => {
     const findConfig = config.find((c) => c?.id === params.id);
 
     const handleOKPressMock = jest.fn();
-    const { unmount, getByText, getByTestId } = await waitFor(() =>
-      render(
-        <MockNavigationProvider>
-          <SettingsForm route={route} />
-        </MockNavigationProvider>,
-      ),
-    );
+    const { unmount, getByText, getByTestId } = render(<SettingsForm route={route} />);
 
     const { result } = renderHook(() => useState(null));
     const { result: buildState } = renderHook(() => BuildParamsState.useState());
