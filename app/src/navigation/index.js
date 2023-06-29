@@ -8,12 +8,15 @@ import {
   AuthFormPage,
   FormPage,
 } from '../pages';
+import { UIState } from '../store';
 
 const Stack = createNativeStackNavigator();
 
 const RootNavigator = () => {
+  const currentPage = UIState.useState((s) => s.currentPage);
+
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName={currentPage}>
       <Stack.Screen name="GetStarted" component={GetStartedPage} />
       <Stack.Screen name="AuthForm" component={AuthFormPage} />
       <Stack.Screen name="Home" component={HomePage} />
