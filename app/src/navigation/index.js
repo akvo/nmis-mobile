@@ -1,4 +1,5 @@
-import { NavigationContainer } from '@react-navigation/native';
+import React from 'react';
+import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
   HomePage,
@@ -8,29 +9,52 @@ import {
   AuthFormPage,
   FormPage,
 } from '../pages';
-import { UIState } from '../store';
+import { UIState, AuthState } from '../store';
+import { BackHandler } from 'react-native';
 
 const Stack = createNativeStackNavigator();
 
-const RootNavigator = () => {
+const RootNavigator = ({ navigationRef }) => {
+  const { name: currentRoute } = navigationRef.getCurrentRoute();
   const currentPage = UIState.useState((s) => s.currentPage);
+  const token = AuthState.useState((s) => s.token); // user already has session
+
+  React.useEffect(() => {
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      if (!token || currentRoute !== 'Home') {
+        // Allow navigation if user is not logged in
+        return false;
+      }
+      // Prevent navigation if user is logged in
+      return true;
+    });
+    return () => backHandler.remove();
+  }, [token, currentRoute]);
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName={currentPage}>
-      <Stack.Screen name="GetStarted" component={GetStartedPage} />
-      <Stack.Screen name="AuthForm" component={AuthFormPage} />
-      <Stack.Screen name="Home" component={HomePage} />
-      <Stack.Screen name="FormAction" component={FormActionPage} />
-      <Stack.Screen name="FormData" component={FormDataPage} />
-      <Stack.Screen name="FormPage" component={FormPage} />
+      {!token ? (
+        <>
+          <Stack.Screen name="GetStarted" component={GetStartedPage} />
+          <Stack.Screen name="AuthForm" component={AuthFormPage} />
+        </>
+      ) : (
+        <>
+          <Stack.Screen name="Home" component={HomePage} />
+          <Stack.Screen name="FormAction" component={FormActionPage} />
+          <Stack.Screen name="FormData" component={FormDataPage} />
+          <Stack.Screen name="FormPage" component={FormPage} />
+        </>
+      )}
     </Stack.Navigator>
   );
 };
 
 const Navigation = (props) => {
+  const navigationRef = useNavigationContainerRef();
   return (
-    <NavigationContainer {...props}>
-      <RootNavigator />
+    <NavigationContainer ref={navigationRef} {...props}>
+      <RootNavigator navigationRef={navigationRef} />
     </NavigationContainer>
   );
 };

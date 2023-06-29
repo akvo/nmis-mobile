@@ -4,7 +4,7 @@ import NetInfo from '@react-native-community/netinfo';
 
 import Navigation from './src/navigation';
 import { conn, query, tables } from './src/database';
-import { UIState } from './src/store';
+import { UIState, AuthState } from './src/store';
 import { crudSessions } from './src/database/crud';
 
 const db = conn.init;
@@ -13,11 +13,16 @@ const App = () => {
   React.useEffect(() => {
     // check session
     crudSessions.selectLastSession().then((res) => {
+      if (!res) {
+        return res;
+      }
       console.info('Session =>', res);
       UIState.update((s) => {
         s.currentPage = res ? 'Home' : s.currentPage;
+      });
+      AuthState.update((s) => {
         s.token = res.token;
-        s.authenticationCode = res.passcode
+        s.authenticationCode = res.passcode;
       });
     });
   }, []);

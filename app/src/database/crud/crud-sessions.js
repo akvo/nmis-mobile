@@ -12,8 +12,8 @@ const sessionsQuery = () => {
         }
         return rows._array[rows.length - 1];
       } catch (error) {
-        console.error('Get sessions', error)
-        return false
+        console.error('Get sessions', error);
+        return false;
       }
     },
     addSession: async (data = { token: '', passcode: '' }) => {
