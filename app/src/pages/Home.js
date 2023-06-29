@@ -1,46 +1,8 @@
 import React from 'react';
-import { ActivityIndicator } from 'react-native';
-import { Overlay } from '@rneui/themed';
 import { BaseLayout } from '../components';
-import { conn, query } from '../database';
-import { UserState } from '../store';
-
-const db = conn.init;
 
 const Home = ({ navigation }) => {
-  const [loading, setLoading] = React.useState(true);
   const [search, setSearch] = React.useState(null);
-  const { id: userID } = UserState.useState((s) => s);
-
-  const hasUser = React.useMemo(() => {
-    const table = 'users';
-    const id = 1;
-    const selectQuery = query.read(table, { id });
-    if (!userID && loading) {
-      conn.tx(db, selectQuery, [id]).then(({ rows }) => {
-        if (rows.length) {
-          const userDB = rows._array[0];
-          UserState.update((s) => {
-            s.id = userDB?.id;
-            s.name = userDB?.name;
-            s.password = userDB?.password;
-          });
-        }
-        setLoading(false);
-      });
-    }
-    if (userID && loading) {
-      setLoading(false);
-    }
-    return userID;
-  }, [userID, loading]);
-
-  React.useEffect(() => {
-    if (!hasUser && !loading) {
-      navigation.navigate('UserProfile');
-    }
-  }, [hasUser, loading]);
-
   const goToFormAction = (id) => {
     const findData = data?.find((d) => d?.id === id);
     navigation.navigate('FormAction', { id, name: findData?.name });
@@ -63,9 +25,6 @@ const Home = ({ navigation }) => {
         action: setSearch,
       }}
     >
-      <Overlay isVisible={loading}>
-        <ActivityIndicator size="large" color="#2089dc" />
-      </Overlay>
       <BaseLayout.Content data={data} action={goToFormAction} columns={2} />
     </BaseLayout>
   );
