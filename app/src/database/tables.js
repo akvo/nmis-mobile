@@ -51,6 +51,7 @@ export const tables = [
     fields: {
       id: 'INTEGER PRIMARY KEY NOT NULL',
       token: 'TEXT',
+      passcode: 'TEXT',
     },
   },
 ];

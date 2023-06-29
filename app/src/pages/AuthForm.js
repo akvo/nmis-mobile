@@ -46,7 +46,7 @@ const AuthForm = ({ navigation }) => {
           const lastSession = await crudSessions.selectLastSession();
           if (!lastSession && lastSession?.token !== bearerToken) {
             console.info('Saving tokens...');
-            await crudSessions.addSession({ token: bearerToken });
+            await crudSessions.addSession({ token: bearerToken, passcode });
           }
           // save forms
           await data.formsUrl.forEach(async (form) => {
@@ -58,6 +58,7 @@ const AuthForm = ({ navigation }) => {
           // update state
           AuthState.update((s) => {
             s.authenticationCode = passcode;
+            s.token = bearerToken;
           });
           // go to home page
           goToHome();

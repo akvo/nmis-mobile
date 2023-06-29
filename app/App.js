@@ -16,6 +16,8 @@ const App = () => {
       console.info('Session =>', res);
       UIState.update((s) => {
         s.currentPage = res ? 'Home' : s.currentPage;
+        s.token = res.token;
+        s.authenticationCode = res.passcode
       });
     });
   }, []);

@@ -7,6 +7,7 @@ const AuthState = new Store({
   useAuthenticationCode: false, // using code for authentication
   username: '',
   password: '',
+  token: null,
 });
 
 export default AuthState;
