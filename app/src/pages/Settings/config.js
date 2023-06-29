@@ -13,7 +13,23 @@ export const config = [
         key: 'BuildParamsState.serverURL',
       },
       {
-        id: 4,
+        id: 12,
+        type: 'text',
+        name: 'username',
+        label: 'Username',
+        description: null,
+        key: 'AuthState.username',
+      },
+      {
+        id: 13,
+        type: 'password',
+        name: 'password',
+        label: 'Password',
+        description: null,
+        key: 'AuthState.password',
+      },
+      {
+        id: 14,
         type: 'text',
         name: 'authenticationCode',
         label: 'Auth Code',
@@ -21,7 +37,7 @@ export const config = [
         key: 'AuthState.authenticationCode',
       },
       {
-        id: 4,
+        id: 15,
         type: 'switch',
         name: 'useAuthenticationCode',
         label: 'Use Auth Code',

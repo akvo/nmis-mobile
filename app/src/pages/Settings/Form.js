@@ -1,6 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { ListItem, Switch } from '@rneui/themed';
+import * as Crypto from 'expo-crypto';
 import { BaseLayout } from '../../components';
 import { config } from './config';
 import { BuildParamsState, UIState, AuthState, UserState } from '../../store';
@@ -15,7 +16,9 @@ const SettingsForm = ({ route }) => {
   const [showDialog, setShowDialog] = React.useState(false);
 
   const { serverURL, appVersion } = BuildParamsState.useState((s) => s);
-  const { authenticationCode, useAuthenticationCode } = AuthState.useState((s) => s);
+  const { username, password, authenticationCode, useAuthenticationCode } = AuthState.useState(
+    (s) => s,
+  );
   const { lang, isDarkMode, fontSize } = UIState.useState((s) => s);
   const { syncInterval, syncWifiOnly } = UserState.useState((s) => s);
   const store = {
@@ -26,6 +29,8 @@ const SettingsForm = ({ route }) => {
   };
   const [settingsState, setSettingsState] = React.useState({
     serverURL,
+    username,
+    password,
     authenticationCode,
     useAuthenticationCode,
     lang,
@@ -55,7 +60,7 @@ const SettingsForm = ({ route }) => {
   };
 
   const handleUpdateOnDB = (field, value) => {
-    const dbFields = [
+    const configFields = [
       'apVersion',
       'authenticationCode',
       'serverURL',
@@ -63,10 +68,26 @@ const SettingsForm = ({ route }) => {
       'syncWifiOnly',
       'lang',
     ];
-    if (dbFields.includes(field)) {
-      const id = 1;
+    const id = 1;
+    if (configFields.includes(field)) {
       const updateQuery = query.update('config', { id }, { [field]: value });
       conn.tx(db, updateQuery, [id]);
+    }
+    if (field === 'username') {
+      const updateQuery = query.update('users', { id }, { username: value });
+      conn.tx(db, updateQuery, [id]).catch((err) => {
+        console.log('error', err);
+      });
+    }
+    if (field === 'password') {
+      Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA1, value)
+        .then((encrypted) => {
+          const updateQuery = query.update('users', { id }, { password: encrypted });
+          conn.tx(db, updateQuery, [id]);
+        })
+        .catch((err) => {
+          console.log('err', err);
+        });
     }
   };
 
@@ -147,8 +168,10 @@ const SettingsForm = ({ route }) => {
             const switchValue =
               l.type === 'switch' && (settingsState[l.name] || false) ? true : false;
             const listProps = l.type === 'switch' ? {} : { onPress: () => handleEditPress(l.id) };
-            const subtitle =
-              l.type === 'switch' ? l.description : settingsState[l.name] || l.description;
+            let subtitle =
+              l.type === 'switch' || l.type === 'password'
+                ? l.description
+                : settingsState[l.name] || l.description;
             return (
               <ListItem key={i} {...listProps} testID={`settings-form-item-${i}`} bottomDivider>
                 <ListItem.Content>
