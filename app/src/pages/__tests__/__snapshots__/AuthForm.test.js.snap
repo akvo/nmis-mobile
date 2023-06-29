@@ -1,0 +1,368 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AuthFormPage renders correctly 1`] = `
+<View
+  style={
+    {
+      "alignItems": "center",
+      "backgroundColor": "#f9fafb",
+      "display": "flex",
+      "flex": 1,
+      "flexDirection": "column",
+      "gap": 36,
+      "justifyContent": "center",
+      "paddingHorizontal": 16,
+    }
+  }
+  testID="center-layout"
+>
+  <View
+    style={
+      {
+        "backgroundColor": "#e5e7eb",
+        "borderRadius": 4,
+        "height": 110,
+        "width": 110,
+      }
+    }
+    testID="image-skeleton"
+  />
+  <View
+    style={
+      {
+        "alignItems": "center",
+        "display": "flex",
+      }
+    }
+    testID="center-layout-items"
+  >
+    <Text
+      accessibilityRole="text"
+      style={
+        {
+          "color": "#242424",
+          "fontSize": 28.285714285714285,
+        }
+      }
+    >
+      Use the Enumerator ID
+    </Text>
+    <Text
+      accessibilityRole="text"
+      style={
+        {
+          "color": "#242424",
+          "fontSize": 28.285714285714285,
+        }
+      }
+    >
+      provided to you by your
+    </Text>
+    <Text
+      accessibilityRole="text"
+      style={
+        {
+          "color": "#242424",
+          "fontSize": 28.285714285714285,
+        }
+      }
+    >
+      project admin
+    </Text>
+  </View>
+  <View
+    style={
+      {
+        "paddingHorizontal": 16,
+        "width": "100%",
+      }
+    }
+  >
+    <View
+      style={
+        {
+          "paddingHorizontal": 10,
+          "width": "100%",
+        }
+      }
+      testID="RNE__Input__view-wrapper"
+    >
+      <View
+        collapsable={false}
+        style={
+          {
+            "alignItems": "center",
+            "borderBottomWidth": 1,
+            "borderColor": "#86939e",
+            "flexDirection": "row",
+            "transform": [
+              {
+                "translateX": 0,
+              },
+            ],
+          }
+        }
+      >
+        <TextInput
+          autoFocus={true}
+          editable={true}
+          placeholder="Enumerator ID"
+          placeholderTextColor="#86939e"
+          secureTextEntry={true}
+          style={
+            {
+              "color": "#242424",
+              "flex": 1,
+              "fontSize": 18,
+              "minHeight": 40,
+            }
+          }
+          testID="auth-password-field"
+          underlineColorAndroid="transparent"
+        />
+        <View
+          style={
+            {
+              "alignItems": "center",
+              "height": 40,
+              "justifyContent": "center",
+              "marginVertical": 4,
+              "paddingRight": 4,
+            }
+          }
+        >
+          <View
+            style={
+              [
+                {
+                  "overflow": "hidden",
+                },
+                {
+                  "borderRadius": 2,
+                },
+                undefined,
+                false,
+              ]
+            }
+            testID="RNE_BUTTON_WRAPPER"
+          >
+            <View
+              accessibilityRole="button"
+              accessibilityState={
+                {
+                  "busy": false,
+                  "checked": undefined,
+                  "disabled": false,
+                  "expanded": undefined,
+                  "selected": undefined,
+                }
+              }
+              accessibilityValue={
+                {
+                  "max": undefined,
+                  "min": undefined,
+                  "now": undefined,
+                  "text": undefined,
+                }
+              }
+              accessible={true}
+              collapsable={false}
+              focusable={true}
+              onClick={[Function]}
+              onResponderGrant={[Function]}
+              onResponderMove={[Function]}
+              onResponderRelease={[Function]}
+              onResponderTerminate={[Function]}
+              onResponderTerminationRequest={[Function]}
+              onStartShouldSetResponder={[Function]}
+              style={
+                {
+                  "opacity": 1,
+                }
+              }
+              testID="auth-toggle-eye-buton"
+            >
+              <View
+                style={
+                  {
+                    "alignItems": "center",
+                    "backgroundColor": "transparent",
+                    "borderColor": "#2089dc",
+                    "borderRadius": 2,
+                    "borderWidth": 0,
+                    "flexDirection": "row",
+                    "justifyContent": "center",
+                    "padding": 8,
+                    "paddingHorizontal": 10,
+                  }
+                }
+              >
+                <Text />
+              </View>
+            </View>
+          </View>
+        </View>
+      </View>
+      <Text
+        style={
+          {
+            "color": "#ff190c",
+            "fontSize": 12,
+            "margin": 5,
+          }
+        }
+      />
+    </View>
+    <View
+      accessibilityRole="checkbox"
+      accessibilityState={
+        {
+          "busy": undefined,
+          "checked": false,
+          "disabled": false,
+          "expanded": undefined,
+          "selected": undefined,
+        }
+      }
+      accessibilityValue={
+        {
+          "max": undefined,
+          "min": undefined,
+          "now": undefined,
+          "text": undefined,
+        }
+      }
+      accessible={true}
+      collapsable={false}
+      focusable={true}
+      onBlur={[Function]}
+      onClick={[Function]}
+      onFocus={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        {
+          "backgroundColor": "#f9fafb",
+          "borderColor": "#ffffff",
+          "margin": 5,
+          "marginLeft": 10,
+          "marginRight": 10,
+          "padding": 10,
+        }
+      }
+      testID="auth-checkbox-field"
+    >
+      <View
+        style={
+          {
+            "alignItems": "center",
+            "flexDirection": "row",
+            "justifyContent": "center",
+          }
+        }
+      >
+        <Text />
+        <Text
+          accessibilityRole="text"
+          style={
+            {
+              "color": "#43484d",
+              "fontWeight": "bold",
+              "marginLeft": 8,
+              "marginRight": 10,
+            }
+          }
+          testID="RNE__CheckBox__Title"
+        >
+          I accept the Terms or Conditions
+        </Text>
+      </View>
+    </View>
+  </View>
+  <View
+    style={
+      [
+        {
+          "overflow": "hidden",
+        },
+        {
+          "borderRadius": 2,
+        },
+        undefined,
+        false,
+      ]
+    }
+    testID="RNE_BUTTON_WRAPPER"
+  >
+    <View
+      accessibilityRole="button"
+      accessibilityState={
+        {
+          "busy": false,
+          "checked": undefined,
+          "disabled": false,
+          "expanded": undefined,
+          "selected": undefined,
+        }
+      }
+      accessibilityValue={
+        {
+          "max": undefined,
+          "min": undefined,
+          "now": undefined,
+          "text": undefined,
+        }
+      }
+      accessible={true}
+      collapsable={false}
+      focusable={true}
+      onClick={[Function]}
+      onResponderGrant={[Function]}
+      onResponderMove={[Function]}
+      onResponderRelease={[Function]}
+      onResponderTerminate={[Function]}
+      onResponderTerminationRequest={[Function]}
+      onStartShouldSetResponder={[Function]}
+      style={
+        {
+          "opacity": 1,
+        }
+      }
+      testID="auth-login-button"
+    >
+      <View
+        style={
+          {
+            "alignItems": "center",
+            "backgroundColor": "#2089dc",
+            "borderColor": "#2089dc",
+            "borderRadius": 2,
+            "borderWidth": 0,
+            "flexDirection": "row",
+            "justifyContent": "center",
+            "padding": 8,
+            "paddingHorizontal": 10,
+          }
+        }
+      >
+        <Text
+          style={
+            {
+              "color": "white",
+              "fontSize": 18,
+              "paddingVertical": 1,
+              "textAlign": "center",
+            }
+          }
+        >
+          LOG IN
+        </Text>
+      </View>
+    </View>
+  </View>
+</View>
+`;

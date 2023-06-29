@@ -1,0 +1,965 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FormPage component should render component correctly 1`] = `
+<View
+  style={
+    {
+      "backgroundColor": "#f9fafb",
+      "flex": 1,
+      "flexDirection": "column",
+      "flexWrap": "wrap",
+    }
+  }
+  testID="stack-container"
+>
+  <RCTScrollView>
+    <View>
+      <View
+        style={
+          {
+            "backgroundColor": "#f9fafb",
+            "flex": 1,
+            "flexDirection": "row",
+            "flexWrap": "wrap",
+          }
+        }
+        testID="stack-container"
+      >
+        <View
+          style={
+            {
+              "flex": 1,
+            }
+          }
+        >
+          <View>
+            <View>
+              <View
+                style={
+                  {
+                    "borderBottomWidth": 0.5,
+                    "borderColor": "grey",
+                    "borderTopWidth": 0.5,
+                    "marginBottom": 20,
+                    "paddingHorizontal": 20,
+                    "paddingVertical": 15,
+                  }
+                }
+              >
+                <Text
+                  accessibilityRole="text"
+                  style={
+                    {
+                      "color": "#242424",
+                      "fontSize": 14,
+                      "fontWeight": "bold",
+                    }
+                  }
+                >
+                  1. Introduction
+                </Text>
+              </View>
+            </View>
+            <View
+              style={
+                {
+                  "paddingHorizontal": 10,
+                  "paddingVertical": 10,
+                }
+              }
+            >
+              <View>
+                <View>
+                  <Text
+                    accessibilityRole="text"
+                    style={
+                      {
+                        "color": "#242424",
+                        "fontSize": 14,
+                        "fontWeight": 600,
+                        "marginBottom": 8,
+                        "paddingHorizontal": 10,
+                      }
+                    }
+                    testID="field-label"
+                  >
+                    1. Name of the data collector (Enumerator)
+                  </Text>
+                  <View
+                    style={
+                      {
+                        "paddingHorizontal": 10,
+                        "width": "100%",
+                      }
+                    }
+                    testID="RNE__Input__view-wrapper"
+                  >
+                    <View
+                      collapsable={false}
+                      style={
+                        {
+                          "alignItems": "center",
+                          "borderBottomWidth": 0.5,
+                          "borderColor": "grey",
+                          "borderRadius": 5,
+                          "borderWidth": 0.5,
+                          "flexDirection": "row",
+                          "paddingHorizontal": 10,
+                          "transform": [
+                            {
+                              "translateX": 0,
+                            },
+                          ],
+                        }
+                      }
+                    >
+                      <TextInput
+                        editable={true}
+                        multiline={true}
+                        numberOfLines={4}
+                        onChangeText={[Function]}
+                        placeholderTextColor="#86939e"
+                        style={
+                          {
+                            "color": "#242424",
+                            "flex": 1,
+                            "fontSize": 18,
+                            "minHeight": 40,
+                          }
+                        }
+                        testID="type-text"
+                        underlineColorAndroid="transparent"
+                      />
+                    </View>
+                    <Text
+                      style={
+                        {
+                          "color": "#ff190c",
+                          "fontSize": 12,
+                          "margin": 5,
+                        }
+                      }
+                    />
+                  </View>
+                </View>
+              </View>
+            </View>
+            <View
+              style={
+                {
+                  "paddingHorizontal": 10,
+                  "paddingVertical": 10,
+                }
+              }
+            >
+              <View>
+                <View>
+                  <Text
+                    accessibilityRole="text"
+                    style={
+                      {
+                        "color": "#242424",
+                        "fontSize": 14,
+                        "fontWeight": 600,
+                        "marginBottom": 8,
+                        "paddingHorizontal": 10,
+                      }
+                    }
+                    testID="field-label"
+                  >
+                    2. Organisation
+                  </Text>
+                  <View
+                    style={
+                      {
+                        "paddingHorizontal": 10,
+                        "width": "100%",
+                      }
+                    }
+                    testID="RNE__Input__view-wrapper"
+                  >
+                    <View
+                      collapsable={false}
+                      style={
+                        {
+                          "alignItems": "center",
+                          "borderBottomWidth": 0.5,
+                          "borderColor": "grey",
+                          "borderRadius": 5,
+                          "borderWidth": 0.5,
+                          "flexDirection": "row",
+                          "paddingHorizontal": 10,
+                          "transform": [
+                            {
+                              "translateX": 0,
+                            },
+                          ],
+                        }
+                      }
+                    >
+                      <TextInput
+                        editable={true}
+                        onChangeText={[Function]}
+                        placeholderTextColor="#86939e"
+                        style={
+                          {
+                            "color": "#242424",
+                            "flex": 1,
+                            "fontSize": 18,
+                            "minHeight": 40,
+                          }
+                        }
+                        testID="type-input"
+                        underlineColorAndroid="transparent"
+                      />
+                    </View>
+                    <Text
+                      style={
+                        {
+                          "color": "#ff190c",
+                          "fontSize": 12,
+                          "margin": 5,
+                        }
+                      }
+                    />
+                  </View>
+                </View>
+              </View>
+            </View>
+            <View
+              style={
+                {
+                  "paddingHorizontal": 10,
+                  "paddingVertical": 10,
+                }
+              }
+            >
+              <View>
+                <View>
+                  <Text
+                    accessibilityRole="text"
+                    style={
+                      {
+                        "color": "#242424",
+                        "fontSize": 14,
+                        "fontWeight": 600,
+                        "marginBottom": 8,
+                        "paddingHorizontal": 10,
+                      }
+                    }
+                    testID="field-label"
+                  >
+                    3. Household code
+                  </Text>
+                  <View
+                    style={
+                      {
+                        "paddingHorizontal": 10,
+                        "width": "100%",
+                      }
+                    }
+                    testID="RNE__Input__view-wrapper"
+                  >
+                    <View
+                      collapsable={false}
+                      style={
+                        {
+                          "alignItems": "center",
+                          "borderBottomWidth": 0.5,
+                          "borderColor": "grey",
+                          "borderRadius": 5,
+                          "borderWidth": 0.5,
+                          "flexDirection": "row",
+                          "paddingHorizontal": 10,
+                          "transform": [
+                            {
+                              "translateX": 0,
+                            },
+                          ],
+                        }
+                      }
+                    >
+                      <TextInput
+                        editable={true}
+                        multiline={true}
+                        numberOfLines={4}
+                        onChangeText={[Function]}
+                        placeholderTextColor="#86939e"
+                        style={
+                          {
+                            "color": "#242424",
+                            "flex": 1,
+                            "fontSize": 18,
+                            "minHeight": 40,
+                          }
+                        }
+                        testID="type-text"
+                        underlineColorAndroid="transparent"
+                      />
+                    </View>
+                    <Text
+                      style={
+                        {
+                          "color": "#ff190c",
+                          "fontSize": 12,
+                          "margin": 5,
+                        }
+                      }
+                    />
+                  </View>
+                </View>
+              </View>
+            </View>
+            <View
+              style={
+                {
+                  "paddingHorizontal": 10,
+                  "paddingVertical": 10,
+                }
+              }
+            >
+              <View>
+                <View
+                  style={
+                    {
+                      "marginBottom": 25,
+                    }
+                  }
+                >
+                  <Text
+                    accessibilityRole="text"
+                    style={
+                      {
+                        "color": "#242424",
+                        "fontSize": 14,
+                        "fontWeight": 600,
+                        "marginBottom": 8,
+                        "paddingHorizontal": 10,
+                      }
+                    }
+                    testID="field-label"
+                  >
+                    4. Are you willing to participate in the survey?
+                  </Text>
+                  <View
+                    accessibilityRole="checkbox"
+                    accessibilityState={
+                      {
+                        "busy": undefined,
+                        "checked": false,
+                        "disabled": false,
+                        "expanded": undefined,
+                        "selected": undefined,
+                      }
+                    }
+                    accessibilityValue={
+                      {
+                        "max": undefined,
+                        "min": undefined,
+                        "now": undefined,
+                        "text": undefined,
+                      }
+                    }
+                    accessible={true}
+                    checkedIcon="dot-circle-o"
+                    collapsable={false}
+                    focusable={true}
+                    onBlur={[Function]}
+                    onClick={[Function]}
+                    onFocus={[Function]}
+                    onResponderGrant={[Function]}
+                    onResponderMove={[Function]}
+                    onResponderRelease={[Function]}
+                    onResponderTerminate={[Function]}
+                    onResponderTerminationRequest={[Function]}
+                    onStartShouldSetResponder={[Function]}
+                    style={
+                      {
+                        "backgroundColor": "transparent",
+                        "borderColor": "#ffffff",
+                        "margin": 5,
+                        "marginBottom": 0,
+                        "marginLeft": 10,
+                        "marginRight": 10,
+                        "padding": 10,
+                        "paddingVertical": 5,
+                      }
+                    }
+                    testID="RNE__CheckBox__Wrapper"
+                    uncheckedIcon="circle-o"
+                  >
+                    <View
+                      style={
+                        {
+                          "alignItems": "center",
+                          "flexDirection": "row",
+                        }
+                      }
+                    >
+                      <Text />
+                      <Text
+                        accessibilityRole="text"
+                        style={
+                          {
+                            "color": "#43484d",
+                            "fontWeight": "normal",
+                            "marginLeft": 10,
+                            "marginRight": 10,
+                          }
+                        }
+                        testID="RNE__CheckBox__Title"
+                      >
+                        Yes
+                      </Text>
+                    </View>
+                  </View>
+                  <View
+                    accessibilityRole="checkbox"
+                    accessibilityState={
+                      {
+                        "busy": undefined,
+                        "checked": false,
+                        "disabled": false,
+                        "expanded": undefined,
+                        "selected": undefined,
+                      }
+                    }
+                    accessibilityValue={
+                      {
+                        "max": undefined,
+                        "min": undefined,
+                        "now": undefined,
+                        "text": undefined,
+                      }
+                    }
+                    accessible={true}
+                    checkedIcon="dot-circle-o"
+                    collapsable={false}
+                    focusable={true}
+                    onBlur={[Function]}
+                    onClick={[Function]}
+                    onFocus={[Function]}
+                    onResponderGrant={[Function]}
+                    onResponderMove={[Function]}
+                    onResponderRelease={[Function]}
+                    onResponderTerminate={[Function]}
+                    onResponderTerminationRequest={[Function]}
+                    onStartShouldSetResponder={[Function]}
+                    style={
+                      {
+                        "backgroundColor": "transparent",
+                        "borderColor": "#ffffff",
+                        "margin": 5,
+                        "marginBottom": 0,
+                        "marginLeft": 10,
+                        "marginRight": 10,
+                        "padding": 10,
+                        "paddingVertical": 5,
+                      }
+                    }
+                    testID="RNE__CheckBox__Wrapper"
+                    uncheckedIcon="circle-o"
+                  >
+                    <View
+                      style={
+                        {
+                          "alignItems": "center",
+                          "flexDirection": "row",
+                        }
+                      }
+                    >
+                      <Text />
+                      <Text
+                        accessibilityRole="text"
+                        style={
+                          {
+                            "color": "#43484d",
+                            "fontWeight": "normal",
+                            "marginLeft": 10,
+                            "marginRight": 10,
+                          }
+                        }
+                        testID="RNE__CheckBox__Title"
+                      >
+                        No
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            </View>
+            <View
+              style={
+                {
+                  "paddingHorizontal": 10,
+                  "paddingVertical": 10,
+                }
+              }
+            >
+              <View>
+                <View>
+                  <Text
+                    accessibilityRole="text"
+                    style={
+                      {
+                        "color": "#242424",
+                        "fontSize": 14,
+                        "fontWeight": 600,
+                        "marginBottom": 8,
+                        "paddingHorizontal": 10,
+                      }
+                    }
+                    testID="field-label"
+                  >
+                    5. Number between 1 to 9 (decimal allowed)
+                  </Text>
+                  <View
+                    style={
+                      {
+                        "paddingHorizontal": 10,
+                        "width": "100%",
+                      }
+                    }
+                    testID="RNE__Input__view-wrapper"
+                  >
+                    <View
+                      collapsable={false}
+                      style={
+                        {
+                          "alignItems": "center",
+                          "borderBottomWidth": 0.5,
+                          "borderColor": "grey",
+                          "borderRadius": 5,
+                          "borderWidth": 0.5,
+                          "flexDirection": "row",
+                          "paddingHorizontal": 10,
+                          "transform": [
+                            {
+                              "translateX": 0,
+                            },
+                          ],
+                        }
+                      }
+                    >
+                      <TextInput
+                        editable={true}
+                        keyboardType="numeric"
+                        onChangeText={[Function]}
+                        placeholderTextColor="#86939e"
+                        style={
+                          {
+                            "color": "#242424",
+                            "flex": 1,
+                            "fontSize": 18,
+                            "minHeight": 40,
+                          }
+                        }
+                        testID="type-number"
+                        underlineColorAndroid="transparent"
+                      />
+                    </View>
+                    <Text
+                      style={
+                        {
+                          "color": "#ff190c",
+                          "fontSize": 12,
+                          "margin": 5,
+                        }
+                      }
+                    />
+                  </View>
+                </View>
+              </View>
+            </View>
+          </View>
+        </View>
+      </View>
+    </View>
+  </RCTScrollView>
+  <View>
+    <View
+      accessibilityRole="tablist"
+      onLayout={[Function]}
+      style={
+        [
+          false,
+          {
+            "flexDirection": "row",
+            "position": "relative",
+          },
+          undefined,
+        ]
+      }
+    >
+      <View
+        style={
+          [
+            {
+              "overflow": "hidden",
+            },
+            {
+              "borderRadius": 2,
+            },
+            [
+              {
+                "borderRadius": 0,
+                "flex": 1,
+              },
+              false,
+              undefined,
+            ],
+            false,
+          ]
+        }
+        testID="RNE_BUTTON_WRAPPER"
+      >
+        <View
+          accessibilityRole="tab"
+          accessibilityState={
+            {
+              "busy": undefined,
+              "checked": undefined,
+              "disabled": false,
+              "expanded": undefined,
+              "selected": true,
+            }
+          }
+          accessibilityValue={
+            {
+              "max": undefined,
+              "min": undefined,
+              "now": undefined,
+              "text": "Back",
+            }
+          }
+          accessible={true}
+          collapsable={false}
+          focusable={true}
+          onClick={[Function]}
+          onLayout={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            {
+              "opacity": 1,
+            }
+          }
+          testID="form-nav-btn-back"
+        >
+          <View
+            style={
+              {
+                "alignItems": "center",
+                "backgroundColor": "transparent",
+                "borderBottomWidth": 0,
+                "borderColor": "#2089dc",
+                "borderRadius": 0,
+                "borderTopColor": "grey",
+                "borderTopWidth": 0.5,
+                "borderWidth": 0,
+                "flexDirection": "row",
+                "justifyContent": "center",
+                "padding": 8,
+                "paddingHorizontal": 10,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "marginHorizontal": 5,
+                  "overflow": "hidden",
+                  "paddingBottom": 10,
+                  "paddingTop": 9,
+                }
+              }
+              testID="RNE__ICON__CONTAINER"
+            >
+              <View
+                accessibilityRole="button"
+                android_ripple={
+                  {
+                    "borderless": false,
+                    "color": "rgba(0, 0, 0, 0.3)",
+                    "radius": -5,
+                  }
+                }
+                disabled={false}
+                testID="RNE__ICON__CONTAINER_ACTION"
+              >
+                <View
+                  style={
+                    {
+                      "alignItems": "center",
+                      "backgroundColor": "transparent",
+                      "justifyContent": "center",
+                    }
+                  }
+                  testID="RNE__ICON"
+                >
+                  <Text />
+                </View>
+              </View>
+            </View>
+            <Text
+              style={
+                {
+                  "color": "grey",
+                  "fontSize": 14,
+                  "fontWeight": "normal",
+                  "marginLeft": -10,
+                  "marginRight": -10,
+                  "paddingBottom": 10,
+                  "paddingHorizontal": 16,
+                  "paddingTop": 9,
+                  "paddingVertical": 2,
+                  "textAlign": "center",
+                }
+              }
+            >
+              Back
+            </Text>
+          </View>
+        </View>
+      </View>
+      <View
+        style={
+          [
+            {
+              "overflow": "hidden",
+            },
+            {
+              "borderRadius": 2,
+            },
+            [
+              {
+                "borderRadius": 0,
+                "flex": 1,
+              },
+              false,
+              undefined,
+            ],
+            false,
+          ]
+        }
+        testID="RNE_BUTTON_WRAPPER"
+      >
+        <View
+          accessibilityRole="tab"
+          accessibilityState={
+            {
+              "busy": undefined,
+              "checked": undefined,
+              "disabled": true,
+              "expanded": undefined,
+              "selected": false,
+            }
+          }
+          accessibilityValue={
+            {
+              "max": undefined,
+              "min": undefined,
+              "now": undefined,
+              "text": "1/2",
+            }
+          }
+          accessible={true}
+          collapsable={false}
+          focusable={true}
+          onClick={[Function]}
+          onLayout={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            {
+              "opacity": 1,
+            }
+          }
+          testID="form-nav-group-count"
+        >
+          <View
+            style={
+              {
+                "alignItems": "center",
+                "backgroundColor": "transparent",
+                "borderBottomWidth": 0,
+                "borderColor": "#2089dc",
+                "borderRadius": 0,
+                "borderTopColor": "grey",
+                "borderTopWidth": 0.5,
+                "borderWidth": 0,
+                "flexDirection": "column",
+                "justifyContent": "center",
+                "padding": 8,
+                "paddingHorizontal": 10,
+              }
+            }
+          >
+            <Text
+              style={
+                {
+                  "color": "hsl(208, 8%, 63%)",
+                  "fontSize": 14,
+                  "fontWeight": "normal",
+                  "marginLeft": -10,
+                  "marginRight": -10,
+                  "paddingBottom": 10,
+                  "paddingHorizontal": 16,
+                  "paddingTop": 9,
+                  "paddingVertical": 8,
+                  "textAlign": "center",
+                }
+              }
+            >
+              1/2
+            </Text>
+          </View>
+        </View>
+      </View>
+      <View
+        style={
+          [
+            {
+              "overflow": "hidden",
+            },
+            {
+              "borderRadius": 2,
+            },
+            [
+              {
+                "borderRadius": 0,
+                "flex": 1,
+              },
+              false,
+              undefined,
+            ],
+            false,
+          ]
+        }
+        testID="RNE_BUTTON_WRAPPER"
+      >
+        <View
+          accessibilityRole="tab"
+          accessibilityState={
+            {
+              "busy": undefined,
+              "checked": undefined,
+              "disabled": false,
+              "expanded": undefined,
+              "selected": false,
+            }
+          }
+          accessibilityValue={
+            {
+              "max": undefined,
+              "min": undefined,
+              "now": undefined,
+              "text": "Next",
+            }
+          }
+          accessible={true}
+          collapsable={false}
+          focusable={true}
+          onClick={[Function]}
+          onLayout={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            {
+              "opacity": 1,
+            }
+          }
+          testID="form-nav-btn-next"
+        >
+          <View
+            style={
+              {
+                "alignItems": "center",
+                "backgroundColor": "transparent",
+                "borderBottomWidth": 0,
+                "borderColor": "#2089dc",
+                "borderRadius": 0,
+                "borderTopColor": "grey",
+                "borderTopWidth": 0.5,
+                "borderWidth": 0,
+                "flexDirection": "row-reverse",
+                "justifyContent": "center",
+                "padding": 8,
+                "paddingHorizontal": 10,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "marginHorizontal": 5,
+                  "overflow": "hidden",
+                  "paddingBottom": 10,
+                  "paddingTop": 9,
+                }
+              }
+              testID="RNE__ICON__CONTAINER"
+            >
+              <View
+                accessibilityRole="button"
+                android_ripple={
+                  {
+                    "borderless": false,
+                    "color": "rgba(0, 0, 0, 0.3)",
+                    "radius": -5,
+                  }
+                }
+                disabled={false}
+                testID="RNE__ICON__CONTAINER_ACTION"
+              >
+                <View
+                  style={
+                    {
+                      "alignItems": "center",
+                      "backgroundColor": "transparent",
+                      "justifyContent": "center",
+                    }
+                  }
+                  testID="RNE__ICON"
+                >
+                  <Text />
+                </View>
+              </View>
+            </View>
+            <Text
+              style={
+                {
+                  "color": "grey",
+                  "fontSize": 14,
+                  "fontWeight": "normal",
+                  "marginLeft": -10,
+                  "marginRight": -10,
+                  "paddingBottom": 10,
+                  "paddingHorizontal": 16,
+                  "paddingTop": 9,
+                  "paddingVertical": 2,
+                  "textAlign": "center",
+                }
+              }
+            >
+              Next
+            </Text>
+          </View>
+        </View>
+      </View>
+    </View>
+  </View>
+</View>
+`;

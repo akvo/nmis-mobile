@@ -1,0 +1,7377 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FormDataPage renders correctly 1`] = `
+<View
+  style={
+    {
+      "backgroundColor": "#f9fafb",
+      "flex": 1,
+      "flexDirection": "column",
+      "flexWrap": "wrap",
+    }
+  }
+  testID="stack-container"
+>
+  <View
+    style={
+      {
+        "backgroundColor": "#393e42",
+        "borderBottomColor": "#000",
+        "borderBottomWidth": 1,
+        "borderTopColor": "#000",
+        "borderTopWidth": 1,
+        "padding": 8,
+      }
+    }
+    testID="RNE__SearchBar-wrapper"
+  >
+    <View
+      style={
+        {
+          "paddingHorizontal": 0,
+          "width": "100%",
+        }
+      }
+      testID="RNE__Input__view-wrapper"
+    >
+      <View
+        collapsable={false}
+        style={
+          {
+            "alignItems": "center",
+            "backgroundColor": "#303337",
+            "borderBottomWidth": 0,
+            "borderColor": "#86939e",
+            "borderRadius": 3,
+            "flexDirection": "row",
+            "minHeight": 30,
+            "overflow": "hidden",
+            "transform": [
+              {
+                "translateX": 0,
+              },
+            ],
+          }
+        }
+      >
+        <View
+          style={
+            {
+              "alignItems": "center",
+              "height": 40,
+              "justifyContent": "center",
+              "marginLeft": 8,
+              "marginVertical": 4,
+              "paddingRight": 4,
+            }
+          }
+        >
+          <View
+            style={
+              {
+                "overflow": "hidden",
+              }
+            }
+            testID="RNE__ICON__CONTAINER"
+          >
+            <View
+              accessibilityRole="button"
+              android_ripple={
+                {
+                  "borderless": false,
+                  "color": "rgba(0, 0, 0, 0.3)",
+                  "radius": -5,
+                }
+              }
+              disabled={false}
+              testID="RNE__ICON__CONTAINER_ACTION"
+            >
+              <View
+                style={
+                  {
+                    "alignItems": "center",
+                    "backgroundColor": "transparent",
+                    "justifyContent": "center",
+                  }
+                }
+                testID="RNE__ICON"
+              >
+                <Text />
+              </View>
+            </View>
+          </View>
+        </View>
+        <TextInput
+          editable={true}
+          onBlur={[Function]}
+          onChangeText={[Function]}
+          onFocus={[Function]}
+          placeholder="Search datapoint"
+          placeholderTextColor="#86939e"
+          platform="default"
+          style={
+            {
+              "color": "#86939e",
+              "flex": 1,
+              "fontSize": 18,
+              "marginLeft": 10,
+              "minHeight": 40,
+              "width": "100%",
+            }
+          }
+          testID="search-bar"
+          underlineColorAndroid="transparent"
+          value=""
+        />
+        <View
+          style={
+            {
+              "alignItems": "center",
+              "height": 40,
+              "justifyContent": "center",
+              "marginRight": 8,
+              "marginVertical": 4,
+              "paddingRight": 4,
+            }
+          }
+        >
+          <View
+            style={
+              {
+                "flexDirection": "row",
+              }
+            }
+          />
+        </View>
+      </View>
+      <Text
+        style={
+          {
+            "color": "#ff190c",
+            "fontSize": 12,
+            "height": 0,
+            "margin": 0,
+            "padding": 0,
+          }
+        }
+      />
+    </View>
+  </View>
+  <RCTScrollView>
+    <View>
+      <View
+        style={
+          {
+            "backgroundColor": "#f9fafb",
+            "flex": 1,
+            "flexDirection": "row",
+            "flexWrap": "wrap",
+          }
+        }
+        testID="stack-container"
+      >
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-0"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 1
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-1"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 2
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-2"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 3
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-3"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 4
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-4"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 5
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-5"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 6
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-6"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 7
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-7"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 8
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-8"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 9
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-9"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 10
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-10"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 11
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-11"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 12
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-12"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 13
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-13"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 14
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-14"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 15
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-15"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 16
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-16"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 17
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-17"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 18
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-18"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 19
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-19"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 20
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-20"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 21
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-21"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 22
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-22"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 23
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-23"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 24
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-24"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 25
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-25"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 26
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-26"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 27
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-27"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 28
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-28"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 29
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-29"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 30
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-30"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 31
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-31"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 32
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-32"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 33
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-33"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 34
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-34"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 35
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-35"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 36
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-36"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 37
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-37"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 38
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-38"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 39
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-39"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 40
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-40"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 41
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-41"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 42
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-42"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 43
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-43"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 44
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-44"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 45
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-45"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 46
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-46"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 47
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-47"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 48
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-48"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 49
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-49"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 50
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-50"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 51
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-51"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 52
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-52"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 53
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-53"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 54
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-54"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 55
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-55"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 56
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-56"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 57
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-57"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 58
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-58"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 59
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-59"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 60
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-60"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 61
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-61"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 62
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-62"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 63
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-63"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 64
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-64"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 65
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-65"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 66
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-66"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 67
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-67"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 68
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-68"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 69
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-69"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 70
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-70"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 71
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-71"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 72
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-72"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 73
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-73"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 74
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-74"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 75
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-75"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 76
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-76"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 77
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-77"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 78
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-78"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 79
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-79"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 80
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-80"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 81
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-81"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 82
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-82"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 83
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-83"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 84
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-84"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 85
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-85"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 86
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-86"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 87
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-87"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 88
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-88"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 89
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-89"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 90
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-90"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 91
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-91"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 92
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-92"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 93
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-93"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 94
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-94"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 95
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-95"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 96
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-96"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 97
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-97"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 98
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-98"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 99
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "width": "100%",
+            }
+          }
+          testID="card-non-touchable-99"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Datapoint 100
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Created: 23-Jan-2023
+              </Text>
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#242424",
+                  }
+                }
+              >
+                Survey duration: 1hr 32m
+              </Text>
+            </View>
+          </View>
+        </View>
+      </View>
+    </View>
+  </RCTScrollView>
+</View>
+`;
