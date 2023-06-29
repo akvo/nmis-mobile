@@ -14,14 +14,13 @@ import { BackHandler } from 'react-native';
 
 const Stack = createNativeStackNavigator();
 
-const RootNavigator = ({ navigationRef }) => {
-  const { name: currentRoute } = navigationRef.getCurrentRoute();
+const RootNavigator = () => {
   const currentPage = UIState.useState((s) => s.currentPage);
   const token = AuthState.useState((s) => s.token); // user already has session
 
   React.useEffect(() => {
     const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-      if (!token || currentRoute !== 'Home') {
+      if (!token || currentPage !== 'Home') {
         // Allow navigation if user is not logged in
         return false;
       }
@@ -29,7 +28,7 @@ const RootNavigator = ({ navigationRef }) => {
       return true;
     });
     return () => backHandler.remove();
-  }, [token, currentRoute]);
+  }, [token, currentPage]);
 
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName={currentPage}>
@@ -52,9 +51,18 @@ const RootNavigator = ({ navigationRef }) => {
 
 const Navigation = (props) => {
   const navigationRef = useNavigationContainerRef();
+
+  const handleOnChangeNavigation = (state) => {
+    // listen to route change
+    const currentRoute = state.routes[state.routes.length - 1].name;
+    UIState.update((s) => {
+      s.currentPage = currentRoute;
+    });
+  };
+
   return (
-    <NavigationContainer ref={navigationRef} {...props}>
-      <RootNavigator navigationRef={navigationRef} />
+    <NavigationContainer ref={navigationRef} onStateChange={handleOnChangeNavigation} {...props}>
+      <RootNavigator />
     </NavigationContainer>
   );
 };
