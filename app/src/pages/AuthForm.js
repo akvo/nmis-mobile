@@ -5,10 +5,7 @@ import { Input, CheckBox, Button, Text, Dialog } from '@rneui/themed';
 import { CenterLayout, Image } from '../components';
 import { api } from '../lib';
 import { AuthState } from '../store';
-import { conn, query } from '../database';
-import { crudSessions } from '../database/crud';
-
-const db = conn.init;
+import { crudSessions, crudForms } from '../database/crud';
 
 const ToggleEye = ({ hidden, onPress }) => {
   const iconName = hidden ? 'eye' : 'eye-off';
@@ -52,30 +49,11 @@ const AuthForm = ({ navigation }) => {
             await crudSessions.addSession({ token: bearerToken });
           }
           // save forms
-          await data.formsUrl.map(({ id: formId, url, version }) => {
-            const table = 'forms';
-            // check exist
-            conn
-              .tx(db, query.read(table, { formId, version }), [formId, version])
-              .then(async (res) => {
-                const { rows } = res;
-                if (rows.length) {
-                  return false;
-                }
-                // Fetch form detail
-                const formRes = await api.get(url);
-                // insert
-                const insertQuery = query.insert(table, {
-                  formId: formId,
-                  version: version,
-                  latest: 1,
-                  name: formRes?.data?.name || null,
-                  json: formRes?.data ? formRes?.data : null,
-                  createdAt: new Date().toISOString(),
-                });
-                console.info('Saving Forms...', formId);
-                return await conn.tx(db, insertQuery, []);
-              });
+          await data.formsUrl.forEach(async (form) => {
+            // Fetch form detail
+            const formRes = await api.get(form.url);
+            console.info('Saving Forms...', form.id);
+            await crudForms.addFormsIfNotExist({ ...form, formJSON: formRes?.data });
           });
           // update state
           AuthState.update((s) => {
