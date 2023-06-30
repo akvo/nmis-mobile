@@ -10,18 +10,20 @@ import {
   FormPage,
   AddUserPage,
 } from '../pages';
-import { UIState, AuthState } from '../store';
+import { UIState, AuthState, UserState } from '../store';
 import { BackHandler } from 'react-native';
 
 const Stack = createNativeStackNavigator();
 
 const RootNavigator = () => {
+  const preventHardwareBackPressFormPages = ['Home', 'AddUser'];
   const currentPage = UIState.useState((s) => s.currentPage);
   const token = AuthState.useState((s) => s.token); // user already has session
+  const userDefined = UserState.useState((s) => s.id);
 
   React.useEffect(() => {
     const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
-      if (!token || currentPage !== 'Home') {
+      if (!token || !preventHardwareBackPressFormPages.includes(currentPage)) {
         // Allow navigation if user is not logged in
         return false;
       }
@@ -38,9 +40,10 @@ const RootNavigator = () => {
           <Stack.Screen name="GetStarted" component={GetStartedPage} />
           <Stack.Screen name="AuthForm" component={AuthFormPage} />
         </>
+      ) : !userDefined ? (
+        <Stack.Screen name="AddUser" component={AddUserPage} />
       ) : (
         <>
-          <Stack.Screen name="AddUser" component={AddUserPage} />
           <Stack.Screen name="Home" component={HomePage} />
           <Stack.Screen name="FormAction" component={FormActionPage} />
           <Stack.Screen name="FormData" component={FormDataPage} />

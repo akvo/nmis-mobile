@@ -4,8 +4,8 @@ import { View, StyleSheet } from 'react-native';
 import { Input, CheckBox, Button, Text, Dialog } from '@rneui/themed';
 import { CenterLayout, Image } from '../components';
 import { api } from '../lib';
-import { AuthState } from '../store';
-import { crudSessions, crudForms } from '../database/crud';
+import { AuthState, UserState } from '../store';
+import { crudSessions, crudForms, crudUsers } from '../database/crud';
 
 const ToggleEye = ({ hidden, onPress }) => {
   const iconName = hidden ? 'eye' : 'eye-off';
@@ -24,7 +24,7 @@ const AuthForm = ({ navigation }) => {
   const [error, setError] = React.useState(null);
 
   const toggleHidden = () => setHidden(!hidden);
-  const goToHome = () => navigation.navigate('Home');
+  const goTo = (page) => navigation.navigate(page);
 
   const disableLoginButton = React.useMemo(
     () => !passcode || passcode === '' || !checked,
@@ -55,13 +55,27 @@ const AuthForm = ({ navigation }) => {
             console.info('Saving Forms...', form.id);
             await crudForms.addFormsIfNotExist({ ...form, formJSON: formRes?.data });
           });
-          // update state
+          // check users exist
+          const users = await crudUsers.selectUsers();
+          // update auth state
           AuthState.update((s) => {
             s.authenticationCode = passcode;
             s.token = bearerToken;
           });
-          // go to home page
-          goToHome();
+          if (!users?.length) {
+            goTo('AddUser');
+            return;
+          }
+          // update user state
+          const user = users?.[users?.length - 1];
+          UserState.update((s) => {
+            s.id = user.id;
+            s.name = user.name;
+            s.password = user.password;
+          });
+          // go to home page (form list)
+          goTo('Home');
+          return;
         } catch (err) {
           console.error(err);
         }

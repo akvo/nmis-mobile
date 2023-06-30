@@ -4,25 +4,46 @@ import NetInfo from '@react-native-community/netinfo';
 
 import Navigation from './src/navigation';
 import { conn, query, tables } from './src/database';
-import { UIState, AuthState } from './src/store';
-import { crudSessions } from './src/database/crud';
+import { UIState, AuthState, UserState } from './src/store';
+import { crudSessions, crudUsers } from './src/database/crud';
 
 const db = conn.init;
 
 const App = () => {
   const handleCheckSession = () => {
-    crudSessions.selectLastSession().then((res) => {
-      if (!res) {
-        return res;
+    crudSessions.selectLastSession().then((session) => {
+      if (!session) {
+        return session;
       }
-      console.info('Session =>', res);
-      UIState.update((s) => {
-        s.currentPage = res ? 'Home' : s.currentPage;
-      });
-      AuthState.update((s) => {
-        s.token = res.token;
-        s.authenticationCode = res.passcode;
-      });
+      console.info('Session =>', session);
+      // check users exist
+      crudUsers
+        .selectUsers({ count: false })
+        .then((users) => {
+          console.info('Users =>', users);
+          let page = null;
+          if (session && users?.length) {
+            page = 'Home';
+          }
+          if (session && !users?.length) {
+            page = 'AddUser';
+          }
+          return { user: users?.[users?.length - 1], page };
+        })
+        .then(({ user, page }) => {
+          UserState.update((s) => {
+            s.id = user.id;
+            s.name = user.name;
+            s.password = user.password;
+          });
+          AuthState.update((s) => {
+            s.token = session.token;
+            s.authenticationCode = session.passcode;
+          });
+          UIState.update((s) => {
+            s.currentPage = page ? page : s.currentPage;
+          });
+        });
     });
   };
 
