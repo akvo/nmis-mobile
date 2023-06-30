@@ -1,10 +1,10 @@
 import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Platform, ToastAndroid } from 'react-native';
 import { Input, CheckBox, Button, Text, Dialog } from '@rneui/themed';
 import { CenterLayout, Image } from '../components';
 import { api } from '../lib';
-import { AuthState, UserState } from '../store';
+import { AuthState, UserState, UIState } from '../store';
 import { crudSessions, crudForms, crudUsers } from '../database/crud';
 
 const ToggleEye = ({ hidden, onPress }) => {
@@ -17,6 +17,7 @@ const ToggleEye = ({ hidden, onPress }) => {
 };
 
 const AuthForm = ({ navigation }) => {
+  const isNetworkAvailable = UIState.useState((s) => s.online);
   const [passcode, setPasscode] = React.useState(null);
   const [hidden, setHidden] = React.useState(true);
   const [checked, setChecked] = React.useState(false);
@@ -32,6 +33,14 @@ const AuthForm = ({ navigation }) => {
   );
 
   const handleOnPressLogin = () => {
+    // check connection
+    if (!isNetworkAvailable) {
+      if (Platform.OS === 'android') {
+        ToastAndroid.show('No connection', ToastAndroid.LONG);
+      }
+      return false;
+    }
+
     setError(null);
     setLoading(true);
     const data = new FormData();
