@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, ToastAndroid } from 'react-native';
+import { View, ToastAndroid, Platform } from 'react-native';
 import { ListItem, Button, Input } from '@rneui/themed';
 import { Formik, ErrorMessage } from 'formik';
 import * as Crypto from 'expo-crypto';
@@ -29,12 +29,15 @@ const AddUser = ({ navigation }) => {
         UserState.update((s) => {
           s.id = id;
         });
-
-        ToastAndroid.show('Success!', ToastAndroid.SHORT);
+        if (Platform.OS === 'android') {
+          ToastAndroid.show('Success!', ToastAndroid.SHORT);
+        }
         setLoading(false);
       })
       .catch(() => {
-        ToastAndroid.show('Unable to save the data to the database', ToastAndroid.LONG);
+        if (Platform.OS === 'android') {
+          ToastAndroid.show('Unable to save the data to the database', ToastAndroid.LONG);
+        }
         setLoading(false);
       });
   };
@@ -49,12 +52,16 @@ const AddUser = ({ navigation }) => {
             s.id = insertId;
           });
         }
-        ToastAndroid.show('Success!', ToastAndroid.SHORT);
 
+        if (Platform.OS === 'android') {
+          ToastAndroid.show('Success!', ToastAndroid.SHORT);
+        }
         setLoading(false);
       })
       .catch(() => {
-        ToastAndroid.show('Unable to save the data to the database', ToastAndroid.LONG);
+        if (Platform.OS === 'android') {
+          ToastAndroid.show('Unable to save the data to the database', ToastAndroid.LONG);
+        }
         setLoading(false);
       });
   };
@@ -131,7 +138,9 @@ const AddUser = ({ navigation }) => {
         }
       })
       .catch(() => {
-        ToastAndroid.show('Unable to load profile', ToastAndroid.LONG);
+        if (Platform.OS === 'android') {
+          ToastAndroid.show('Unable to load profile', ToastAndroid.LONG);
+        }
       });
   }, []);
 
@@ -154,6 +163,7 @@ const AddUser = ({ navigation }) => {
                   onChangeText={(value) => handleNameChange(formik.handleChange, value)}
                   value={name}
                   errorMessage={<ErrorMessage name="name" />}
+                  testID="input-name"
                 />
               </ListItem.Content>
             </ListItem>
@@ -166,6 +176,7 @@ const AddUser = ({ navigation }) => {
                   onChangeText={(value) => handlePasswordChange(formik.handleChange, value)}
                   value={password}
                   errorMessage={<ErrorMessage name="password" />}
+                  testID="input-password"
                 />
               </ListItem.Content>
             </ListItem>
@@ -178,6 +189,7 @@ const AddUser = ({ navigation }) => {
                   onChangeText={formik.handleChange('confirmPassword')}
                   value={formik.confirmPassword}
                   errorMessage={<ErrorMessage name="confirmPassword" />}
+                  testID="input-confirm-password"
                 />
               </ListItem.Content>
             </ListItem>
@@ -185,10 +197,17 @@ const AddUser = ({ navigation }) => {
             <View
               style={{ display: 'flex', flexDirection: 'column', gap: 8, paddingHorizontal: 16 }}
             >
-              <Button onPress={formik.handleSubmit} loading={loading}>
+              <Button onPress={formik.handleSubmit} loading={loading} testID="button-save">
                 {loading ? 'Saving...' : 'Save'}
               </Button>
-              {userID && <Button title="Go to Dashboard" type="outline" onPress={goToHome} />}
+              {userID && (
+                <Button
+                  title="Go to Dashboard"
+                  type="outline"
+                  onPress={goToHome}
+                  testID="button-dashboard"
+                />
+              )}
             </View>
           </BaseLayout.Content>
         )}
