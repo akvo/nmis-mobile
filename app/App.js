@@ -4,16 +4,35 @@ import NetInfo from '@react-native-community/netinfo';
 
 import Navigation from './src/navigation';
 import { conn, query, tables } from './src/database';
-import { UIState } from './src/store';
+import { UIState, AuthState } from './src/store';
+import { crudSessions } from './src/database/crud';
 
 const db = conn.init;
 
 const App = () => {
   React.useEffect(() => {
-    const queries = tables.map((t) => query.initialQuery(t.name, t.fields)).join(' ');
-    conn.tx(db, queries).then((res) => {
-      console.log('results', res);
+    // check session
+    crudSessions.selectLastSession().then((res) => {
+      if (!res) {
+        return res;
+      }
+      console.info('Session =>', res);
+      UIState.update((s) => {
+        s.currentPage = res ? 'Home' : s.currentPage;
+      });
+      AuthState.update((s) => {
+        s.token = res.token;
+        s.authenticationCode = res.passcode;
+      });
     });
+  }, []);
+
+  React.useEffect(() => {
+    const queries = tables.map((t) => {
+      const queryString = query.initialQuery(t.name, t.fields);
+      return conn.tx(db, queryString);
+    });
+    Promise.all(queries);
   }, []);
 
   React.useEffect(() => {
@@ -27,6 +46,7 @@ const App = () => {
       unsubscribe();
     };
   }, []);
+
   return (
     <SafeAreaProvider>
       <Navigation testID="navigation-element" />
