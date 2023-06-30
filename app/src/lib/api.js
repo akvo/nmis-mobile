@@ -1,7 +1,8 @@
 import axios from 'axios';
+import defaultBuildParams from '../build.json';
 
 export const config = {
-  baseURL: 'http://192.168.21.252:8080', // server URL from setting
+  baseURL: defaultBuildParams?.serverURL, // server URL from setting
   headers: {
     'Content-Type': 'application/json',
   },

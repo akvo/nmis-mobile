@@ -4,3 +4,4 @@ export { default as FormDataPage } from './FormData';
 export { default as GetStartedPage } from './GetStarted';
 export { default as AuthFormPage } from './AuthForm';
 export { default as FormPage } from './FormPage';
+export { default as AddUserPage } from './AddUser';

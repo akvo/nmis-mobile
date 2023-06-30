@@ -10,8 +10,7 @@ import { crudSessions } from './src/database/crud';
 const db = conn.init;
 
 const App = () => {
-  React.useEffect(() => {
-    // check session
+  const handleCheckSession = () => {
     crudSessions.selectLastSession().then((res) => {
       if (!res) {
         return res;
@@ -25,14 +24,16 @@ const App = () => {
         s.authenticationCode = res.passcode;
       });
     });
-  }, []);
+  };
 
   React.useEffect(() => {
     const queries = tables.map((t) => {
       const queryString = query.initialQuery(t.name, t.fields);
       return conn.tx(db, queryString);
     });
-    Promise.all(queries);
+    Promise.all(queries).then(() => {
+      handleCheckSession();
+    });
   }, []);
 
   React.useEffect(() => {
