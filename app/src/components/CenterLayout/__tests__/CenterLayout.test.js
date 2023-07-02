@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text } from 'react-native';
 import { render } from '@testing-library/react-native';
-import { CenterLayout } from '../../../src/components';
+import CenterLayout from '..';
 
 describe('CenterLayout component', () => {
   it('renders page without children correctly', () => {

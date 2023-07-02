@@ -1,10 +1,10 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import { GetStartedPage } from '../../src/pages';
+import ManageFormPage from '../ManageForm';
 
-describe('GetStartedPage', () => {
+describe('ManageFormPage', () => {
   test('renders correctly', () => {
-    const tree = renderer.create(<GetStartedPage />).toJSON();
+    const tree = renderer.create(<ManageFormPage />).toJSON();
     expect(tree).toMatchSnapshot();
   });
 });

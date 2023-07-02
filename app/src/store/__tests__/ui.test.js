@@ -5,7 +5,7 @@ describe('UIState', () => {
   it('should initialize with the correct default state', () => {
     const { result } = renderHook(() => UIState.useState());
     const { fontSize, lang, isDarkMode, currentPage, online } = result.current;
-    expect(fontSize).toBe('default');
+    expect(fontSize).toBe(16);
     expect(lang).toBe('en');
     expect(isDarkMode).toBe(false);
     expect(currentPage).toBe('GetStarted');

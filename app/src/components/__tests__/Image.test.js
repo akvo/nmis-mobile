@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react-native';
-import { Image } from '../../src/components';
+import Image from '../Image';
 
 describe('Image', () => {
   test('renders an image with the correct URL', () => {

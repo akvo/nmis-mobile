@@ -1,8 +1,21 @@
 import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Header, Text, Button } from '@rneui/themed';
+import { useNavigation } from '@react-navigation/native';
 
-const PageTitle = ({ text, back = null }) => {
+const PageTitle = ({ text }) => {
+  const navigation = useNavigation();
+
+  const handleSettingsPress = () => {
+    navigation.navigate('Settings');
+  };
+
+  const handleGoBackPress = () => {
+    navigation.goBack();
+  };
+
+  const hasPreviousScreen = navigation.canGoBack();
+
   return (
     <Header
       backgroundColor="#f3f4f6"
@@ -14,8 +27,8 @@ const PageTitle = ({ text, back = null }) => {
       }}
       testID="base-layout-page-title"
     >
-      {back && typeof back === 'function' ? (
-        <Button type="clear" onPress={back} testID="arrow-back-button">
+      {hasPreviousScreen ? (
+        <Button type="clear" onPress={handleGoBackPress} testID="arrow-back-button">
           <Icon name="arrow-back" size={18} />
         </Button>
       ) : (
@@ -24,7 +37,7 @@ const PageTitle = ({ text, back = null }) => {
       <Text h4Style={{ fontSize: 18 }} h4>
         {text}
       </Text>
-      <Button type="clear" testID="more-options-button">
+      <Button type="clear" testID="more-options-button" onPress={handleSettingsPress}>
         <Icon name="ellipsis-vertical" size={18} />
       </Button>
     </Header>

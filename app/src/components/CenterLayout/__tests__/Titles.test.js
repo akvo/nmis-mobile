@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from 'react-native-testing-library';
-import { Titles } from '../../../src/components/CenterLayout/Titles';
+import { Titles } from '../Titles';
 
 describe('Titles component', () => {
   it('renders titles correctly', () => {
@@ -13,5 +13,12 @@ describe('Titles component', () => {
 
     const titleElement2 = getByText(items[1]);
     expect(titleElement2).toBeDefined();
+  });
+
+  it('renders titles without params correctly', () => {
+    const { getByTestId } = render(<Titles />);
+
+    const layoutEl = getByTestId('center-layout-items');
+    expect(layoutEl).toBeDefined();
   });
 });

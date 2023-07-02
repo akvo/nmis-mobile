@@ -1,10 +1,10 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import { AuthFormPage } from '../../src/pages';
+import FormDataPage from '../FormData';
 
-describe('AuthFormPage', () => {
+describe('FormDataPage', () => {
   test('renders correctly', () => {
-    const tree = renderer.create(<AuthFormPage />).toJSON();
+    const tree = renderer.create(<FormDataPage />).toJSON();
     expect(tree).toMatchSnapshot();
   });
 });

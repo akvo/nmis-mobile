@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from 'react-native-testing-library';
-import { Card } from '../../src/components';
+import Card from '../Card';
 
 describe('Card component', () => {
   it('renders title and subTitles correctly', () => {
