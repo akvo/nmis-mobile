@@ -6,20 +6,20 @@ describe('crudForms function', () => {
     jest.clearAllMocks();
   });
 
-  describe('addFormsIfNotExist', () => {
-    it('should insert the form if it does not exist or has a different version', async () => {
+  describe('addForm', () => {
+    it('should insert the form', async () => {
       const formId = 1;
       const version = 1;
       const formJSON = { id: 1, version: 1, name: 'Form 1' };
-      const result = await crudForms.addFormsIfNotExist({ id: formId, version, formJSON });
+      const result = await crudForms.addForm({ id: formId, version, formJSON });
       expect(result).toEqual({ rowsAffected: 1 });
     });
+  });
 
-    it('should update the form if it exists and has the same version', async () => {
+  describe('updateForm', () => {
+    it('should update the form, set latest to 0', async () => {
       const formId = 1;
-      const version = 1;
-      const formJSON = { id: 1, version: 1, name: 'Form 1' };
-      const result = await crudForms.addFormsIfNotExist({ id: formId, version, formJSON });
+      const result = await crudForms.updateForm({ id: formId });
       expect(result).toEqual({ rowsAffected: 1 });
     });
   });
