@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Button, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { Asset } from 'expo-asset';
 import * as FileSystem from 'expo-file-system';
@@ -8,15 +8,6 @@ const MapView = () => {
   const [htmlContent, setHtmlContent] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
   const webViewRef = React.useRef(null);
-
-  const changeMarker = () => {
-    // Code to change the marker in Leaflet
-    // You can use postMessage to send a message to the WebView and handle it in Leaflet
-    const lat = -7.3912838;
-    const lng = 109.4651336;
-    const eventData = JSON.stringify({ type: 'changeMarker', data: { lat, lng } });
-    webViewRef.current.postMessage(eventData);
-  };
 
   const handleMarkerClick = (markerData) => {
     // Access the latitude and longitude values from markerData
@@ -27,7 +18,12 @@ const MapView = () => {
 
   const loadHtml = async () => {
     const [{ localUri }] = await Asset.loadAsync(require('../../assets/map.html'));
-    const fileContents = await FileSystem.readAsStringAsync(localUri);
+    let fileContents = await FileSystem.readAsStringAsync(localUri);
+
+    const lat = -7.3912838;
+    const lng = 109.4651336;
+
+    fileContents = fileContents.replace(/{{latitude}}/g, lat).replace(/{{longitude}}/g, lng);
     setHtmlContent(fileContents);
   };
 
@@ -43,10 +39,6 @@ const MapView = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.buttonContainer}>
-        <Button title="Change Marker" onPress={changeMarker} />
-      </View>
-
       {loading ? (
         <ActivityIndicator style={styles.map} />
       ) : (
@@ -70,6 +62,7 @@ const MapView = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingTop: 16,
   },
   map: {
     flex: 1,
