@@ -1,13 +1,21 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { View } from 'react-native';
-import { Text } from '@rneui/themed';
+import { Text, Button } from '@rneui/themed';
+import { useNavigation } from '@react-navigation/native';
+
 import { FieldLabel } from '../support';
 import { styles } from '../styles';
 import * as Location from 'expo-location';
 
-const TypeGeo = ({ keyform, id, name }) => {
+const TypeGeo = ({ onChange, values, keyform, id, name }) => {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+
+  const navigation = useNavigation();
+
+  const handleOpenMapPress = () => {
+    navigation.navigate('MapView');
+  };
 
   useEffect(() => {
     (async () => {
@@ -32,16 +40,24 @@ const TypeGeo = ({ keyform, id, name }) => {
     }
     return 'Waiting..';
   }, [errorMsg, location]);
-  /**
-   * TODO Map preview
-   */
+
+  useEffect(() => {
+    if (text && !values?.[id]) {
+      onChange(text);
+    }
+  }, [values, id, text]);
 
   return (
     <View>
       <FieldLabel keyform={keyform} name={name} />
-      <Text key={id} style={styles.inputFieldContainer}>
-        {text}
-      </Text>
+      <View style={styles?.inputGeoContainer}>
+        <Text key={id} style={styles.inputFieldContainer}>
+          {text}
+        </Text>
+        <Button type="outline" onPress={handleOpenMapPress}>
+          Open Map
+        </Button>
+      </View>
     </View>
   );
 };
