@@ -1,10 +1,10 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import { FormDataPage } from '../../src/pages';
+import SettingsPage from '../Settings';
 
-describe('FormDataPage', () => {
+describe('SettingsPage', () => {
   test('renders correctly', () => {
-    const tree = renderer.create(<FormDataPage />).toJSON();
+    const tree = renderer.create(<SettingsPage />).toJSON();
     expect(tree).toMatchSnapshot();
   });
 });

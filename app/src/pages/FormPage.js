@@ -6,7 +6,7 @@ import * as formDefinition from '../form/example-form.json';
 
 const FormPage = ({ navigation, route }) => {
   const goBack = () => {
-    navigation.navigate('FormAction', { ...route?.params });
+    navigation.navigate('ManageForm', { ...route?.params });
   };
 
   return (

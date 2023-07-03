@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`FormActionPage renders correctly 1`] = `
+exports[`SettingsPage renders correctly 1`] = `
 <View
   style={
     {
@@ -15,6 +15,146 @@ exports[`FormActionPage renders correctly 1`] = `
   <View
     style={
       {
+        "alignItems": "center",
+        "backgroundColor": "#f3f4f6",
+        "borderBottomColor": "#f2f2f2",
+        "borderBottomWidth": 0.5,
+        "flexDirection": "row",
+        "height": 80,
+        "justifyContent": "space-between",
+        "paddingHorizontal": 10,
+        "paddingVertical": 10,
+      }
+    }
+    testID="base-layout-page-title"
+  >
+    <RNCSafeAreaView
+      edges={
+        [
+          "left",
+          "top",
+          "right",
+        ]
+      }
+      style={
+        {
+          "flexDirection": "row",
+          "width": "100%",
+        }
+      }
+    >
+      <View
+        style={
+          {
+            "alignItems": "flex-start",
+            "flex": 1,
+          }
+        }
+      />
+      <View
+        style={
+          {
+            "alignItems": "center",
+            "flex": 3,
+          }
+        }
+      >
+        <Text
+          accessibilityRole="text"
+          style={
+            {
+              "color": "#242424",
+              "fontSize": 18,
+            }
+          }
+        >
+          Settings
+        </Text>
+      </View>
+      <View
+        style={
+          {
+            "alignItems": "flex-end",
+            "flex": 1,
+          }
+        }
+      >
+        <View
+          style={
+            [
+              {
+                "overflow": "hidden",
+              },
+              {
+                "borderRadius": 2,
+              },
+              undefined,
+              false,
+            ]
+          }
+          testID="RNE_BUTTON_WRAPPER"
+        >
+          <View
+            accessibilityRole="button"
+            accessibilityState={
+              {
+                "busy": false,
+                "checked": undefined,
+                "disabled": false,
+                "expanded": undefined,
+                "selected": undefined,
+              }
+            }
+            accessibilityValue={
+              {
+                "max": undefined,
+                "min": undefined,
+                "now": undefined,
+                "text": undefined,
+              }
+            }
+            accessible={true}
+            collapsable={false}
+            focusable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              {
+                "opacity": 1,
+              }
+            }
+            testID="more-options-button"
+          >
+            <View
+              style={
+                {
+                  "alignItems": "center",
+                  "backgroundColor": "transparent",
+                  "borderColor": "#2089dc",
+                  "borderRadius": 2,
+                  "borderWidth": 0,
+                  "flexDirection": "row",
+                  "justifyContent": "center",
+                  "padding": 8,
+                  "paddingHorizontal": 10,
+                }
+              }
+            >
+              <Text />
+            </View>
+          </View>
+        </View>
+      </View>
+    </RNCSafeAreaView>
+  </View>
+  <View
+    style={
+      {
         "backgroundColor": "#f9fafb",
         "flex": 1,
         "flexDirection": "row",
@@ -26,9 +166,6 @@ exports[`FormActionPage renders correctly 1`] = `
     <View
       style={
         {
-          "flex": 1,
-          "justifyContent": "center",
-          "paddingHorizontal": 16,
           "width": "100%",
         }
       }
@@ -69,6 +206,7 @@ exports[`FormActionPage renders correctly 1`] = `
             {
               "alignItems": "center",
               "backgroundColor": "#ffffff",
+              "borderBottomWidth": 0.5,
               "borderColor": "#bcbbc1",
               "flexDirection": "row",
               "padding": 14,
@@ -76,14 +214,6 @@ exports[`FormActionPage renders correctly 1`] = `
           }
           testID="RNE__LISTITEM__padView"
         >
-          <Text />
-          <View
-            style={
-              {
-                "paddingLeft": 16,
-              }
-            }
-          />
           <View
             style={
               [
@@ -176,7 +306,20 @@ exports[`FormActionPage renders correctly 1`] = `
               }
               testID="listItemTitle"
             >
-              New Blank Form
+              Server
+            </Text>
+            <Text
+              accessibilityRole="text"
+              style={
+                {
+                  "backgroundColor": "transparent",
+                  "color": "#242424",
+                  "fontSize": 15,
+                }
+              }
+              testID="listItemTitle"
+            >
+              URL, Username, Password
             </Text>
           </View>
           <View
@@ -259,6 +402,7 @@ exports[`FormActionPage renders correctly 1`] = `
             {
               "alignItems": "center",
               "backgroundColor": "#ffffff",
+              "borderBottomWidth": 0.5,
               "borderColor": "#bcbbc1",
               "flexDirection": "row",
               "padding": 14,
@@ -266,14 +410,6 @@ exports[`FormActionPage renders correctly 1`] = `
           }
           testID="RNE__LISTITEM__padView"
         >
-          <Text />
-          <View
-            style={
-              {
-                "paddingLeft": 16,
-              }
-            }
-          />
           <View
             style={
               [
@@ -366,7 +502,20 @@ exports[`FormActionPage renders correctly 1`] = `
               }
               testID="listItemTitle"
             >
-              Edit Saved Form
+              User Interface
+            </Text>
+            <Text
+              accessibilityRole="text"
+              style={
+                {
+                  "backgroundColor": "transparent",
+                  "color": "#242424",
+                  "fontSize": 15,
+                }
+              }
+              testID="listItemTitle"
+            >
+              App Language, Theme, Font-size
             </Text>
           </View>
           <View
@@ -449,6 +598,7 @@ exports[`FormActionPage renders correctly 1`] = `
             {
               "alignItems": "center",
               "backgroundColor": "#ffffff",
+              "borderBottomWidth": 0.5,
               "borderColor": "#bcbbc1",
               "flexDirection": "row",
               "padding": 14,
@@ -456,14 +606,6 @@ exports[`FormActionPage renders correctly 1`] = `
           }
           testID="RNE__LISTITEM__padView"
         >
-          <Text />
-          <View
-            style={
-              {
-                "paddingLeft": 16,
-              }
-            }
-          />
           <View
             style={
               [
@@ -556,7 +698,20 @@ exports[`FormActionPage renders correctly 1`] = `
               }
               testID="listItemTitle"
             >
-              View Submitted
+              Form Management
+            </Text>
+            <Text
+              accessibilityRole="text"
+              style={
+                {
+                  "backgroundColor": "transparent",
+                  "color": "#242424",
+                  "fontSize": 15,
+                }
+              }
+              testID="listItemTitle"
+            >
+              Sync interval, Sync method
             </Text>
           </View>
           <View

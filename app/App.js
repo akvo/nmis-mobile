@@ -55,6 +55,7 @@ const App = () => {
     Promise.all(queries).then(() => {
       handleCheckSession();
     });
+    Promise.all(queries);
   }, []);
 
   React.useEffect(() => {

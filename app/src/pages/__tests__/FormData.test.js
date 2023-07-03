@@ -1,10 +1,10 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import { FormActionPage } from '../../src/pages';
+import FormDataPage from '../FormData';
 
-describe('FormActionPage', () => {
+describe('FormDataPage', () => {
   test('renders correctly', () => {
-    const tree = renderer.create(<FormActionPage />).toJSON();
+    const tree = renderer.create(<FormDataPage />).toJSON();
     expect(tree).toMatchSnapshot();
   });
 });

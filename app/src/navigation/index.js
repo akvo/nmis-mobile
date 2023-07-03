@@ -3,10 +3,12 @@ import { NavigationContainer, useNavigationContainerRef } from '@react-navigatio
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
   HomePage,
-  FormActionPage,
+  ManageFormPage,
   FormDataPage,
   GetStartedPage,
   AuthFormPage,
+  SettingsPage,
+  SettingsFormPage,
   FormPage,
   AddUserPage,
 } from '../pages';
@@ -45,8 +47,10 @@ const RootNavigator = () => {
       ) : (
         <>
           <Stack.Screen name="Home" component={HomePage} />
-          <Stack.Screen name="FormAction" component={FormActionPage} />
+          <Stack.Screen name="ManageForm" component={ManageFormPage} />
           <Stack.Screen name="FormData" component={FormDataPage} />
+          <Stack.Screen name="Settings" component={SettingsPage} />
+          <Stack.Screen name="SettingsForm" component={SettingsFormPage} />
           <Stack.Screen name="FormPage" component={FormPage} />
         </>
       )}
