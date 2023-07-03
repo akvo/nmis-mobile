@@ -8,6 +8,7 @@ const Home = ({ navigation }) => {
   const isOnline = UIState.useState((s) => s.online);
   const authenticationCode = AuthState.useState((s) => s.authenticationCode);
   const [search, setSearch] = React.useState(null);
+  const [data, setData] = React.useState([]);
 
   const goToManageForm = (id) => {
     const findData = data?.find((d) => d?.id === id);
@@ -41,13 +42,22 @@ const Home = ({ navigation }) => {
       });
   }, []);
 
-  const data = Array.from({ length: 100 })
-    .map((_, dx) => ({
-      id: dx,
-      name: `Household ${dx + 1}`,
-      subtitles: ['Submitted: 20', 'Draft: 1', 'Synced: 11'],
-    }))
-    .filter((d) => (search && d?.name?.toLowerCase().includes(search.toLowerCase())) || !search);
+  React.useState(() => {
+    crudForms.selectLatestFormVersion().then((results) => {
+      const forms = results.map((r) => ({
+        ...r,
+        subtitles: ['Submitted: 20', 'Draft: 1', 'Synced: 11'],
+      }));
+      setData(forms);
+    });
+  }, []);
+
+  const filteredData = React.useMemo(() => {
+    return data.filter(
+      (d) => (search && d?.name?.toLowerCase().includes(search.toLowerCase())) || !search,
+    );
+  }, [data]);
+
   return (
     <BaseLayout
       title="Form Lists"
@@ -58,7 +68,7 @@ const Home = ({ navigation }) => {
         action: setSearch,
       }}
     >
-      <BaseLayout.Content data={data} action={goToManageForm} columns={2} />
+      <BaseLayout.Content data={filteredData} action={goToManageForm} columns={2} />
     </BaseLayout>
   );
 };

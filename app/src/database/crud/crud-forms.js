@@ -4,6 +4,14 @@ const db = conn.init;
 
 const formsQuery = () => {
   return {
+    selectLatestFormVersion: async () => {
+      const latest = 1;
+      const { rows } = await conn.tx(db, query.read('forms', { latest }), [latest]);
+      if (!rows.length) {
+        return [];
+      }
+      return rows._array;
+    },
     selectFormByIdAndVersion: async ({ id: formId, version }) => {
       const { rows } = await conn.tx(db, query.read('forms', { formId, version }), [
         formId,
