@@ -4,15 +4,56 @@ import NetInfo from '@react-native-community/netinfo';
 
 import Navigation from './src/navigation';
 import { conn, query, tables } from './src/database';
-import { UIState } from './src/store';
+import { UIState, AuthState, UserState } from './src/store';
+import { crudSessions, crudUsers } from './src/database/crud';
 
 const db = conn.init;
 
 const App = () => {
+  const handleCheckSession = () => {
+    crudSessions.selectLastSession().then((session) => {
+      if (!session) {
+        return session;
+      }
+      console.info('Session =>', session);
+      // check users exist
+      crudUsers
+        .selectUsers({ count: false })
+        .then((users) => {
+          console.info('Users =>', users);
+          let page = null;
+          if (session && users?.length) {
+            page = 'Home';
+          }
+          if (session && !users?.length) {
+            page = 'AddUser';
+          }
+          return { user: users?.[users?.length - 1], page };
+        })
+        .then(({ user, page }) => {
+          UserState.update((s) => {
+            s.id = user.id;
+            s.name = user.name;
+            s.password = user.password;
+          });
+          AuthState.update((s) => {
+            s.token = session.token;
+            s.authenticationCode = session.passcode;
+          });
+          UIState.update((s) => {
+            s.currentPage = page ? page : s.currentPage;
+          });
+        });
+    });
+  };
+
   React.useEffect(() => {
     const queries = tables.map((t) => {
       const queryString = query.initialQuery(t.name, t.fields);
       return conn.tx(db, queryString);
+    });
+    Promise.all(queries).then(() => {
+      handleCheckSession();
     });
     Promise.all(queries);
   }, []);
@@ -28,6 +69,7 @@ const App = () => {
       unsubscribe();
     };
   }, []);
+
   return (
     <SafeAreaProvider>
       <Navigation testID="navigation-element" />

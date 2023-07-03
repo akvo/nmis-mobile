@@ -6,3 +6,4 @@ export { default as AuthFormPage } from './AuthForm';
 export { default as SettingsPage } from './Settings';
 export { default as SettingsFormPage } from './Settings/Form';
 export { default as FormPage } from './FormPage';
+export { default as AddUserPage } from './AddUser';

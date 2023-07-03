@@ -106,6 +106,7 @@ exports[`AuthFormPage renders correctly 1`] = `
         <TextInput
           autoFocus={true}
           editable={true}
+          onChangeText={[Function]}
           placeholder="Enumerator ID"
           placeholderTextColor="#86939e"
           secureTextEntry={true}
@@ -119,6 +120,7 @@ exports[`AuthFormPage renders correctly 1`] = `
           }
           testID="auth-password-field"
           underlineColorAndroid="transparent"
+          value={null}
         />
         <View
           style={
@@ -180,7 +182,7 @@ exports[`AuthFormPage renders correctly 1`] = `
                   "opacity": 1,
                 }
               }
-              testID="auth-toggle-eye-buton"
+              testID="auth-toggle-eye-button"
             >
               <View
                 style={
@@ -304,7 +306,7 @@ exports[`AuthFormPage renders correctly 1`] = `
         {
           "busy": false,
           "checked": undefined,
-          "disabled": false,
+          "disabled": true,
           "expanded": undefined,
           "selected": undefined,
         }
@@ -338,7 +340,7 @@ exports[`AuthFormPage renders correctly 1`] = `
         style={
           {
             "alignItems": "center",
-            "backgroundColor": "#2089dc",
+            "backgroundColor": "hsl(208, 8%, 90%)",
             "borderColor": "#2089dc",
             "borderRadius": 2,
             "borderWidth": 0,
@@ -352,7 +354,7 @@ exports[`AuthFormPage renders correctly 1`] = `
         <Text
           style={
             {
-              "color": "white",
+              "color": "hsl(208, 8%, 63%)",
               "fontSize": 18,
               "paddingVertical": 1,
               "textAlign": "center",
@@ -364,5 +366,17 @@ exports[`AuthFormPage renders correctly 1`] = `
       </View>
     </View>
   </View>
+  <Modal
+    hardwareAccelerated={false}
+    onRequestClose={[Function]}
+    style={
+      {
+        "flex": 1,
+      }
+    }
+    testID="Internal__Overlay"
+    transparent={true}
+    visible={false}
+  />
 </View>
 `;

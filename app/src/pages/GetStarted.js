@@ -6,6 +6,7 @@ const GetStarted = ({ navigation }) => {
   const goToLogin = () => {
     navigation.navigate('AuthForm');
   };
+
   const titles = ['Get Started', 'collecting data the', 'smart way'];
   return (
     <CenterLayout title={titles}>
