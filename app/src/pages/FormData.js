@@ -7,9 +7,6 @@ const FormData = ({ navigation, route }) => {
     name: `Datapoint ${dx + 1}`,
     subtitles: ['Created: 23-Jan-2023', 'Survey duration: 1hr 32m'],
   }));
-  const goBack = () => {
-    navigation.navigate('FormAction', { ...route?.params });
-  };
   return (
     <BaseLayout
       title={route?.params?.name}
@@ -17,7 +14,6 @@ const FormData = ({ navigation, route }) => {
         show: true,
         placeholder: 'Search datapoint',
       }}
-      back={goBack}
     >
       <BaseLayout.Content data={data} />
     </BaseLayout>

@@ -3,9 +3,9 @@ import { BaseLayout } from '../components';
 
 const Home = ({ navigation }) => {
   const [search, setSearch] = React.useState(null);
-  const goToFormAction = (id) => {
+  const goToManageForm = (id) => {
     const findData = data?.find((d) => d?.id === id);
-    navigation.navigate('FormAction', { id, name: findData?.name });
+    navigation.navigate('ManageForm', { id, name: findData?.name });
   };
 
   const data = Array.from({ length: 100 })
@@ -25,7 +25,7 @@ const Home = ({ navigation }) => {
         action: setSearch,
       }}
     >
-      <BaseLayout.Content data={data} action={goToFormAction} columns={2} />
+      <BaseLayout.Content data={data} action={goToManageForm} columns={2} />
     </BaseLayout>
   );
 };
