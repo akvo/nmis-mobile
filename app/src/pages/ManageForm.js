@@ -28,6 +28,12 @@ const ManageForm = ({ navigation, route }) => {
       icon: 'eye',
       navigation: 'FormData',
     },
+    {
+      id: 4,
+      text: 'Test Map view',
+      icon: 'eye',
+      navigation: 'MapView',
+    },
   ];
   return (
     <BaseLayout title={route?.params?.name}>
