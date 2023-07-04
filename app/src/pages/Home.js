@@ -1,19 +1,20 @@
 import React from 'react';
+import { Platform } from 'react-native';
 import { BaseLayout } from '../components';
 import { api } from '../lib';
-import { AuthState, UIState, FormState } from '../store';
+import { FormState } from '../store';
 import { crudForms, crudSessions } from '../database/crud';
-// import { bgTask } from '../lib';
 import * as TaskManager from 'expo-task-manager';
 import * as BackgroundFetch from 'expo-background-fetch';
+import * as Device from 'expo-device';
+import * as Notifications from 'expo-notifications';
 
 const TASK_NAME = 'sync-form-version';
 
-const syncFormVersion = async () => {
+const syncFormVersion = async (showNotificationOnly = true) => {
   try {
     // find last session
     const session = await crudSessions.selectLastSession();
-    console.log('[bgTask]', session);
     if (!session) {
       return;
     }
@@ -24,11 +25,15 @@ const syncFormVersion = async () => {
       .post('/auth', data, { headers: { 'Content-Type': 'multipart/form-data' } })
       .then(async (res) => {
         const { data } = res;
+        const newFormsVersion = [];
         data.formsUrl.forEach(async (form) => {
           const formExist = await crudForms.selectFormByIdAndVersion({ ...form });
           if (formExist) {
-            // skip
-            console.info('[bgTask]Form exist:', form.id);
+            console.info('[bgTask]Form exist:', form.id, form.version);
+            return false;
+          }
+          if (showNotificationOnly) {
+            newFormsVersion.push({ id: form.id, version: form.version });
             return;
           }
           const formRes = await api.get(form.url);
@@ -37,10 +42,16 @@ const syncFormVersion = async () => {
           console.info('[bgTask]Updated Forms...', form.id, updatedForm);
           const savedForm = await crudForms.addForm({ ...form, formJSON: formRes?.data });
           console.info('[bgTask]Saved Forms...', form.id, savedForm);
+          return form;
         });
+        if (newFormsVersion.length && showNotificationOnly) {
+          console.info('[bgTask]New form available:', newFormsVersion);
+          await sendPushNotification();
+          return;
+        }
       });
   } catch (err) {
-    console.error('sycnFormVersion failed:', err);
+    console.error('[bgTask]sycnFormVersion failed:', err);
   }
 };
 
@@ -74,9 +85,54 @@ const unregisterBackgroundTask = async () => {
   }
 };
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+  }),
+});
+
+const sendPushNotification = async () => {
+  await Notifications.scheduleNotificationAsync({
+    content: {
+      title: 'New Form version available',
+      body: 'Here is the notification body',
+      data: null,
+    },
+    trigger: null,
+  });
+};
+
+const registerForPushNotificationsAsync = async () => {
+  let token;
+  if (Platform.OS === 'android') {
+    await Notifications.setNotificationChannelAsync('default', {
+      name: 'default',
+      importance: Notifications.AndroidImportance.MAX,
+      vibrationPattern: [0, 250, 250, 250],
+      lightColor: '#FF231F7C',
+    });
+  }
+  if (Device.isDevice) {
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== 'granted') {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== 'granted') {
+      console.warn('[Notification]Failed to get push token for push notification!');
+      return;
+    }
+    token = (await Notifications.getExpoPushTokenAsync()).data;
+  } else {
+    console.warn('[Notification]Must use physical device for Push Notifications');
+  }
+  return token;
+};
+
 const Home = ({ navigation }) => {
-  const isOnline = UIState.useState((s) => s.online);
-  const authenticationCode = AuthState.useState((s) => s.authenticationCode);
   const [search, setSearch] = React.useState(null);
   const [data, setData] = React.useState([]);
 
@@ -93,15 +149,29 @@ const Home = ({ navigation }) => {
   const checkStatusAsync = async () => {
     const status = await BackgroundFetch.getStatusAsync();
     const isRegistered = await TaskManager.isTaskRegisteredAsync(TASK_NAME);
-    console.log('BackgroundTask Status', status, isRegistered);
     if (BackgroundFetch.BackgroundFetchStatus?.[status] === 'Available' && !isRegistered) {
       await registerBackgroundTask();
     }
-    console.log('BackgroundTask Status', status, isRegistered);
+    console.log('[bgTask]Status', status, isRegistered);
   };
 
   React.useEffect(() => {
     checkStatusAsync();
+  }, []);
+
+  React.useEffect(() => {
+    registerForPushNotificationsAsync();
+    const notificationListener = Notifications.addNotificationReceivedListener((notification) => {
+      console.log('[Notification]Received Listener');
+    });
+    const responseListener = Notifications.addNotificationResponseReceivedListener((response) => {
+      console.log('[Notification]Response Listener');
+      syncFormVersion(false);
+    });
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener);
+      Notifications.removeNotificationSubscription(responseListener);
+    };
   }, []);
 
   React.useState(() => {
