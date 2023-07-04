@@ -1,5 +1,5 @@
 import { Store } from 'pullstate';
-import defaultBuildParams from '../build.json';
+import defaultBuildParams from '../build';
 
 const BuildParamsState = new Store({
   authenticationType: defaultBuildParams?.authenticationType || [

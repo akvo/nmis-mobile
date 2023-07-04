@@ -7,6 +7,16 @@ module.exports = function (api) {
       ['@babel/plugin-transform-class-properties', { loose: true }],
       ['@babel/plugin-transform-private-methods', { loose: true }],
       ['@babel/plugin-transform-private-property-in-object', { loose: true }],
+      [
+        'module:react-native-dotenv',
+        {
+          moduleName: '@env',
+          path: '.env',
+          blocklist: ['GITHUB_TOKEN'],
+          safe: false,
+          allowUndefined: true,
+        },
+      ],
     ],
   };
 };
