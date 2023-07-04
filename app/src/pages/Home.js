@@ -15,6 +15,7 @@ const syncFormVersion = async (showNotificationOnly = true) => {
   try {
     // find last session
     const session = await crudSessions.selectLastSession();
+    console.log('[bgTask]Session:', session);
     if (!session) {
       return;
     }
@@ -25,30 +26,31 @@ const syncFormVersion = async (showNotificationOnly = true) => {
       .post('/auth', data, { headers: { 'Content-Type': 'multipart/form-data' } })
       .then(async (res) => {
         const { data } = res;
-        const newFormsVersion = [];
-        data.formsUrl.forEach(async (form) => {
+        const promises = data.formsUrl.map(async (form) => {
           const formExist = await crudForms.selectFormByIdAndVersion({ ...form });
           if (formExist) {
             console.info('[bgTask]Form exist:', form.id, form.version);
             return false;
           }
           if (showNotificationOnly) {
-            newFormsVersion.push({ id: form.id, version: form.version });
-            return;
+            console.info('[bgTask]New form:', form.id, form.version);
+            return { id: form.id, version: form.version };
           }
           const formRes = await api.get(form.url);
           // update previous form latest value to 0
           const updatedForm = await crudForms.updateForm({ ...form });
-          console.info('[bgTask]Updated Forms...', form.id, updatedForm);
+          console.info('[syncForm]Updated Forms...', form.id, updatedForm);
           const savedForm = await crudForms.addForm({ ...form, formJSON: formRes?.data });
-          console.info('[bgTask]Saved Forms...', form.id, savedForm);
-          return form;
+          console.info('[syncForm]Saved Forms...', form.id, savedForm);
+          return savedForm;
         });
-        if (newFormsVersion.length && showNotificationOnly) {
-          console.info('[bgTask]New form available:', newFormsVersion);
+        Promise.all(promises).then(async (res) => {
+          const exist = res.filter((x) => x);
+          if (!exist.length || !showNotificationOnly) {
+            return;
+          }
           await sendPushNotification();
-          return;
-        }
+        });
       });
   } catch (err) {
     console.error('[bgTask]sycnFormVersion failed:', err);
@@ -57,7 +59,8 @@ const syncFormVersion = async (showNotificationOnly = true) => {
 
 TaskManager.defineTask(TASK_NAME, async () => {
   try {
-    syncFormVersion();
+    console.log('[bgTask]Function here');
+    await syncFormVersion();
     return BackgroundFetch.BackgroundFetchResult.NewData;
   } catch (err) {
     console.error('define task manager failed:', err);
@@ -68,7 +71,7 @@ TaskManager.defineTask(TASK_NAME, async () => {
 const registerBackgroundTask = async () => {
   try {
     await BackgroundFetch.registerTaskAsync(TASK_NAME, {
-      minimumInterval: 0.5 * 60, // in minutes
+      minimumInterval: 1 * 60,
       stopOnTerminate: false, // android only,
       startOnBoot: true, // android only
     });
