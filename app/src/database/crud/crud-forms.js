@@ -28,7 +28,7 @@ const formsQuery = () => {
         version: version,
         latest: 1,
         name: formJSON?.name || null,
-        json: formJSON ? formJSON : null,
+        json: formJSON ? JSON.stringify(formJSON).replace(/'/g, "''") : null,
         createdAt: new Date().toISOString(),
       });
       return await conn.tx(db, insertQuery, []);

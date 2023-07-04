@@ -1,7 +1,7 @@
 import React from 'react';
 import { BaseLayout } from '../components';
 import { api } from '../lib';
-import { AuthState, UIState } from '../store';
+import { AuthState, UIState, FormState } from '../store';
 import { crudForms } from '../database/crud';
 
 const Home = ({ navigation }) => {
@@ -11,8 +11,13 @@ const Home = ({ navigation }) => {
   const [data, setData] = React.useState([]);
 
   const goToManageForm = (id) => {
-    const findData = data?.find((d) => d?.id === id);
-    navigation.navigate('ManageForm', { id, name: findData?.name });
+    const findData = data.find((d) => d?.id === id);
+    FormState.update((s) => {
+      s.form = findData;
+    });
+    setTimeout(() => {
+      navigation.navigate('ManageForm', { id: id, name: findData.name });
+    }, 100);
   };
 
   React.useEffect(() => {
