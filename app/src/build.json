@@ -1,6 +1,6 @@
 {
   "authenticationType": ["code_assignment", "username", "password"],
-  "serverURL": "http://192.168.21.252:8080",
+  "serverURL": "https://api.example.com/nmis",
   "debugMode": false,
   "dataSyncInterval": 300,
   "errorHandling": true,
