@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { View, StyleSheet, ActivityIndicator, Button, Platform, ToastAndroid } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { Asset } from 'expo-asset';
@@ -6,10 +6,10 @@ import * as FileSystem from 'expo-file-system';
 import { MapState } from '../store';
 import { loc } from '../lib';
 
-const MapView = ({ navigation, route }) => {
-  const [htmlContent, setHtmlContent] = React.useState(null);
-  const [loading, setLoading] = React.useState(true);
-  const webViewRef = React.useRef(null);
+const MapView = ({ route }) => {
+  const [htmlContent, setHtmlContent] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const webViewRef = useRef(null);
 
   const updateMapState = (markerData) => {
     const { lat, lng } = markerData;
@@ -48,11 +48,11 @@ const MapView = ({ navigation, route }) => {
     setHtmlContent(fileContents);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     loadHtml();
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (loading && htmlContent) {
       setLoading(false);
     }
