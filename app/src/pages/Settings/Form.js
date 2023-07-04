@@ -167,7 +167,8 @@ const SettingsForm = ({ route }) => {
           {list.map((l, i) => {
             const switchValue =
               l.type === 'switch' && (settingsState[l.name] || false) ? true : false;
-            const listProps = l.type === 'switch' ? {} : { onPress: () => handleEditPress(l.id) };
+            const listProps =
+              l.editable && l.type !== 'switch' ? { onPress: () => handleEditPress(l.id) } : {};
             let subtitle =
               l.type === 'switch' || l.type === 'password'
                 ? l.description
