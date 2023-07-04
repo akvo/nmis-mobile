@@ -1,5 +1,5 @@
 import axios from 'axios';
-import defaultBuildParams from '../build.json';
+import defaultBuildParams from '../build.js';
 
 export const config = {
   baseURL: defaultBuildParams?.serverURL, // server URL from setting
