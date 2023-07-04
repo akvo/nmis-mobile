@@ -1,28 +1,47 @@
 import React from 'react';
-import { View, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, ActivityIndicator, Button, Platform, ToastAndroid } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { Asset } from 'expo-asset';
 import * as FileSystem from 'expo-file-system';
+import { MapState } from '../store';
+import { loc } from '../lib';
 
-const MapView = () => {
+const MapView = ({ navigation, route }) => {
   const [htmlContent, setHtmlContent] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
   const webViewRef = React.useRef(null);
 
   const handleMarkerClick = (markerData) => {
-    // Access the latitude and longitude values from markerData
     const { lat, lng } = markerData;
-    console.log('Latitude:', lat);
-    console.log('Longitude:', lng);
+    MapState.update((s) => {
+      s.latitude = lat;
+      s.longitude = lng;
+    });
+  };
+
+  const handleCurrentLocation = () => {
+    setLoading(true);
+    loc.getCurrentLocation(
+      (res) => {
+        const { latitude: lat, longitude: lng } = res?.coords;
+        const eventData = JSON.stringify({ type: 'changeMarker', data: { lat, lng } });
+        webViewRef.current.postMessage(eventData);
+        setLoading(false);
+      },
+      (err) => {
+        setLoading(false);
+        setLocation({});
+        if (Platform.OS === 'android') {
+          ToastAndroid.show(err.message, ToastAndroid.SHORT);
+        }
+      },
+    );
   };
 
   const loadHtml = async () => {
     const [{ localUri }] = await Asset.loadAsync(require('../../assets/map.html'));
     let fileContents = await FileSystem.readAsStringAsync(localUri);
-
-    const lat = -7.3912838;
-    const lng = 109.4651336;
-
+    const { latitude: lat, longitude: lng } = route?.params;
     fileContents = fileContents.replace(/{{latitude}}/g, lat).replace(/{{longitude}}/g, lng);
     setHtmlContent(fileContents);
   };
@@ -39,22 +58,27 @@ const MapView = () => {
 
   return (
     <View style={styles.container}>
-      {loading ? (
-        <ActivityIndicator style={styles.map} />
-      ) : (
-        <WebView
-          ref={webViewRef}
-          originWhitelist={['*']}
-          source={{ html: htmlContent }}
-          style={styles.map}
-          onMessage={(event) => {
-            const messageData = JSON.parse(event.nativeEvent.data);
-            if (messageData.type === 'markerClicked') {
-              handleMarkerClick(messageData.data);
-            }
-          }}
+      {loading && <ActivityIndicator />}
+      <WebView
+        ref={webViewRef}
+        originWhitelist={['*']}
+        source={{ html: htmlContent }}
+        style={styles.map}
+        onMessage={(event) => {
+          const messageData = JSON.parse(event.nativeEvent.data);
+          if (messageData.type === 'markerClicked') {
+            handleMarkerClick(messageData.data);
+          }
+        }}
+        testID="webview-map"
+      />
+      <View style={styles.buttonContainer}>
+        <Button
+          title="Use current location"
+          onPress={handleCurrentLocation}
+          testID="button-get-current-loc"
         />
-      )}
+      </View>
     </View>
   );
 };
