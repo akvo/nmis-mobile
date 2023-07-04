@@ -11,7 +11,7 @@ const MapView = ({ navigation, route }) => {
   const [loading, setLoading] = React.useState(true);
   const webViewRef = React.useRef(null);
 
-  const handleMarkerClick = (markerData) => {
+  const updateMapState = (markerData) => {
     const { lat, lng } = markerData;
     MapState.update((s) => {
       s.latitude = lat;
@@ -24,6 +24,8 @@ const MapView = ({ navigation, route }) => {
     loc.getCurrentLocation(
       (res) => {
         const { latitude: lat, longitude: lng } = res?.coords;
+        updateMapState({ lat, lng });
+
         const eventData = JSON.stringify({ type: 'changeMarker', data: { lat, lng } });
         webViewRef.current.postMessage(eventData);
         setLoading(false);
@@ -67,7 +69,7 @@ const MapView = ({ navigation, route }) => {
         onMessage={(event) => {
           const messageData = JSON.parse(event.nativeEvent.data);
           if (messageData.type === 'markerClicked') {
-            handleMarkerClick(messageData.data);
+            updateMapState(messageData.data);
           }
         }}
         testID="webview-map"
