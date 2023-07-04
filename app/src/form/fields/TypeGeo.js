@@ -3,48 +3,62 @@ import { View } from 'react-native';
 import { Text, Button } from '@rneui/themed';
 import { useNavigation } from '@react-navigation/native';
 
+import { MapState } from '../../store';
 import { FieldLabel } from '../support';
 import { styles } from '../styles';
-import * as Location from 'expo-location';
+import { loc } from '../../lib';
 
 const TypeGeo = ({ onChange, values, keyform, id, name }) => {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+  const { latitude, longitude } = MapState.useState((s) => s);
 
   const navigation = useNavigation();
 
   const handleOpenMapPress = () => {
-    navigation.navigate('MapView');
-  };
-
-  const handleCurrentLocation = async () => {
-    const { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== 'granted') {
-      setErrorMsg('Permission to access location was denied');
-      return;
+    const geoVal = values?.[id];
+    let params = location?.coords;
+    if (geoVal) {
+      const [lat, lng] = geoVal?.split('|');
+      params = { latitude: lat, longitude: lng };
     }
-    const result = await Location.getCurrentPositionAsync({});
-    setLocation(result);
+    navigation.navigate('MapView', params);
   };
-
   useEffect(() => {
-    handleCurrentLocation();
-  }, []);
+    try {
+      if (location === null) {
+        loc.getCurrentLocation(
+          (res) => {
+            setLocation(res);
+          },
+          (err) => {
+            setLocation({});
+            setErrorMsg(err.message);
+          },
+        );
+      }
+    } catch (err) {
+      console.log('err', err);
+      setLocation({});
+    }
+  }, [location]);
 
   const text = useMemo(() => {
     if (errorMsg) {
       return errorMsg;
     }
-    if (location) {
-      const { latitude, longitude } = location?.coords || {};
-      return `${latitude}|${longitude}`;
+    if (location?.coords) {
+      const { latitude: lat, longitude: lng } = location?.coords;
+      const coordsMap = `${latitude}|${longitude}`;
+      const coordsLoc = `${lat}|${lng}`;
+      return latitude && longitude ? coordsMap : coordsLoc;
     }
     return 'Waiting..';
-  }, [errorMsg, location]);
+  }, [errorMsg, location, latitude, longitude]);
 
   useEffect(() => {
-    if (text && !values?.[id]) {
-      onChange(text);
+    if ((text && !values?.[id]) || (values?.[id] && values[id] !== text)) {
+      onChange(id, text);
     }
   }, [values, id, text]);
 
@@ -52,10 +66,10 @@ const TypeGeo = ({ onChange, values, keyform, id, name }) => {
     <View>
       <FieldLabel keyform={keyform} name={name} />
       <View style={styles?.inputGeoContainer}>
-        <Text key={id} style={styles.inputFieldContainer}>
+        <Text key={id} style={styles.inputFieldContainer} testID="text-coords">
           {text}
         </Text>
-        <Button type="outline" onPress={handleOpenMapPress}>
+        <Button type="outline" onPress={handleOpenMapPress} testID="button-open-map">
           Open Map
         </Button>
       </View>
