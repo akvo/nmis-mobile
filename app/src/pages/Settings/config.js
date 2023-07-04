@@ -11,6 +11,7 @@ export const config = [
         name: 'serverURL',
         description: null,
         key: 'BuildParamsState.serverURL',
+        editable: false,
       },
       {
         id: 12,
@@ -19,6 +20,7 @@ export const config = [
         label: 'Username',
         description: null,
         key: 'AuthState.username',
+        editable: true,
       },
       {
         id: 13,
@@ -27,6 +29,7 @@ export const config = [
         label: 'Password',
         description: null,
         key: 'AuthState.password',
+        editable: true,
       },
       {
         id: 14,
@@ -35,6 +38,7 @@ export const config = [
         label: 'Auth Code',
         description: null,
         key: 'AuthState.authenticationCode',
+        editable: true,
       },
       {
         id: 15,
@@ -43,6 +47,7 @@ export const config = [
         label: 'Use Auth Code',
         description: 'Using authentication code',
         key: 'AuthState.useAuthenticationCode',
+        editable: true,
       },
     ],
   },
@@ -58,6 +63,7 @@ export const config = [
         label: 'Language',
         description: 'Application language',
         key: 'UIState.lang',
+        editable: true,
         options: [
           {
             label: 'English',
@@ -76,6 +82,7 @@ export const config = [
         label: 'Dark mode',
         description: 'Switch theme to dark mode',
         key: 'UIState.isDarkMode',
+        editable: true,
       },
       {
         id: 23,
@@ -84,6 +91,7 @@ export const config = [
         label: 'Font size',
         description: null,
         key: 'UIState.fontSize',
+        editable: true,
         slider: {
           minimumValue: 12,
           maximumValue: 24,
@@ -104,6 +112,7 @@ export const config = [
         label: 'Sync interval',
         description: 'Sync interval in minutes',
         key: 'UserState.syncInterval',
+        editable: true,
       },
       {
         id: 32,
@@ -112,6 +121,7 @@ export const config = [
         name: 'syncWifiOnly',
         description: 'Sync Wifi only',
         key: 'UserState.syncWifiOnly',
+        editable: true,
       },
     ],
   },
