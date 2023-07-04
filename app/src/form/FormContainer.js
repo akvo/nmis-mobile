@@ -10,7 +10,6 @@ import { transformForm } from './lib';
 // TODO:: Allow other not supported yet
 // TODO:: Repeat group not supported yet
 // TODO:: Cascade not supported yet
-// TODO:: Geo not supported yet
 
 const FormContainer = ({ forms, initialValues = {} }) => {
   const formRef = React.useRef();
