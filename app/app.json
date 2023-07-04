@@ -25,14 +25,6 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": [
-      [
-        "expo-location",
-        {
-          "locationAlwaysAndWhenInUsePermission": "Allow NMIS to use your location."
-        }
-      ]
-    ],
     "extra": {
       "eas": {
         "projectId": "cc0a686d-96f7-4fc9-ad9b-c5263bedaed1"
