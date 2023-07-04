@@ -37,8 +37,7 @@ const TypeGeo = ({ onChange, values, keyform, id, name }) => {
           },
         );
       }
-    } catch (err) {
-      console.log('err', err);
+    } catch {
       setLocation({});
     }
   }, [location]);
@@ -62,13 +61,21 @@ const TypeGeo = ({ onChange, values, keyform, id, name }) => {
     }
   }, [values, id, text]);
 
+  const [latText, lngText] = text?.split('|');
   return (
     <View>
       <FieldLabel keyform={keyform} name={name} />
       <View style={styles?.inputGeoContainer}>
-        <Text key={id} style={styles.inputFieldContainer} testID="text-coords">
-          {text}
-        </Text>
+        {latText && lngText ? (
+          <View>
+            <Text testID="text-lat">Latitude: {latText}</Text>
+            <Text testID="text-lng">Longitude: {lngText}</Text>
+          </View>
+        ) : (
+          <Text style={styles.inputFieldContainer} testID="text-waiting">
+            {text}
+          </Text>
+        )}
         <Button type="outline" onPress={handleOpenMapPress} testID="button-open-map">
           Open Map
         </Button>
