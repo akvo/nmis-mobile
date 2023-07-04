@@ -65,7 +65,7 @@ const TypeGeo = ({ onChange, values, keyform, id, name }) => {
   return (
     <View>
       <FieldLabel keyform={keyform} name={name} />
-      <View style={styles?.inputGeoContainer}>
+      <View style={styles.inputGeoContainer}>
         {latText && lngText ? (
           <View>
             <Text testID="text-lat">Latitude: {latText}</Text>
