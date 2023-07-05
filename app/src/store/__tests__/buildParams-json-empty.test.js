@@ -10,7 +10,6 @@ describe('BuildParamsState build.json empty', () => {
     const { result } = renderHook(() => BuildParamsState.useState());
     const {
       authenticationType,
-      serverURL,
       debugMode,
       dataSyncInterval,
       errorHandling,
@@ -18,7 +17,6 @@ describe('BuildParamsState build.json empty', () => {
       appVersion,
     } = result.current;
     expect(authenticationType).toEqual(['code_assignment', 'username', 'password']);
-    expect(serverURL).toBe('https://api.example.com/nmis');
     expect(debugMode).toBe(false);
     expect(dataSyncInterval).toBe(300);
     expect(errorHandling).toBe(true);

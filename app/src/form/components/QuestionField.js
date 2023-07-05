@@ -7,6 +7,7 @@ import {
   TypeOption,
   TypeText,
   TypeNumber,
+  TypeGeo,
 } from '../fields';
 import { useField } from 'formik';
 import { View, Text } from 'react-native';
@@ -70,6 +71,15 @@ const QuestionField = ({ keyform, field: questionField, setFieldValue, values, v
       case 'number':
         return (
           <TypeNumber
+            keyform={keyform}
+            onChange={handleOnChangeField}
+            values={values}
+            {...questionField}
+          />
+        );
+      case 'geo':
+        return (
+          <TypeGeo
             keyform={keyform}
             onChange={handleOnChangeField}
             values={values}

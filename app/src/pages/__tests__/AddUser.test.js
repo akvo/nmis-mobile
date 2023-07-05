@@ -8,14 +8,6 @@ import AddUser from '../AddUser';
 import { UserState } from '../../store';
 import { conn, query } from '../../database';
 
-jest.mock('@react-navigation/native', () => {
-  return {
-    useNavigation: () => ({
-      navigate: jest.fn(),
-    }),
-  };
-});
-
 jest.mock('expo-sqlite');
 
 jest.mock('expo-crypto');
