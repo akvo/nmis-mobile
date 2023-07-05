@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { View } from 'react-native';
 import { ListItem, Switch } from '@rneui/themed';
 import * as Crypto from 'expo-crypto';
@@ -11,9 +11,9 @@ import DialogForm from './DialogForm';
 const db = conn.init;
 
 const SettingsForm = ({ route }) => {
-  const [edit, setEdit] = React.useState(null);
-  const [list, setList] = React.useState([]);
-  const [showDialog, setShowDialog] = React.useState(false);
+  const [edit, setEdit] = useState(null);
+  const [list, setList] = useState([]);
+  const [showDialog, setShowDialog] = useState(false);
 
   const { serverURL, appVersion } = BuildParamsState.useState((s) => s);
   const { username, password, authenticationCode, useAuthenticationCode } = AuthState.useState(
@@ -27,7 +27,7 @@ const SettingsForm = ({ route }) => {
     UIState,
     UserState,
   };
-  const [settingsState, setSettingsState] = React.useState({
+  const [settingsState, setSettingsState] = useState({
     serverURL,
     username,
     password,
@@ -40,7 +40,7 @@ const SettingsForm = ({ route }) => {
     syncWifiOnly,
   });
 
-  const editState = React.useMemo(() => {
+  const editState = useMemo(() => {
     if (edit && edit?.key) {
       const [stateName, stateKey] = edit?.key?.split('.');
       return [store[stateName], stateKey];
@@ -136,17 +136,17 @@ const SettingsForm = ({ route }) => {
     conn.tx(db, insertQuery, []);
   };
 
-  const settingsID = React.useMemo(() => {
+  const settingsID = useMemo(() => {
     return route?.params?.id;
   }, [route]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const findConfig = config.find((c) => c?.id === settingsID);
     const fields = findConfig ? findConfig.fields : [];
     setList(fields);
   }, [settingsID]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const selectQuery = query.read('config', { id: 1 });
     conn.tx(db, selectQuery, [1]).then(({ rows }) => {
       if (rows.length) {
