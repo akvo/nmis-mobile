@@ -92,4 +92,10 @@ export const styles = StyleSheet.create({
     marginRight: -10,
     marginLeft: -10,
   },
+  inputGeoContainer: {
+    paddingHorizontal: 16,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 8,
+  },
 });
