@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef, useMemo } from 'react';
 import { BaseLayout } from '../components';
 import { ScrollView, View } from 'react-native';
 import { Formik } from 'formik';
@@ -10,17 +10,16 @@ import { transformForm } from './lib';
 // TODO:: Allow other not supported yet
 // TODO:: Repeat group not supported yet
 // TODO:: Cascade not supported yet
-// TODO:: Geo not supported yet
 
 const FormContainer = ({ forms, initialValues = {} }) => {
-  const formRef = React.useRef();
-  const [activeGroup, setActiveGroup] = React.useState(0);
+  const formRef = useRef();
+  const [activeGroup, setActiveGroup] = useState(0);
 
-  const formDefinition = React.useMemo(() => {
+  const formDefinition = useMemo(() => {
     return transformForm(forms);
   }, [forms]);
 
-  const currentGroup = React.useMemo(() => {
+  const currentGroup = useMemo(() => {
     return formDefinition.question_group.find((qg) => qg.groupIndex === activeGroup);
   }, [formDefinition, activeGroup]);
 

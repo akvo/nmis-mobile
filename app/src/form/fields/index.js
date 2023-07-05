@@ -5,3 +5,4 @@ export { default as TypeOption } from './TypeOption';
 export { default as TypeMultipleOption } from './TypeMultipleOption';
 export { default as TypeText } from './TypeText';
 export { default as TypeNumber } from './TypeNumber';
+export { default as TypeGeo } from './TypeGeo';
