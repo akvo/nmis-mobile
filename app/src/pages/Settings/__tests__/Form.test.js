@@ -49,18 +49,19 @@ describe('SettingsForm', () => {
     const [edit, setEdit] = result.current;
     const { serverURL } = buildState.current;
 
-    const serverUrlItem = getByTestId('settings-form-item-0');
-    fireEvent.press(serverUrlItem);
-    const serverConfig = {
-      id: 11,
+    const authCodeItem = getByTestId('settings-form-item-3');
+    fireEvent.press(authCodeItem);
+    const authCodeConfig = {
+      id: 14,
       type: 'text',
-      label: 'Server URL',
-      name: 'serverURL',
+      name: 'authenticationCode',
+      label: 'Auth Code',
       description: null,
-      key: 'BuildParamsState.serverURL',
+      key: 'AuthState.authenticationCode',
+      editable: true,
     };
     act(() => {
-      setEdit(serverConfig);
+      setEdit(authCodeConfig);
     });
 
     const dialogEl = getByTestId('settings-form-dialog');
@@ -68,17 +69,14 @@ describe('SettingsForm', () => {
     const inputEl = getByTestId('settings-form-input');
     expect(inputEl).toBeDefined();
 
-    const serverURLValue = 'http://127.0.0.1:19000';
-    fireEvent(inputEl, 'onChangeText', { value: serverURLValue });
+    const authCodeValue = 'test123';
+    fireEvent(inputEl, 'onChangeText', { value: authCodeValue });
 
     const okEl = getByTestId('settings-form-dialog-ok');
     expect(okEl).toBeDefined();
-    //    fireEvent.press(okEl);
 
-    // expect(serverURL).toEqual(serverURLValue);
-    //expect(handleOKPressMock).toHaveBeenCalled();
     const id = 1;
-    const updateQuery = query.update('config', { id }, { serverURL: serverURLValue });
+    const updateQuery = query.update('config', { id }, { authenticationCode: authCodeValue });
     const updateResultSet = await conn.tx(db, updateQuery, [id]);
     expect(updateResultSet).toEqual({ rowsAffected: 1 });
     expect(db.transaction).toHaveBeenCalled();
