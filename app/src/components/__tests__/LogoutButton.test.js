@@ -3,7 +3,7 @@ import { render, renderHook, fireEvent, act, waitFor } from '@testing-library/re
 import { useNavigation } from '@react-navigation/native';
 
 import LogoutButton from '../LogoutButton';
-import { AuthState } from '../../store';
+import { AuthState, UserState } from '../../store';
 import { conn, query } from '../../database';
 
 jest.mock('@react-navigation/native');
@@ -68,7 +68,7 @@ describe('LogoutButton', () => {
     });
   });
 
-  test('clear state and sessions on successfull logout', async () => {
+  test('clear state and all tables on successfull logout', async () => {
     const mockToken = 'Bearer mockToken';
     const mockPasscode = 'secret123';
     act(() => {
@@ -77,7 +77,7 @@ describe('LogoutButton', () => {
       });
     });
     const mockSelectSql = jest.fn((query, params, successCallback) => {
-      successCallback(null, { rows: { length: 0, _array: [] } });
+      successCallback(null, { rows: { length: 0, _array: [{ count: 0 }] } });
     });
     db.transaction.mockImplementation((transactionFunction) => {
       transactionFunction({
@@ -104,17 +104,28 @@ describe('LogoutButton', () => {
     await waitFor(async () => {
       const { result } = renderHook(() => AuthState.useState());
       const { token } = result.current;
-      const table = 'sessions';
-      const selectQuery = query.read(table);
-      const sessionRes = await conn.tx(db, selectQuery);
+      expect(token).toBe(null);
 
-      expect(token).toEqual(null);
-      expect(sessionRes.rows.length).toEqual(0);
-      expect(sessionRes.rows._array).toEqual([]);
+      const { result: userStateRef } = renderHook(() => UserState.useState());
+      const { id, name, password } = userStateRef.current;
+      expect(id).toBe(null);
+      expect(name).toBe(null);
+      expect(password).toBe('');
 
       const { result: navigationRef } = renderHook(() => useNavigation());
       const navigation = navigationRef.current;
       expect(navigation.navigate).toHaveBeenCalledWith('GetStarted');
+
+      // Make sure all tables has rows count: 0
+      const query = "SELECT name FROM sqlite_master WHERE type='table';";
+      conn.tx(db, query).then(({ rows }) => {
+        rows._array.forEach(({ name: tableName }) => {
+          const q = `SELECT COUNT(*) AS count FROM ${tableName}`;
+          conn.tx(db, q).then(({ rows: tableRows }) => {
+            expect(tableRows._array[0].count).toBe(0);
+          });
+        });
+      });
     });
   });
 });
