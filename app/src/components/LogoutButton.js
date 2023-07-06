@@ -25,8 +25,9 @@ const LogoutButton = () => {
       s.token = null;
     });
     UserState.update((s) => {
+      s.id = null;
       s.name = null;
-      s.password = null;
+      s.password = '';
     });
     setLoading(false);
     setVisible(false);
