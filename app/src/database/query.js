@@ -22,8 +22,8 @@ const read = (table, where = {}) => {
   return `SELECT * FROM ${table} ${conditionString};`;
 };
 
-const clear = (table) => {
-  return `DELETE FROM ${table};`;
+const clear = (tables = []) => {
+  return tables.map((t) => `DELETE FROM ${t};`);
 };
 
 const drop = (table) => {
