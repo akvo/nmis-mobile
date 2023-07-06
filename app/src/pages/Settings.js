@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
-import { ListItem } from '@rneui/themed';
-import { BaseLayout } from '../components';
+import { ListItem, Divider } from '@rneui/themed';
+import { BaseLayout, LogoutButton } from '../components';
 import { config } from './Settings/config';
 const Settings = ({ navigation }) => {
   const goToForm = (id) => {
@@ -22,6 +22,8 @@ const Settings = ({ navigation }) => {
               <ListItem.Chevron />
             </ListItem>
           ))}
+          <Divider width={8} color="#f9fafb" />
+          <LogoutButton />
         </View>
       </BaseLayout.Content>
     </BaseLayout>

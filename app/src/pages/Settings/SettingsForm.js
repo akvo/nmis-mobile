@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { View } from 'react-native';
 import { ListItem, Switch } from '@rneui/themed';
 import * as Crypto from 'expo-crypto';
@@ -11,25 +11,23 @@ import DialogForm from './DialogForm';
 const db = conn.init;
 
 const SettingsForm = ({ route }) => {
-  const [edit, setEdit] = React.useState(null);
-  const [list, setList] = React.useState([]);
-  const [showDialog, setShowDialog] = React.useState(false);
+  const [edit, setEdit] = useState(null);
+  const [list, setList] = useState([]);
+  const [showDialog, setShowDialog] = useState(false);
 
   const { serverURL, appVersion } = BuildParamsState.useState((s) => s);
-  const { username, password, authenticationCode, useAuthenticationCode } = AuthState.useState(
-    (s) => s,
-  );
+  const { password, authenticationCode, useAuthenticationCode } = AuthState.useState((s) => s);
   const { lang, isDarkMode, fontSize } = UIState.useState((s) => s);
-  const { syncInterval, syncWifiOnly } = UserState.useState((s) => s);
+  const { name, syncInterval, syncWifiOnly } = UserState.useState((s) => s);
   const store = {
     AuthState,
     BuildParamsState,
     UIState,
     UserState,
   };
-  const [settingsState, setSettingsState] = React.useState({
+  const [settingsState, setSettingsState] = useState({
     serverURL,
-    username,
+    name,
     password,
     authenticationCode,
     useAuthenticationCode,
@@ -40,7 +38,7 @@ const SettingsForm = ({ route }) => {
     syncWifiOnly,
   });
 
-  const editState = React.useMemo(() => {
+  const editState = useMemo(() => {
     if (edit && edit?.key) {
       const [stateName, stateKey] = edit?.key?.split('.');
       return [store[stateName], stateKey];
@@ -73,8 +71,8 @@ const SettingsForm = ({ route }) => {
       const updateQuery = query.update('config', { id }, { [field]: value });
       conn.tx(db, updateQuery, [id]);
     }
-    if (field === 'username') {
-      const updateQuery = query.update('users', { id }, { username: value });
+    if (field === 'name') {
+      const updateQuery = query.update('users', { id }, { name: value });
       conn.tx(db, updateQuery, [id]).catch((err) => {
         console.log('error', err);
       });
@@ -136,17 +134,17 @@ const SettingsForm = ({ route }) => {
     conn.tx(db, insertQuery, []);
   };
 
-  const settingsID = React.useMemo(() => {
+  const settingsID = useMemo(() => {
     return route?.params?.id;
   }, [route]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const findConfig = config.find((c) => c?.id === settingsID);
     const fields = findConfig ? findConfig.fields : [];
     setList(fields);
   }, [settingsID]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const selectQuery = query.read('config', { id: 1 });
     conn.tx(db, selectQuery, [1]).then(({ rows }) => {
       if (rows.length) {
@@ -167,7 +165,8 @@ const SettingsForm = ({ route }) => {
           {list.map((l, i) => {
             const switchValue =
               l.type === 'switch' && (settingsState[l.name] || false) ? true : false;
-            const listProps = l.type === 'switch' ? {} : { onPress: () => handleEditPress(l.id) };
+            const listProps =
+              l.editable && l.type !== 'switch' ? { onPress: () => handleEditPress(l.id) } : {};
             let subtitle =
               l.type === 'switch' || l.type === 'password'
                 ? l.description
