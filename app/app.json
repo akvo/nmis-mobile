@@ -20,7 +20,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.ifirmawan.nmismobile"
+      "package": "com.akvo.nmis"
     },
     "web": {
       "favicon": "./assets/favicon.png"
