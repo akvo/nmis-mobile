@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 
 import { BaseLayout, Image } from '../components';
 import { conn, query } from '../database';
-import { UserState, AuthState } from '../store';
+import { UserState } from '../store';
 
 db = conn.init;
 
@@ -98,9 +98,6 @@ const AddUser = ({ navigation }) => {
     formikChange('name')(value);
     UserState.update((s) => {
       s.name = value;
-    });
-    AuthState.update((s) => {
-      s.username = value;
     });
   };
 
