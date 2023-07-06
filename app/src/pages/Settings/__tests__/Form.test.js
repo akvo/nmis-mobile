@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { render } from 'react-native-testing-library';
 import { renderHook, fireEvent, act } from '@testing-library/react-native';
 import { route } from '@react-navigation/native';
-import SettingsForm from '../Form';
+import SettingsForm from '../SettingsForm';
 import { config } from '../config';
 import { BuildParamsState } from '../../../store';
 import { conn, query } from '../../../database';
