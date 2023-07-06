@@ -102,18 +102,14 @@ describe('conn.tx', () => {
   });
 
   test('should execute the truncate transaction successfully', async () => {
-    const table = 'users';
-    const truncateQuery = query.clear(table);
-    await conn.tx(db, truncateQuery);
+    const tables = ['users'];
+    const truncateQueries = query.clear(tables);
+    await conn.tx(db, truncateQueries);
 
-    expect(truncateQuery).toEqual('DELETE FROM users;');
+    const expectedQuery = 'DELETE FROM users;';
+    expect(truncateQueries).toEqual([expectedQuery]);
     expect(db.transaction).toHaveBeenCalled();
-    expect(mockExecuteSql).toHaveBeenCalledWith(
-      truncateQuery,
-      [],
-      expect.any(Function),
-      expect.any(Function),
-    );
+    expect(mockExecuteSql).toHaveBeenCalledWith(expectedQuery, [], expect.any(Function));
   });
 
   test('should execute the drop transaction successfully', async () => {
