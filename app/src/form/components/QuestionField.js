@@ -8,6 +8,7 @@ import {
   TypeText,
   TypeNumber,
   TypeGeo,
+  TypeCascade,
 } from '../fields';
 import { useField } from 'formik';
 import { View, Text } from 'react-native';
@@ -80,6 +81,15 @@ const QuestionField = ({ keyform, field: questionField, setFieldValue, values, v
       case 'geo':
         return (
           <TypeGeo
+            keyform={keyform}
+            onChange={handleOnChangeField}
+            values={values}
+            {...questionField}
+          />
+        );
+      case 'cascade':
+        return (
+          <TypeCascade
             keyform={keyform}
             onChange={handleOnChangeField}
             values={values}
