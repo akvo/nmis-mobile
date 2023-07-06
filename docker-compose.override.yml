@@ -6,6 +6,16 @@ services:
       - BACKEND_IP_ADDRESS=http://${IP_ADDRESS}:8080
     volumes:
       - nmis-mobile-sync:/app/node_modules:nocopy
+  builder:
+    image: timbru31/java-node
+    volumes:
+      - ./app:/app:delegated
+      - ~/.android_sdk:/root/android_sdk:delegated
+      - nmis-mobile-sync:/app/node_modules:nocopy
+    working_dir: /app/android
+    command: ["./gradlew","build"]
+    environment:
+      - ANDROID_HOME=/root/android_sdk
   backend:
     image: nginx:1.25.1-alpine
     ports:
