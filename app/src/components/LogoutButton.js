@@ -16,16 +16,9 @@ const LogoutButton = () => {
     setVisible(false);
   };
 
-  const handleError = () => {
-    if (Platform.OS === 'android') {
-      ToastAndroid.show('Logout Failed: Please try again later', ToastAndroid.LONG);
-    }
-  };
-
   const handleYesPress = () => {
     const table = 'sessions';
     const clearQuery = query.clear(table);
-    console.log('clear', clearQuery);
     setLoading(true);
     conn
       .tx(db, clearQuery)
@@ -33,12 +26,11 @@ const LogoutButton = () => {
         AuthState.update((s) => {
           s.token = null;
         });
-        navigation.navigate('GetStarted');
         setLoading(false);
         setVisible(false);
+        navigation.navigate('GetStarted');
       })
       .catch(() => {
-        handleError();
         setLoading(false);
         setVisible(false);
       });
