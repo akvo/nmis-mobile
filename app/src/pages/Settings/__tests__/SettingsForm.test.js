@@ -39,15 +39,11 @@ describe('SettingsForm', () => {
   test('Storing data to state and database', async () => {
     const params = { id: 1, name: 'Server' };
     route.params = params;
-    const findConfig = config.find((c) => c?.id === params.id);
 
-    const handleOKPressMock = jest.fn();
-    const { unmount, getByText, getByTestId } = render(<SettingsForm route={route} />);
+    const { unmount, getByTestId } = render(<SettingsForm route={route} />);
 
     const { result } = renderHook(() => useState(null));
-    const { result: buildState } = renderHook(() => BuildParamsState.useState());
     const [edit, setEdit] = result.current;
-    const { serverURL } = buildState.current;
 
     const authCodeItem = getByTestId('settings-form-item-3');
     fireEvent.press(authCodeItem);

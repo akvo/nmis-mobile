@@ -16,11 +16,9 @@ const SettingsForm = ({ route }) => {
   const [showDialog, setShowDialog] = useState(false);
 
   const { serverURL, appVersion } = BuildParamsState.useState((s) => s);
-  const { username, password, authenticationCode, useAuthenticationCode } = AuthState.useState(
-    (s) => s,
-  );
+  const { password, authenticationCode, useAuthenticationCode } = AuthState.useState((s) => s);
   const { lang, isDarkMode, fontSize } = UIState.useState((s) => s);
-  const { syncInterval, syncWifiOnly } = UserState.useState((s) => s);
+  const { name, syncInterval, syncWifiOnly } = UserState.useState((s) => s);
   const store = {
     AuthState,
     BuildParamsState,
@@ -29,7 +27,7 @@ const SettingsForm = ({ route }) => {
   };
   const [settingsState, setSettingsState] = useState({
     serverURL,
-    username,
+    name,
     password,
     authenticationCode,
     useAuthenticationCode,
@@ -73,8 +71,8 @@ const SettingsForm = ({ route }) => {
       const updateQuery = query.update('config', { id }, { [field]: value });
       conn.tx(db, updateQuery, [id]);
     }
-    if (field === 'username') {
-      const updateQuery = query.update('users', { id }, { username: value });
+    if (field === 'name') {
+      const updateQuery = query.update('users', { id }, { name: value });
       conn.tx(db, updateQuery, [id]).catch((err) => {
         console.log('error', err);
       });

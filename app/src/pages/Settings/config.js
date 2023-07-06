@@ -16,10 +16,10 @@ export const config = [
       {
         id: 12,
         type: 'text',
-        name: 'username',
+        name: 'name',
         label: 'Username',
         description: null,
-        key: 'AuthState.username',
+        key: 'UserState.name',
         editable: true,
       },
       {
