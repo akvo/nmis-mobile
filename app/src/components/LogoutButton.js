@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Platform, ToastAndroid } from 'react-native';
 import { ListItem, Dialog, Text, Icon } from '@rneui/themed';
 import { useNavigation } from '@react-navigation/native';
-import { AuthState } from '../store';
+import { AuthState, UserState } from '../store';
 import { conn, query } from '../database';
 
 const db = conn.init;
@@ -16,24 +16,21 @@ const LogoutButton = () => {
     setVisible(false);
   };
 
-  const handleYesPress = () => {
-    const table = 'sessions';
-    const clearQuery = query.clear(table);
+  const handleYesPress = async () => {
+    const tables = ['sessions', 'users'];
+    const clearQuery = query.clear(tables);
     setLoading(true);
-    conn
-      .tx(db, clearQuery)
-      .then(() => {
-        AuthState.update((s) => {
-          s.token = null;
-        });
-        setLoading(false);
-        setVisible(false);
-        navigation.navigate('GetStarted');
-      })
-      .catch(() => {
-        setLoading(false);
-        setVisible(false);
-      });
+    await conn.tx(db, clearQuery);
+    AuthState.update((s) => {
+      s.token = null;
+    });
+    UserState.update((s) => {
+      s.name = null;
+      s.password = null;
+    });
+    setLoading(false);
+    setVisible(false);
+    navigation.navigate('GetStarted');
   };
 
   return (
