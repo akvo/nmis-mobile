@@ -17,7 +17,7 @@ const LogoutButton = () => {
   };
 
   const handleYesPress = async () => {
-    const tables = ['sessions', 'users'];
+    const tables = ['sessions', 'users', 'forms', 'config', 'datapoints'];
     const clearQuery = query.clear(tables);
     setLoading(true);
     await conn.tx(db, clearQuery);
