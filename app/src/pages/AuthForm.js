@@ -55,6 +55,7 @@ const AuthForm = ({ navigation }) => {
           const lastSession = await crudSessions.selectLastSession();
           if (!lastSession && lastSession?.token !== bearerToken) {
             console.info('Saving tokens...');
+            api.setToken(bearerToken);
             await crudSessions.addSession({ token: bearerToken, passcode });
           }
           // save forms

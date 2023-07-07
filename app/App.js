@@ -6,6 +6,7 @@ import Navigation from './src/navigation';
 import { conn, query, tables } from './src/database';
 import { UIState, AuthState, UserState } from './src/store';
 import { crudSessions, crudUsers } from './src/database/crud';
+import { api } from './src/lib';
 
 const db = conn.init;
 
@@ -16,6 +17,7 @@ const App = () => {
         return session;
       }
       console.info('Session =>', session);
+      api.setToken(session.token)
       // check users exist
       crudUsers
         .selectUsers({ count: false })

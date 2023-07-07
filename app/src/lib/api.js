@@ -1,8 +1,7 @@
 import axios from 'axios';
-import defaultBuildParams from '../build.js';
 
 export const config = {
-  baseURL: defaultBuildParams?.serverURL, // server URL from setting
+  baseURL: null,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -27,6 +26,9 @@ const API = () => {
     setToken: (token) => {
       api.token = token;
     },
+    setServerURL: (serverURL) => {
+      api.baseURL = serverURL
+    }
   };
 };
 
