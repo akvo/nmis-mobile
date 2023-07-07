@@ -32,8 +32,9 @@ jobs:
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: 📦 Install dependencies
-        working-directory: ./app
-        run: npm install
+        run: |
+          cd ./app/
+          npm install
 
       - name: 🚀 Release to Expo Dev
         working-directory: ./app
