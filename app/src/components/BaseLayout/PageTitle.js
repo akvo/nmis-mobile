@@ -8,7 +8,13 @@ const BackButton = ({ navigation }) => {
     navigation.goBack();
   };
 
-  const hasPreviousScreen = navigation.canGoBack();
+  const hasPreviousScreen = () => {
+    try {
+      return navigation.canGoBack();
+    } catch {
+      return false;
+    }
+  };
 
   return hasPreviousScreen ? (
     <Button type="clear" onPress={handleGoBackPress} testID="arrow-back-button">
