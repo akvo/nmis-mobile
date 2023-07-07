@@ -27,8 +27,8 @@ const API = () => {
       api.token = token;
     },
     setServerURL: (serverURL) => {
-      api.baseURL = serverURL
-    }
+      api.baseURL = serverURL;
+    },
   };
 };
 

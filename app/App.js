@@ -5,7 +5,7 @@ import NetInfo from '@react-native-community/netinfo';
 import Navigation from './src/navigation';
 import { conn, query, tables } from './src/database';
 import { UIState, AuthState, UserState } from './src/store';
-import { crudSessions, crudUsers } from './src/database/crud';
+import { crudSessions, crudUsers, crudConfig } from './src/database/crud';
 import { api } from './src/lib';
 
 const db = conn.init;
@@ -17,7 +17,7 @@ const App = () => {
         return session;
       }
       console.info('Session =>', session);
-      api.setToken(session.token)
+      api.setToken(session.token);
       // check users exist
       crudUsers
         .selectUsers({ count: false })
@@ -49,15 +49,26 @@ const App = () => {
     });
   };
 
+  const handleInitConfig = async () => {
+    const configExist = await crudConfig.getConfig();
+    if (configExist && configExist?.id) {
+      const initConfig = await crudConfig.addConfig();
+      console.log('Config created', initConfig);
+    }
+  };
+
   React.useEffect(() => {
     const queries = tables.map((t) => {
       const queryString = query.initialQuery(t.name, t.fields);
       return conn.tx(db, queryString);
     });
-    Promise.all(queries).then(() => {
-      handleCheckSession();
-    });
-    Promise.all(queries);
+    Promise.all(queries)
+      .then(() => {
+        handleInitConfig();
+      })
+      .then(() => {
+        handleCheckSession();
+      });
   }, []);
 
   React.useEffect(() => {
