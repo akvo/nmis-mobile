@@ -5,6 +5,7 @@ export const tables = [
       id: 'INTEGER PRIMARY KEY NOT NULL',
       name: 'TEXT',
       password: 'TEXT',
+      active: 'TINYINT',
     },
   },
   {
