@@ -21,11 +21,9 @@ jobs:
         uses: actions/checkout@v3
 
       - name: 🏗  Setup node
-        working-directory: ./app
         uses: actions/setup-node@v3
         with:
           node-version: 18.x
-          cache: npm
 
       - name: 🏗  Setup EAS
         working-directory: ./app
