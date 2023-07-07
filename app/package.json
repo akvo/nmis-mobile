@@ -9,7 +9,8 @@
     "web": "expo start --web",
     "test": "jest --coverage",
     "prettier": "prettier --check .",
-    "prettier-write": "prettier --write ."
+    "prettier-write": "prettier --write .",
+    "eas": "eas"
   },
   "dependencies": {
     "@react-native-community/datetimepicker": "6.7.3",
@@ -51,6 +52,7 @@
     "babel-jest": "^29.5.0",
     "babel-preset-react-native": "^4.0.1",
     "coveralls": "^3.1.1",
+    "eas-cli": "^3.15.0",
     "eslint": "^8.42.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^8.8.0",

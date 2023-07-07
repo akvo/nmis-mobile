@@ -6,6 +6,7 @@ services:
       - BACKEND_IP_ADDRESS=http://${IP_ADDRESS}:8080
     volumes:
       - nmis-mobile-sync:/app/node_modules:nocopy
+      - ./.git:/app/.git:ro
   backend:
     image: nginx:1.25.1-alpine
     ports:
