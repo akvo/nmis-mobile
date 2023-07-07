@@ -45,15 +45,15 @@ describe('SettingsForm', () => {
     const { result } = renderHook(() => useState(null));
     const [edit, setEdit] = result.current;
 
-    const authCodeItem = getByTestId('settings-form-item-3');
+    const authCodeItem = getByTestId('settings-form-item-2');
     fireEvent.press(authCodeItem);
     const authCodeConfig = {
-      id: 14,
-      type: 'text',
-      name: 'authenticationCode',
-      label: 'Auth Code',
-      description: null,
-      key: 'AuthState.authenticationCode',
+      id: 31,
+      type: 'number',
+      name: 'syncInterval',
+      label: 'Sync interval',
+      description: 'Sync interval in minutes',
+      key: 'UserState.syncInterval',
       editable: true,
     };
     act(() => {
@@ -65,7 +65,7 @@ describe('SettingsForm', () => {
     const inputEl = getByTestId('settings-form-input');
     expect(inputEl).toBeDefined();
 
-    const authCodeValue = 'test123';
+    const authCodeValue = 500;
     fireEvent(inputEl, 'onChangeText', { value: authCodeValue });
 
     const okEl = getByTestId('settings-form-dialog-ok');
