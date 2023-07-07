@@ -5,7 +5,7 @@ import { Input, CheckBox, Button, Text, Dialog } from '@rneui/themed';
 import { CenterLayout, Image } from '../components';
 import { api } from '../lib';
 import { AuthState, UserState, UIState } from '../store';
-import { crudSessions, crudForms, crudUsers } from '../database/crud';
+import { crudSessions, crudForms, crudUsers, crudConfig } from '../database/crud';
 
 const ToggleEye = ({ hidden, onPress }) => {
   const iconName = hidden ? 'eye' : 'eye-off';
@@ -55,8 +55,9 @@ const AuthForm = ({ navigation }) => {
           const lastSession = await crudSessions.selectLastSession();
           if (!lastSession && lastSession?.token !== bearerToken) {
             console.info('Saving tokens...');
-            api.setToken(bearerToken);
             await crudSessions.addSession({ token: bearerToken, passcode });
+            api.setToken(bearerToken);
+            await crudConfig.updateConfig({ authenticationCode: passcode });
           }
           // save forms
           await data.formsUrl.forEach(async (form) => {

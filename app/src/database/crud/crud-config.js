@@ -17,9 +17,9 @@ const configQuery = () => {
       const insertQuery = query.insert('config', {
         id,
         appVersion: defaultBuildParams.appVersion,
-        authenticationCode: '',
-        serverURL: '',
-        ...data
+        authenticationCode: 'code',
+        serverURL: 'url',
+        ...data,
       });
       return await conn.tx(db, insertQuery, []);
     },

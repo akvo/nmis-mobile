@@ -4,13 +4,16 @@ import NetInfo from '@react-native-community/netinfo';
 
 import Navigation from './src/navigation';
 import { conn, query, tables } from './src/database';
-import { UIState, AuthState, UserState } from './src/store';
+import { UIState, AuthState, UserState, BuildParamsState } from './src/store';
 import { crudSessions, crudUsers, crudConfig } from './src/database/crud';
 import { api } from './src/lib';
 
 const db = conn.init;
+const serverURLNotDefined = 'http://:8080';
 
 const App = () => {
+  const serverURLState = BuildParamsState.useState((s) => s.serverURL);
+
   const handleCheckSession = () => {
     crudSessions.selectLastSession().then((session) => {
       if (!session) {
@@ -51,8 +54,13 @@ const App = () => {
 
   const handleInitConfig = async () => {
     const configExist = await crudConfig.getConfig();
-    if (configExist && configExist?.id) {
-      const initConfig = await crudConfig.addConfig();
+    if (!configExist) {
+      let serverURL = 'url';
+      if (serverURLState !== serverURLNotDefined) {
+        serverURL = serverURLState;
+        api.setServerURL(serverURL);
+      }
+      const initConfig = await crudConfig.addConfig({ serverURL });
       console.log('Config created', initConfig);
     }
   };

@@ -9,12 +9,19 @@ export const config = {
 
 const API = () => {
   const getConfig = () => {
+    let current = config;
+    if (api.baseURL) {
+      current = {
+        ...config,
+        baseURL: api.baseURL,
+      };
+    }
     return api?.token
       ? {
-          ...config,
+          ...current,
           headers: { ...config.headers, Authorization: `Bearer ${api.token}` },
         }
-      : config;
+      : current;
   };
   return {
     get: (url, config = {}) => axios({ url, ...getConfig(), ...config }),
