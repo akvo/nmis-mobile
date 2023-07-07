@@ -4,31 +4,36 @@ import NetInfo from '@react-native-community/netinfo';
 
 import Navigation from './src/navigation';
 import { conn, query, tables } from './src/database';
-import { UIState, AuthState, UserState } from './src/store';
-import { crudSessions, crudUsers } from './src/database/crud';
+import { UIState, AuthState, UserState, BuildParamsState } from './src/store';
+import { crudSessions, crudUsers, crudConfig } from './src/database/crud';
+import { api } from './src/lib';
 
 const db = conn.init;
+const serverURLNotDefined = 'http://:8080';
 
 const App = () => {
+  const serverURLState = BuildParamsState.useState((s) => s.serverURL);
+
   const handleCheckSession = () => {
     crudSessions.selectLastSession().then((session) => {
       if (!session) {
         return session;
       }
       console.info('Session =>', session);
+      api.setToken(session.token);
       // check users exist
       crudUsers
-        .selectUsers({ count: false })
-        .then((users) => {
-          console.info('Users =>', users);
+        .getActiveUser()
+        .then((user) => {
+          console.info('Users =>', user);
           let page = null;
-          if (session && users?.length) {
+          if (session && user?.id) {
             page = 'Home';
           }
-          if (session && !users?.length) {
+          if (session && (!user || !user?.id)) {
             page = 'AddUser';
           }
-          return { user: users?.[users?.length - 1], page };
+          return { user, page };
         })
         .then(({ user, page }) => {
           UserState.update((s) => {
@@ -47,15 +52,31 @@ const App = () => {
     });
   };
 
+  const handleInitConfig = async () => {
+    const configExist = await crudConfig.getConfig();
+    if (!configExist) {
+      let serverURL = 'url';
+      if (serverURLState !== serverURLNotDefined) {
+        serverURL = serverURLState;
+        api.setServerURL(serverURL);
+      }
+      const initConfig = await crudConfig.addConfig({ serverURL });
+      console.log('Config created', initConfig);
+    }
+  };
+
   React.useEffect(() => {
     const queries = tables.map((t) => {
       const queryString = query.initialQuery(t.name, t.fields);
       return conn.tx(db, queryString);
     });
-    Promise.all(queries).then(() => {
-      handleCheckSession();
-    });
-    Promise.all(queries);
+    Promise.all(queries)
+      .then(() => {
+        handleInitConfig();
+      })
+      .then(() => {
+        handleCheckSession();
+      });
   }, []);
 
   React.useEffect(() => {

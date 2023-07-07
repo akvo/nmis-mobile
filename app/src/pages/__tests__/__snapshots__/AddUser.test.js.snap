@@ -50,7 +50,78 @@ exports[`AddUserPage renders correctly 1`] = `
             "flex": 1,
           }
         }
-      />
+      >
+        <View
+          style={
+            [
+              {
+                "overflow": "hidden",
+              },
+              {
+                "borderRadius": 2,
+              },
+              undefined,
+              false,
+            ]
+          }
+          testID="RNE_BUTTON_WRAPPER"
+        >
+          <View
+            accessibilityRole="button"
+            accessibilityState={
+              {
+                "busy": false,
+                "checked": undefined,
+                "disabled": false,
+                "expanded": undefined,
+                "selected": undefined,
+              }
+            }
+            accessibilityValue={
+              {
+                "max": undefined,
+                "min": undefined,
+                "now": undefined,
+                "text": undefined,
+              }
+            }
+            accessible={true}
+            collapsable={false}
+            focusable={true}
+            onClick={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              {
+                "opacity": 1,
+              }
+            }
+            testID="arrow-back-button"
+          >
+            <View
+              style={
+                {
+                  "alignItems": "center",
+                  "backgroundColor": "transparent",
+                  "borderColor": "#2089dc",
+                  "borderRadius": 2,
+                  "borderWidth": 0,
+                  "flexDirection": "row",
+                  "justifyContent": "center",
+                  "padding": 8,
+                  "paddingHorizontal": 10,
+                }
+              }
+            >
+              <Text />
+            </View>
+          </View>
+        </View>
+      </View>
       <View
         style={
           {
@@ -190,124 +261,6 @@ exports[`AddUserPage renders correctly 1`] = `
                 "flex": 1,
                 "justifyContent": "center",
               },
-              {
-                "alignItems": "center",
-                "flex": 1,
-                "justifyContent": "center",
-              },
-            ]
-          }
-          theme={
-            {
-              "colors": {
-                "background": "#ffffff",
-                "black": "#242424",
-                "disabled": "hsl(208, 8%, 90%)",
-                "divider": "#bcbbc1",
-                "error": "#ff190c",
-                "grey0": "#393e42",
-                "grey1": "#43484d",
-                "grey2": "#5e6977",
-                "grey3": "#86939e",
-                "grey4": "#bdc6cf",
-                "grey5": "#e1e8ee",
-                "greyOutline": "#bbb",
-                "platform": {
-                  "android": {
-                    "error": "#f44336",
-                    "grey": "rgba(0, 0, 0, 0.54)",
-                    "primary": "#2196f3",
-                    "searchBg": "#dcdce1",
-                    "secondary": "#9C27B0",
-                    "success": "#4caf50",
-                    "warning": "#ffeb3b",
-                  },
-                  "default": {
-                    "error": "#ff3b30",
-                    "grey": "#7d7d7d",
-                    "primary": "#007aff",
-                    "searchBg": "#dcdce1",
-                    "secondary": "#5856d6",
-                    "success": "#4cd964",
-                    "warning": "#ffcc00",
-                  },
-                  "ios": {
-                    "error": "#ff3b30",
-                    "grey": "#7d7d7d",
-                    "primary": "#007aff",
-                    "searchBg": "#dcdce1",
-                    "secondary": "#5856d6",
-                    "success": "#4cd964",
-                    "warning": "#ffcc00",
-                  },
-                  "web": {
-                    "error": "#ff190c",
-                    "grey": "#393e42",
-                    "primary": "#2089dc",
-                    "searchBg": "#303337",
-                    "secondary": "#ca71eb",
-                    "success": "#52c41a",
-                    "warning": "#faad14",
-                  },
-                },
-                "primary": "#2089dc",
-                "searchBg": "#303337",
-                "secondary": "#ad1457",
-                "success": "#52c41a",
-                "warning": "#faad14",
-                "white": "#ffffff",
-              },
-              "spacing": {
-                "lg": 12,
-                "md": 8,
-                "sm": 4,
-                "xl": 24,
-                "xs": 2,
-              },
-            }
-          }
-        >
-          <View
-            style={
-              {
-                "backgroundColor": "#e5e7eb",
-                "borderRadius": 4,
-                "height": 110,
-                "width": 110,
-              }
-            }
-            testID="image-skeleton"
-          />
-        </View>
-      </View>
-    </View>
-    <View
-      style={
-        {
-          "width": "100%",
-        }
-      }
-    >
-      <View
-        style={
-          {
-            "alignItems": "center",
-            "backgroundColor": "#ffffff",
-            "borderColor": "#bcbbc1",
-            "flexDirection": "row",
-            "padding": 14,
-          }
-        }
-        testID="RNE__LISTITEM__padView"
-      >
-        <View
-          style={
-            [
-              {
-                "alignItems": "flex-start",
-                "flex": 1,
-                "justifyContent": "center",
-              },
               undefined,
             ]
           }
@@ -392,7 +345,18 @@ exports[`AddUserPage renders correctly 1`] = `
             }
             testID="listItemTitle"
           >
-            Username
+            Username 
+            <Text
+              accessibilityRole="text"
+              color="#ff0000"
+              style={
+                {
+                  "color": "#242424",
+                }
+              }
+            >
+              *
+            </Text>
           </Text>
           <View
             style={
@@ -421,6 +385,7 @@ exports[`AddUserPage renders correctly 1`] = `
             >
               <TextInput
                 editable={true}
+                name="name"
                 onChangeText={[Function]}
                 placeholder="Username"
                 placeholderTextColor="#86939e"
@@ -434,7 +399,7 @@ exports[`AddUserPage renders correctly 1`] = `
                 }
                 testID="input-name"
                 underlineColorAndroid="transparent"
-                value=""
+                value={null}
               />
             </View>
             <Text
@@ -774,6 +739,7 @@ exports[`AddUserPage renders correctly 1`] = `
                 }
                 testID="input-confirm-password"
                 underlineColorAndroid="transparent"
+                value={null}
               />
             </View>
             <Text

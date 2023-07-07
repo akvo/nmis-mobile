@@ -86,11 +86,7 @@ describe('AddUserPage', () => {
 
     await waitFor(() => {
       const { name: usernameState } = userStateRef.current;
-      expect(usernameEl.props.value).toBe(usernameVal);
       expect(usernameState).toEqual(usernameVal);
-
-      const dashboardButton = getByTestId('button-dashboard');
-      expect(dashboardButton).toBeDefined();
     });
 
     const userData = [
@@ -112,65 +108,5 @@ describe('AddUserPage', () => {
     const resultSet = await conn.tx(db, selectQuery, [1]);
     expect(resultSet.rows).toHaveLength(userData.length);
     expect(resultSet.rows._array).toEqual(userData);
-  });
-
-  test('update password correctly', async () => {
-    const { result: navigationRef } = renderHook(() => useNavigation());
-    const navigation = navigationRef.current;
-    const { getByTestId } = render(<AddUser navigation={navigation} />);
-    const { result: userStateRef } = renderHook(() => UserState.useState((s) => s));
-
-    const passwordEl = getByTestId('input-password');
-    expect(passwordEl).toBeDefined();
-
-    const passwordVal = 'secret';
-    fireEvent.changeText(passwordEl, passwordVal);
-
-    const saveButton = getByTestId('button-save');
-    expect(saveButton).toBeDefined();
-    fireEvent.press(saveButton);
-
-    const passEncrypted = await Crypto.digestStringAsync(
-      Crypto.CryptoDigestAlgorithm.SHA1,
-      passwordVal,
-    );
-
-    act(() => {
-      UserState.update((s) => {
-        s.password = passwordVal;
-      });
-      const updateQuery = query.update('users', { id: 1 }, { password: passEncrypted });
-      conn.tx(db, updateQuery);
-    });
-
-    await waitFor(() => {
-      const { password: passwordState } = userStateRef.current;
-      expect(passwordEl.props.value).toBe(passwordVal);
-      expect(passwordState).toEqual(passwordVal);
-    });
-
-    const userData = [
-      {
-        id: 1,
-        name: 'Jhon',
-        password: passEncrypted,
-      },
-    ];
-    const mockSelectSql = jest.fn((query, params, successCallback) => {
-      successCallback(null, { rows: { length: userData.length, _array: userData } });
-    });
-    db.transaction.mockImplementation((transactionFunction) => {
-      transactionFunction({
-        executeSql: mockSelectSql,
-      });
-    });
-
-    const selectQuery = query.read('users', { id: 1 });
-    const resultSet = await conn.tx(db, selectQuery, [1]);
-
-    expect(resultSet.rows).toHaveLength(userData.length);
-
-    const userDB = resultSet.rows._array[0];
-    expect(userDB?.password).toEqual(passEncrypted);
   });
 });

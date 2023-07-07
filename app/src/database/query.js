@@ -22,12 +22,16 @@ const read = (table, where = {}) => {
   return `SELECT * FROM ${table} ${conditionString};`;
 };
 
-const clear = (table) => {
-  return `DELETE FROM ${table};`;
+const clear = (tables = []) => {
+  return tables.map((t) => `DELETE FROM ${t};`);
 };
 
 const drop = (table) => {
   return `DROP TABLE IF EXISTS ${table};`;
+};
+
+const count = (table) => {
+  return `SELECT COUNT(*) AS count FROM ${table}`;
 };
 
 const initialQuery = (tableName, columns) => {
@@ -41,5 +45,6 @@ export const query = {
   read,
   clear,
   drop,
+  count,
   initialQuery,
 };

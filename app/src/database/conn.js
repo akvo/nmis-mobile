@@ -23,17 +23,27 @@ const tx = (db, query, params = []) => {
   return new Promise((resolve, reject) => {
     db.transaction(
       (transaction) => {
-        transaction.executeSql(
-          query,
-          params,
-          (_, resultSet) => {
-            resolve(resultSet);
-          },
-          (_, error) => {
-            reject(error);
-            return false; // Rollback the transaction
-          },
-        );
+        if (Array.isArray(query)) {
+          const results = [];
+          query.forEach(async (q) => {
+            transaction.executeSql(q, params, (_, resultSet) => {
+              results.push(resultSet); // Store the result set in the array
+            });
+          });
+          resolve(results);
+        } else {
+          transaction.executeSql(
+            query,
+            params,
+            (_, resultSet) => {
+              resolve(resultSet);
+            },
+            (_, error) => {
+              reject(error);
+              return false; // Rollback the transaction
+            },
+          );
+        }
       },
       (error) => {
         reject(error);

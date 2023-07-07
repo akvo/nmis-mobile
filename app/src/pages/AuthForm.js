@@ -5,7 +5,7 @@ import { Input, CheckBox, Button, Text, Dialog } from '@rneui/themed';
 import { CenterLayout, Image } from '../components';
 import { api } from '../lib';
 import { AuthState, UserState, UIState } from '../store';
-import { crudSessions, crudForms, crudUsers } from '../database/crud';
+import { crudSessions, crudForms, crudUsers, crudConfig } from '../database/crud';
 
 const ToggleEye = ({ hidden, onPress }) => {
   const iconName = hidden ? 'eye' : 'eye-off';
@@ -56,31 +56,32 @@ const AuthForm = ({ navigation }) => {
           if (!lastSession && lastSession?.token !== bearerToken) {
             console.info('Saving tokens...');
             await crudSessions.addSession({ token: bearerToken, passcode });
+            api.setToken(bearerToken);
+            await crudConfig.updateConfig({ authenticationCode: passcode });
           }
           // save forms
           await data.formsUrl.forEach(async (form) => {
             // Fetch form detail
             const formRes = await api.get(form.url);
-            console.info('Saving Forms...', form.id);
-            await crudForms.addFormsIfNotExist({ ...form, formJSON: formRes?.data });
+            const savedForm = await crudForms.addForm({ ...form, formJSON: formRes?.data });
+            console.info('Saved Forms...', form.id, savedForm);
           });
           // check users exist
-          const users = await crudUsers.selectUsers();
+          const activeUser = await crudUsers.getActiveUser();
           // update auth state
           AuthState.update((s) => {
             s.authenticationCode = passcode;
             s.token = bearerToken;
           });
-          if (!users?.length) {
+          if (!activeUser || !activeUser?.id) {
             goTo('AddUser');
             return;
           }
           // update user state
-          const user = users?.[users?.length - 1];
           UserState.update((s) => {
-            s.id = user.id;
-            s.name = user.name;
-            s.password = user.password;
+            s.id = activeUser.id;
+            s.name = activeUser.name;
+            s.password = activeUser.password;
           });
           // go to home page (form list)
           goTo('Home');

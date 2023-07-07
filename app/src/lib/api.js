@@ -1,8 +1,7 @@
 import axios from 'axios';
-import defaultBuildParams from '../build.js';
 
 export const config = {
-  baseURL: defaultBuildParams?.serverURL, // server URL from setting
+  baseURL: null,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -10,12 +9,19 @@ export const config = {
 
 const API = () => {
   const getConfig = () => {
+    let current = config;
+    if (api.baseURL) {
+      current = {
+        ...config,
+        baseURL: api.baseURL,
+      };
+    }
     return api?.token
       ? {
-          ...config,
+          ...current,
           headers: { ...config.headers, Authorization: `Bearer ${api.token}` },
         }
-      : config;
+      : current;
   };
   return {
     get: (url, config = {}) => axios({ url, ...getConfig(), ...config }),
@@ -26,6 +32,9 @@ const API = () => {
     delete: (url) => axios({ url, method: 'DELETE', ...getConfig() }),
     setToken: (token) => {
       api.token = token;
+    },
+    setServerURL: (serverURL) => {
+      api.baseURL = serverURL;
     },
   };
 };
