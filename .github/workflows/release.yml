@@ -38,11 +38,13 @@ jobs:
       - name: 🚀 Release to Expo Dev
         working-directory: ./app
         run: |
-          npm run aes:release > output.log 2>&1 &
-          tail -f output.log | while read line; do
-            echo "$line"
-            if [[ "$line" == *"Input is required, but stdin is not readable."* ]]; then
-              pkill -P $$ tail
-              break
-            fi
+          output=$(npm run aes:release)
+          apk_url=$(echo "$output" | grep -o "https://expo.dev/artifacts/eas/.*\.apk")
+          echo "APK URL: $apk_url"
+          while [[ -z $apk_url ]]; do
+            sleep 10
+            output=$(npm run aes:release)
+            apk_url=$(echo "$output" | grep -o "https://expo.dev/artifacts/eas/.*\.apk")
+            echo "APK URL: $apk_url"
           done
+          echo "APK URL found: $apk_url"
