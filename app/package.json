@@ -8,6 +8,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "test": "jest --coverage",
+    "test:watch": "jest --watch",
     "prettier": "prettier --check .",
     "prettier-write": "prettier --write .",
     "eas": "eas",
