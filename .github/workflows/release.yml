@@ -26,7 +26,6 @@ jobs:
           node-version: 18.x
 
       - name: 🏗  Setup EAS
-        working-directory: ./app
         uses: expo/expo-github-action@v8
         with:
           eas-version: latest
