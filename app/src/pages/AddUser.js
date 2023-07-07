@@ -1,45 +1,34 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import { View, ToastAndroid, Platform } from 'react-native';
-import { ListItem, Button, Input } from '@rneui/themed';
+import { ListItem, Button, Input, Text } from '@rneui/themed';
 import { Formik, ErrorMessage } from 'formik';
 import * as Crypto from 'expo-crypto';
 import * as Yup from 'yup';
+import Icon from 'react-native-vector-icons/Ionicons';
 
-import { BaseLayout, Image } from '../components';
+import { BaseLayout } from '../components';
 import { conn, query } from '../database';
 import { UserState } from '../store';
 
 db = conn.init;
 
-const DEFAULT_UID = 1;
-
 const AddUser = ({ navigation }) => {
-  const [loading, setLoading] = React.useState(false);
-  const { id: userID, name, password } = UserState.useState((s) => s);
+  const [loading, setLoading] = useState(false);
+  const formRef = useRef();
 
-  const goToHome = () => {
-    navigation.navigate('Home');
+  const goToUsers = () => {
+    navigation.navigate('Users');
   };
 
-  const handleUpdateDB = (id, data) => {
-    const updateQuery = query.update('users', { id }, data);
-    conn
-      .tx(db, updateQuery, [id])
-      .then(() => {
-        UserState.update((s) => {
-          s.id = id;
-        });
-        if (Platform.OS === 'android') {
-          ToastAndroid.show('Success!', ToastAndroid.SHORT);
-        }
-        setLoading(false);
-      })
-      .catch(() => {
-        if (Platform.OS === 'android') {
-          ToastAndroid.show('Unable to save the data to the database', ToastAndroid.LONG);
-        }
-        setLoading(false);
-      });
+  const getUsersCount = async () => {
+    const { rows } = await conn.tx(db, query.count('users'));
+    return rows._array?.[0]?.count || 0;
+  };
+
+  const checkExistingUser = async (name) => {
+    const checkQuery = query.read('users', { name });
+    const { rows } = await conn.tx(db, checkQuery, [name]);
+    return rows.length;
   };
 
   const handleInsertDB = (data) => {
@@ -47,16 +36,16 @@ const AddUser = ({ navigation }) => {
     conn
       .tx(db, insertQuery)
       .then(({ insertId }) => {
-        if (insertId) {
+        if (data?.active) {
           UserState.update((s) => {
             s.id = insertId;
           });
         }
-
         if (Platform.OS === 'android') {
           ToastAndroid.show('Success!', ToastAndroid.SHORT);
         }
         setLoading(false);
+        navigation.navigate('Users', { added: { id: insertId } });
       })
       .catch(() => {
         if (Platform.OS === 'android') {
@@ -66,54 +55,36 @@ const AddUser = ({ navigation }) => {
       });
   };
 
-  const handleSaveData = async () => {
+  const submitData = async ({ password, name }) => {
+    setLoading(true);
     const passwordEncrypted = await Crypto.digestStringAsync(
       Crypto.CryptoDigestAlgorithm.SHA1,
       password,
     );
-    const data = {
-      name,
-      id: DEFAULT_UID,
-      password: passwordEncrypted,
-    };
-    if (userID) {
-      handleUpdateDB(userID, data);
-    } else {
-      handleInsertDB(data);
-    }
-  };
-
-  const handleSubmit = () => {
-    setLoading(true);
-    try {
-      handleSaveData();
-    } catch (error) {
-      consoe.log('err', error);
+    const numOfRow = await getUsersCount();
+    const isActive = numOfRow === 0;
+    const exist = await checkExistingUser(name);
+    if (exist) {
+      if (Platform.OS === 'android') {
+        ToastAndroid.show('User already exists', ToastAndroid.SHORT);
+      }
       setLoading(false);
-      throw error;
+    } else {
+      const data = {
+        name,
+        password: passwordEncrypted,
+        active: isActive,
+      };
+
+      handleInsertDB(data);
+      formRef.current.resetForm();
     }
   };
-
-  const handleNameChange = (formikChange, value) => {
-    formikChange('name')(value);
-    UserState.update((s) => {
-      s.name = value;
-    });
-  };
-
-  const handlePasswordChange = (formikChange, value) => {
-    formikChange('password')(value);
-    UserState.update((s) => {
-      s.password = value;
-    });
-  };
-
   const initialValues = {
-    name,
-    password,
+    name: null,
+    password: '',
     confirmPassword: null,
   };
-
   const addSchema = Yup.object().shape({
     name: Yup.string().required('Username is required'),
     password: Yup.string().nullable(),
@@ -124,45 +95,42 @@ const AddUser = ({ navigation }) => {
     }),
   });
 
-  React.useEffect(() => {
-    const selectQuery = query.read('users', { id: DEFAULT_UID });
-    conn
-      .tx(db, selectQuery, [DEFAULT_UID])
-      .then(({ rows }) => {
-        if (rows.length) {
-          const userDB = rows._array[0];
-          UserState.update((s) => {
-            s.id = DEFAULT_UID;
-            s.name = userDB?.name;
-          });
-        }
-      })
-      .catch(() => {
-        if (Platform.OS === 'android') {
-          ToastAndroid.show('Unable to load profile', ToastAndroid.LONG);
-        }
-      });
-  }, []);
-
   return (
-    <BaseLayout title="Create New Profile">
-      <Formik initialValues={initialValues} validationSchema={addSchema} onSubmit={handleSubmit}>
-        {(formik) => (
+    <BaseLayout
+      title="Create New Profile"
+      leftComponent={
+        <Button type="clear" onPress={goToUsers} testID="arrow-back-button">
+          <Icon name="arrow-back" size={18} />
+        </Button>
+      }
+    >
+      <Formik
+        initialValues={initialValues}
+        validationSchema={addSchema}
+        innerRef={formRef}
+        onSubmit={async (values) => {
+          try {
+            await submitData(values);
+          } catch (err) {
+            throw err;
+          } finally {
+            formRef.current.setSubmitting(false);
+          }
+        }}
+      >
+        {({ setFieldValue, values, handleSubmit, isSubmitting }) => (
           <BaseLayout.Content>
             <ListItem>
-              <ListItem.Content style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Image />
-              </ListItem.Content>
-            </ListItem>
-
-            <ListItem>
               <ListItem.Content>
-                <ListItem.Title>Username</ListItem.Title>
+                <ListItem.Title>
+                  Username <Text color="#ff0000">*</Text>
+                </ListItem.Title>
                 <Input
-                  placeholder="Username"
-                  onChangeText={(value) => handleNameChange(formik.handleChange, value)}
-                  value={name}
+                  placeholder={'Username'}
+                  onChangeText={(value) => setFieldValue('name', value)}
                   errorMessage={<ErrorMessage name="name" />}
+                  value={values.name}
+                  name="name"
                   testID="input-name"
                 />
               </ListItem.Content>
@@ -173,8 +141,8 @@ const AddUser = ({ navigation }) => {
                 <Input
                   placeholder="Password"
                   secureTextEntry
-                  onChangeText={(value) => handlePasswordChange(formik.handleChange, value)}
-                  value={password}
+                  onChangeText={(value) => setFieldValue('password', value)}
+                  value={values.password}
                   errorMessage={<ErrorMessage name="password" />}
                   testID="input-password"
                 />
@@ -186,9 +154,9 @@ const AddUser = ({ navigation }) => {
                 <Input
                   placeholder="Confirm Password"
                   secureTextEntry
-                  onChangeText={formik.handleChange('confirmPassword')}
-                  value={formik.confirmPassword}
+                  onChangeText={(value) => setFieldValue('confirmPassword', value)}
                   errorMessage={<ErrorMessage name="confirmPassword" />}
+                  value={values.confirmPassword}
                   testID="input-confirm-password"
                 />
               </ListItem.Content>
@@ -197,17 +165,14 @@ const AddUser = ({ navigation }) => {
             <View
               style={{ display: 'flex', flexDirection: 'column', gap: 8, paddingHorizontal: 16 }}
             >
-              <Button onPress={formik.handleSubmit} loading={loading} testID="button-save">
+              <Button
+                onPress={handleSubmit}
+                loading={loading}
+                disabled={isSubmitting}
+                testID="button-save"
+              >
                 {loading ? 'Saving...' : 'Save'}
               </Button>
-              {userID && (
-                <Button
-                  title="Go to Dashboard"
-                  type="outline"
-                  onPress={goToHome}
-                  testID="button-dashboard"
-                />
-              )}
             </View>
           </BaseLayout.Content>
         )}
