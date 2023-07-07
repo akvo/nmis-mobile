@@ -4,7 +4,6 @@ on:
   push:
     brances:
       - main
-
 jobs:
   release:
     name: EAS Update
@@ -39,5 +38,11 @@ jobs:
       - name: 🚀 Release to Expo Dev
         working-directory: ./app
         run: |
-          npm run eas:release
-          exit 0
+          npm run aes:release > output.log 2>&1 &
+          tail -f output.log | while read line; do
+            echo "$line"
+            if [[ "$line" == *"Input is required, but stdin is not readable."* ]]; then
+              pkill -P $$ tail
+              break
+            fi
+          done
