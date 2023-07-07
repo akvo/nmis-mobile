@@ -8,7 +8,7 @@ describe('crudUsers function', () => {
 
   describe('selectUsers', () => {
     it('should return false if users does not exist', async () => {
-      const result = await crudUsers.selectUsers();
+      const result = await crudUsers.getActiveUser();
       expect(result).toBe(false);
     });
 
@@ -20,16 +20,11 @@ describe('crudUsers function', () => {
           name: 'John Doe',
           password: 'password',
         },
-        {
-          id: 2,
-          name: 'John Doe Junior',
-          password: 'password',
-        },
       ];
-      const mockSelectSql = jest.fn(() => users);
-      crudUsers.selectUsers = mockSelectSql;
-      const result = await crudUsers.selectUsers();
-      expect(result).toEqual(users);
+      const mockSelectSql = jest.fn(() => users[0]);
+      crudUsers.getActiveUser = mockSelectSql;
+      const result = await crudUsers.getActiveUser();
+      expect(result).toEqual(users[0]);
     });
   });
 });

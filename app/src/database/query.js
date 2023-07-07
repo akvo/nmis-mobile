@@ -30,6 +30,10 @@ const drop = (table) => {
   return `DROP TABLE IF EXISTS ${table};`;
 };
 
+const count = (table) => {
+  return `SELECT COUNT(*) AS count FROM ${table}`;
+};
+
 const initialQuery = (tableName, columns) => {
   const fields = Object.keys(columns).map((key) => `${key} ${columns[key]}`);
   const fieldsString = fields.join(', ');
@@ -41,5 +45,6 @@ export const query = {
   read,
   clear,
   drop,
+  count,
   initialQuery,
 };

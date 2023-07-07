@@ -1,4 +1,6 @@
 import React from 'react';
+import { Button } from '@rneui/themed';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { BaseLayout } from '../components';
 import { FormState } from '../store';
 import { crudForms } from '../database/crud';
@@ -15,6 +17,10 @@ const Home = ({ navigation }) => {
     setTimeout(() => {
       navigation.navigate('ManageForm', { id: id, name: findData.name });
     }, 100);
+  };
+
+  const goToUsers = () => {
+    navigation.navigate('Users');
   };
 
   React.useState(() => {
@@ -42,6 +48,11 @@ const Home = ({ navigation }) => {
         value: search,
         action: setSearch,
       }}
+      leftComponent={
+        <Button type="clear" testID="button-users" onPress={goToUsers}>
+          <Icon name="person" size={18} />
+        </Button>
+      }
     >
       <BaseLayout.Content data={filteredData} action={goToManageForm} columns={2} />
     </BaseLayout>
