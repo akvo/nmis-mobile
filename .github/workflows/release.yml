@@ -37,4 +37,4 @@ jobs:
 
       - name: 🚀 Release to Expo Dev
         working-directory: ./app
-        run: npm run aes:release
+        run: npm run eas:release
