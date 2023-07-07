@@ -10,7 +10,8 @@
     "test": "jest --coverage",
     "prettier": "prettier --check .",
     "prettier-write": "prettier --write .",
-    "eas": "eas"
+    "eas": "eas",
+    "eas:develop": "eas build --platform android --profile development"
   },
   "dependencies": {
     "@react-native-community/datetimepicker": "6.7.3",
