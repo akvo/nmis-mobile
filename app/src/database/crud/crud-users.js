@@ -4,13 +4,14 @@ const db = conn.init;
 
 const usersQuery = () => {
   return {
-    selectUsers: async () => {
+    getActiveUser: async () => {
       try {
-        const { rows } = await conn.tx(db, query.read('users', []));
+        const active = 1;
+        const { rows } = await conn.tx(db, query.read('users', { active }), [active]);
         if (!rows.length) {
           return false;
         }
-        return rows._array;
+        return rows._array[0];
       } catch (error) {
         console.error('Get users', error);
         return false;

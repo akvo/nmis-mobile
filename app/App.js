@@ -23,17 +23,17 @@ const App = () => {
       api.setToken(session.token);
       // check users exist
       crudUsers
-        .selectUsers({ count: false })
-        .then((users) => {
-          console.info('Users =>', users);
+        .getActiveUser()
+        .then((user) => {
+          console.info('Users =>', user);
           let page = null;
-          if (session && users?.length) {
+          if (session && user?.id) {
             page = 'Home';
           }
-          if (session && !users?.length) {
+          if (session && (!user || !user?.id)) {
             page = 'AddUser';
           }
-          return { user: users?.[users?.length - 1], page };
+          return { user, page };
         })
         .then(({ user, page }) => {
           UserState.update((s) => {

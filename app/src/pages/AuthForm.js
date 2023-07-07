@@ -67,22 +67,21 @@ const AuthForm = ({ navigation }) => {
             console.info('Saved Forms...', form.id, savedForm);
           });
           // check users exist
-          const users = await crudUsers.selectUsers();
+          const activeUser = await crudUsers.getActiveUser();
           // update auth state
           AuthState.update((s) => {
             s.authenticationCode = passcode;
             s.token = bearerToken;
           });
-          if (!users?.length) {
+          if (!activeUser || !activeUser?.id) {
             goTo('AddUser');
             return;
           }
           // update user state
-          const user = users?.[users?.length - 1];
           UserState.update((s) => {
-            s.id = user.id;
-            s.name = user.name;
-            s.password = user.password;
+            s.id = activeUser.id;
+            s.name = activeUser.name;
+            s.password = activeUser.password;
           });
           // go to home page (form list)
           goTo('Home');
