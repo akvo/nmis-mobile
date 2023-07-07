@@ -7,6 +7,10 @@ export const useNavigation = jest.fn().mockReturnValue({
   setParams: jest.fn(),
 });
 
+export const useNavigationContainerRef = jest.fn().mockReturnValue({
+  navigate: jest.fn(),
+});
+
 export const route = {
   params: {},
 };
@@ -14,3 +18,4 @@ export const route = {
 export const useRoute = () => route;
 
 export const MockNavigationProvider = ({ children }) => <React.Fragment>{children}</React.Fragment>;
+export const NavigationContainer = ({ children }) => <React.Fragment>{children}</React.Fragment>;

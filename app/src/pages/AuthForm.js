@@ -61,8 +61,8 @@ const AuthForm = ({ navigation }) => {
           await data.formsUrl.forEach(async (form) => {
             // Fetch form detail
             const formRes = await api.get(form.url);
-            console.info('Saving Forms...', form.id);
-            await crudForms.addFormsIfNotExist({ ...form, formJSON: formRes?.data });
+            const savedForm = await crudForms.addForm({ ...form, formJSON: formRes?.data });
+            console.info('Saved Forms...', form.id, savedForm);
           });
           // check users exist
           const users = await crudUsers.selectUsers();
