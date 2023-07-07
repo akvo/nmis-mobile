@@ -41,7 +41,10 @@ const GetStarted = ({ navigation }) => {
       <Image />
       <CenterLayout.Titles items={titles} />
       <Text>Lorem Ipsum dolor sit amet dolor random</Text>
-      {(currentConfig?.serverURL === 'url' || serverURLState === serverURLNotDefined) && (
+      {(!currentConfig?.serverURL ||
+        currentConfig?.serverURL === 'url' ||
+        !serverURLState ||
+        serverURLState === serverURLNotDefined) && (
         <Input
           keyboardType="numeric"
           placeholder="IP Address (dev mode only)"
