@@ -6,7 +6,7 @@ on:
       - main
 jobs:
   release:
-    name: EAS Update
+    name: apk build
     runs-on: ubuntu-latest
     steps:
       - name: 🏗  Environment Check
@@ -38,13 +38,7 @@ jobs:
       - name: 🚀 Release to Expo Dev
         working-directory: ./app
         run: |
-          output=$(npm run aes:release)
-          apk_url=$(echo "$output" | grep -o "https://expo.dev/artifacts/eas/.*\.apk")
-          echo "APK URL: $apk_url"
-          while [[ -z $apk_url ]]; do
-            sleep 10
-            output=$(npm run aes:release)
-            apk_url=$(echo "$output" | grep -o "https://expo.dev/artifacts/eas/.*\.apk")
-            echo "APK URL: $apk_url"
-          done
-          echo "APK URL found: $apk_url"
+          nohup npm run aes:release > output.log 2>&1 &
+          # Echo the message with the URL
+          echo "Please check the build status at:"
+          echo "https://expo.dev/accounts/akvo/projects/nmis-mobile/builds"
