@@ -1,9 +1,9 @@
 name: Release
 
 on:
-  push:
-    brances:
-      - main
+  release:
+    types: [created]
+
 jobs:
   release:
     name: apk build
