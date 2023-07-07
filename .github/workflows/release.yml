@@ -21,23 +21,23 @@ jobs:
         uses: actions/checkout@v3
 
       - name: 🏗  Setup node
+        working-directory: ./app
         uses: actions/setup-node@v3
         with:
           node-version: 18.x
           cache: npm
 
       - name: 🏗  Setup EAS
+        working-directory: ./app
         uses: expo/expo-github-action@v8
         with:
           eas-version: latest
           token: ${{ secrets.EXPO_TOKEN }}
 
       - name: 📦 Install dependencies
-        run: |
-          cd ./app/
-          npm install
+        working-directory: ./app
+        run: npm install
 
       - name: 🚀 Release to Expo Dev
-        run: |
-          cd ./app/
-          npm run aes:release
+        working-directory: ./app
+        run: npm run aes:release
