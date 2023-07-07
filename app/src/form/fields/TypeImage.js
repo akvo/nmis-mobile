@@ -4,7 +4,6 @@ import { Image, Button, Dialog } from '@rneui/themed';
 import * as ImagePicker from 'expo-image-picker';
 import { Stack } from '../../components';
 import { FieldLabel } from '../support';
-import { styles as formStyle } from '../styles';
 
 // TODO: getImageBase64 (ARF)
 // TODO: convertImageToBase64 (ARF)

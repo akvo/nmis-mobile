@@ -14,7 +14,13 @@ const PageTitle = ({ text }) => {
     navigation.goBack();
   };
 
-  const hasPreviousScreen = navigation.canGoBack();
+  const hasPreviousScreen = () => {
+    try {
+      return navigation.canGoBack();
+    } catch {
+      return false;
+    }
+  };
 
   return (
     <Header
@@ -27,7 +33,7 @@ const PageTitle = ({ text }) => {
       }}
       testID="base-layout-page-title"
     >
-      {hasPreviousScreen ? (
+      {hasPreviousScreen() ? (
         <Button type="clear" onPress={handleGoBackPress} testID="arrow-back-button">
           <Icon name="arrow-back" size={18} />
         </Button>
