@@ -8,3 +8,4 @@ export { default as SettingsFormPage } from './Settings/SettingsForm';
 export { default as FormPage } from './FormPage';
 export { default as AddUserPage } from './AddUser';
 export { default as MapViewPage } from './MapView';
+export { default as UsersPage } from './Users';

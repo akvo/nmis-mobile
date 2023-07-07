@@ -127,7 +127,7 @@ describe('AuthFormPage', () => {
     };
     const mockUser = { id: 1, name: 'John Doe', password: 'qwerty' };
     api.post.mockImplementation(() => Promise.resolve({ data: mockAuthPostData }));
-    crudUsers.selectUsers.mockImplementation(() => Promise.resolve([mockUser]));
+    crudUsers.getActiveUser.mockImplementation(() => Promise.resolve(mockUser));
     const { result: userStateRef } = renderHook(() => UserState.useState((s) => s));
 
     const { getByTestId } = render(<AuthFormPage navigation={navigation} />);
