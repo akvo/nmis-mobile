@@ -38,7 +38,4 @@ jobs:
       - name: 🚀 Release to Expo Dev
         working-directory: ./app
         run: |
-          nohup npm run aes:release > output.log 2>&1 &
-          # Echo the message with the URL
-          echo "Please check the build status at:"
-          echo "https://expo.dev/accounts/akvo/projects/nmis-mobile/builds"
+          npm run eas:release

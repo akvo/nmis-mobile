@@ -12,8 +12,8 @@
     "prettier": "prettier --check .",
     "prettier-write": "prettier --write .",
     "eas": "eas",
-    "eas:develop": "eas build --platform android --profile development",
-    "eas:release": "eas build --platform android --profile release"
+    "eas:develop": "eas build --platform=android --profile=development",
+    "eas:release": "eas build --platform=android --profile=release --non-interactive"
   },
   "dependencies": {
     "@react-native-community/datetimepicker": "6.7.3",
