@@ -116,6 +116,20 @@ const example = {
             },
           ],
         },
+        {
+          id: 5,
+          name: 'Comment',
+          order: 5,
+          type: 'text',
+          required: false,
+          meta: false,
+          translations: [
+            {
+              name: 'Komentar',
+              language: 'id',
+            },
+          ],
+        },
       ],
     },
   ],
@@ -131,16 +145,16 @@ const QuestionGroupListItem = ({ name, active }) => {
 
 const QuestionGroupList = ({ form, values = {}, activeQuestionGroup }) => {
   const completedQuestionGroup = form.question_group.map((questionGroup) => {
-    const completedQuestion = [];
+    const filteredQuestions = questionGroup.question.filter((q) => q.required);
     return (
-      questionGroup.question
+      filteredQuestions
         .map((question) => {
           if (values?.[question.id]) {
             return true;
           }
           return false;
         })
-        .filter((x) => x).length > 0
+        .filter((x) => x).length === filteredQuestions.length
     );
   });
 
@@ -153,6 +167,7 @@ const QuestionGroupList = ({ form, values = {}, activeQuestionGroup }) => {
           key={questionGroup.id}
           name={questionGroup.name}
           active={activeQuestionGroup === questionGroup.id}
+          completedQuestionGroup={completedQuestionGroup}
         />
       ))}
     </mock-questionGroupList>
@@ -193,4 +208,33 @@ describe('QuestionGroupList', () => {
 
   it.todo('Should disable question group if not completed');
   it.todo('Should highlight question group if active');
+
+  it.failing(
+    'Should failing when only one question answered from two requred questions in a question group',
+    () => {
+      const values = {
+        2: new Date().toISOString(),
+      };
+      render(<QuestionGroupList form={example} values={values} activeQuestionGroup={2} />);
+      expect(mockQuestionGroupList).toHaveBeenCalledWith(example, values, 2, [false, true, false]);
+    },
+  );
+
+  it('Should check two requred questions in a question group', () => {
+    const values = {
+      2: new Date().toISOString(),
+      3: '20',
+    };
+    render(<QuestionGroupList form={example} values={values} activeQuestionGroup={2} />);
+    expect(mockQuestionGroupList).toHaveBeenCalledWith(example, values, 2, [false, true, false]);
+  });
+
+  it('Should ignore not required questions', () => {
+    render(<QuestionGroupList form={example} values={{ 4: ['Male'] }} activeQuestionGroup={3} />);
+    expect(mockQuestionGroupList).toHaveBeenCalledWith(example, { 4: ['Male'] }, 3, [
+      false,
+      false,
+      true,
+    ]);
+  });
 });
