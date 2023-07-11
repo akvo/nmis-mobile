@@ -129,7 +129,7 @@ const QuestionGroupListItem = ({ name, active }) => {
   return <mock-questionGroupListItem name={name} active={active} />;
 };
 
-const QuestionGroupList = ({ form, values, activeQuestionGroup }) => {
+const QuestionGroupList = ({ form, values = {}, activeQuestionGroup }) => {
   const completedQuestionGroup = form.question_group.map((questionGroup) => {
     const completedQuestion = [];
     return (
@@ -161,20 +161,13 @@ const QuestionGroupList = ({ form, values, activeQuestionGroup }) => {
 
 describe('QuestionGroupList', () => {
   it('Should read form title', () => {
-    const wrapper = render(
-      <QuestionGroupList form={example} values={{}} activeQuestionGroup={1} />,
-    );
+    const wrapper = render(<QuestionGroupList form={example} activeQuestionGroup={1} />);
     expect(wrapper.getByTestId('form-name').children[0]).toBe(example.name);
   });
 
   it('Should read form json', () => {
-    render(<QuestionGroupList form={example} values={{ 1: 'Galih' }} activeQuestionGroup={1} />);
+    render(<QuestionGroupList form={example} activeQuestionGroup={1} />);
     expect(mockQuestionGroupList.mock.calls[0][0]).toEqual(example);
-    expect(mockQuestionGroupList).toHaveBeenCalledWith(example, { 1: 'Galih' }, 1, [
-      true,
-      false,
-      false,
-    ]);
   });
 
   it.todo('Should read datapoint name');
@@ -184,13 +177,20 @@ describe('QuestionGroupList', () => {
     expect(mockQuestionGroupList.mock.calls[0][1]).toEqual({ 1: 'Galih' });
   });
 
-  it('Should check if particular question id defined in formik values', () => {});
+  it('Should return boolean if completed/not', () => {
+    render(<QuestionGroupList form={example} values={{ 1: 'Galih' }} activeQuestionGroup={1} />);
+    expect(mockQuestionGroupList).toHaveBeenCalledWith(example, { 1: 'Galih' }, 1, [
+      true,
+      false,
+      false,
+    ]);
+  });
 
-  it.todo('Should return boolean if completed/not');
-  it.todo('Should render form name');
   it.todo('Should render question group name');
+
   it.todo('Should have a active mark if completed');
   it.todo('Should have disabled mark if not completed');
+
   it.todo('Should disable question group if not completed');
   it.todo('Should highlight question group if active');
 });
