@@ -62,6 +62,8 @@ const App = () => {
       }
       const initConfig = await crudConfig.addConfig({ serverURL });
       console.log('Config created', initConfig);
+    } else {
+      api.setServerURL(configExist.serverURL);
     }
   };
 
