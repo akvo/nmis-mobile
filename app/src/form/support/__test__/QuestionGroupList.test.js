@@ -138,9 +138,16 @@ const example = {
 const mockQuestionGroupList = jest.fn();
 const mockQuestionGroupListItem = jest.fn();
 
-const QuestionGroupListItem = ({ name, active }) => {
-  mockQuestionGroupListItem(name, active);
-  return <mock-questionGroupListItem name={name} active={active} />;
+const QuestionGroupListItem = ({ name, active, completedQuestionGroup: completed = false }) => {
+  mockQuestionGroupListItem(name, active, completed);
+  const icon = completed ? 'checked' : 'unchecked';
+  const bgColor = completed ? 'blue' : 'gray';
+  return (
+    <mock-questionGroupListItem>
+      <i testID="icon-mark" style={{ backgroundColor: bgColor }} className={icon} />
+      <div>{name}</div>
+    </mock-questionGroupListItem>
+  );
 };
 
 const QuestionGroupList = ({ form, values = {}, activeQuestionGroup }) => {
@@ -162,12 +169,12 @@ const QuestionGroupList = ({ form, values = {}, activeQuestionGroup }) => {
   return (
     <mock-questionGroupList>
       <div testID="form-name">{form.name}</div>
-      {form.question_group.map((questionGroup) => (
+      {form.question_group.map((questionGroup, qx) => (
         <QuestionGroupListItem
           key={questionGroup.id}
           name={questionGroup.name}
           active={activeQuestionGroup === questionGroup.id}
-          completedQuestionGroup={completedQuestionGroup}
+          completedQuestionGroup={completedQuestionGroup[qx]}
         />
       ))}
     </mock-questionGroupList>
@@ -203,8 +210,40 @@ describe('QuestionGroupList', () => {
 
   it.todo('Should render question group name');
 
-  it.todo('Should have a active mark if completed');
-  it.todo('Should have disabled mark if not completed');
+  it('Should have a active mark if completed', () => {
+    render(<QuestionGroupList form={example} values={{ 1: 'Galih' }} activeQuestionGroup={1} />);
+    expect(mockQuestionGroupList).toHaveBeenCalledWith(example, { 1: 'Galih' }, 1, [
+      true,
+      false,
+      false,
+    ]);
+    expect(mockQuestionGroupListItem.mock.calls).toEqual([
+      ['Group 1', true, true],
+      ['Group 2', false, false],
+      ['Group 3', false, false],
+    ]);
+    const active = true;
+    const completed = true;
+    const wrapper = render(
+      <QuestionGroupListItem name="Group 1" active={active} completedQuestionGroup={completed} />,
+    );
+    const iconEl = wrapper.getByTestId('icon-mark');
+
+    expect(iconEl.props.style.backgroundColor).toBe('blue');
+    expect(iconEl.props.className).toBe('checked');
+  });
+
+  it('Should have disabled mark if not completed', () => {
+    const active = true;
+    const completed = false;
+    const wrapper = render(
+      <QuestionGroupListItem name="Group 1" active={active} completedQuestionGroup={completed} />,
+    );
+    const iconEl = wrapper.getByTestId('icon-mark');
+
+    expect(iconEl.props.style.backgroundColor).toBe('gray');
+    expect(iconEl.props.className).toBe('unchecked');
+  });
 
   it.todo('Should disable question group if not completed');
   it.todo('Should highlight question group if active');
