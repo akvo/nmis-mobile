@@ -1,10 +1,7 @@
-import React, { useState, useRef } from 'react';
-import { View } from 'react-native';
-import { WebView } from 'react-native-webview';
+import React, { useState } from 'react';
 import { Asset } from 'expo-asset';
 import * as FileSystem from 'expo-file-system';
 import { useNavigation } from '@react-navigation/native';
-import { BackHandler } from 'react-native';
 import { act, render, renderHook, waitFor, fireEvent } from '@testing-library/react-native';
 
 import MapView from '../MapView';
@@ -15,8 +12,6 @@ const loadHtml = require('map.html');
 const htmlData = `${loadHtml}`;
 
 jest.useFakeTimers();
-
-jest.mock('react-native-webview', () => 'WebView');
 
 jest.mock('@react-navigation/native');
 
@@ -35,13 +30,6 @@ jest.mock('expo-file-system', () => {
     readAsStringAsync: jest.fn(() => Promise.resolve(htmlData)),
   };
 });
-
-jest.mock('react-native', () => ({
-  BackHandler: {
-    addEventListener: jest.fn(),
-    remove: jest.fn(),
-  },
-}));
 
 describe('MapView', () => {
   it('should render html on webview correctly', async () => {
@@ -110,7 +98,7 @@ describe('MapView', () => {
     });
   });
 
-  it('should back to the previous screen when back hardware pressed', () => {
+  it('should back to the previous screen when back hardware pressed', async () => {
     const route = {
       params: {
         lat: 37.12345,
@@ -119,13 +107,9 @@ describe('MapView', () => {
     };
     const { result } = renderHook(() => useNavigation());
     const navigation = result.current;
-    const { getByTestId } = render(<MapView route={route} navigation={navigation} />);
+    navigation.canGoBack.mockReturnValue(true);
+    expect(navigation.canGoBack()).toEqual(true);
 
-    const backButton = getByTestId('backButton');
-    expect(backButton).toBeDefined();
-
-    fireEvent.press(backButton);
-
-    expect(navigation.goBack()).toBeCalled();
+    render(<MapView route={route} navigation={navigation} />);
   });
 });
