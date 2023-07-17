@@ -52,13 +52,7 @@ const FormContainer = ({ forms, initialValues = {} }) => {
     <>
       <ScrollView>
         <BaseLayout.Content>
-          {showQuestionGroupList ? (
-            <QuestionGroupList
-              form={formDefinition}
-              values={{}}
-              activeQuestionGroup={activeGroup}
-            />
-          ) : (
+          {!showQuestionGroupList ? (
             <Formik
               innerRef={formRef}
               initialValues={initialValues}
@@ -69,7 +63,7 @@ const FormContainer = ({ forms, initialValues = {} }) => {
               {({ setFieldValue, values }) => (
                 <View style={styles.formContainer}>
                   {formDefinition?.question_group?.map((group) => {
-                    if (activeGroup !== group.groupIndex) {
+                    if (activeGroup !== group.id) {
                       return '';
                     }
                     return (
@@ -85,6 +79,14 @@ const FormContainer = ({ forms, initialValues = {} }) => {
                 </View>
               )}
             </Formik>
+          ) : (
+            <QuestionGroupList
+              form={formDefinition}
+              values={{}}
+              activeQuestionGroup={activeGroup}
+              setActiveQuestionGroup={setActiveGroup}
+              setShowQuestionGroupList={setShowQuestionGroupList}
+            />
           )}
         </BaseLayout.Content>
       </ScrollView>

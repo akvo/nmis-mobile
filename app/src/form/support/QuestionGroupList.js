@@ -20,10 +20,21 @@ export const checkCompleteQuestionGroup = (form, values) => {
   });
 };
 
-const QuestionGroupList = ({ form, values = {}, activeQuestionGroup }) => {
+const QuestionGroupList = ({
+  form,
+  values = {},
+  activeQuestionGroup,
+  setActiveQuestionGroup,
+  setShowQuestionGroupList,
+}) => {
   const completedQuestionGroup = useMemo(() => {
     return checkCompleteQuestionGroup(form, values);
   });
+
+  const handleOnPress = (questionGroupId) => {
+    setActiveQuestionGroup(questionGroupId);
+    setShowQuestionGroupList(false);
+  };
 
   return (
     <View style={styles.questionGroupListContainer}>
@@ -41,6 +52,7 @@ const QuestionGroupList = ({ form, values = {}, activeQuestionGroup }) => {
           name={questionGroup.name}
           active={activeQuestionGroup === questionGroup.id}
           completedQuestionGroup={completedQuestionGroup[qx]}
+          onPress={() => handleOnPress(questionGroup.id)}
         />
       ))}
     </View>

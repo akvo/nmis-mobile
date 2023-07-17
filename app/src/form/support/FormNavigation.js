@@ -63,6 +63,7 @@ const FormNavigation = ({
         testID="form-nav-btn-back"
       />
       <Tab.Item
+        // disabled
         // disabledStyle={{ backgroundColor: 'transparent' }}
         title={`${activeGroup + 1}/${totalGroup}`}
         titleStyle={styles.formNavigationGroupCount}
