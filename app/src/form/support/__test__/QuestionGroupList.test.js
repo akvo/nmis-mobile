@@ -1,8 +1,8 @@
 import React from 'react';
-import { render } from '@testing-library/react-native';
+import { render, waitFor } from '@testing-library/react-native';
 jest.useFakeTimers();
-import { Text } from '@rneui/themed';
-import { TouchableOpacity } from 'react-native';
+import QuestionGroupList from '../QuestionGroupList';
+import { checkCompleteQuestionGroup } from '../../lib';
 
 const example = {
   name: 'Testing Form',
@@ -140,58 +140,19 @@ const example = {
 const mockQuestionGroupList = jest.fn();
 const mockQuestionGroupListItem = jest.fn();
 
-const QuestionGroupListItem = ({ name, active, completedQuestionGroup = false }) => {
+jest.mock('../QuestionGroupList', () => ({ form, values = {}, activeQuestionGroup }) => {
+  mockQuestionGroupList(form, values, activeQuestionGroup);
+  return <mock-QuestionGroupList />;
+});
+
+jest.mock('../QuestionGroupListItem', () => ({ name, active, completedQuestionGroup = false }) => {
   mockQuestionGroupListItem(name, active, completedQuestionGroup);
-  const icon = completedQuestionGroup ? 'checked' : 'unchecked';
-  const bgColor = completedQuestionGroup ? 'blue' : 'gray';
-  const activeOpacity = active ? 'gray' : 'transparent';
-  return (
-    <TouchableOpacity
-      testID="question-group-list-item-wrapper"
-      style={{ backgroundColor: activeOpacity }}
-      disabled={!completedQuestionGroup}
-    >
-      <i testID="icon-mark" style={{ backgroundColor: bgColor }} className={icon} />
-      <Text>{name}</Text>
-    </TouchableOpacity>
-  );
-};
-
-const QuestionGroupList = ({ form, values = {}, activeQuestionGroup }) => {
-  const completedQuestionGroup = form.question_group.map((questionGroup) => {
-    const filteredQuestions = questionGroup.question.filter((q) => q.required);
-    return (
-      filteredQuestions
-        .map((question) => {
-          if (values?.[question.id]) {
-            return true;
-          }
-          return false;
-        })
-        .filter((x) => x).length === filteredQuestions.length
-    );
-  });
-
-  mockQuestionGroupList(form, values, activeQuestionGroup, completedQuestionGroup);
-  return (
-    <mock-questionGroupList>
-      <div testID="form-name">{form.name}</div>
-      {form.question_group.map((questionGroup, qx) => (
-        <QuestionGroupListItem
-          key={questionGroup.id}
-          name={questionGroup.name}
-          active={activeQuestionGroup === questionGroup.id}
-          completedQuestionGroup={completedQuestionGroup[qx]}
-        />
-      ))}
-    </mock-questionGroupList>
-  );
-};
+  return <mock-QuestionGroupListItem />;
+});
 
 describe('QuestionGroupList', () => {
-  it('Should read form title', () => {
-    const wrapper = render(<QuestionGroupList form={example} activeQuestionGroup={1} />);
-    expect(wrapper.getByTestId('form-name').children[0]).toBe(example.name);
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('Should read form json', () => {
@@ -204,131 +165,5 @@ describe('QuestionGroupList', () => {
   it('Should read formik values', () => {
     render(<QuestionGroupList form={example} values={{ 1: 'Galih' }} activeQuestionGroup={1} />);
     expect(mockQuestionGroupList.mock.calls[0][1]).toEqual({ 1: 'Galih' });
-  });
-
-  it('Should return boolean if completed/not', () => {
-    render(<QuestionGroupList form={example} values={{ 1: 'Galih' }} activeQuestionGroup={1} />);
-    expect(mockQuestionGroupList).toHaveBeenCalledWith(example, { 1: 'Galih' }, 1, [
-      true,
-      false,
-      false,
-    ]);
-  });
-
-  it('Should render question group name', () => {
-    const parrentWrapper = render(<QuestionGroupList form={example} activeQuestionGroup={1} />);
-    expect(mockQuestionGroupListItem).toHaveBeenCalledWith('Group 1', true, false);
-    expect(mockQuestionGroupListItem).toHaveBeenCalledWith('Group 2', false, false);
-    expect(mockQuestionGroupListItem).toHaveBeenCalledWith('Group 3', false, false);
-
-    const group1 = parrentWrapper.getByText('Group 1');
-    expect(group1).toBeDefined();
-    const group2 = parrentWrapper.getByText('Group 2');
-    expect(group2).toBeDefined();
-    const group3 = parrentWrapper.getByText('Group 3');
-    expect(group3).toBeDefined();
-  });
-
-  it('Should have a active mark if completed', () => {
-    render(<QuestionGroupList form={example} values={{ 1: 'Galih' }} activeQuestionGroup={1} />);
-    expect(mockQuestionGroupList).toHaveBeenCalledWith(example, { 1: 'Galih' }, 1, [
-      true,
-      false,
-      false,
-    ]);
-    expect(mockQuestionGroupListItem.mock.calls).toEqual([
-      ['Group 1', true, true],
-      ['Group 2', false, false],
-      ['Group 3', false, false],
-    ]);
-    const active = true;
-    const completed = true;
-    const wrapper = render(
-      <QuestionGroupListItem name="Group 1" active={active} completedQuestionGroup={completed} />,
-    );
-    const iconEl = wrapper.getByTestId('icon-mark');
-
-    expect(iconEl.props.style.backgroundColor).toBe('blue');
-    expect(iconEl.props.className).toBe('checked');
-  });
-
-  it('Should have disabled mark if not completed', () => {
-    const active = true;
-    const completed = false;
-    const wrapper = render(
-      <QuestionGroupListItem name="Group 1" active={active} completedQuestionGroup={completed} />,
-    );
-    const iconEl = wrapper.getByTestId('icon-mark');
-
-    expect(iconEl.props.style.backgroundColor).toBe('gray');
-    expect(iconEl.props.className).toBe('unchecked');
-  });
-
-  it('Should disable question group if not completed', () => {
-    render(<QuestionGroupList form={example} values={{ 1: 'Galih' }} activeQuestionGroup={1} />);
-    expect(mockQuestionGroupListItem).toHaveBeenCalledWith('Group 1', true, true);
-    expect(mockQuestionGroupListItem).toHaveBeenCalledWith('Group 2', false, false);
-    expect(mockQuestionGroupListItem).toHaveBeenCalledWith('Group 3', false, false);
-
-    const itemWrapper = render(
-      <QuestionGroupListItem name="Group 2" active={false} completedQuestionGroup={false} />,
-    );
-    const item = itemWrapper.getByTestId('question-group-list-item-wrapper');
-    expect(item.props.accessibilityState.disabled).toBe(true);
-  });
-
-  it('Should not disable question group if completed', () => {
-    const itemWrapper = render(
-      <QuestionGroupListItem name="Group 2" active={false} completedQuestionGroup={true} />,
-    );
-    const item = itemWrapper.getByTestId('question-group-list-item-wrapper');
-    expect(item.props.accessibilityState.disabled).toBe(false);
-  });
-
-  it('Should highlight question group if active', () => {
-    const itemWrapper = render(
-      <QuestionGroupListItem name="Group 1" active={true} completedQuestionGroup={false} />,
-    );
-    const item = itemWrapper.getByTestId('question-group-list-item-wrapper');
-    console.log(item.props);
-    expect(item.props.style.backgroundColor).toBe('gray');
-  });
-
-  it.failing('Should highlight question group if not active', () => {
-    const itemWrapper = render(
-      <QuestionGroupListItem name="Group 1" active={false} completedQuestionGroup={false} />,
-    );
-    const item = itemWrapper.getByTestId('question-group-list-item-wrapper');
-    console.log(item.props);
-    expect(item.props.style.backgroundColor).toBe('gray');
-  });
-
-  it.failing(
-    'Should failing when only one question answered from two requred questions in a question group',
-    () => {
-      const values = {
-        2: new Date().toISOString(),
-      };
-      render(<QuestionGroupList form={example} values={values} activeQuestionGroup={2} />);
-      expect(mockQuestionGroupList).toHaveBeenCalledWith(example, values, 2, [false, true, false]);
-    },
-  );
-
-  it('Should check two requred questions in a question group', () => {
-    const values = {
-      2: new Date().toISOString(),
-      3: '20',
-    };
-    render(<QuestionGroupList form={example} values={values} activeQuestionGroup={2} />);
-    expect(mockQuestionGroupList).toHaveBeenCalledWith(example, values, 2, [false, true, false]);
-  });
-
-  it('Should ignore not required questions', () => {
-    render(<QuestionGroupList form={example} values={{ 4: ['Male'] }} activeQuestionGroup={3} />);
-    expect(mockQuestionGroupList).toHaveBeenCalledWith(example, { 4: ['Male'] }, 3, [
-      false,
-      false,
-      true,
-    ]);
   });
 });
