@@ -1,7 +1,8 @@
 import React, { useMemo } from 'react';
 import { View } from 'react-native';
-import { Text } from '@rneui/themed';
+import { Text, Divider } from '@rneui/themed';
 import QuestionGroupListItem from './QuestionGroupListItem';
+import { styles } from '../styles';
 
 export const checkCompleteQuestionGroup = (form, values) => {
   return form.question_group.map((questionGroup) => {
@@ -25,8 +26,15 @@ const QuestionGroupList = ({ form, values = {}, activeQuestionGroup }) => {
   });
 
   return (
-    <View>
-      <Text testID="form-name">{form.name}</Text>
+    <View style={styles.questionGroupListContainer}>
+      <Text style={styles.questionGroupListFormTitle} testID="form-name">
+        {form.name}
+      </Text>
+      <Divider style={styles.divider} />
+      <Text style={styles.questionGroupListDataPointName} testID="datapoint-name">
+        Data Point name here
+      </Text>
+      <Divider style={styles.divider} />
       {form.question_group.map((questionGroup, qx) => (
         <QuestionGroupListItem
           key={questionGroup.id}

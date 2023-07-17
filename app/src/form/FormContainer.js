@@ -3,7 +3,7 @@ import { BaseLayout } from '../components';
 import { ScrollView, View } from 'react-native';
 import { Formik } from 'formik';
 import { styles } from './styles';
-import { FormNavigation } from './support';
+import { FormNavigation, QuestionGroupList } from './support';
 import QuestionGroup from './components/QuestionGroup';
 import { transformForm } from './lib';
 
@@ -14,13 +14,14 @@ import { transformForm } from './lib';
 const FormContainer = ({ forms, initialValues = {} }) => {
   const formRef = useRef();
   const [activeGroup, setActiveGroup] = useState(0);
+  const [showQuestionGroupList, setShowQuestionGroupList] = useState(false);
 
   const formDefinition = useMemo(() => {
     return transformForm(forms);
   }, [forms]);
 
   const currentGroup = useMemo(() => {
-    return formDefinition.question_group.find((qg) => qg.groupIndex === activeGroup);
+    return formDefinition.question_group.find((qg) => qg.id === activeGroup);
   }, [formDefinition, activeGroup]);
 
   const handleOnSubmitForm = (values) => {
@@ -51,32 +52,40 @@ const FormContainer = ({ forms, initialValues = {} }) => {
     <>
       <ScrollView>
         <BaseLayout.Content>
-          <Formik
-            innerRef={formRef}
-            initialValues={initialValues}
-            onSubmit={handleOnSubmitForm}
-            validateOnBlur={true}
-            validateOnChange={true}
-          >
-            {({ setFieldValue, values }) => (
-              <View style={styles.formContainer}>
-                {formDefinition?.question_group?.map((group) => {
-                  if (activeGroup !== group.groupIndex) {
-                    return '';
-                  }
-                  return (
-                    <QuestionGroup
-                      key={`group-${group.groupIndex}`}
-                      index={group.groupIndex}
-                      group={group}
-                      setFieldValue={setFieldValue}
-                      values={values}
-                    />
-                  );
-                })}
-              </View>
-            )}
-          </Formik>
+          {showQuestionGroupList ? (
+            <QuestionGroupList
+              form={formDefinition}
+              values={{}}
+              activeQuestionGroup={activeGroup}
+            />
+          ) : (
+            <Formik
+              innerRef={formRef}
+              initialValues={initialValues}
+              onSubmit={handleOnSubmitForm}
+              validateOnBlur={true}
+              validateOnChange={true}
+            >
+              {({ setFieldValue, values }) => (
+                <View style={styles.formContainer}>
+                  {formDefinition?.question_group?.map((group) => {
+                    if (activeGroup !== group.groupIndex) {
+                      return '';
+                    }
+                    return (
+                      <QuestionGroup
+                        key={`group-${group.id}`}
+                        index={group.id}
+                        group={group}
+                        setFieldValue={setFieldValue}
+                        values={values}
+                      />
+                    );
+                  })}
+                </View>
+              )}
+            </Formik>
+          )}
         </BaseLayout.Content>
       </ScrollView>
       <View>
@@ -91,6 +100,8 @@ const FormContainer = ({ forms, initialValues = {} }) => {
           activeGroup={activeGroup}
           setActiveGroup={setActiveGroup}
           totalGroup={formDefinition?.question_group?.length || 0}
+          showQuestionGroupList={showQuestionGroupList}
+          setShowQuestionGroupList={setShowQuestionGroupList}
         />
       </View>
     </>

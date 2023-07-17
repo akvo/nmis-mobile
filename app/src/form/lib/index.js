@@ -68,7 +68,7 @@ export const transformForm = (forms) => {
           ...qg,
           ...repeat,
           ...repeats,
-          groupIndex: qgi,
+          id: qg?.id || qgi,
           question: qg.question
             ?.sort((a, b) => a.order - b.order)
             ?.map((q) => {

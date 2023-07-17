@@ -92,10 +92,57 @@ export const styles = StyleSheet.create({
     marginRight: -10,
     marginLeft: -10,
   },
+  formNavigationGroupCount: {
+    paddingTop: 13,
+    paddingBottom: 10,
+    color: 'grey',
+    fontWeight: 'normal',
+    fontSize: 14,
+    marginRight: -10,
+    marginLeft: -10,
+  },
   inputGeoContainer: {
     paddingHorizontal: 16,
     display: 'flex',
     flexDirection: 'column',
     gap: 8,
+  },
+  questionGroupListContainer: {
+    paddingVertical: 24,
+    flex: 1,
+    width: '100%',
+  },
+  divider: {
+    paddingHorizontal: 20,
+    marginVertical: 7,
+  },
+  questionGroupListFormTitle: {
+    paddingHorizontal: 20,
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 4,
+  },
+  questionGroupListDataPointName: {
+    paddingHorizontal: 20,
+    fontSize: 16,
+    marginBottom: 4,
+  },
+  questionGroupListItemWrapper: {
+    flex: 1,
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+    paddingVertical: 5,
+    alignItems: 'center',
+    paddingHorizontal: 10,
+  },
+  questionGroupListItemActive: {
+    backgroundColor: '#F3F3F3',
+  },
+  questionGroupListItemIcon: {
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+  },
+  questionGroupListItemName: {
+    marginLeft: 10,
   },
 });
