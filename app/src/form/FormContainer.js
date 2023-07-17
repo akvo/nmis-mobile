@@ -60,7 +60,7 @@ const FormContainer = ({ forms, initialValues = {} }) => {
               validateOnBlur={true}
               validateOnChange={true}
             >
-              {({ setFieldValue, values }) => (
+              {({ setFieldValue }) => (
                 <View style={styles.formContainer}>
                   {formDefinition?.question_group?.map((group) => {
                     if (activeGroup !== group.id) {
@@ -72,7 +72,7 @@ const FormContainer = ({ forms, initialValues = {} }) => {
                         index={group.id}
                         group={group}
                         setFieldValue={setFieldValue}
-                        values={values}
+                        values={initialValues}
                       />
                     );
                   })}
@@ -82,7 +82,7 @@ const FormContainer = ({ forms, initialValues = {} }) => {
           ) : (
             <QuestionGroupList
               form={formDefinition}
-              values={{}} // missing values
+              values={initialValues}
               activeQuestionGroup={activeGroup}
               setActiveQuestionGroup={setActiveGroup}
               setShowQuestionGroupList={setShowQuestionGroupList}
