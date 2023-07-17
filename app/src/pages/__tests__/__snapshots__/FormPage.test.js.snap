@@ -40,7 +40,6 @@ exports[`FormPage component should render component correctly 1`] = `
                     "borderBottomWidth": 0.5,
                     "borderColor": "grey",
                     "borderTopWidth": 0.5,
-                    "marginBottom": 20,
                     "paddingHorizontal": 20,
                     "paddingVertical": 15,
                   }
@@ -55,10 +54,18 @@ exports[`FormPage component should render component correctly 1`] = `
                       "fontWeight": "bold",
                     }
                   }
+                  testID="text-name"
                 >
                   1. Introduction
                 </Text>
               </View>
+              <View
+                style={
+                  {
+                    "backgroundColor": "#e5e7eb",
+                  }
+                }
+              />
             </View>
             <View
               style={
