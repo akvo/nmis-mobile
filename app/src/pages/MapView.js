@@ -11,13 +11,14 @@ import {
 import { WebView } from 'react-native-webview';
 import { Asset } from 'expo-asset';
 import * as FileSystem from 'expo-file-system';
-import { MapState } from '../store';
+import { MapState, FormState } from '../store';
 import { loc } from '../lib';
 
 const MapView = ({ navigation, route }) => {
   const [htmlContent, setHtmlContent] = useState(null);
   const [loading, setLoading] = useState(true);
   const webViewRef = useRef(null);
+  const { form: selectedForm } = FormState.useState((s) => s);
 
   const updateMapState = (markerData) => {
     const { lat, lng } = markerData;
@@ -68,7 +69,7 @@ const MapView = ({ navigation, route }) => {
 
   useEffect(() => {
     const handleBackPress = () => {
-      navigation.goBack();
+      navigation.navigate('FormPage', selectedForm);
       return true;
     };
     const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
