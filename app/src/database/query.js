@@ -16,9 +16,15 @@ const update = (table, where = {}, data = {}) => {
   return `UPDATE ${table} SET ${fieldString} ${conditionString};`;
 };
 
-const read = (table, where = {}) => {
+const read = (table, where = {}, nocase = false) => {
   const conditions = Object.keys(where).map((key) => `${key} = ?`);
-  const conditionString = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
+  let conditionString = '';
+  if (conditions.length) {
+    conditionString = `WHERE ${conditions.join(' AND ')}`;
+    if (nocase) {
+      conditionString += ' COLLATE NOCASE';
+    }
+  }
   return `SELECT * FROM ${table} ${conditionString};`;
 };
 
