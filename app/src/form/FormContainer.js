@@ -82,7 +82,7 @@ const FormContainer = ({ forms, initialValues = {} }) => {
           ) : (
             <QuestionGroupList
               form={formDefinition}
-              values={{}}
+              values={{}} // missing values
               activeQuestionGroup={activeGroup}
               setActiveQuestionGroup={setActiveGroup}
               setShowQuestionGroupList={setShowQuestionGroupList}

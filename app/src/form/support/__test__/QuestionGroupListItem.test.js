@@ -192,9 +192,9 @@ describe('QuestionGroup & QuestionGroupListItem without mock', () => {
       <QuestionGroupListItem name="Group 1" active={active} completedQuestionGroup={completed} />,
     );
     const iconEl = wrapper.getByTestId('icon-mark');
-
-    expect(iconEl.props.style.backgroundColor).toBe('blue');
-    expect(iconEl.props.className).toBe('checked');
+    const iconElProps = iconEl.props.children.props.children.props;
+    expect(iconElProps.color).toBe('#2884bd');
+    expect(iconElProps.name).toBe('check-circle');
   });
 
   it('Should have disabled mark if not completed', () => {
@@ -204,9 +204,9 @@ describe('QuestionGroup & QuestionGroupListItem without mock', () => {
       <QuestionGroupListItem name="Group 1" active={active} completedQuestionGroup={completed} />,
     );
     const iconEl = wrapper.getByTestId('icon-mark');
-
-    expect(iconEl.props.style.backgroundColor).toBe('gray');
-    expect(iconEl.props.className).toBe('unchecked');
+    const iconElProps = iconEl.props.children.props.children.props;
+    expect(iconElProps.color).toBe('#d4d4d4');
+    expect(iconElProps.name).toBe('circle');
   });
 
   it('Should disable question group if not completed', () => {
@@ -230,7 +230,7 @@ describe('QuestionGroup & QuestionGroupListItem without mock', () => {
       <QuestionGroupListItem name="Group 1" active={true} completedQuestionGroup={false} />,
     );
     const itemEl = wrapper.getByTestId('question-group-list-item-wrapper');
-    expect(itemEl.props.style.backgroundColor).toBe('gray');
+    expect(itemEl.props.style.backgroundColor).toBe('#F3F3F3');
   });
 
   it.failing('Should highlight question group if not active', () => {
@@ -238,6 +238,6 @@ describe('QuestionGroup & QuestionGroupListItem without mock', () => {
       <QuestionGroupListItem name="Group 1" active={false} completedQuestionGroup={false} />,
     );
     const itemEl = wrapper.getByTestId('question-group-list-item-wrapper');
-    expect(itemEl.props.style.backgroundColor).toBe('gray');
+    expect(itemEl.props.style.backgroundColor).toBe('#F3F3F3');
   });
 });
