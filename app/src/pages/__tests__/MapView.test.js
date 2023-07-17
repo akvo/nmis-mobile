@@ -3,9 +3,10 @@ import { Asset } from 'expo-asset';
 import * as FileSystem from 'expo-file-system';
 import { useNavigation } from '@react-navigation/native';
 import { act, render, renderHook, waitFor, fireEvent } from '@testing-library/react-native';
+import mockBackHandler from 'react-native/Libraries/Utilities/__mocks__/BackHandler.js';
 
 import MapView from '../MapView';
-import { MapState } from '../../store';
+import { MapState, FormState } from '../../store';
 import { loc } from '../../lib';
 
 const loadHtml = require('map.html');
@@ -30,6 +31,8 @@ jest.mock('expo-file-system', () => {
     readAsStringAsync: jest.fn(() => Promise.resolve(htmlData)),
   };
 });
+
+jest.mock('react-native/Libraries/Utilities/BackHandler', () => mockBackHandler);
 
 describe('MapView', () => {
   it('should render html on webview correctly', async () => {
@@ -98,18 +101,51 @@ describe('MapView', () => {
     });
   });
 
-  it('should back to the previous screen when back hardware pressed', async () => {
+  it('should back to the FormPage screen along with params when back hardware pressed', async () => {
     const route = {
       params: {
         lat: 37.12345,
         lng: -122.6789,
       },
     };
-    const { result } = renderHook(() => useNavigation());
-    const navigation = result.current;
+    const navigation = useNavigation();
     navigation.canGoBack.mockReturnValue(true);
     expect(navigation.canGoBack()).toEqual(true);
 
+    const mockSelectedForm = {
+      id: 1,
+      name: 'Health Facilities',
+    };
+
+    // update FormState to store selectedForm
+    act(() => {
+      FormState.update((s) => {
+        s.form = mockSelectedForm;
+      });
+    });
+
     render(<MapView route={route} navigation={navigation} />);
+
+    act(() => {
+      const handleBackPress = () => {
+        navigation.navigate('FormPage', mockSelectedForm);
+        return true;
+      };
+      const backHandler = mockBackHandler.addEventListener('hardwareBackPress', handleBackPress);
+      return () => {
+        backHandler.remove();
+      };
+    }, []);
+
+    act(() => {
+      mockBackHandler.mockPressBack();
+    });
+
+    await waitFor(() => {
+      const { result } = renderHook(() => FormState.useState());
+      const { form: formSelected } = result.current;
+      expect(formSelected).toBe(mockSelectedForm);
+      expect(navigation.navigate).toHaveBeenCalledWith('FormPage', mockSelectedForm);
+    });
   });
 });
