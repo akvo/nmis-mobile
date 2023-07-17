@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   TypeDate,
   TypeImage,
@@ -16,24 +16,23 @@ import { FormState } from '../../store';
 
 const QuestionField = ({ keyform, field: questionField, setFieldValue, values, validate }) => {
   const [field, meta, helpers] = useField({ name: questionField.id, validate });
-  const [currentFieldValue, setCurrentFieldValue] = useState({});
 
   useEffect(() => {
-    if (!meta?.error) {
-      FormState.update((s) => {
-        s.currentValues = { ...s.currentValues, ...currentFieldValue };
-      });
-    } else {
-      delete values?.[questionField.id];
-      FormState.update((s) => {
-        s.currentValues = values;
-      });
+    if (meta.error && field.name && values?.[field.name]) {
+      setTimeout(() => {
+        delete values?.[field.name];
+        FormState.update((s) => {
+          s.currentValues = values;
+        });
+      }, 100);
     }
-  }, [meta]);
+  }, [meta.error, field.name, values]);
 
   const handleOnChangeField = (id, value) => {
     helpers.setTouched({ [field.name]: true });
-    setCurrentFieldValue({ [id]: value });
+    FormState.update((s) => {
+      s.currentValues = { ...s.currentValues, [id]: value };
+    });
     setFieldValue(id, value);
   };
 
