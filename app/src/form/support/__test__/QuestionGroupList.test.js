@@ -1,6 +1,8 @@
 import React from 'react';
-import { render, fireEvent, waitFor } from '@testing-library/react-native';
+import { render } from '@testing-library/react-native';
 jest.useFakeTimers();
+import { Text } from '@rneui/themed';
+import { TouchableOpacity } from 'react-native';
 
 const example = {
   name: 'Testing Form',
@@ -138,15 +140,20 @@ const example = {
 const mockQuestionGroupList = jest.fn();
 const mockQuestionGroupListItem = jest.fn();
 
-const QuestionGroupListItem = ({ name, active, completedQuestionGroup: completed = false }) => {
-  mockQuestionGroupListItem(name, active, completed);
-  const icon = completed ? 'checked' : 'unchecked';
-  const bgColor = completed ? 'blue' : 'gray';
+const QuestionGroupListItem = ({ name, active, completedQuestionGroup = false }) => {
+  mockQuestionGroupListItem(name, active, completedQuestionGroup);
+  const icon = completedQuestionGroup ? 'checked' : 'unchecked';
+  const bgColor = completedQuestionGroup ? 'blue' : 'gray';
+  const activeOpacity = active ? 'gray' : 'transparent';
   return (
-    <mock-questionGroupListItem>
+    <TouchableOpacity
+      testID="question-group-list-item-wrapper"
+      style={{ backgroundColor: activeOpacity }}
+      disabled={!completedQuestionGroup}
+    >
       <i testID="icon-mark" style={{ backgroundColor: bgColor }} className={icon} />
-      <div>{name}</div>
-    </mock-questionGroupListItem>
+      <Text>{name}</Text>
+    </TouchableOpacity>
   );
 };
 
@@ -208,7 +215,19 @@ describe('QuestionGroupList', () => {
     ]);
   });
 
-  it.todo('Should render question group name');
+  it('Should render question group name', () => {
+    const parrentWrapper = render(<QuestionGroupList form={example} activeQuestionGroup={1} />);
+    expect(mockQuestionGroupListItem).toHaveBeenCalledWith('Group 1', true, false);
+    expect(mockQuestionGroupListItem).toHaveBeenCalledWith('Group 2', false, false);
+    expect(mockQuestionGroupListItem).toHaveBeenCalledWith('Group 3', false, false);
+
+    const group1 = parrentWrapper.getByText('Group 1');
+    expect(group1).toBeDefined();
+    const group2 = parrentWrapper.getByText('Group 2');
+    expect(group2).toBeDefined();
+    const group3 = parrentWrapper.getByText('Group 3');
+    expect(group3).toBeDefined();
+  });
 
   it('Should have a active mark if completed', () => {
     render(<QuestionGroupList form={example} values={{ 1: 'Galih' }} activeQuestionGroup={1} />);
@@ -245,8 +264,44 @@ describe('QuestionGroupList', () => {
     expect(iconEl.props.className).toBe('unchecked');
   });
 
-  it.todo('Should disable question group if not completed');
-  it.todo('Should highlight question group if active');
+  it('Should disable question group if not completed', () => {
+    render(<QuestionGroupList form={example} values={{ 1: 'Galih' }} activeQuestionGroup={1} />);
+    expect(mockQuestionGroupListItem).toHaveBeenCalledWith('Group 1', true, true);
+    expect(mockQuestionGroupListItem).toHaveBeenCalledWith('Group 2', false, false);
+    expect(mockQuestionGroupListItem).toHaveBeenCalledWith('Group 3', false, false);
+
+    const itemWrapper = render(
+      <QuestionGroupListItem name="Group 2" active={false} completedQuestionGroup={false} />,
+    );
+    const item = itemWrapper.getByTestId('question-group-list-item-wrapper');
+    expect(item.props.accessibilityState.disabled).toBe(true);
+  });
+
+  it('Should not disable question group if completed', () => {
+    const itemWrapper = render(
+      <QuestionGroupListItem name="Group 2" active={false} completedQuestionGroup={true} />,
+    );
+    const item = itemWrapper.getByTestId('question-group-list-item-wrapper');
+    expect(item.props.accessibilityState.disabled).toBe(false);
+  });
+
+  it('Should highlight question group if active', () => {
+    const itemWrapper = render(
+      <QuestionGroupListItem name="Group 1" active={true} completedQuestionGroup={false} />,
+    );
+    const item = itemWrapper.getByTestId('question-group-list-item-wrapper');
+    console.log(item.props);
+    expect(item.props.style.backgroundColor).toBe('gray');
+  });
+
+  it.failing('Should highlight question group if not active', () => {
+    const itemWrapper = render(
+      <QuestionGroupListItem name="Group 1" active={false} completedQuestionGroup={false} />,
+    );
+    const item = itemWrapper.getByTestId('question-group-list-item-wrapper');
+    console.log(item.props);
+    expect(item.props.style.backgroundColor).toBe('gray');
+  });
 
   it.failing(
     'Should failing when only one question answered from two requred questions in a question group',
