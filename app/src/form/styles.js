@@ -10,7 +10,6 @@ export const styles = StyleSheet.create({
   fieldGroupHeader: {
     paddingHorizontal: 20,
     paddingVertical: 15,
-    marginBottom: 20,
     borderColor: 'grey',
     borderTopWidth: 0.5,
     borderBottomWidth: 0.5,
@@ -19,9 +18,12 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 14,
   },
+  fieldGroupDescContainer: {
+    backgroundColor: '#e5e7eb',
+  },
   fieldGroupDescription: {
-    paddingTop: 20,
-    paddingVertical: 15,
+    paddingVertical: 8,
+    paddingHorizontal: 22,
     fontSize: 14,
   },
   questionContainer: {
