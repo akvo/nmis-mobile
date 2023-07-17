@@ -20,17 +20,13 @@ const AuthForm = ({ navigation }) => {
   const isNetworkAvailable = UIState.useState((s) => s.online);
   const [passcode, setPasscode] = React.useState(null);
   const [hidden, setHidden] = React.useState(true);
-  const [checked, setChecked] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(null);
 
   const toggleHidden = () => setHidden(!hidden);
   const goTo = (page) => navigation.navigate(page);
 
-  const disableLoginButton = React.useMemo(
-    () => !passcode || passcode === '' || !checked,
-    [passcode, checked],
-  );
+  const disableLoginButton = React.useMemo(() => !passcode || passcode === '', [passcode]);
 
   const handleOnPressLogin = () => {
     // check connection
@@ -116,15 +112,6 @@ const AuthForm = ({ navigation }) => {
             {error}
           </Text>
         )}
-        <CheckBox
-          title="I accept the Terms or Conditions"
-          checked={checked}
-          onPress={() => setChecked(!checked)}
-          containerStyle={styles.checkbox}
-          textStyle={styles.text}
-          testID="auth-checkbox-field"
-          center
-        />
       </View>
       <Button
         title="primary"
