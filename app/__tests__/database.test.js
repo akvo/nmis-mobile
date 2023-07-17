@@ -209,4 +209,43 @@ describe('conn.tx', () => {
       expect.any(Function),
     );
   });
+
+  test('should execute the select with no case condition', async () => {
+    // Mock the result set for select
+    const userData = [
+      {
+        name: 'Leo',
+      },
+    ];
+    const mockSelectSql = jest.fn((query, params, successCallback) => {
+      successCallback(null, { rows: { length: userData.length, _array: userData } });
+    });
+    db.transaction.mockImplementation((transactionFunction) => {
+      transactionFunction({
+        executeSql: mockSelectSql,
+      });
+    });
+
+    // Define the query and parameters for select
+    const table = 'users';
+    const name = 'leo';
+    const where = { name };
+    const selectQuery = query.read(table, where, true);
+    const selectParams = [name];
+
+    // Execute the select transaction
+    const result = await conn.tx(db, selectQuery, selectParams);
+
+    // Assertions
+    expect(selectQuery).toEqual('SELECT * FROM users WHERE name = ? COLLATE NOCASE;');
+    expect(result.rows).toHaveLength(userData.length);
+    expect(result.rows._array).toEqual(userData);
+    expect(db.transaction).toHaveBeenCalled();
+    expect(mockSelectSql).toHaveBeenCalledWith(
+      selectQuery,
+      selectParams,
+      expect.any(Function),
+      expect.any(Function),
+    );
+  });
 });
