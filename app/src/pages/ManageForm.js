@@ -3,13 +3,9 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { View } from 'react-native';
 import { ListItem } from '@rneui/themed';
 import { BaseLayout } from '../components';
-import { FormState } from '../store';
 
 const ManageForm = ({ navigation, route }) => {
   const goTo = (page) => {
-    FormState.update((s) => {
-      s.form = route?.params;
-    });
     navigation.navigate(page, { ...route?.params });
   };
 

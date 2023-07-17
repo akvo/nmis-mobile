@@ -1,10 +1,9 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import { act, render, renderHook, waitFor, fireEvent } from '@testing-library/react-native';
+import { render, fireEvent } from '@testing-library/react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import ManageFormPage from '../ManageForm';
-import { FormState } from '../../store';
 
 jest.mock('@react-navigation/native');
 
@@ -14,7 +13,7 @@ describe('ManageFormPage', () => {
     expect(tree).toMatchSnapshot();
   });
 
-  test('should navigate to page and update formState successfully', async () => {
+  test('should navigate to page successfully', () => {
     const navigation = useNavigation();
     const mockParams = {
       params: {
@@ -28,17 +27,6 @@ describe('ManageFormPage', () => {
     expect(listItemEl).toBeDefined();
     fireEvent.press(listItemEl);
 
-    act(() => {
-      FormState.update((s) => {
-        s.form = mockParams.params;
-      });
-    });
-
-    await waitFor(() => {
-      const { result } = renderHook(() => FormState.useState());
-      const { form: formSelected } = result.current;
-      expect(formSelected).toBe(mockParams.params);
-      expect(navigation.navigate).toHaveBeenCalledWith('FormPage', mockParams.params);
-    });
+    expect(navigation.navigate).toHaveBeenCalledWith('FormPage', mockParams.params);
   });
 });
