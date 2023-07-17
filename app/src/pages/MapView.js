@@ -18,7 +18,7 @@ const MapView = ({ navigation, route }) => {
   const [htmlContent, setHtmlContent] = useState(null);
   const [loading, setLoading] = useState(true);
   const webViewRef = useRef(null);
-  const { form: selectedForm } = FormState.useState((s) => s);
+  const selectedForm = FormState.useState((s) => s.form);
 
   const updateMapState = (markerData) => {
     const { lat, lng } = markerData;
@@ -69,7 +69,7 @@ const MapView = ({ navigation, route }) => {
 
   useEffect(() => {
     const handleBackPress = () => {
-      navigation.navigate('FormPage', selectedForm);
+      navigation.navigate('FormPage', { id: selectedForm?.id, name: selectedForm?.name });
       return true;
     };
     const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
