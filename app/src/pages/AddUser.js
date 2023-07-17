@@ -26,7 +26,7 @@ const AddUser = ({ navigation }) => {
   };
 
   const checkExistingUser = async (name) => {
-    const checkQuery = query.read('users', { name });
+    const checkQuery = query.read('users', { name }, true);
     const { rows } = await conn.tx(db, checkQuery, [name]);
     return rows.length;
   };
