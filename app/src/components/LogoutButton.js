@@ -38,12 +38,19 @@ const LogoutButton = () => {
     <View>
       <ListItem onPress={() => setVisible(true)} testID="list-item-logout">
         <ListItem.Content>
-          <ListItem.Title>Log Out</ListItem.Title>
+          <ListItem.Title>Reset</ListItem.Title>
         </ListItem.Content>
-        <Icon name="log-out-outline" type="ionicon" />
+        <Icon name="refresh" type="ionicon" />
       </ListItem>
       <Dialog testID="dialog-confirm-logout" isVisible={visible}>
-        {loading ? <Dialog.Loading /> : <Text>Are you sure you want to log out?</Text>}
+        {loading ? (
+          <Dialog.Loading />
+        ) : (
+          <Text>
+            By resetting, you'll lose all saved data including users, forms and data-points. Are you
+            sure?
+          </Text>
+        )}
         <Dialog.Actions>
           <Dialog.Button onPress={handleYesPress} testID="dialog-button-yes">
             Yes

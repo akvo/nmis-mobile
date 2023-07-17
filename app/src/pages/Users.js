@@ -22,40 +22,28 @@ const Users = ({ navigation, route }) => {
     navigation.navigate('Home');
   };
 
-  const loadUsers = () => {
+  const loadUsers = async () => {
     const selectQuery = query.read('users');
-    conn
-      .tx(db, selectQuery)
-      .then(({ rows }) => {
-        setUsers(rows._array);
-        setLoading(false);
-      })
-      .catch(() => {
-        setLoading(false);
-      });
+    const { rows } = await conn.tx(db, selectQuery);
+    setUsers(rows._array);
+    setLoading(false);
   };
 
   const handleSelectUser = async (id, name) => {
-    try {
-      const currUserQuery = query.update('users', { id: currUserID }, { active: 0 });
-      await conn.tx(db, currUserQuery, [currUserID]);
+    const currUserQuery = query.update('users', { id: currUserID }, { active: 0 });
+    await conn.tx(db, currUserQuery, [currUserID]);
 
-      const thisUserQuery = query.update('users', { id }, { active: 1 });
-      await conn.tx(db, thisUserQuery, [id]);
+    const thisUserQuery = query.update('users', { id }, { active: 1 });
+    await conn.tx(db, thisUserQuery, [id]);
 
-      UserState.update((s) => {
-        s.id = id;
-        s.name = name;
-      });
-      loadUsers();
+    UserState.update((s) => {
+      s.id = id;
+      s.name = name;
+    });
+    await loadUsers();
 
-      if (Platform.OS === 'android') {
-        ToastAndroid.show(`Switch to ${name}`, ToastAndroid.SHORT);
-      }
-    } catch {
-      if (Platform.OS === 'android') {
-        ToastAndroid.show('Unable to switch user', ToastAndroid.SHORT);
-      }
+    if (Platform.OS === 'android') {
+      ToastAndroid.show(`Switch to ${name}`, ToastAndroid.SHORT);
     }
   };
 

@@ -26,7 +26,7 @@ const AddUser = ({ navigation }) => {
   };
 
   const checkExistingUser = async (name) => {
-    const checkQuery = query.read('users', { name });
+    const checkQuery = query.read('users', { name }, true);
     const { rows } = await conn.tx(db, checkQuery, [name]);
     return rows.length;
   };
@@ -135,7 +135,7 @@ const AddUser = ({ navigation }) => {
                 />
               </ListItem.Content>
             </ListItem>
-            <ListItem>
+            {/* <ListItem>
               <ListItem.Content>
                 <ListItem.Title>Password</ListItem.Title>
                 <Input
@@ -160,7 +160,7 @@ const AddUser = ({ navigation }) => {
                   testID="input-confirm-password"
                 />
               </ListItem.Content>
-            </ListItem>
+            </ListItem> */}
 
             <View
               style={{ display: 'flex', flexDirection: 'column', gap: 8, paddingHorizontal: 16 }}
