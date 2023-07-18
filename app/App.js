@@ -55,7 +55,11 @@ const App = () => {
     const configExist = await crudConfig.getConfig();
     const serverURL = configExist?.serverURL || serverURLState || null;
     if (!configExist) {
-      await crudConfig.addConfig();
+      if (serverURL) {
+        await crudConfig.addConfig({ serverURL });
+      } else {
+        await crudConfig.addConfig();
+      }
     }
     if (serverURL) {
       BuildParamsState.update((s) => {
