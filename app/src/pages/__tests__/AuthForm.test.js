@@ -33,17 +33,13 @@ describe('AuthFormPage', () => {
 
     const passcodeInput = getByTestId('auth-password-field');
     expect(passcodeInput).toBeDefined();
-    const checkbox = getByTestId('auth-checkbox-field');
-    expect(checkbox).toBeDefined();
     const loginButton = getByTestId('auth-login-button');
     expect(loginButton).toBeDefined();
 
     fireEvent.changeText(passcodeInput, '123456');
-    expect(loginButton.props.accessibilityState.disabled).toBe(true);
-    fireEvent.press(checkbox);
     expect(loginButton.props.accessibilityState.disabled).toBe(false);
-    fireEvent.press(loginButton);
 
+    fireEvent.press(loginButton);
     expect(api.post).not.toHaveBeenCalled();
   });
 
@@ -60,11 +56,9 @@ describe('AuthFormPage', () => {
       });
     });
     const passcodeInput = getByTestId('auth-password-field');
-    const checkbox = getByTestId('auth-checkbox-field');
     const loginButton = getByTestId('auth-login-button');
 
     fireEvent.changeText(passcodeInput, '123456');
-    fireEvent.press(checkbox);
     fireEvent.press(loginButton);
 
     expect(api.post).toHaveBeenCalledWith('/auth', expect.any(FormData), {
@@ -98,11 +92,9 @@ describe('AuthFormPage', () => {
     });
 
     const passcodeInput = getByTestId('auth-password-field');
-    const checkbox = getByTestId('auth-checkbox-field');
     const loginButton = getByTestId('auth-login-button');
 
     fireEvent.changeText(passcodeInput, '123456');
-    fireEvent.press(checkbox);
     fireEvent.press(loginButton);
 
     expect(api.post).toHaveBeenCalledWith('/auth', expect.any(FormData), {
@@ -139,11 +131,9 @@ describe('AuthFormPage', () => {
     });
 
     const passcodeInput = getByTestId('auth-password-field');
-    const checkbox = getByTestId('auth-checkbox-field');
     const loginButton = getByTestId('auth-login-button');
 
     fireEvent.changeText(passcodeInput, '123456');
-    fireEvent.press(checkbox);
     fireEvent.press(loginButton);
 
     expect(api.post).toHaveBeenCalledWith('/auth', expect.any(FormData), {

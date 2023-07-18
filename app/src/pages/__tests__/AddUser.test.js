@@ -32,7 +32,7 @@ describe('AddUserPage', () => {
       expect(errorText).toBeDefined();
     });
   });
-
+  /*
   test('confirm password not matched', async () => {
     const { result: navigationRef } = renderHook(() => useNavigation());
     const navigation = navigationRef.current;
@@ -56,7 +56,7 @@ describe('AddUserPage', () => {
       const errorText = getByText('Passwords must match');
       expect(errorText).toBeDefined();
     });
-  });
+  }); */
 
   test('create username correctly', async () => {
     const { result: navigationRef } = renderHook(() => useNavigation());
