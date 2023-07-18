@@ -9,10 +9,23 @@ describe('FieldGroupHeader component', () => {
 
     const { getByText } = render(<FieldGroupHeader name={name} description={description} />);
 
-    const nameElement = getByText(name);
+    const nameOutput = `1. ${name}`;
+    const nameElement = getByText(nameOutput);
     expect(nameElement).toBeDefined();
+    expect(nameElement.props.children).toBe(nameOutput);
 
     const descriptionElement = getByText(description);
     expect(descriptionElement).toBeDefined();
+    expect(descriptionElement.props.children).toBe(description);
+  });
+
+  test('name and description is not defined', () => {
+    const { getByTestId, queryByTestId } = render(<FieldGroupHeader />);
+
+    const nameEl = getByTestId('text-name');
+    expect(nameEl.props.children).toBe('1. ');
+
+    const descriptionEl = queryByTestId('text-description');
+    expect(descriptionEl).toBeNull();
   });
 });

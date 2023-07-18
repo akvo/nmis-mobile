@@ -3,13 +3,22 @@ import { View } from 'react-native';
 import { Text } from '@rneui/themed';
 import { styles } from '../styles';
 
-const FieldGroupHeader = ({ index, name = '', description = '' }) => {
+const FieldGroupHeader = ({ description: descriptionText, index = 0, name = '' }) => {
+  const hasDescription = descriptionText || null;
   return (
     <View>
       <View style={styles.fieldGroupHeader}>
-        <Text style={styles.fieldGroupName}>{!isNaN(index) ? `${index + 1}. ${name}` : name}</Text>
+        <Text style={styles.fieldGroupName} testID="text-name">
+          {`${index + 1}. ${name}`}
+        </Text>
       </View>
-      {description && <Text style={styles.fieldGroupDescription}>{description}</Text>}
+      <View style={styles.fieldGroupDescContainer}>
+        {hasDescription && (
+          <Text style={styles.fieldGroupDescription} testID="text-description">
+            {descriptionText}
+          </Text>
+        )}
+      </View>
     </View>
   );
 };

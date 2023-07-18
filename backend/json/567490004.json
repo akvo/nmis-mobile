@@ -5,6 +5,7 @@
   "question_group": [
     {
       "name": "Introduction",
+      "description": "Your responses will be treated confidentially and used solely for the purpose of improving our services.",
       "question": [
         {
           "id": 605030132,
@@ -38,6 +39,7 @@
     },
     {
       "name": "Governance",
+      "description": "We adhere to strong governance and policy frameworks to ensure ethical practices, transparency, and accountability.",
       "question": [
         {
           "id": 595960114,
@@ -324,6 +326,7 @@
     },
     {
       "name": "Sustainability",
+      "description": "We are dedicated to sustainability in every aspect of our operations.",
       "question": [
         {
           "id": 605320013,
