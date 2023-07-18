@@ -3,7 +3,7 @@ version: "3.9"
 services:
   mobileapp:
     environment:
-      - BACKEND_IP_ADDRESS=http://${IP_ADDRESS}:8080
+      - BACKEND_IP_ADDRESS=${IP_ADDRESS}
     volumes:
       - nmis-mobile-sync:/app/node_modules:nocopy
       - ./.git:/app/.git:ro

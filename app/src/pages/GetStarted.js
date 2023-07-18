@@ -1,11 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Text, Button, Input } from '@rneui/themed';
 import { CenterLayout, Image } from '../components';
 import { BuildParamsState } from '../store';
 import { api } from '../lib';
 import { crudConfig } from '../database/crud';
-
-const serverURLNotDefined = 'http://:8080';
 
 const GetStarted = ({ navigation }) => {
   const [currentConfig, setCurrentConfig] = useState({});
@@ -19,16 +17,22 @@ const GetStarted = ({ navigation }) => {
     }
   };
 
+  const isServerURLDefined = useMemo(() => {
+    return currentConfig?.serverURL && serverURLState;
+  }, [currentConfig?.serverURL, serverURLState]);
+
   useEffect(() => {
     getConfig();
   }, []);
 
   const goToLogin = async () => {
     if (IPAddr) {
-      const URL = `http://${IPAddr}:8080`;
-      api.setServerURL(URL);
+      BuildParamsState.update((s) => {
+        s.serverURL = IPAddr;
+      });
+      api.setServerURL(IPAddr);
       // save server URL
-      await crudConfig.updateConfig({ serverURL: URL });
+      await crudConfig.updateConfig({ serverURL: IPAddr });
     }
     setTimeout(() => {
       navigation.navigate('AuthForm');
@@ -41,16 +45,7 @@ const GetStarted = ({ navigation }) => {
       <Image />
       <CenterLayout.Titles items={titles} />
       <Text>Lorem Ipsum dolor sit amet dolor random</Text>
-      {(!currentConfig?.serverURL ||
-        currentConfig?.serverURL === 'url' ||
-        !serverURLState ||
-        serverURLState === serverURLNotDefined) && (
-        <Input
-          keyboardType="numeric"
-          placeholder="IP Address (dev mode only)"
-          onChangeText={setIPAddr}
-        />
-      )}
+      {!isServerURLDefined && <Input placeholder="Input Server URL" onChangeText={setIPAddr} />}
       <Button title="primary" onPress={goToLogin}>
         Get Started
       </Button>
