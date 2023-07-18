@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   TypeDate,
   TypeImage,
@@ -12,12 +12,27 @@ import {
 import { useField } from 'formik';
 import { View, Text } from 'react-native';
 import { styles } from '../styles';
+import { FormState } from '../../store';
 
 const QuestionField = ({ keyform, field: questionField, setFieldValue, values, validate }) => {
   const [field, meta, helpers] = useField({ name: questionField.id, validate });
 
+  useEffect(() => {
+    if (meta.error && field.name && values?.[field.name]) {
+      setTimeout(() => {
+        delete values?.[field.name];
+        FormState.update((s) => {
+          s.currentValues = values;
+        });
+      }, 100);
+    }
+  }, [meta.error, field.name, values]);
+
   const handleOnChangeField = (id, value) => {
     helpers.setTouched({ [field.name]: true });
+    FormState.update((s) => {
+      s.currentValues = { ...s.currentValues, [id]: value };
+    });
     setFieldValue(id, value);
   };
 

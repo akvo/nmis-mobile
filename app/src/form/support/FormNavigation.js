@@ -9,6 +9,8 @@ const FormNavigation = ({
   activeGroup,
   setActiveGroup,
   totalGroup,
+  showQuestionGroupList,
+  setShowQuestionGroupList,
 }) => {
   const validateOnFormNavigation = async () => {
     let errors = false;
@@ -25,6 +27,13 @@ const FormNavigation = ({
   };
 
   const handleFormNavigation = (index) => {
+    // index 0 = prev group
+    // index 1 = show question group list
+    // index 2 = next group
+    if (index === 1) {
+      setShowQuestionGroupList(!showQuestionGroupList);
+      return;
+    }
     validateOnFormNavigation()
       .then((errors) => {
         if (!errors && index === 2 && activeGroup === totalGroup - 1) {
@@ -54,10 +63,8 @@ const FormNavigation = ({
         testID="form-nav-btn-back"
       />
       <Tab.Item
-        disabled
-        disabledStyle={{ backgroundColor: 'transparent' }}
         title={`${activeGroup + 1}/${totalGroup}`}
-        titleStyle={styles.formNavigationTitle}
+        titleStyle={styles.formNavigationGroupCount}
         testID="form-nav-group-count"
       />
       {activeGroup < totalGroup - 1 ? (

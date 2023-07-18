@@ -7,6 +7,7 @@ const FormState = new Store({
   currentGroup: 1,
   saved: false,
   submitted: false,
+  currentValues: {},
 });
 
 export default FormState;

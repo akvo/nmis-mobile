@@ -7,7 +7,7 @@ import { FormState } from '../store';
 import * as formDefinition from '../form/example-form.json';
 
 const FormPage = ({ navigation, route }) => {
-  const selectedForm = FormState.useState((s) => s.form);
+  const { selectedForm, currentValues } = FormState.useState((s) => s);
 
   const formJSON = React.useMemo(() => {
     if (!selectedForm?.json) {
@@ -22,7 +22,7 @@ const FormPage = ({ navigation, route }) => {
 
   return (
     <BaseLayout title={route?.params?.name} back={goBack}>
-      <FormContainer forms={formJSON || formDefinition} initialValues={{}} />
+      <FormContainer forms={formJSON || formDefinition} initialValues={currentValues} />
     </BaseLayout>
   );
 };

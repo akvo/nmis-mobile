@@ -761,7 +761,7 @@ exports[`FormPage component should render component correctly 1`] = `
             {
               "busy": undefined,
               "checked": undefined,
-              "disabled": true,
+              "disabled": false,
               "expanded": undefined,
               "selected": false,
             }
@@ -813,14 +813,14 @@ exports[`FormPage component should render component correctly 1`] = `
             <Text
               style={
                 {
-                  "color": "hsl(208, 8%, 63%)",
+                  "color": "grey",
                   "fontSize": 14,
                   "fontWeight": "normal",
                   "marginLeft": -10,
                   "marginRight": -10,
                   "paddingBottom": 10,
                   "paddingHorizontal": 16,
-                  "paddingTop": 9,
+                  "paddingTop": 13,
                   "paddingVertical": 8,
                   "textAlign": "center",
                 }

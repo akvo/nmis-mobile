@@ -14,7 +14,7 @@ import {
   MapViewPage,
   UsersPage,
 } from '../pages';
-import { UIState, AuthState, UserState } from '../store';
+import { UIState, AuthState, UserState, FormState } from '../store';
 import { BackHandler } from 'react-native';
 import * as TaskManager from 'expo-task-manager';
 import * as BackgroundFetch from 'expo-background-fetch';
@@ -113,6 +113,11 @@ const Navigation = (props) => {
   const handleOnChangeNavigation = (state) => {
     // listen to route change
     const currentRoute = state.routes[state.routes.length - 1].name;
+    if (['Home', 'ManageForm'].includes(currentRoute)) {
+      FormState.update((s) => {
+        s.currentValues = {};
+      });
+    }
     UIState.update((s) => {
       s.currentPage = currentRoute;
     });
