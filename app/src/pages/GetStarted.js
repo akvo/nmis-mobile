@@ -18,7 +18,7 @@ const GetStarted = ({ navigation }) => {
   };
 
   const isServerURLDefined = useMemo(() => {
-    return currentConfig?.serverURL && serverURLState;
+    return currentConfig?.serverURL || serverURLState;
   }, [currentConfig?.serverURL, serverURLState]);
 
   useEffect(() => {
