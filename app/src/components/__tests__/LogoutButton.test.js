@@ -18,7 +18,7 @@ describe('LogoutButton', () => {
     const logoutItem = getByTestId('list-item-logout');
     expect(logoutItem).toBeDefined();
 
-    const logoutText = getByText('Log Out');
+    const logoutText = getByText('Reset');
     expect(logoutText).toBeDefined();
   });
 

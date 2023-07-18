@@ -63,6 +63,7 @@ exports[`ManageFormPage renders correctly 1`] = `
         onResponderTerminate={[Function]}
         onResponderTerminationRequest={[Function]}
         onStartShouldSetResponder={[Function]}
+        testID="goto-item-0"
       >
         <View
           style={
@@ -253,6 +254,7 @@ exports[`ManageFormPage renders correctly 1`] = `
         onResponderTerminate={[Function]}
         onResponderTerminationRequest={[Function]}
         onStartShouldSetResponder={[Function]}
+        testID="goto-item-1"
       >
         <View
           style={
@@ -443,6 +445,7 @@ exports[`ManageFormPage renders correctly 1`] = `
         onResponderTerminate={[Function]}
         onResponderTerminationRequest={[Function]}
         onStartShouldSetResponder={[Function]}
+        testID="goto-item-2"
       >
         <View
           style={

@@ -848,7 +848,7 @@ exports[`SettingsPage renders correctly 1`] = `
                 }
                 testID="listItemTitle"
               >
-                Log Out
+                Reset
               </Text>
             </View>
             <View

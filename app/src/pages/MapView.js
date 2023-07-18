@@ -1,15 +1,24 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, StyleSheet, ActivityIndicator, Button, Platform, ToastAndroid } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  ActivityIndicator,
+  Button,
+  Platform,
+  ToastAndroid,
+  BackHandler,
+} from 'react-native';
 import { WebView } from 'react-native-webview';
 import { Asset } from 'expo-asset';
 import * as FileSystem from 'expo-file-system';
-import { MapState } from '../store';
+import { MapState, FormState } from '../store';
 import { loc } from '../lib';
 
-const MapView = ({ route }) => {
+const MapView = ({ navigation, route }) => {
   const [htmlContent, setHtmlContent] = useState(null);
   const [loading, setLoading] = useState(true);
   const webViewRef = useRef(null);
+  const selectedForm = FormState.useState((s) => s.form);
 
   const updateMapState = (markerData) => {
     const { lat, lng } = markerData;
@@ -57,6 +66,17 @@ const MapView = ({ route }) => {
       setLoading(false);
     }
   }, [loading, htmlContent]);
+
+  useEffect(() => {
+    const handleBackPress = () => {
+      navigation.navigate('FormPage', { id: selectedForm?.id, name: selectedForm?.name });
+      return true;
+    };
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
+    return () => {
+      backHandler.remove();
+    };
+  }, []);
 
   return (
     <View style={styles.container}>
