@@ -44,6 +44,21 @@ describe('TypeNumber component', () => {
     expect(inputElement.props.value).toBe(initialValue);
   });
 
-  test.todo('should show input preffix if addonBefore defined');
-  test.todo('should show input suffix if addonAfter defined');
+  test.todo('should not show input preffix if addonBefore not defined');
+
+  test.todo('should show input preffix if addonBefore (string) defined');
+
+  test.todo('should show input preffix if addonBefore (React element) defined');
+
+  test.todo('should not show input suffix if only addonBefore defined');
+
+  test.todo('should not show input preffix if addonBefore not defined');
+
+  test.todo('should show input suffix if addonAfter (string) defined');
+
+  test.todo('should show input suffix if addonAfter (React element) defined');
+
+  test.todo('should not show input preffix if only addonAfter defined');
+
+  test.todo('should show both input suffix & preffix if both addonAfter & addonBefore defined');
 });
