@@ -1,4 +1,6 @@
 import { Platform } from 'react-native';
+import { Asset } from 'expo-asset';
+import * as FileSystem from 'expo-file-system';
 import * as SQLite from 'expo-sqlite';
 
 const openDatabase = () => {
@@ -50,7 +52,19 @@ const tx = (db, query, params = []) => {
   });
 };
 
+const openDBfile = async (databaseFile, databaseName) => {
+  if (!(await FileSystem.getInfoAsync(FileSystem.documentDirectory + 'SQLite')).exists) {
+    await FileSystem.makeDirectoryAsync(FileSystem.documentDirectory + 'SQLite');
+  }
+  await FileSystem.downloadAsync(
+    Asset.fromModule(databaseFile).uri,
+    FileSystem.documentDirectory + `SQLite/${databaseName}.db`,
+  );
+  return SQLite.openDatabase(`${databaseName}.db`);
+};
+
 export const conn = {
+  file: (dbFile, dbName) => openDBfile(dbFile, dbName),
   init,
   tx,
 };
