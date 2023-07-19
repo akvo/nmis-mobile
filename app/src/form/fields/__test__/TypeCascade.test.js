@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
-import { render, renderHook, fireEvent, act, waitFor } from '@testing-library/react-native';
+import { render, fireEvent } from '@testing-library/react-native';
 
 const mockTypeCascade = jest.fn();
 
@@ -27,56 +27,61 @@ const TypeCascade = ({ onChange, values, id, name, dataSource = [] }) => {
     return groupedData;
   };
 
-  const loadOptions = (index, parentID) => {
-    const options = dataSource
-      ?.filter((d) => d?.parent === parentID)
-      ?.map((d) => ({
-        label: d?.name,
-        value: d?.id,
-      }));
-    const nextIndex = index + 1;
-    const hasNextItem = dropdownItems[nextIndex] || {};
-    const hasChildren = hasNextItem?.options?.filter((o) => o?.parent === parentID)?.length > 0;
-    if (hasChildren) {
-      const updatedItems = dropdownItems
-        .slice(0, nextIndex)
-        .reduce((accumulator, currentValue, currentIndex) => {
-          if (currentIndex === index) {
-            accumulator.push({ options });
-          } else {
-            accumulator.push(currentValue);
-          }
-          return accumulator;
-        }, []);
-      setDropdownItems(updatedItems);
-    }
+  const handleUpdateItems = (dataItems, index, options) => {
+    const updatedItems = dataItems.reduce((accumulator, currentValue, currentIndex) => {
+      if (currentIndex === index) {
+        accumulator.push({ options });
+      } else {
+        accumulator.push(currentValue);
+      }
+      return accumulator;
+    }, []);
 
-    if (!hasChildren) {
-      setDropdownItems([
-        ...dropdownItems,
-        {
-          options,
-          value: null,
-        },
-      ]);
-    }
+    return updatedItems;
   };
 
-  const handleOnChange = (index, value) => {
-    const nextIndex = index + 1;
-    const updatedItems = dropdownItems
-      .slice(0, nextIndex)
-      .map((d, dx) => (dx === index ? { ...d, value } : d));
-    setDropdownItems(updatedItems);
+  const handleAddItems = (dataItems, options) => {
+    return [
+      ...dataItems,
+      {
+        options,
+        value: null,
+      },
+    ];
+  };
 
-    const selectedValues = updatedItems.map((u) => {
+  const handleSetValues = (dataItems) => {
+    const selectedValues = dataItems.map((u) => {
       const findData = dataSource.find((ds) => ds?.id === u.value);
       return findData?.name;
     });
 
     const stringValue = selectedValues.join('|');
+    // call onChange formik
     onChange(id, stringValue);
-    loadOptions(index, value);
+  };
+
+  const handleOnChange = (index, value) => {
+    const nextIndex = index + 1;
+    let updatedItems = dropdownItems
+      .slice(0, nextIndex)
+      .map((d, dx) => (dx === index ? { ...d, value } : d));
+
+    const hasNextItem = updatedItems[nextIndex] || {};
+    const hasChildren = hasNextItem?.options?.filter((o) => o?.parent === value)?.length > 0;
+
+    const options = dataSource?.filter((d) => d?.parent === value);
+
+    if (hasChildren) {
+      updatedItems = handleUpdateItems(updatedItems, index, options);
+    }
+    if (!hasChildren) {
+      updatedItems = handleAddItems(updatedItems, options);
+    }
+
+    handleSetValues(updatedItems);
+
+    setDropdownItems(updatedItems);
   };
 
   useEffect(() => {
@@ -89,11 +94,7 @@ const TypeCascade = ({ onChange, values, id, name, dataSource = [] }) => {
       const initValue =
         options?.find((o) => o?.id === findValue?.parent || o?.id === findValue?.id)?.id || null;
       return {
-        options: options.map((o) => ({
-          label: o?.name,
-          value: o?.id,
-          parent: o?.parent,
-        })),
+        options,
         value: initValue,
       };
     });
@@ -107,8 +108,8 @@ const TypeCascade = ({ onChange, values, id, name, dataSource = [] }) => {
         return (
           <Dropdown
             key={index}
-            labelField="label"
-            valueField="value"
+            labelField="name"
+            valueField="id"
             testID={`dropdown-cascade-${index}`}
             data={item?.options}
             onChange={({ value }) => handleOnChange(index, value)}
@@ -276,7 +277,7 @@ describe('TypeCascade', () => {
     const mockedOnChange = jest.fn((fieldName, value) => {
       values[fieldName] = value;
     });
-    const { getByTestId, getByText, queryByTestId, debug } = render(
+    const { getByTestId, getByText, queryByTestId, queryByText } = render(
       <TypeCascade
         onChange={mockedOnChange}
         id={fieldID}
@@ -288,18 +289,29 @@ describe('TypeCascade', () => {
 
     const firstDropdown = getByTestId('dropdown-cascade-0');
     expect(firstDropdown).toBeDefined();
+
     const firstOption = getByText('DI YOGYAKARTA');
     expect(firstOption).toBeDefined();
-
-    // Change first parent
-    fireEvent(firstDropdown, 'onChange', { value: 111 });
-
-    const updatedOption = getByText('JAWA TENGAH');
-    expect(updatedOption).toBeDefined();
 
     const secondDropdown = getByTestId('dropdown-cascade-1');
     expect(secondDropdown).toBeDefined();
 
-    // TODO next child options
+    const secondOption = getByText('KAB. BANTUL');
+    expect(secondOption).toBeDefined();
+
+    const thirdDropdown = getByTestId('dropdown-cascade-2');
+    expect(thirdDropdown).toBeDefined();
+
+    // Change first parent
+    fireEvent(firstDropdown, 'onChange', { value: 111 });
+
+    const updatedFirstOption = getByText('JAWA TENGAH');
+    expect(updatedFirstOption).toBeDefined();
+
+    const updatedSecondOption = queryByText('KAB. BANTUL');
+    expect(updatedSecondOption).toBeNull();
+
+    const thirdNotFound = queryByTestId('dropdown-cascade-2');
+    expect(thirdNotFound).toBeNull();
   });
 });
