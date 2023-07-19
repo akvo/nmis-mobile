@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { render, renderHook, fireEvent, act, waitFor } from '@testing-library/react-native';
+import React from 'react';
+import { render, fireEvent, act, waitFor } from '@testing-library/react-native';
 import TypeCascade from '../TypeCascade';
 
 const dummyLocations = [
@@ -14,7 +14,24 @@ const dummyLocations = [
 ];
 
 describe('TypeCascade', () => {
-  it('Should have an initial state with default values or empty dropdowns.', () => {
+  it('Should not show options when the data source is not set.', () => {
+    const fieldID = 'location';
+    const fieldName = 'Location';
+    const values = { [fieldID]: null };
+
+    const mockedOnChange = jest.fn((fieldName, value) => {
+      values[fieldName] = value;
+    });
+
+    const { queryByTestId } = render(
+      <TypeCascade onChange={mockedOnChange} id={fieldID} name={fieldName} values={values} />,
+    );
+
+    const firstDropdown = queryByTestId('dropdown-cascade-0');
+    expect(firstDropdown).toBeNull();
+  });
+
+  it('Should not be able to update values when options is empty', async () => {
     const fieldID = 'location';
     const fieldName = 'Location';
     const initialValue = null;
@@ -23,18 +40,31 @@ describe('TypeCascade', () => {
     const mockedOnChange = jest.fn((fieldName, value) => {
       values[fieldName] = value;
     });
+
+    const dataSource = [{ id: 1, name: 'Only parent', parent: null }];
+
     const { getByTestId } = render(
       <TypeCascade
         onChange={mockedOnChange}
         id={fieldID}
         name={fieldName}
         values={values}
-        dataSource={dummyLocations}
+        dataSource={dataSource}
       />,
     );
-    const txtValuesEl = getByTestId('text-values');
-    expect(txtValuesEl).toBeDefined();
-    expect(txtValuesEl.props.children).toBeNull();
+
+    const dropdownEl = getByTestId('dropdown-cascade-0');
+    expect(dropdownEl).toBeDefined();
+
+    act(() => {
+      fireEvent(dropdownEl, 'onChange', { value: 2 });
+    });
+
+    await waitFor(() => {
+      const txtValuesEl = getByTestId('text-values');
+      expect(txtValuesEl).toBeDefined();
+      expect(txtValuesEl.props.children).toBeUndefined();
+    });
   });
 
   it('Should have a parent dropdown.', async () => {
@@ -55,8 +85,6 @@ describe('TypeCascade', () => {
         dataSource={dummyLocations}
       />,
     );
-    const { result: resultState } = renderHook(() => useState());
-    const [dropdownItems, setDropdownItems] = resultState.current;
 
     const parentDropdown = getByTestId('dropdown-cascade-0');
     expect(parentDropdown).toBeDefined();
@@ -99,6 +127,7 @@ describe('TypeCascade', () => {
     const childDropdown = getByTestId('dropdown-cascade-1');
     expect(childDropdown).toBeDefined();
   });
+
   it('Should depend on the selected option in the parent dropdown.', () => {
     const fieldID = 'location';
     const fieldName = 'Location';
@@ -133,32 +162,6 @@ describe('TypeCascade', () => {
     expect(thirdDropdown).toBeDefined();
   });
 
-  it('Should not show options when the data source is empty.', () => {
-    const fieldID = 'location';
-    const fieldName = 'Location';
-    const selectedOption = 107;
-    const values = { [fieldID]: selectedOption };
-
-    const mockedOnChange = jest.fn((fieldName, value) => {
-      values[fieldName] = value;
-    });
-
-    const emptyDataSource = [];
-
-    const { queryByTestId } = render(
-      <TypeCascade
-        onChange={mockedOnChange}
-        id={fieldID}
-        name={fieldName}
-        values={values}
-        dataSource={emptyDataSource}
-      />,
-    );
-
-    const firstDropdown = queryByTestId('dropdown-cascade-0');
-    expect(firstDropdown).toBeNull();
-  });
-
   it('Should update child dropdowns when the selected option in the parent dropdown changes.', async () => {
     const fieldID = 'location';
     const fieldName = 'Location';
@@ -168,7 +171,7 @@ describe('TypeCascade', () => {
     const mockedOnChange = jest.fn((fieldName, value) => {
       values[fieldName] = value;
     });
-    const { getByTestId, getByText, queryByTestId, queryByText, debug } = render(
+    const { getByTestId, getByText, queryByTestId, queryByText } = render(
       <TypeCascade
         onChange={mockedOnChange}
         id={fieldID}
