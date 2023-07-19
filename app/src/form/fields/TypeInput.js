@@ -18,6 +18,20 @@ export const addPreffix = (addonBefore) => {
   }
   return {
     leftIcon: element,
+    leftIconContainerStyle: {
+      backgroundColor: '#F5F5F5',
+      marginLeft: -10,
+      marginRight: 8,
+      marginVertical: 0,
+      paddingLeft: 8,
+      paddingRight: 8,
+      borderWidth: 0,
+      borderColor: 'transparent',
+      borderTopLeftRadius: 5,
+      borderBottomLeftRadius: 5,
+      borderRightWidth: 0.5,
+      borderRightColor: 'grey',
+    },
   };
 };
 
@@ -35,6 +49,20 @@ export const addSuffix = (addonAfter) => {
   }
   return {
     rightIcon: element,
+    rightIconContainerStyle: {
+      backgroundColor: '#F5F5F5',
+      marginRight: -9,
+      marginLeft: 8,
+      marginVertical: 0,
+      paddingRight: 8,
+      paddingLeft: 8,
+      borderWidth: 0,
+      borderColor: 'transparent',
+      borderTopRightRadius: 5,
+      borderBottomRightRadius: 5,
+      borderLeftWidth: 0.5,
+      borderLeftColor: 'grey',
+    },
   };
 };
 
