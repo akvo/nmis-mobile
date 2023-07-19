@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   TypeDate,
   TypeImage,
@@ -8,14 +8,17 @@ import {
   TypeText,
   TypeNumber,
   TypeGeo,
+  TypeCascade,
 } from '../fields';
 import { useField } from 'formik';
 import { View, Text } from 'react-native';
 import { styles } from '../styles';
 import { FormState } from '../../store';
+import { conn, query } from '../../database';
 
 const QuestionField = ({ keyform, field: questionField, setFieldValue, values, validate }) => {
   const [field, meta, helpers] = useField({ name: questionField.id, validate });
+  const [cascadeData, setCascadeData] = useState([]);
 
   useEffect(() => {
     if (meta.error && field.name && values?.[field.name]) {
@@ -35,6 +38,22 @@ const QuestionField = ({ keyform, field: questionField, setFieldValue, values, v
     });
     setFieldValue(id, value);
   };
+
+  const loadCascadeDataSource = async () => {
+    /**
+     * TODO: How to load cascade
+     */
+    const dbFile = require('../../assets/administrations.db');
+    const admDB = await conn.file(dbFile, 'administrations');
+
+    const admQuery = query.read('nodes');
+    const { rows } = await conn.tx(admDB, admQuery);
+    setCascadeData(rows._array);
+  };
+
+  useEffect(() => {
+    loadCascadeDataSource();
+  }, []);
 
   const renderField = () => {
     switch (questionField?.type) {
@@ -101,6 +120,17 @@ const QuestionField = ({ keyform, field: questionField, setFieldValue, values, v
             {...questionField}
           />
         );
+      case 'cascade':
+        return (
+          <TypeCascade
+            keyform={keyform}
+            onChange={handleOnChangeField}
+            values={values}
+            {...questionField}
+            dataSource={cascadeData}
+          />
+        );
+
       default:
         return (
           <TypeInput
