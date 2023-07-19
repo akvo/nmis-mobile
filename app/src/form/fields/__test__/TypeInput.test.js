@@ -47,7 +47,7 @@ describe('TypeInput component', () => {
   test.failing('should not show input preffix if addonBefore not defined', () => {
     const wrapper = render(<TypeInput id="inputField" name="Field Label" />);
 
-    const preffixElement = wrapper.getByTestId('type-input-preffix');
+    const preffixElement = wrapper.getByTestId('field-preffix');
     expect(preffixElement).toBeDefined();
   });
 
@@ -57,7 +57,7 @@ describe('TypeInput component', () => {
       <TypeInput id="inputField" name="Field Label" addonBefore={addonBefore} />,
     );
 
-    const preffixElement = wrapper.getByTestId('type-input-preffix');
+    const preffixElement = wrapper.getByTestId('field-preffix');
     expect(preffixElement).toBeDefined();
     expect(preffixElement.props.children).toEqual(addonBefore);
   });
@@ -68,7 +68,7 @@ describe('TypeInput component', () => {
       <TypeInput id="inputField" name="Field Label" addonBefore={addonBefore} />,
     );
 
-    const preffixElement = wrapper.getByTestId('type-input-preffix');
+    const preffixElement = wrapper.getByTestId('field-preffix');
     expect(preffixElement).toBeDefined();
     expect(preffixElement.props.children).toEqual(addonBefore);
   });
@@ -79,14 +79,14 @@ describe('TypeInput component', () => {
       <TypeInput id="inputField" name="Field Label" addonBefore={addonBefore} />,
     );
 
-    const suffixElement = wrapper.getByTestId('type-input-suffix');
+    const suffixElement = wrapper.getByTestId('field-suffix');
     expect(suffixElement).toBeDefined();
   });
 
   test.failing('should not show input preffix if addonBefore not defined', () => {
     const wrapper = render(<TypeInput id="inputField" name="Field Label" />);
 
-    const suffixElement = wrapper.getByTestId('type-input-suffix');
+    const suffixElement = wrapper.getByTestId('field-suffix');
     expect(suffixElement).toBeDefined();
   });
 
@@ -96,7 +96,7 @@ describe('TypeInput component', () => {
       <TypeInput id="inputField" name="Field Label" addonAfter={addonAfter} />,
     );
 
-    const suffixElement = wrapper.getByTestId('type-input-suffix');
+    const suffixElement = wrapper.getByTestId('field-suffix');
     expect(suffixElement).toBeDefined();
     expect(suffixElement.props.children).toEqual(addonAfter);
   });
@@ -107,7 +107,7 @@ describe('TypeInput component', () => {
       <TypeInput id="inputField" name="Field Label" addonAfter={addonAfter} />,
     );
 
-    const suffixElement = wrapper.getByTestId('type-input-suffix');
+    const suffixElement = wrapper.getByTestId('field-suffix');
     expect(suffixElement).toBeDefined();
     expect(suffixElement.props.children).toEqual(addonAfter);
   });
@@ -118,7 +118,7 @@ describe('TypeInput component', () => {
       <TypeInput id="inputField" name="Field Label" addonAfter={addonAfter} />,
     );
 
-    const preffixElement = wrapper.getByTestId('type-input-preffix');
+    const preffixElement = wrapper.getByTestId('field-preffix');
     expect(preffixElement).toBeDefined();
   });
 
@@ -127,10 +127,10 @@ describe('TypeInput component', () => {
     () => {
       const wrapper = render(<TypeInput id="inputField" name="Field Label" />);
 
-      const preffixElement = wrapper.getByTestId('type-input-preffix');
+      const preffixElement = wrapper.getByTestId('field-preffix');
       expect(preffixElement).toBeDefined();
 
-      const suffixElement = wrapper.getByTestId('type-input-suffix');
+      const suffixElement = wrapper.getByTestId('field-suffix');
       expect(suffixElement).toBeDefined();
     },
   );
@@ -147,11 +147,11 @@ describe('TypeInput component', () => {
       />,
     );
 
-    const preffixElement = wrapper.getByTestId('type-input-preffix');
+    const preffixElement = wrapper.getByTestId('field-preffix');
     expect(preffixElement).toBeDefined();
     expect(preffixElement.props.children).toEqual(addonBefore);
 
-    const suffixElement = wrapper.getByTestId('type-input-suffix');
+    const suffixElement = wrapper.getByTestId('field-suffix');
     expect(suffixElement).toBeDefined();
     expect(suffixElement.props.children).toEqual(addonAfter);
   });

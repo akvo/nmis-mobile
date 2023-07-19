@@ -2,13 +2,13 @@ import React, { isValidElement } from 'react';
 import { View } from 'react-native';
 import { FieldLabel } from '../support';
 import { styles } from '../styles';
-import { Input, Text, Icon } from '@rneui/themed';
+import { Input, Text } from '@rneui/themed';
 
-const addPreffix = (addonBefore) => {
+export const addPreffix = (addonBefore) => {
   if (!addonBefore) {
     return {};
   }
-  const testID = 'type-input-preffix';
+  const testID = 'field-preffix';
   let element = addonBefore;
   if (element && isValidElement(element)) {
     element = <View testID={testID}>{element}</View>;
@@ -21,11 +21,11 @@ const addPreffix = (addonBefore) => {
   };
 };
 
-const addSuffix = (addonAfter) => {
+export const addSuffix = (addonAfter) => {
   if (!addonAfter) {
     return {};
   }
-  const testID = 'type-input-suffix';
+  const testID = 'field-suffix';
   let element = addonAfter;
   if (element && isValidElement(element)) {
     element = <View testID={testID}>{element}</View>;

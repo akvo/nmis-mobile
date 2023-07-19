@@ -3,8 +3,9 @@ import { View } from 'react-native';
 import { FieldLabel } from '../support';
 import { styles } from '../styles';
 import { Input } from '@rneui/themed';
+import { addPreffix, addSuffix } from './TypeInput';
 
-const TypeNumber = ({ onChange, values, keyform, id, name }) => {
+const TypeNumber = ({ onChange, values, keyform, id, name, addonAfter, addonBefore }) => {
   return (
     <View>
       <FieldLabel keyform={keyform} name={name} />
@@ -18,6 +19,8 @@ const TypeNumber = ({ onChange, values, keyform, id, name }) => {
         }}
         value={values?.[id]}
         testID="type-number"
+        {...addPreffix(addonBefore)}
+        {...addSuffix(addonAfter)}
       />
     </View>
   );
