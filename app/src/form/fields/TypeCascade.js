@@ -24,44 +24,19 @@ const TypeCascade = ({ onChange, values, keyform, id, name, dataSource = [] }) =
     return groupedData;
   };
 
-  const handleUpdateItems = (dataItems, index, options) => {
-    const updatedItems = dataItems.reduce((accumulator, currentValue, currentIndex) => {
-      if (currentIndex === index) {
-        accumulator.push({ options });
-      } else {
-        accumulator.push(currentValue);
-      }
-      return accumulator;
-    }, []);
-
-    return updatedItems;
-  };
-
-  const handleAddItems = (dataItems, options) => {
-    return [
-      ...dataItems,
-      {
-        options,
-        value: null,
-      },
-    ];
-  };
-
   const handleOnChange = (index, value) => {
     const nextIndex = index + 1;
-    let updatedItems = dropdownItems
+    const updatedItems = dropdownItems
       .slice(0, nextIndex)
       .map((d, dx) => (dx === index ? { ...d, value } : d));
-
-    const hasNextItem = updatedItems[nextIndex] || {};
-    const hasChildren = hasNextItem?.options?.filter((o) => o?.parent === value)?.length > 0;
 
     const options = dataSource?.filter((d) => d?.parent === value);
 
     if (options.length) {
-      updatedItems = hasChildren
-        ? handleUpdateItems(updatedItems, index, options)
-        : handleAddItems(updatedItems, options);
+      updatedItems.push({
+        options,
+        value: null,
+      });
     }
 
     onChange(id, value);
