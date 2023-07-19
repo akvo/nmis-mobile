@@ -9,7 +9,6 @@ import { crudSessions, crudUsers, crudConfig } from './src/database/crud';
 import { api } from './src/lib';
 
 const db = conn.init;
-const serverURLNotDefined = 'http://:8080';
 
 const App = () => {
   const serverURLState = BuildParamsState.useState((s) => s.serverURL);
@@ -54,17 +53,22 @@ const App = () => {
 
   const handleInitConfig = async () => {
     const configExist = await crudConfig.getConfig();
+    const serverURL = configExist?.serverURL || serverURLState || null;
     if (!configExist) {
-      let serverURL = 'url';
-      if (serverURLState !== serverURLNotDefined) {
-        serverURL = serverURLState;
-        api.setServerURL(serverURL);
+      if (serverURL) {
+        await crudConfig.addConfig({ serverURL });
+      } else {
+        await crudConfig.addConfig();
       }
-      const initConfig = await crudConfig.addConfig({ serverURL });
-      console.log('Config created', initConfig);
-    } else {
-      api.setServerURL(configExist.serverURL);
     }
+    if (serverURL) {
+      BuildParamsState.update((s) => {
+        s.serverURL = serverURL;
+      });
+      api.setServerURL(serverURL);
+      await crudConfig.updateConfig({ serverURL });
+    }
+    console.info('[CONFIG] Server URL', serverURL);
   };
 
   React.useEffect(() => {

@@ -13,8 +13,8 @@ export const tables = [
     fields: {
       id: 'INTEGER PRIMARY KEY NOT NULL',
       appVersion: 'VARCHAR(255) NOT NULL',
-      authenticationCode: 'TEXT NOT NULL',
-      serverURL: 'TEXT NOT NULL',
+      authenticationCode: 'TEXT',
+      serverURL: 'TEXT',
       syncInterval: 'REAL',
       syncWifiOnly: 'TINYINT',
       lang: 'VARCHAR(255) DEFAULT "en" NOT NULL',
