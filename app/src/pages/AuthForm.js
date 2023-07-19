@@ -1,11 +1,12 @@
 import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { View, StyleSheet, Platform, ToastAndroid } from 'react-native';
-import { Input, CheckBox, Button, Text, Dialog } from '@rneui/themed';
+import { Input, Button, Text } from '@rneui/themed';
 import { CenterLayout, Image } from '../components';
 import { api } from '../lib';
 import { AuthState, UserState, UIState } from '../store';
 import { crudSessions, crudForms, crudUsers, crudConfig } from '../database/crud';
+import { LoadingDialog } from '../components';
 
 const ToggleEye = ({ hidden, onPress }) => {
   const iconName = hidden ? 'eye' : 'eye-off';
@@ -122,10 +123,7 @@ const AuthForm = ({ navigation }) => {
         LOG IN
       </Button>
       {/* Loading dialog */}
-      <Dialog isVisible={loading} style={styles.dialogLoadingContainer}>
-        <Dialog.Loading />
-        <Text style={styles.dialogLoadingText}>Fetching data</Text>
-      </Dialog>
+      <LoadingDialog isVisible={loading} loadingText="Fetching data" />
     </CenterLayout>
   );
 };
@@ -142,13 +140,6 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   errorText: { color: 'red', fontStyle: 'italic', marginHorizontal: 10, marginTop: -8 },
-  dialogLoadingContainer: {
-    flex: 1,
-  },
-  dialogLoadingText: {
-    textAlign: 'center',
-    fontStyle: 'italic',
-  },
 });
 
 export default AuthForm;
