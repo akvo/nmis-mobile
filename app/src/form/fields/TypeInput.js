@@ -2,7 +2,7 @@ import React from 'react';
 import { View } from 'react-native';
 import { FieldLabel } from '../support';
 import { styles } from '../styles';
-import { Input } from '@rneui/themed';
+import { Input, Text } from '@rneui/themed';
 
 const TypeInput = ({ onChange, values, keyform, id, name }) => {
   return (
@@ -17,6 +17,8 @@ const TypeInput = ({ onChange, values, keyform, id, name }) => {
         }}
         value={values?.[id]}
         testID="type-input"
+        // leftIcon={<Text>Test</Text>}
+        // rightIcon={<Text>Test</Text>}
       />
     </View>
   );

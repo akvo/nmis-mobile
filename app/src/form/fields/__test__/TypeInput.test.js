@@ -43,4 +43,7 @@ describe('TypeInput component', () => {
     const inputElement = getByTestId('type-input');
     expect(inputElement.props.value).toBe(initialValue);
   });
+
+  test.todo('should show input preffix if addonBefore defined');
+  test.todo('should show input suffix if addonAfter defined');
 });
