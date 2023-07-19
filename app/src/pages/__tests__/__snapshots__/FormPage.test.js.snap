@@ -160,7 +160,9 @@ exports[`FormPage component should render component correctly 1`] = `
               }
             >
               <View>
-                <View>
+                <View
+                  testID="view-type-cascade"
+                >
                   <Text
                     accessibilityRole="text"
                     style={
@@ -176,60 +178,25 @@ exports[`FormPage component should render component correctly 1`] = `
                   >
                     2. Organisation
                   </Text>
+                  <Text
+                    style={
+                      {
+                        "marginBottom": -16,
+                        "opacity": 0,
+                      }
+                    }
+                    testID="text-values"
+                  />
                   <View
                     style={
                       {
-                        "paddingHorizontal": 10,
-                        "width": "100%",
+                        "display": "flex",
+                        "flexDirection": "column",
+                        "gap": 6,
+                        "marginBottom": 25,
                       }
                     }
-                    testID="RNE__Input__view-wrapper"
-                  >
-                    <View
-                      collapsable={false}
-                      style={
-                        {
-                          "alignItems": "center",
-                          "borderBottomWidth": 0.5,
-                          "borderColor": "grey",
-                          "borderRadius": 5,
-                          "borderWidth": 0.5,
-                          "flexDirection": "row",
-                          "paddingHorizontal": 10,
-                          "transform": [
-                            {
-                              "translateX": 0,
-                            },
-                          ],
-                        }
-                      }
-                    >
-                      <TextInput
-                        editable={true}
-                        onChangeText={[Function]}
-                        placeholderTextColor="#86939e"
-                        style={
-                          {
-                            "color": "#242424",
-                            "flex": 1,
-                            "fontSize": 18,
-                            "minHeight": 40,
-                          }
-                        }
-                        testID="type-input"
-                        underlineColorAndroid="transparent"
-                      />
-                    </View>
-                    <Text
-                      style={
-                        {
-                          "color": "#ff190c",
-                          "fontSize": 12,
-                          "margin": 5,
-                        }
-                      }
-                    />
-                  </View>
+                  />
                 </View>
               </View>
             </View>
