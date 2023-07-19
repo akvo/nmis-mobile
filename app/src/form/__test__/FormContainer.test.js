@@ -4,6 +4,10 @@ jest.useFakeTimers();
 import FormContainer from '../FormContainer';
 import * as exampleTestForm from './example-test-form.json';
 
+jest.mock('../../assets/administrations.db', () => {
+  return 'data';
+});
+
 describe('FormContainer component', () => {
   test('submits form data correctly without dependency', async () => {
     const consoleSpy = jest.spyOn(console, 'log');
