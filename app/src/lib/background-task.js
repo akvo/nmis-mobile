@@ -7,7 +7,6 @@ const syncFormVersion = async ({
   showNotificationOnly = true,
   sendPushNotification = () => {},
 }) => {
-  console.log('[bgTask]Params:', showNotificationOnly, sendPushNotification);
   try {
     // find last session
     const session = await crudSessions.selectLastSession();

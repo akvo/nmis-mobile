@@ -7,15 +7,15 @@ import { crudForms } from '../database/crud';
 
 const Home = ({ navigation }) => {
   const [search, setSearch] = React.useState(null);
-  const [data, setData] = React.useState([]);
+  const allForms = FormState.useState((s) => s.allForms);
 
   const goToManageForm = (id) => {
-    const findData = data.find((d) => d?.id === id);
+    const findForm = allForms.find((d) => d?.id === id);
     FormState.update((s) => {
-      s.form = findData;
+      s.form = findForm;
     });
     setTimeout(() => {
-      navigation.navigate('ManageForm', { id: id, name: findData.name });
+      navigation.navigate('ManageForm', { id: id, name: findForm.name });
     }, 100);
   };
 
@@ -29,15 +29,17 @@ const Home = ({ navigation }) => {
         ...r,
         subtitles: [`Version: ${r.version}`, 'Submitted: 20', 'Draft: 1', 'Synced: 11'],
       }));
-      setData(forms);
+      FormState.update((s) => {
+        s.allForms = forms;
+      });
     });
   }, []);
 
-  const filteredData = React.useMemo(() => {
-    return data.filter(
+  const filteredForms = React.useMemo(() => {
+    return allForms.filter(
       (d) => (search && d?.name?.toLowerCase().includes(search.toLowerCase())) || !search,
     );
-  }, [data]);
+  }, [allForms]);
 
   return (
     <BaseLayout
@@ -54,7 +56,7 @@ const Home = ({ navigation }) => {
         </Button>
       }
     >
-      <BaseLayout.Content data={filteredData} action={goToManageForm} columns={2} />
+      <BaseLayout.Content data={filteredForms} action={goToManageForm} columns={2} />
     </BaseLayout>
   );
 };

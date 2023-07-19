@@ -1,6 +1,7 @@
 import { Store } from 'pullstate';
 
 const FormState = new Store({
+  allForms: [],
   form: {},
   questionGroups: [],
   questions: [],

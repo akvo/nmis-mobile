@@ -305,7 +305,7 @@ exports[`AuthFormPage renders correctly 1`] = `
         "flex": 1,
       }
     }
-    testID="Internal__Overlay"
+    testID="loading-dialog"
     transparent={true}
     visible={false}
   />

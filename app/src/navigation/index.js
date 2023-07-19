@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
@@ -20,6 +20,8 @@ import * as TaskManager from 'expo-task-manager';
 import * as BackgroundFetch from 'expo-background-fetch';
 import * as Notifications from 'expo-notifications';
 import { backgroundTask, notification } from '../lib';
+import { LoadingDialog } from '../components';
+import { crudForms } from '../database/crud';
 
 const TASK_NAME = 'sync-form-version';
 
@@ -47,7 +49,7 @@ TaskManager.defineTask(TASK_NAME, async () => {
 
 const Stack = createNativeStackNavigator();
 
-const RootNavigator = () => {
+const RootNavigator = ({ setIsSyncForm }) => {
   const preventHardwareBackPressFormPages = ['Home', 'AddUser'];
   const currentPage = UIState.useState((s) => s.currentPage);
   const token = AuthState.useState((s) => s.token); // user already has session
@@ -68,12 +70,24 @@ const RootNavigator = () => {
   React.useEffect(() => {
     backgroundTask.backgroundTaskStatus(TASK_NAME);
     notification.registerForPushNotificationsAsync();
-    const notificationListener = Notifications.addNotificationReceivedListener((notification) => {
+    const notificationListener = Notifications.addNotificationReceivedListener(() => {
       console.log('[Notification]Received Listener');
     });
-    const responseListener = Notifications.addNotificationResponseReceivedListener((response) => {
+    const responseListener = Notifications.addNotificationResponseReceivedListener(() => {
       console.log('[Notification]Response Listener');
-      backgroundTask.syncFormVersion({ showNotificationOnly: false });
+      setIsSyncForm(true);
+      backgroundTask.syncFormVersion({ showNotificationOnly: false }).then(() => {
+        crudForms.selectLatestFormVersion().then((results) => {
+          const forms = results.map((r) => ({
+            ...r,
+            subtitles: [`Version: ${r.version}`, 'Submitted: 20', 'Draft: 1', 'Synced: 11'],
+          }));
+          FormState.update((s) => {
+            s.allForms = forms;
+          });
+          setIsSyncForm(false);
+        });
+      });
     });
     return () => {
       Notifications.removeNotificationSubscription(notificationListener);
@@ -109,6 +123,7 @@ const RootNavigator = () => {
 
 const Navigation = (props) => {
   const navigationRef = useNavigationContainerRef();
+  const [isSyncForm, setIsSyncForm] = useState(false);
 
   const handleOnChangeNavigation = (state) => {
     // listen to route change
@@ -125,7 +140,8 @@ const Navigation = (props) => {
 
   return (
     <NavigationContainer ref={navigationRef} onStateChange={handleOnChangeNavigation} {...props}>
-      <RootNavigator />
+      <RootNavigator setIsSyncForm={setIsSyncForm} />
+      <LoadingDialog isVisible={isSyncForm} loadingText="Updating form, please wait." />
     </NavigationContainer>
   );
 };
