@@ -2,11 +2,15 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import { Text, Dialog } from '@rneui/themed';
 
-const LoadingDialog = ({ isVisible = false, loadingText = 'Loading' }) => {
+const LoadingDialog = ({ isVisible = false, loadingText = null }) => {
   return (
-    <Dialog isVisible={isVisible} style={styles.dialogLoadingContainer}>
+    <Dialog testID="loading-dialog" isVisible={isVisible} style={styles.dialogLoadingContainer}>
       <Dialog.Loading />
-      <Text style={styles.dialogLoadingText}>{loadingText}</Text>
+      {loadingText && (
+        <Text style={styles.dialogLoadingText} testID="loading-dialog-text">
+          {loadingText}
+        </Text>
+      )}
     </Dialog>
   );
 };
