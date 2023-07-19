@@ -44,21 +44,115 @@ describe('TypeInput component', () => {
     expect(inputElement.props.value).toBe(initialValue);
   });
 
-  test.todo('should not show input preffix if addonBefore not defined');
+  test.failing('should not show input preffix if addonBefore not defined', () => {
+    const wrapper = render(<TypeInput id="inputField" name="Field Label" />);
 
-  test.todo('should show input preffix if addonBefore (string) defined');
+    const preffixElement = wrapper.getByTestId('type-input-preffix');
+    expect(preffixElement).toBeDefined();
+  });
 
-  test.todo('should show input preffix if addonBefore (React element) defined');
+  test('should show input preffix if addonBefore (string) defined', () => {
+    const addonBefore = 'Addon Before';
+    const wrapper = render(
+      <TypeInput id="inputField" name="Field Label" addonBefore={addonBefore} />,
+    );
 
-  test.todo('should not show input suffix if only addonBefore defined');
+    const preffixElement = wrapper.getByTestId('type-input-preffix');
+    expect(preffixElement).toBeDefined();
+    expect(preffixElement.props.children).toEqual(addonBefore);
+  });
 
-  test.todo('should not show input preffix if addonBefore not defined');
+  test('should show input preffix if addonBefore (React element) defined', () => {
+    const addonBefore = <h1>React element</h1>;
+    const wrapper = render(
+      <TypeInput id="inputField" name="Field Label" addonBefore={addonBefore} />,
+    );
 
-  test.todo('should show input suffix if addonAfter (string) defined');
+    const preffixElement = wrapper.getByTestId('type-input-preffix');
+    expect(preffixElement).toBeDefined();
+    expect(preffixElement.props.children).toEqual(addonBefore);
+  });
 
-  test.todo('should show input suffix if addonAfter (React element) defined');
+  test.failing('should not show input suffix if only addonBefore defined', () => {
+    const addonBefore = 'Addon Before';
+    const wrapper = render(
+      <TypeInput id="inputField" name="Field Label" addonBefore={addonBefore} />,
+    );
 
-  test.todo('should not show input preffix if only addonAfter defined');
+    const suffixElement = wrapper.getByTestId('type-input-suffix');
+    expect(suffixElement).toBeDefined();
+  });
 
-  test.todo('should show both input suffix & preffix if both addonAfter & addonBefore defined');
+  test.failing('should not show input preffix if addonBefore not defined', () => {
+    const wrapper = render(<TypeInput id="inputField" name="Field Label" />);
+
+    const suffixElement = wrapper.getByTestId('type-input-suffix');
+    expect(suffixElement).toBeDefined();
+  });
+
+  test('should show input suffix if addonAfter (string) defined', () => {
+    const addonAfter = 'Addon After';
+    const wrapper = render(
+      <TypeInput id="inputField" name="Field Label" addonAfter={addonAfter} />,
+    );
+
+    const suffixElement = wrapper.getByTestId('type-input-suffix');
+    expect(suffixElement).toBeDefined();
+    expect(suffixElement.props.children).toEqual(addonAfter);
+  });
+
+  test('should show input suffix if addonAfter (React element) defined', () => {
+    const addonAfter = <h1>React element</h1>;
+    const wrapper = render(
+      <TypeInput id="inputField" name="Field Label" addonAfter={addonAfter} />,
+    );
+
+    const suffixElement = wrapper.getByTestId('type-input-suffix');
+    expect(suffixElement).toBeDefined();
+    expect(suffixElement.props.children).toEqual(addonAfter);
+  });
+
+  test.failing('should not show input preffix if only addonAfter defined', () => {
+    const addonAfter = 'Addon After';
+    const wrapper = render(
+      <TypeInput id="inputField" name="Field Label" addonAfter={addonAfter} />,
+    );
+
+    const preffixElement = wrapper.getByTestId('type-input-preffix');
+    expect(preffixElement).toBeDefined();
+  });
+
+  test.failing(
+    'should not show both input suffix & preffix if both addonAfter & addonBefore not defined',
+    () => {
+      const wrapper = render(<TypeInput id="inputField" name="Field Label" />);
+
+      const preffixElement = wrapper.getByTestId('type-input-preffix');
+      expect(preffixElement).toBeDefined();
+
+      const suffixElement = wrapper.getByTestId('type-input-suffix');
+      expect(suffixElement).toBeDefined();
+    },
+  );
+
+  test('should show both input suffix & preffix if both addonAfter & addonBefore defined', () => {
+    const addonBefore = 'Addon Before';
+    const addonAfter = 'Addon After';
+    const wrapper = render(
+      <TypeInput
+        id="inputField"
+        name="Field Label"
+        addonBefore={addonBefore}
+        addonAfter={addonAfter}
+      />,
+    );
+
+    const preffixElement = wrapper.getByTestId('type-input-preffix');
+    expect(preffixElement).toBeDefined();
+    expect(preffixElement.props.children).toEqual(addonBefore);
+
+    const suffixElement = wrapper.getByTestId('type-input-suffix');
+    expect(suffixElement).toBeDefined();
+    expect(suffixElement.props.children).toEqual(addonAfter);
+  });
 });
