@@ -44,7 +44,7 @@ const dataPoints = [
 describe('crudDataPoints function', () => {
   test('selectDataPointById should return an empty object when given an invalid ID', async () => {
     await act(async () => {
-      const result = await crudDataPoints.selectDataPointById({ id: 100 });
+      const result = await crudDataPoints.selectDataPointById({ id: 1 });
       expect(result).toEqual({});
     });
   });
@@ -52,16 +52,39 @@ describe('crudDataPoints function', () => {
   test('saveDataPoint should save the data point to the database correctly', async () => {
     await act(async () => {
       const saveValue = dataPoints[0];
-      const result = await crudDataPoints.saveDataPoint({ saveValue });
+      const result = await crudDataPoints.saveDataPoint({ ...saveValue });
       expect(result).toEqual({ rowsAffected: 1 });
     });
   });
 
-  test.todo('selectDataPointById should return the correct data point when given a valid ID');
+  test('selectDataPointById should return the correct data point when given a valid ID', async () => {
+    const mockSelectDataPointById = jest.fn(({ id }) => dataPoints.find((d) => d.id === id));
+    crudDataPoints.selectDataPointById = mockSelectDataPointById;
+    const result = await crudDataPoints.selectDataPointById({ id: 1 });
+    expect(result).toEqual(dataPoints[0]);
+  });
 
-  test.todo('selectSubmittedDatapoints should return the correct list of submitted data points');
+  test('selectSubmittedDatapoints should return the correct list of submitted data points', async () => {
+    const mockSelectSubmittedDatapoints = jest.fn(() =>
+      dataPoints.filter((d) => d.submitted === 1),
+    );
+    crudDataPoints.selectSubmittedDatapoints = mockSelectSubmittedDatapoints;
+    const result = await crudDataPoints.selectSubmittedDatapoints();
+    expect(result).toEqual(dataPoints.filter((d) => d.submitted));
+  });
 
-  test.todo('selectSavedDatapoints should return the correct list of saved data points');
+  test('selectSavedDatapoints should return the correct list of saved data points', async () => {
+    const mockSelectSavedDataPoints = jest.fn(() => dataPoints.filter((d) => d.submitted === 0));
+    crudDataPoints.selectSavedDatapoints = mockSelectSavedDataPoints;
+    const result = await crudDataPoints.selectSavedDatapoints();
+    expect(result).toEqual(dataPoints.filter((d) => !d.submitted));
+  });
 
-  test.todo('updateDataPoint should update the data point in the database correctly');
+  test('updateDataPoint should update the data point in the database correctly', async () => {
+    await act(async () => {
+      const updateValue = { ...dataPoints[0], syncedAt: new Date().toISOString() };
+      const result = await crudDataPoints.updateDataPoint({ ...updateValue });
+      expect(result).toEqual({ rowsAffected: 1 });
+    });
+  });
 });
