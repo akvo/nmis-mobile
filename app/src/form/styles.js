@@ -37,6 +37,9 @@ export const styles = StyleSheet.create({
     fontStyle: 'italic',
   },
   fieldLabel: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 4,
     paddingHorizontal: 10,
     marginBottom: 8,
     fontWeight: 600,
