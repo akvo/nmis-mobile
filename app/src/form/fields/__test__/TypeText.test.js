@@ -15,7 +15,7 @@ describe('TypeText component', () => {
       <TypeText onChange={onChangeMock} values={values} id={id} name={name} />,
     );
 
-    const textAreaFieldLabel = getByText(name);
+    const textAreaFieldLabel = getByText(`1. ${name}`);
     expect(textAreaFieldLabel).toBeDefined();
 
     const textAreaField = getByTestId('type-text');
