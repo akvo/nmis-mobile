@@ -36,6 +36,8 @@ const QuestionGroupList = ({
     setShowQuestionGroupList(false);
   };
 
+  console.log('qgl', values);
+
   return (
     <View style={styles.questionGroupListContainer}>
       <Text style={styles.questionGroupListFormTitle} testID="form-name">

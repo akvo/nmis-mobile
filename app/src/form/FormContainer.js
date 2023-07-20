@@ -6,6 +6,7 @@ import { styles } from './styles';
 import { FormNavigation, QuestionGroupList } from './support';
 import QuestionGroup from './components/QuestionGroup';
 import { transformForm } from './lib';
+import { FormState } from '../store';
 
 // TODO:: Allow other not supported yet
 // TODO:: Repeat group not supported yet
@@ -15,6 +16,9 @@ const FormContainer = ({ forms, initialValues = {} }) => {
   const formRef = useRef();
   const [activeGroup, setActiveGroup] = useState(0);
   const [showQuestionGroupList, setShowQuestionGroupList] = useState(false);
+  const questionGroupListCurrentValues = FormState.useState(
+    (s) => s.questionGroupListCurrentValues,
+  );
 
   const formDefinition = useMemo(() => {
     return transformForm(forms);
@@ -60,7 +64,7 @@ const FormContainer = ({ forms, initialValues = {} }) => {
               validateOnBlur={true}
               validateOnChange={true}
             >
-              {({ setFieldValue }) => (
+              {({ setFieldValue, values }) => (
                 <View style={styles.formContainer}>
                   {formDefinition?.question_group?.map((group) => {
                     if (activeGroup !== group.id) {
@@ -72,7 +76,7 @@ const FormContainer = ({ forms, initialValues = {} }) => {
                         index={group.id}
                         group={group}
                         setFieldValue={setFieldValue}
-                        values={initialValues}
+                        values={values}
                       />
                     );
                   })}
@@ -82,7 +86,7 @@ const FormContainer = ({ forms, initialValues = {} }) => {
           ) : (
             <QuestionGroupList
               form={formDefinition}
-              values={initialValues}
+              values={questionGroupListCurrentValues}
               activeQuestionGroup={activeGroup}
               setActiveQuestionGroup={setActiveGroup}
               setShowQuestionGroupList={setShowQuestionGroupList}
