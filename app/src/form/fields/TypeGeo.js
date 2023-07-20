@@ -8,7 +8,7 @@ import { FieldLabel } from '../support';
 import { styles } from '../styles';
 import { loc } from '../../lib';
 
-const TypeGeo = ({ onChange, values, keyform, id, name }) => {
+const TypeGeo = ({ onChange, values, keyform, id, name, lang, tooltip, translations }) => {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const { latitude, longitude } = MapState.useState((s) => s);
@@ -64,7 +64,13 @@ const TypeGeo = ({ onChange, values, keyform, id, name }) => {
   const [latText, lngText] = text?.split('|');
   return (
     <View>
-      <FieldLabel keyform={keyform} name={name} />
+      <FieldLabel
+        keyform={keyform}
+        name={name}
+        lang={lang}
+        tooltip={tooltip}
+        translations={translations}
+      />
       <View style={styles.inputGeoContainer}>
         {latText && lngText ? (
           <View>
