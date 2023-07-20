@@ -15,7 +15,7 @@ const FormData = ({ navigation, route }) => {
     });
     results = results.map((res) => {
       const createdAt = new Date(res.createdAt).toLocaleDateString('en-GB');
-      const syncedAt = res.syncedAt ? new Date(res.synced).toLocaleDateString('en-GB') : '-';
+      const syncedAt = res.syncedAt ? new Date(res.syncedAt).toLocaleDateString('en-GB') : '-';
       return {
         ...res,
         subtitles: [
