@@ -7,7 +7,7 @@ import { FormState } from '../store';
 import * as formDefinition from '../form/example-form.json';
 
 const FormPage = ({ navigation, route }) => {
-  const selectedForm = FormState.useState((s) => s.selectedForm);
+  const selectedForm = FormState.useState((s) => s.form);
 
   const formJSON = React.useMemo(() => {
     if (!selectedForm?.json) {
@@ -20,9 +20,17 @@ const FormPage = ({ navigation, route }) => {
     navigation.navigate('ManageForm', { ...route?.params });
   };
 
+  const handleOnSubmitForm = (values, refreshForm) => {
+    console.log(values, refreshForm);
+  };
+
   return (
     <BaseLayout title={route?.params?.name} back={goBack}>
-      <FormContainer forms={formJSON || formDefinition} initialValues={{}} />
+      <FormContainer
+        forms={formJSON || formDefinition}
+        initialValues={{}}
+        onSubmit={handleOnSubmitForm}
+      />
     </BaseLayout>
   );
 };

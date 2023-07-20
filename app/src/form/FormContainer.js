@@ -12,7 +12,7 @@ import { FormState } from '../store';
 // TODO:: Repeat group not supported yet
 // TODO:: Cascade not supported yet
 
-const FormContainer = ({ forms, initialValues = {} }) => {
+const FormContainer = ({ forms, initialValues = {}, onSubmit }) => {
   const formRef = useRef();
   const [activeGroup, setActiveGroup] = useState(0);
   const [showQuestionGroupList, setShowQuestionGroupList] = useState(false);
@@ -49,6 +49,15 @@ const FormContainer = ({ forms, initialValues = {} }) => {
     return currentValues;
   }, [initialValues, currentValues]);
 
+  const refreshForm = () => {
+    FormState.update((s) => {
+      s.currentValues = {};
+      s.questionGroupListCurrentValues = {};
+      s.dataPointName = [];
+    });
+    formRef.current.resetForm();
+  };
+
   const handleOnSubmitForm = (values) => {
     const results = Object.keys(values)
       .map((key) => {
@@ -70,7 +79,10 @@ const FormContainer = ({ forms, initialValues = {} }) => {
       })
       .filter((v) => v)
       .reduce((res, current) => ({ ...res, ...current }), {});
-    console.log(results);
+    if (onSubmit) {
+      const { dpName, dpGeo } = generateDataPointName(dataPointName);
+      onSubmit({ name: dpName, geo: dpGeo, answers: [results] }, refreshForm);
+    }
   };
 
   return (
