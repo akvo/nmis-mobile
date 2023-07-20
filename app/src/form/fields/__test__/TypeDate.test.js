@@ -8,7 +8,7 @@ describe('TypeDate component', () => {
       <TypeDate onChange={() => jest.fn()} values={{}} id="dateField" name="Date Field" />,
     );
 
-    expect(getByText('Date Field')).toBeDefined();
+    expect(getByText('1. Date Field')).toBeDefined();
 
     const dateField = getByTestId('type-date');
     expect(dateField).toBeDefined();
