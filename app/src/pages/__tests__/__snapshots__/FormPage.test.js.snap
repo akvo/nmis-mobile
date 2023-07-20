@@ -77,21 +77,75 @@ exports[`FormPage component should render component correctly 1`] = `
             >
               <View>
                 <View>
-                  <Text
-                    accessibilityRole="text"
+                  <View
                     style={
                       {
-                        "color": "#242424",
+                        "display": "flex",
+                        "flexDirection": "row",
                         "fontSize": 14,
                         "fontWeight": 600,
+                        "gap": 4,
                         "marginBottom": 8,
                         "paddingHorizontal": 10,
                       }
                     }
-                    testID="field-label"
                   >
-                    1. Name of the data collector (Enumerator)
-                  </Text>
+                    <Text
+                      accessibilityRole="text"
+                      style={
+                        {
+                          "color": "#242424",
+                        }
+                      }
+                      testID="field-label"
+                    >
+                      1. Name of the data collector (Enumerator)
+                    </Text>
+                    <View
+                      collapsable={false}
+                    >
+                      <View
+                        accessibilityState={
+                          {
+                            "busy": undefined,
+                            "checked": undefined,
+                            "disabled": undefined,
+                            "expanded": undefined,
+                            "selected": undefined,
+                          }
+                        }
+                        accessibilityValue={
+                          {
+                            "max": undefined,
+                            "min": undefined,
+                            "now": undefined,
+                            "text": undefined,
+                          }
+                        }
+                        accessible={true}
+                        collapsable={false}
+                        focusable={true}
+                        onBlur={[Function]}
+                        onClick={[Function]}
+                        onFocus={[Function]}
+                        onResponderGrant={[Function]}
+                        onResponderMove={[Function]}
+                        onResponderRelease={[Function]}
+                        onResponderTerminate={[Function]}
+                        onResponderTerminationRequest={[Function]}
+                        onStartShouldSetResponder={[Function]}
+                      >
+                        <Text />
+                      </View>
+                      <Modal
+                        animationType="fade"
+                        hardwareAccelerated={false}
+                        onShow={[Function]}
+                        transparent={true}
+                        visible={false}
+                      />
+                    </View>
+                  </View>
                   <View
                     style={
                       {
@@ -161,21 +215,31 @@ exports[`FormPage component should render component correctly 1`] = `
             >
               <View>
                 <View>
-                  <Text
-                    accessibilityRole="text"
+                  <View
                     style={
                       {
-                        "color": "#242424",
+                        "display": "flex",
+                        "flexDirection": "row",
                         "fontSize": 14,
                         "fontWeight": 600,
+                        "gap": 4,
                         "marginBottom": 8,
                         "paddingHorizontal": 10,
                       }
                     }
-                    testID="field-label"
                   >
-                    2. Organisation
-                  </Text>
+                    <Text
+                      accessibilityRole="text"
+                      style={
+                        {
+                          "color": "#242424",
+                        }
+                      }
+                      testID="field-label"
+                    >
+                      2. Organisation
+                    </Text>
+                  </View>
                   <View
                     style={
                       {
@@ -243,21 +307,31 @@ exports[`FormPage component should render component correctly 1`] = `
             >
               <View>
                 <View>
-                  <Text
-                    accessibilityRole="text"
+                  <View
                     style={
                       {
-                        "color": "#242424",
+                        "display": "flex",
+                        "flexDirection": "row",
                         "fontSize": 14,
                         "fontWeight": 600,
+                        "gap": 4,
                         "marginBottom": 8,
                         "paddingHorizontal": 10,
                       }
                     }
-                    testID="field-label"
                   >
-                    3. Household code
-                  </Text>
+                    <Text
+                      accessibilityRole="text"
+                      style={
+                        {
+                          "color": "#242424",
+                        }
+                      }
+                      testID="field-label"
+                    >
+                      3. Household code
+                    </Text>
+                  </View>
                   <View
                     style={
                       {
@@ -333,21 +407,31 @@ exports[`FormPage component should render component correctly 1`] = `
                     }
                   }
                 >
-                  <Text
-                    accessibilityRole="text"
+                  <View
                     style={
                       {
-                        "color": "#242424",
+                        "display": "flex",
+                        "flexDirection": "row",
                         "fontSize": 14,
                         "fontWeight": 600,
+                        "gap": 4,
                         "marginBottom": 8,
                         "paddingHorizontal": 10,
                       }
                     }
-                    testID="field-label"
                   >
-                    4. Are you willing to participate in the survey?
-                  </Text>
+                    <Text
+                      accessibilityRole="text"
+                      style={
+                        {
+                          "color": "#242424",
+                        }
+                      }
+                      testID="field-label"
+                    >
+                      4. Are you willing to participate in the survey?
+                    </Text>
+                  </View>
                   <View
                     accessibilityRole="checkbox"
                     accessibilityState={
@@ -505,21 +589,31 @@ exports[`FormPage component should render component correctly 1`] = `
             >
               <View>
                 <View>
-                  <Text
-                    accessibilityRole="text"
+                  <View
                     style={
                       {
-                        "color": "#242424",
+                        "display": "flex",
+                        "flexDirection": "row",
                         "fontSize": 14,
                         "fontWeight": 600,
+                        "gap": 4,
                         "marginBottom": 8,
                         "paddingHorizontal": 10,
                       }
                     }
-                    testID="field-label"
                   >
-                    5. Number between 1 to 9 (decimal allowed)
-                  </Text>
+                    <Text
+                      accessibilityRole="text"
+                      style={
+                        {
+                          "color": "#242424",
+                        }
+                      }
+                      testID="field-label"
+                    >
+                      5. Number between 1 to 9 (decimal allowed)
+                    </Text>
+                  </View>
                   <View
                     style={
                       {
