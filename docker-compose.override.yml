@@ -13,6 +13,7 @@ services:
       - 8080:80
     volumes:
       - ./backend/json:/var/www/html
+      - ./backend/sqlite:/var/www/html/sqlite
       - ./backend/conf.d/nginx.conf:/etc/nginx/nginx.conf:ro
     networks:
       - api-network
