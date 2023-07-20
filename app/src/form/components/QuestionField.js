@@ -36,6 +36,16 @@ const QuestionField = ({ keyform, field: questionField, setFieldValue, values, v
     helpers.setTouched({ [field.name]: true });
     FormState.update((s) => {
       s.currentValues = { ...s.currentValues, [id]: value };
+      if (questionField?.meta) {
+        s.dataPointName = s.dataPointName.map((dp) =>
+          dp.id.toString() === id.toString()
+            ? {
+                ...dp,
+                value: value,
+              }
+            : dp,
+        );
+      }
     });
     setFieldValue(id, value);
   };

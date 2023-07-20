@@ -9,6 +9,7 @@ const FormState = new Store({
   submitted: false,
   currentValues: {}, // answers
   questionGroupListCurrentValues: {}, // answers for question group list component
+  dataPointName: [],
 });
 
 export default FormState;

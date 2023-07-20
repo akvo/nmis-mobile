@@ -23,6 +23,7 @@ export const checkCompleteQuestionGroup = (form, values) => {
 const QuestionGroupList = ({
   form,
   values = {},
+  dataPointNameText = null,
   activeQuestionGroup,
   setActiveQuestionGroup,
   setShowQuestionGroupList,
@@ -36,18 +37,20 @@ const QuestionGroupList = ({
     setShowQuestionGroupList(false);
   };
 
-  console.log('qgl', values);
-
   return (
     <View style={styles.questionGroupListContainer}>
       <Text style={styles.questionGroupListFormTitle} testID="form-name">
         {form.name}
       </Text>
       <Divider style={styles.divider} />
-      <Text style={styles.questionGroupListDataPointName} testID="datapoint-name">
-        Data Point name here
-      </Text>
-      <Divider style={styles.divider} />
+      {dataPointNameText && (
+        <>
+          <Text style={styles.questionGroupListDataPointName} testID="datapoint-name">
+            {dataPointNameText}
+          </Text>
+          <Divider style={styles.divider} />
+        </>
+      )}
       {form.question_group.map((questionGroup, qx) => (
         <QuestionGroupListItem
           key={questionGroup.id}
