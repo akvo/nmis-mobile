@@ -12,7 +12,22 @@
           "order": 1,
           "type": "text",
           "required": true,
-          "meta": true
+          "meta": true,
+          "tooltip": {
+            "text": "Enumerator name",
+            "translations": [
+              {
+                "language": "fr",
+                "text": "Nom de l'enquêteur"
+              }
+            ]
+          },
+          "translations": [
+            {
+              "language": "fr",
+              "text": "Nom du collecteur de données (recenseur)"
+            }
+          ]
         },
         {
           "id": 5196300481,
