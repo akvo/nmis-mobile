@@ -11,7 +11,7 @@ describe('FormDataPage', () => {
     params: {
       id: 123,
       name: 'Form Name',
-      showSubmitted: false,
+      showSubmitted: true,
     },
   };
 
