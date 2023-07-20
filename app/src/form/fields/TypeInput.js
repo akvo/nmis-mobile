@@ -66,10 +66,27 @@ export const addSuffix = (addonAfter) => {
   };
 };
 
-const TypeInput = ({ onChange, values, keyform, id, name, addonAfter, addonBefore }) => {
+const TypeInput = ({
+  onChange,
+  values,
+  keyform,
+  id,
+  name,
+  addonAfter,
+  addonBefore,
+  lang,
+  tooltip,
+  translations,
+}) => {
   return (
     <View>
-      <FieldLabel keyform={keyform} name={name} />
+      <FieldLabel
+        keyform={keyform}
+        name={name}
+        lang={lang}
+        tooltip={tooltip}
+        translations={translations}
+      />
       <Input
         inputContainerStyle={styles.inputFieldContainer}
         onChangeText={(val) => {
