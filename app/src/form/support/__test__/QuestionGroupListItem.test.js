@@ -197,6 +197,10 @@ describe('QuestionGroup & QuestionGroupListItem without mock', () => {
     expect(completed).toEqual([false, false, true]);
   });
 
+  it.todo('Should ignore dependency question if not answered')
+
+  it.todo('Should check dependency question if answered')
+
   it('Should render question group name', () => {
     const wrapper = render(
       <QuestionGroupListItem name="Group 1" active={true} completedQuestionGroup={false} />,
