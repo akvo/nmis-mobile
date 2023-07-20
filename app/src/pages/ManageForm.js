@@ -5,8 +5,8 @@ import { ListItem } from '@rneui/themed';
 import { BaseLayout } from '../components';
 
 const ManageForm = ({ navigation, route }) => {
-  const goTo = (page) => {
-    navigation.navigate(page, { ...route?.params });
+  const goTo = (page, showSubmitted) => {
+    navigation.navigate(page, { ...route?.params, showSubmitted: showSubmitted || false });
   };
 
   const items = [
@@ -21,12 +21,14 @@ const ManageForm = ({ navigation, route }) => {
       text: 'Edit Saved Form',
       icon: 'folder-open',
       navigation: 'FormData',
+      showSubmitted: false,
     },
     {
       id: 3,
       text: 'View Submitted',
       icon: 'eye',
       navigation: 'FormData',
+      showSubmitted: true,
     },
   ];
   return (
@@ -40,7 +42,11 @@ const ManageForm = ({ navigation, route }) => {
           }}
         >
           {items.map((i, ix) => (
-            <ListItem key={ix} onPress={() => goTo(i.navigation)} testID={`goto-item-${ix}`}>
+            <ListItem
+              key={ix}
+              onPress={() => goTo(i.navigation, i?.showSubmitted)}
+              testID={`goto-item-${ix}`}
+            >
               <Icon name={i.icon} color="grey" size={18} />
               <ListItem.Content>
                 <ListItem.Title>{i.text}</ListItem.Title>
