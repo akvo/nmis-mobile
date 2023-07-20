@@ -23,11 +23,7 @@ const FormPage = ({ navigation, route }) => {
 
   return (
     <BaseLayout title={route?.params?.name} back={goBack}>
-      <FormContainer
-        forms={formJSON}
-        initialValues={{}}
-        onSubmit={handleOnSubmitForm}
-      />
+      <FormContainer forms={formJSON} initialValues={{}} onSubmit={handleOnSubmitForm} />
     </BaseLayout>
   );
 };
