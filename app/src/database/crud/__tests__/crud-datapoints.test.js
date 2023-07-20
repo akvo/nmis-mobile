@@ -64,20 +64,28 @@ describe('crudDataPoints function', () => {
     expect(result).toEqual(dataPoints[0]);
   });
 
-  test('selectSubmittedDatapoints should return the correct list of submitted data points', async () => {
-    const mockSelectSubmittedDatapoints = jest.fn(() =>
-      dataPoints.filter((d) => d.submitted === 1),
+  test('selectDataPointsByFormAndSubmitted should return the correct list of submitted data points', async () => {
+    const mockSelectDataPointsByFormAndSubmitted = jest.fn(({ form, submitted }) =>
+      dataPoints.filter((d) => d.form === form && d.submitted === submitted),
     );
-    crudDataPoints.selectSubmittedDatapoints = mockSelectSubmittedDatapoints;
-    const result = await crudDataPoints.selectSubmittedDatapoints();
-    expect(result).toEqual(dataPoints.filter((d) => d.submitted));
+    crudDataPoints.selectDataPointsByFormAndSubmitted = mockSelectDataPointsByFormAndSubmitted;
+    const result = await crudDataPoints.selectDataPointsByFormAndSubmitted({
+      form: 123,
+      submitted: 1,
+    });
+    expect(result).toEqual(dataPoints.filter((d) => d.form === 123 && d.submitted));
   });
 
-  test('selectSavedDatapoints should return the correct list of saved data points', async () => {
-    const mockSelectSavedDataPoints = jest.fn(() => dataPoints.filter((d) => d.submitted === 0));
-    crudDataPoints.selectSavedDatapoints = mockSelectSavedDataPoints;
-    const result = await crudDataPoints.selectSavedDatapoints();
-    expect(result).toEqual(dataPoints.filter((d) => !d.submitted));
+  test('selectDataPointsByFormAndSubmitted should return the correct list of saved data points', async () => {
+    const mockSelectDataPointsByFormAndSubmitted = jest.fn(({ form, submitted }) =>
+      dataPoints.filter((d) => d.form === form && d.submitted === submitted),
+    );
+    crudDataPoints.selectDataPointsByFormAndSubmitted = mockSelectDataPointsByFormAndSubmitted;
+    const result = await crudDataPoints.selectDataPointsByFormAndSubmitted({
+      form: 123,
+      submitted: 0,
+    });
+    expect(result).toEqual(dataPoints.filter((d) => d.form === 123 && !d.submitted));
   });
 
   test('updateDataPoint should update the data point in the database correctly', async () => {
