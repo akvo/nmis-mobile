@@ -7,7 +7,7 @@ const BuildParamsState = new Store({
     'username',
     'password',
   ],
-  serverURL: defaultBuildParams?.serverURL || 'https://api.example.com/nmis',
+  serverURL: defaultBuildParams?.serverURL,
   debugMode: defaultBuildParams?.debugMode || false,
   dataSyncInterval: defaultBuildParams?.dataSyncInterval || 300,
   errorHandling: defaultBuildParams?.errorHandling || true,
