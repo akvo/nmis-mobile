@@ -1,4 +1,4 @@
-import { crudForms, crudSessions } from '../database/crud';
+import { crudForms, crudSessions, crudDataPoints, crudUsers } from '../database/crud';
 import api from './api';
 import * as BackgroundFetch from 'expo-background-fetch';
 import * as TaskManager from 'expo-task-manager';
@@ -80,12 +80,49 @@ const backgroundTaskStatus = async (TASK_NAME, minimumInterval = 86400) => {
   console.log(`[${TASK_NAME}] Status`, status, isRegistered, minimumInterval);
 };
 
+const syncFormSubmission = async () => {
+  try {
+    // check connection
+    await api.get();
+    // get token
+    const session = await crudSessions.selectLastSession();
+    // set token
+    api.setToken(session.token);
+    // get all datapoints to sync
+    const data = await crudDataPoints.selectSubmissionToSync();
+    data.forEach(async (d) => {
+      // get user
+      const user = await crudUsers.selectUserById({ id: d.user });
+      const syncData = {
+        name: d.name,
+        submitter: user.name,
+        duration: d.duration,
+        submittedAt: d.submittedAt,
+        answers: JSON.parse(d.json.replace(/''/g, "'")),
+      };
+      // sync data point
+      const res = await api.post('/sync', syncData);
+      if (res.id) {
+        // update data point
+        const updatedDataPoint = await crudDataPoints.updateDataPoint({
+          ...d,
+          syncedAt: new Date().toISOString(),
+        });
+        console.info('[syncFormSubmisiion] sync data point :', d.id);
+      }
+    });
+  } catch (err) {
+    console.error('[syncFormSubmission] Error: ', err);
+  }
+};
+
 const backgroundTaskHandler = () => {
   return {
     syncFormVersion,
     registerBackgroundTask,
     unregisterBackgroundTask,
     backgroundTaskStatus,
+    syncFormSubmission,
   };
 };
 
