@@ -19,7 +19,6 @@ const syncFormVersion = async ({
     api
       .post('/auth', data, { headers: { 'Content-Type': 'multipart/form-data' } })
       .then(async (res) => {
-        console.log('[bgTask]Fetch Auth Success');
         const { data } = res;
         const promises = data.formsUrl.map(async (form) => {
           const formExist = await crudForms.selectFormByIdAndVersion({ ...form });
@@ -82,14 +81,13 @@ const backgroundTaskStatus = async (TASK_NAME, minimumInterval = 86400) => {
 
 const syncFormSubmission = async () => {
   try {
-    // check connection
-    await api.get();
     // get token
     const session = await crudSessions.selectLastSession();
     // set token
     api.setToken(session.token);
     // get all datapoints to sync
     const data = await crudDataPoints.selectSubmissionToSync();
+    console.info('[syncFormSubmisiion] data point to sync:', data.length);
     data.forEach(async (d) => {
       // get user
       const user = await crudUsers.selectUserById({ id: d.user });
@@ -102,13 +100,14 @@ const syncFormSubmission = async () => {
       };
       // sync data point
       const res = await api.post('/sync', syncData);
-      if (res.id) {
+      console.info('[syncFormSubmisiion] post sync data point:', res.status, res.data);
+      if (res.status === 200) {
         // update data point
-        const updatedDataPoint = await crudDataPoints.updateDataPoint({
+        await crudDataPoints.updateDataPoint({
           ...d,
           syncedAt: new Date().toISOString(),
         });
-        console.info('[syncFormSubmisiion] sync data point :', d.id);
+        console.info('[syncFormSubmisiion] updated data point syncedAt:', d.id);
       }
     });
   } catch (err) {
