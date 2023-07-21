@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { BaseLayout } from '../components';
 import { crudDataPoints } from '../database/crud';
+import { Button } from '@rneui/themed';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const FormData = ({ navigation, route }) => {
   const formId = route?.params?.id;
   const showSubmitted = route?.params?.showSubmitted || false;
   const [data, setData] = useState([]);
+
+  const goBack = () => {
+    navigation.navigate('ManageForm', { ...route?.params });
+  };
 
   const fetchData = async () => {
     const submitted = showSubmitted ? 1 : 0;
@@ -39,6 +45,11 @@ const FormData = ({ navigation, route }) => {
         show: true,
         placeholder: 'Search datapoint',
       }}
+      leftComponent={
+        <Button type="clear" onPress={goBack} testID="arrow-back-button">
+          <Icon name="arrow-back" size={18} />
+        </Button>
+      }
     >
       <BaseLayout.Content data={data} />
     </BaseLayout>
