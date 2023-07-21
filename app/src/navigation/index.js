@@ -47,7 +47,7 @@ TaskManager.defineTask(SYNC_FORM_VERSION_TASK_NAME, async () => {
 
 TaskManager.defineTask(SYNC_FORM_SUBMISSION_TASK_NAME, async () => {
   try {
-    console.log(`[${SYNC_FORM_SUBMISSION_TASK_NAME}]Function here...`);
+    await backgroundTask.syncFormSubmission();
     return BackgroundFetch.BackgroundFetchResult.NewData;
   } catch (err) {
     console.error(`[${SYNC_FORM_SUBMISSION_TASK_NAME}] Define task manager failed`, err);
