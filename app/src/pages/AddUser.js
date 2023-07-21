@@ -45,7 +45,9 @@ const AddUser = ({ navigation }) => {
           ToastAndroid.show('Success!', ToastAndroid.SHORT);
         }
         setLoading(false);
-        navigation.navigate('Users', { added: { id: insertId } });
+        data.active
+          ? navigation.navigate('Home')
+          : navigation.navigate('Users', { added: { id: insertId } });
       })
       .catch(() => {
         if (Platform.OS === 'android') {
@@ -62,12 +64,10 @@ const AddUser = ({ navigation }) => {
       password,
     );
     const numOfRow = await getUsersCount();
-    const isActive = numOfRow === 0;
+    const isActive = numOfRow === 0 ? 1 : 0;
     const exist = await checkExistingUser(name);
     if (exist) {
-      if (Platform.OS === 'android') {
-        ToastAndroid.show('User already exists', ToastAndroid.SHORT);
-      }
+      formRef.current.setErrors({ name: 'User already exists' });
       setLoading(false);
     } else {
       const data = {
