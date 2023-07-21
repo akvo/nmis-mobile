@@ -186,7 +186,6 @@ export const generateValidationSchema = (forms) => {
 */
 }
 
-// TODO:: Check for chaining dependency
 export const generateValidationSchemaFieldLevel = (currentValue, field) => {
   const { name, type, required, rule } = field;
   let yupType;
@@ -228,4 +227,13 @@ export const generateValidationSchemaFieldLevel = (currentValue, field) => {
   } catch (error) {
     return error.message;
   }
+};
+
+export const generateDataPointName = (dataPointNameValues) => {
+  const dpName = dataPointNameValues
+    .filter((d) => d.type !== 'geo' && (d.value || d.value === 0))
+    .map((x) => x.value)
+    .join(' - ');
+  const dpGeo = dataPointNameValues.find((d) => d.type === 'geo')?.value || null;
+  return { dpName, dpGeo };
 };

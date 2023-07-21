@@ -19,6 +19,7 @@ describe('ManageFormPage', () => {
       params: {
         id: 1,
         name: 'Health Facilities',
+        showSubmitted: false,
       },
     };
     const { getByTestId } = render(<ManageFormPage navigation={navigation} route={mockParams} />);

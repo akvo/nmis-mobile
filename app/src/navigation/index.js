@@ -114,8 +114,11 @@ const Navigation = (props) => {
     // listen to route change
     const currentRoute = state.routes[state.routes.length - 1].name;
     if (['Home', 'ManageForm'].includes(currentRoute)) {
+      // reset form values
       FormState.update((s) => {
         s.currentValues = {};
+        s.questionGroupListCurrentValues = {};
+        s.dataPointName = [];
       });
     }
     UIState.update((s) => {
