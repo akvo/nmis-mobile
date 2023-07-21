@@ -7,11 +7,9 @@ const syncFormVersion = async ({
   showNotificationOnly = true,
   sendPushNotification = () => {},
 }) => {
-  console.log('[bgTask]Params:', showNotificationOnly, sendPushNotification);
   try {
     // find last session
     const session = await crudSessions.selectLastSession();
-    console.log('[bgTask]Session:', session);
     if (!session) {
       return;
     }
@@ -26,7 +24,6 @@ const syncFormVersion = async ({
         const promises = data.formsUrl.map(async (form) => {
           const formExist = await crudForms.selectFormByIdAndVersion({ ...form });
           if (formExist) {
-            console.info('[bgTask]Form exist:', form.id, form.version);
             return false;
           }
           if (showNotificationOnly) {
@@ -35,10 +32,10 @@ const syncFormVersion = async ({
           }
           const formRes = await api.get(form.url);
           // update previous form latest value to 0
-          const updatedForm = await crudForms.updateForm({ ...form });
-          console.info('[syncForm]Updated Forms...', form.id, updatedForm);
+          await crudForms.updateForm({ ...form });
+          console.info('[syncForm]Updated Forms...', form.id);
           const savedForm = await crudForms.addForm({ ...form, formJSON: formRes?.data });
-          console.info('[syncForm]Saved Forms...', form.id, savedForm);
+          console.info('[syncForm]Saved Forms...', form.id);
           return savedForm;
         });
         Promise.all(promises).then(async (res) => {
@@ -54,11 +51,11 @@ const syncFormVersion = async ({
   }
 };
 
-const registerBackgroundTask = async (TASK_NAME) => {
+const registerBackgroundTask = async (TASK_NAME, minimumInterval = 86400) => {
   try {
     await BackgroundFetch.registerTaskAsync(TASK_NAME, {
-      minimumInterval: 1 * 60,
-      stopOnTerminate: false, // android only,
+      minimumInterval: minimumInterval,
+      stopOnTerminate: true, // android only,
       startOnBoot: true, // android only
     });
   } catch (err) {
@@ -74,13 +71,13 @@ const unregisterBackgroundTask = async (TASK_NAME) => {
   }
 };
 
-const backgroundTaskStatus = async (TASK_NAME) => {
+const backgroundTaskStatus = async (TASK_NAME, minimumInterval = 86400) => {
   const status = await BackgroundFetch.getStatusAsync();
   const isRegistered = await TaskManager.isTaskRegisteredAsync(TASK_NAME);
   if (BackgroundFetch.BackgroundFetchStatus?.[status] === 'Available' && !isRegistered) {
-    await registerBackgroundTask(TASK_NAME);
+    await registerBackgroundTask(TASK_NAME, minimumInterval);
   }
-  console.log('[bgTask]Status', status, isRegistered);
+  console.log(`[${TASK_NAME}] Status`, status, isRegistered, minimumInterval);
 };
 
 const backgroundTaskHandler = () => {

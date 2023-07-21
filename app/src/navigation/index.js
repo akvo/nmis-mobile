@@ -14,14 +14,15 @@ import {
   MapViewPage,
   UsersPage,
 } from '../pages';
-import { UIState, AuthState, UserState, FormState } from '../store';
+import { UIState, AuthState, UserState, FormState, BuildParamsState } from '../store';
 import { BackHandler } from 'react-native';
 import * as TaskManager from 'expo-task-manager';
 import * as BackgroundFetch from 'expo-background-fetch';
 import * as Notifications from 'expo-notifications';
 import { backgroundTask, notification } from '../lib';
 
-const TASK_NAME = 'sync-form-version';
+const SYNC_FORM_VERSION_TASK_NAME = 'sync-form-version';
+const SYNC_FORM_SUBMISSION_TASK_NAME = 'sync-form-submission';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -31,16 +32,25 @@ Notifications.setNotificationHandler({
   }),
 });
 
-TaskManager.defineTask(TASK_NAME, async () => {
+TaskManager.defineTask(SYNC_FORM_VERSION_TASK_NAME, async () => {
   try {
-    console.log('[bgTask]Function here');
     await backgroundTask.syncFormVersion({
       sendPushNotification: notification.sendPushNotification,
       showNotificationOnly: true,
     });
     return BackgroundFetch.BackgroundFetchResult.NewData;
   } catch (err) {
-    console.error('define task manager failed:', err);
+    console.error(`[${SYNC_FORM_VERSION_TASK_NAME}] Define task manager failed`, err);
+    return BackgroundFetch.Result.Failed;
+  }
+});
+
+TaskManager.defineTask(SYNC_FORM_SUBMISSION_TASK_NAME, async () => {
+  try {
+    console.log(`[${SYNC_FORM_SUBMISSION_TASK_NAME}]Function here...`);
+    return BackgroundFetch.BackgroundFetchResult.NewData;
+  } catch (err) {
+    console.error(`[${SYNC_FORM_SUBMISSION_TASK_NAME}] Define task manager failed`, err);
     return BackgroundFetch.Result.Failed;
   }
 });
@@ -52,6 +62,7 @@ const RootNavigator = () => {
   const currentPage = UIState.useState((s) => s.currentPage);
   const token = AuthState.useState((s) => s.token); // user already has session
   const userDefined = UserState.useState((s) => s.id);
+  const syncInterval = BuildParamsState.useState((s) => s.dataSyncInterval);
 
   React.useEffect(() => {
     const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
@@ -66,7 +77,9 @@ const RootNavigator = () => {
   }, [token, currentPage]);
 
   React.useEffect(() => {
-    backgroundTask.backgroundTaskStatus(TASK_NAME);
+    backgroundTask.backgroundTaskStatus(SYNC_FORM_VERSION_TASK_NAME);
+    backgroundTask.backgroundTaskStatus(SYNC_FORM_SUBMISSION_TASK_NAME, syncInterval);
+
     notification.registerForPushNotificationsAsync();
     const notificationListener = Notifications.addNotificationReceivedListener((notification) => {
       console.log('[Notification]Received Listener');
