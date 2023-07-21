@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FormPage component should render component correctly 1`] = `
+<View
+  style={
+    {
+      "backgroundColor": "#f9fafb",
+      "flex": 1,
+      "flexDirection": "column",
+      "flexWrap": "wrap",
+    }
+  }
+  testID="stack-container"
+>
+  <mock-FormContainer>
+    <button
+      onPress={[Function]}
+      testID="mock-submit-button"
+    >
+      Submit
+    </button>
+  </mock-FormContainer>
+</View>
+`;
