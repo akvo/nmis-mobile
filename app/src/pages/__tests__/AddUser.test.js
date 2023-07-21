@@ -75,7 +75,7 @@ describe('AddUserPage', () => {
     fireEvent.press(saveButton);
 
     act(() => {
-      const insertQuery = query.insert('users', { id: 1, name: usernameVal });
+      const insertQuery = query.insert('users', { id: 1, name: usernameVal, active: 1 });
       conn.tx(db, insertQuery);
 
       UserState.update((s) => {
@@ -87,12 +87,14 @@ describe('AddUserPage', () => {
     await waitFor(() => {
       const { name: usernameState } = userStateRef.current;
       expect(usernameState).toEqual(usernameVal);
+      expect(navigation.navigate).toHaveBeenCalledWith('Home');
     });
 
     const userData = [
       {
         id: 1,
         name: usernameVal,
+        active: 1,
       },
     ];
     const mockSelectSql = jest.fn((query, params, successCallback) => {
@@ -108,5 +110,57 @@ describe('AddUserPage', () => {
     const resultSet = await conn.tx(db, selectQuery, [1]);
     expect(resultSet.rows).toHaveLength(userData.length);
     expect(resultSet.rows._array).toEqual(userData);
+  });
+
+  it('should redirect to list users when click arrow back', () => {
+    const { result: navigationRef } = renderHook(() => useNavigation());
+    const navigation = navigationRef.current;
+    const { getByTestId } = render(<AddUser navigation={navigation} />);
+
+    const arrowBackEl = getByTestId('arrow-back-button');
+    expect(arrowBackEl).toBeDefined();
+    fireEvent.press(arrowBackEl);
+
+    expect(navigation.navigate).toHaveBeenCalledWith('Users');
+  });
+
+  it('should be able to validate username case insensitive', async () => {
+    const userData = [
+      {
+        id: 1,
+        name: 'jHon doe',
+        active: 0,
+      },
+    ];
+    const mockSelectSql = jest.fn((query, params, successCallback) => {
+      successCallback(null, { rows: { length: userData.length, _array: userData } });
+    });
+    db.transaction.mockImplementation((transactionFunction) => {
+      transactionFunction({
+        executeSql: mockSelectSql,
+      });
+    });
+
+    const { result: navigationRef } = renderHook(() => useNavigation());
+    const navigation = navigationRef.current;
+    const { getByText, getByTestId } = render(<AddUser navigation={navigation} />);
+
+    const name = 'Jhon Doe';
+    const usernameEl = getByTestId('input-name');
+    expect(usernameEl).toBeDefined();
+    fireEvent.changeText(usernameEl, name);
+
+    const saveButton = getByTestId('button-save');
+    expect(saveButton).toBeDefined();
+    fireEvent.press(saveButton);
+
+    await waitFor(async () => {
+      const checkQuery = query.read('users', { name }, true);
+      const { rows } = await conn.tx(db, checkQuery, [name]);
+      expect(rows.length).toBe(1);
+
+      const errorText = getByText('User already exists');
+      expect(errorText).toBeDefined();
+    });
   });
 });
