@@ -118,7 +118,8 @@ const SettingsForm = ({ route }) => {
       ...settingsState,
       [stateKey]: value,
     });
-    handleUpdateOnDB(stateKey, value);
+    const tinyIntVal = value ? 1 : 0;
+    handleUpdateOnDB(stateKey, tinyIntVal);
   };
 
   const handleCreateNewConfig = () => {
