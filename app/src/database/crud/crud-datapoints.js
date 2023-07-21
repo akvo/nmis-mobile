@@ -29,11 +29,11 @@ const dataPointsQuery = () => {
     },
     selectSubmissionToSync: async () => {
       const submitted = 1;
-      const syncedAt = null;
-      const { rows } = await conn.tx(db, query.read('datapoints', { submitted, syncedAt }), [
-        submitted,
-        syncedAt,
-      ]);
+      const { rows } = await conn.tx(
+        db,
+        'SELECT * FROM datapoints WHERE submitted = ? AND syncedAt IS NULL',
+        [submitted],
+      );
       if (!rows.length) {
         return [];
       }
