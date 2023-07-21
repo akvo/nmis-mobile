@@ -27,6 +27,18 @@ const dataPointsQuery = () => {
       }
       return rows._array;
     },
+    selectSubmissionToSync: async () => {
+      const submitted = 1;
+      const syncedAt = null;
+      const { rows } = await conn.tx(db, query.read('datapoints', { submitted, syncedAt }), [
+        submitted,
+        syncedAt,
+      ]);
+      if (!rows.length) {
+        return [];
+      }
+      return rows._array;
+    },
     saveDataPoint: async ({ form, user, name, submitted, duration, json }) => {
       const insertQuery = query.insert('datapoints', {
         form,
