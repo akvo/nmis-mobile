@@ -14,7 +14,7 @@ import { useField } from 'formik';
 import { View, Text } from 'react-native';
 import { styles } from '../styles';
 import { FormState } from '../../store';
-import { conn, query } from '../../database';
+import { cascades } from '../../lib';
 
 const QuestionField = ({ keyform, field: questionField, setFieldValue, values, validate }) => {
   const [field, meta, helpers] = useField({ name: questionField.id, validate });
@@ -54,14 +54,7 @@ const QuestionField = ({ keyform, field: questionField, setFieldValue, values, v
   };
 
   const loadCascadeDataSource = async () => {
-    /**
-     * TODO: How to load cascade
-     */
-    const dbFile = require('../../assets/administrations.db');
-    const admDB = await conn.file(dbFile, 'administrations');
-
-    const admQuery = query.read('nodes');
-    const { rows } = await conn.tx(admDB, admQuery);
+    const { rows } = await cascades.loadDataSource(questionField?.source);
     setCascadeData(rows._array);
   };
 
