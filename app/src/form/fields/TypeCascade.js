@@ -1,21 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { FieldLabel } from '../support';
 import { styles } from '../styles';
 
-const TypeCascade = ({ onChange, values, keyform, id, name, dataSource = [] }) => {
+const TypeCascade = ({ onChange, values, keyform, id, name, source, dataSource = [] }) => {
   const [dropdownItems, setDropdownItems] = useState([]);
 
   const groupBy = (array, property) => {
-    const gd = array.reduce((groups, item) => {
-      const key = item[property];
-      if (!groups[key]) {
-        groups[key] = [];
-      }
-      groups[key].push(item);
-      return groups;
-    }, {});
+    const gd = array
+      .sort((a, b) => {
+        if (a.name < b.name) {
+          return -1;
+        }
+        if (a.name > b.name) {
+          return 1;
+        }
+        return 0;
+      })
+      .reduce((groups, item) => {
+        const key = item[property];
+        if (!groups[key]) {
+          groups[key] = [];
+        }
+        groups[key].push(item);
+        return groups;
+      }, {});
     const groupedData = {};
     Object.entries(gd).forEach(([key, value]) => {
       const newKey = key === 'null' ? '0' : key;
@@ -43,17 +53,13 @@ const TypeCascade = ({ onChange, values, keyform, id, name, dataSource = [] }) =
 
     setDropdownItems(updatedItems);
   };
-
-  useEffect(() => {
+  const fetchDropdowns = useCallback(async () => {
     if (!dropdownItems.length && dataSource.length) {
-      const filterDs = dataSource.filter(
-        (ds) => values[id] === ds?.parent || values[id] === ds?.id || !ds?.parent,
-      );
+      const parentID = source?.parent_id || 0;
+      const filterDs = dataSource.filter((ds) => ds?.parent === parentID);
       const groupedDs = groupBy(filterDs, 'parent');
-      const findValue = dataSource.find((ds) => ds?.id === values[id]);
       const initialDropdowns = Object.values(groupedDs).map((options) => {
-        const initValue =
-          options?.find((o) => o?.id === findValue?.parent || o?.id === findValue?.id)?.id || null;
+        const initValue = values[id] || null;
         return {
           options,
           value: initValue,
@@ -61,7 +67,10 @@ const TypeCascade = ({ onChange, values, keyform, id, name, dataSource = [] }) =
       });
       setDropdownItems(initialDropdowns);
     }
-  }, [dropdownItems, dataSource]);
+  }, [dataSource, dropdownItems, source]);
+  useEffect(() => {
+    fetchDropdowns();
+  }, [fetchDropdowns]);
 
   return (
     <View testID="view-type-cascade">
