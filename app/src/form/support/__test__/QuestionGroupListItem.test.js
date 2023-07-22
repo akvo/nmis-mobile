@@ -143,6 +143,26 @@ describe('QuestionGroup & QuestionGroupListItem without mock', () => {
     expect(wrapper.getByTestId('form-name').children[0]).toBe(example.name);
   });
 
+  it('Should render datapoint name if defined', () => {
+    const wrapper = render(
+      <QuestionGroupList
+        form={example}
+        activeQuestionGroup={1}
+        values={{ 1: 'John Doe' }}
+        dataPointNameText="John Doe"
+      />,
+    );
+    const dataPointElement = wrapper.getByTestId('datapoint-name');
+    expect(dataPointElement).toBeDefined();
+    expect(dataPointElement.props.children).toEqual('John Doe');
+  });
+
+  it('Should not render datapoint name if not defined', () => {
+    const wrapper = render(<QuestionGroupList form={example} />);
+    const dataPointElement = wrapper.queryByTestId('datapoint-name');
+    expect(dataPointElement).toBeFalsy();
+  });
+
   it('Should return boolean if completed/not', () => {
     const completed = checkCompleteQuestionGroup(example, { 1: 'Galih' });
     expect(completed).toEqual([true, false, false]);
@@ -176,6 +196,10 @@ describe('QuestionGroup & QuestionGroupListItem without mock', () => {
     const completed = checkCompleteQuestionGroup(example, { 4: ['Male'] });
     expect(completed).toEqual([false, false, true]);
   });
+
+  it.todo('Should ignore dependency question if not answered');
+
+  it.todo('Should check dependency question if answered');
 
   it('Should render question group name', () => {
     const wrapper = render(
