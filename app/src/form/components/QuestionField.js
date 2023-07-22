@@ -53,13 +53,16 @@ const QuestionField = ({ keyform, field: questionField, setFieldValue, values, v
     setFieldValue(id, value);
   };
 
-  const loadCascadeDataSource = async () => {
-    const { rows } = await cascades.loadDataSource(questionField?.source);
+  const loadCascadeDataSource = async (source) => {
+    const { rows } = await cascades.loadDataSource(source);
     setCascadeData(rows._array);
   };
 
   useEffect(() => {
-    loadCascadeDataSource();
+    if (questionField?.type === 'cascade' && questionField?.source?.file) {
+      const cascadeSource = questionField.source;
+      loadCascadeDataSource(cascadeSource);
+    }
   }, []);
 
   const renderField = () => {
