@@ -55,12 +55,16 @@ const TypeCascade = ({ onChange, values, keyform, id, name, source, dataSource =
   };
 
   useEffect(() => {
-    if (!dropdownItems.length && dataSource.length) {
+    if (dropdownItems.length === 0 && dataSource.length) {
       const parentID = source?.parent_id || 0;
-      const filterDs = dataSource.filter((ds) => ds?.parent === parentID);
+      const filterDs = dataSource.filter(
+        (ds) => values[id] === ds?.parent || values[id] === ds?.id || ds?.parent === parentID,
+      );
       const groupedDs = groupBy(filterDs, 'parent');
+      const findValue = dataSource.find((ds) => ds?.id === values[id]);
       const initialDropdowns = Object.values(groupedDs).map((options) => {
-        const initValue = values[id] || null;
+        const initValue =
+          options?.find((o) => o?.id === findValue?.parent || o?.id === findValue?.id)?.id || null;
         return {
           options,
           value: initValue,
