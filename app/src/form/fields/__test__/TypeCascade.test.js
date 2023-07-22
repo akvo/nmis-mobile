@@ -3,11 +3,11 @@ import { render, fireEvent, act, waitFor } from '@testing-library/react-native';
 import TypeCascade from '../TypeCascade';
 
 const dummyLocations = [
-  { id: 106, name: 'DI YOGYAKARTA', parent: null },
+  { id: 106, name: 'DI YOGYAKARTA', parent: 0 },
   { id: 107, name: 'KAB. BANTUL', parent: 106 },
   { id: 109, name: 'Sabdodadi', parent: 107 },
   { id: 110, name: 'Bantul', parent: 107 },
-  { id: 111, name: 'JAWA TENGAH', parent: null },
+  { id: 111, name: 'JAWA TENGAH', parent: 0 },
   { id: 112, name: 'KAB. PURBALINGGA', parent: 111 },
   { id: 113, name: 'KAB. BANYUMAS', parent: 111 },
   { id: 114, name: 'Kembaran', parent: 113 },
@@ -67,40 +67,35 @@ describe('TypeCascade', () => {
     });
   });
 
-  it('Should have a parent dropdown.', async () => {
+  it('Should have a specific parent dropdown when source is defined.', () => {
     const fieldID = 'location';
     const fieldName = 'Location';
-    const initialValue = null;
+    const initialValue = 110;
     const values = { [fieldID]: initialValue };
 
     const mockedOnChange = jest.fn((fieldName, value) => {
       values[fieldName] = value;
     });
-    const { getByTestId, getByText } = render(
+
+    const questionSource = { file: 'file.sqlite', parent_id: 107 };
+    const { getByTestId, getByText, queryByText } = render(
       <TypeCascade
         onChange={mockedOnChange}
         id={fieldID}
         name={fieldName}
         values={values}
         dataSource={dummyLocations}
+        source={questionSource}
       />,
     );
 
     const parentDropdown = getByTestId('dropdown-cascade-0');
     expect(parentDropdown).toBeDefined();
+    const invalidOption = queryByText('DI YOGYAKARTA');
+    expect(invalidOption).toBeNull();
 
-    const selected = { id: 196, name: 'DI YOGYAKARTA' };
-
-    act(() => {
-      fireEvent(parentDropdown, 'onChange', { value: selected.id });
-
-      mockedOnChange(fieldID, selected.name);
-    });
-
-    await waitFor(() => {
-      const firstOption = getByText('DI YOGYAKARTA');
-      expect(firstOption).toBeDefined();
-    });
+    const validOption = queryByText('Bantul');
+    expect(validOption).toBeDefined();
   });
 
   it('Should have one or more child dropdowns.', () => {
