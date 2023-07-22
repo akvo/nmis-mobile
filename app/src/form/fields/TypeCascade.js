@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { FieldLabel } from '../support';
@@ -53,7 +53,8 @@ const TypeCascade = ({ onChange, values, keyform, id, name, source, dataSource =
 
     setDropdownItems(updatedItems);
   };
-  const fetchDropdowns = useCallback(async () => {
+
+  useEffect(() => {
     if (!dropdownItems.length && dataSource.length) {
       const parentID = source?.parent_id || 0;
       const filterDs = dataSource.filter((ds) => ds?.parent === parentID);
@@ -68,9 +69,6 @@ const TypeCascade = ({ onChange, values, keyform, id, name, source, dataSource =
       setDropdownItems(initialDropdowns);
     }
   }, [dataSource, dropdownItems, source]);
-  useEffect(() => {
-    fetchDropdowns();
-  }, [fetchDropdowns]);
 
   return (
     <View testID="view-type-cascade">
