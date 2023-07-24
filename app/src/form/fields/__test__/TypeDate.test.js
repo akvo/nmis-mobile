@@ -59,4 +59,34 @@ describe('TypeDate component', () => {
     const dateField = getByTestId('type-date');
     expect(dateField.props.value).toBe(initialValue.toLocaleDateString());
   });
+
+  it('should not show required sign if required param is false and requiredSign is not defined', () => {
+    const wrapper = render(<TypeDate id="dateField" name="Date Field" required={false} />);
+    const requiredIcon = wrapper.queryByTestId('field-required-icon');
+    expect(requiredIcon).toBeFalsy();
+  });
+
+  it('should not show required sign if required param is false but requiredSign is defined', () => {
+    const wrapper = render(
+      <TypeDate id="dateField" name="Date Field" required={false} requiredSign="*" />,
+    );
+    const requiredIcon = wrapper.queryByTestId('field-required-icon');
+    expect(requiredIcon).toBeFalsy();
+  });
+
+  it('should not show required sign if required param is true and requiredSign defined', () => {
+    const wrapper = render(
+      <TypeDate id="dateField" name="Date Field" required={true} requiredSign="*" />,
+    );
+    const requiredIcon = wrapper.queryByTestId('field-required-icon');
+    expect(requiredIcon).toBeTruthy();
+  });
+
+  it('should show required sign with custom requiredSign', () => {
+    const wrapper = render(
+      <TypeDate id="dateField" name="Date Field" required={true} requiredSign="**" />,
+    );
+    const requiredIcon = wrapper.getByText('**');
+    expect(requiredIcon).toBeTruthy();
+  });
 });
