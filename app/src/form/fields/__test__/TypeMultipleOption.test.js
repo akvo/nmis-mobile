@@ -51,8 +51,4 @@ describe('TypeMultipleOption', () => {
     const multipleDropdown = getByTestId('type-multiple-option-dropdown');
     expect(multipleDropdown).toBeDefined();
   });
-
-  test.todo('should not show required sign if required param is false or undefined')
-
-  test.todo('should show required sign if required param is true')
 });

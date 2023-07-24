@@ -59,8 +59,4 @@ describe('TypeDate component', () => {
     const dateField = getByTestId('type-date');
     expect(dateField.props.value).toBe(initialValue.toLocaleDateString());
   });
-
-  test.todo('should not show required sign if required param is false or undefined')
-
-  test.todo('should show required sign if required param is true')
 });

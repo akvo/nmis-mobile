@@ -8,4 +8,8 @@ describe('FieldLabel component', () => {
     const labelElement = getByText('1. Question Name');
     expect(labelElement).toBeDefined();
   });
+
+  it.todo('should not show required sign if requiredSign param is null')
+
+  it.todo('should show required sign if requiredSign param is not null')
 });
