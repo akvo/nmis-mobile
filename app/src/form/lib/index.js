@@ -44,13 +44,21 @@ export const transformForm = (forms) => {
     });
 
   const transformed = questions.map((x) => {
+    let requiredSignTemp = x?.requiredSign || null;
+    if (x?.required && !x?.requiredSign) {
+      requiredSignTemp = '*';
+    }
     if (x?.dependency) {
       return {
         ...x,
+        requiredSign: requiredSignTemp,
         dependency: getDependencyAncestors(questions, x.dependency, x.dependency),
       };
     }
-    return x;
+    return {
+      ...x,
+      requiredSign: requiredSignTemp,
+    };
   });
 
   return {

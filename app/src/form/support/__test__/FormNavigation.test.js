@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, fireEvent, waitFor } from 'react-native-testing-library';
 import FormNavigation from '../FormNavigation';
+import { Platform, ToastAndroid } from 'react-native';
 
 describe('FormNavigation component', () => {
   it('renders form navigation correctly', async () => {
@@ -83,6 +84,246 @@ describe('FormNavigation component', () => {
     fireEvent.press(btnSubmit);
     await waitFor(() => {
       expect(onSubmit).toHaveBeenCalled();
+    });
+  });
+
+  it('should call validateOnFormNavigation and not call setActiveGroup if validation error', async () => {
+    const mockSetActiveGroup = jest.fn();
+    const mockFormRef = {
+      current: {
+        setTouched: jest.fn(),
+        validateForm: jest.fn(() => Promise.resolve(true)),
+        errors: [1],
+      },
+    };
+
+    const { getByTestId } = render(
+      <FormNavigation
+        formRef={mockFormRef}
+        activeGroup={1}
+        setActiveGroup={mockSetActiveGroup}
+        totalGroup={3}
+      />,
+    );
+
+    const nextButton = getByTestId('form-nav-btn-next');
+    fireEvent.press(nextButton);
+
+    await waitFor(() => {
+      expect(mockFormRef.current.setTouched).toHaveBeenCalledTimes(1);
+      expect(mockFormRef.current.validateForm).toHaveBeenCalledTimes(1);
+      expect(mockSetActiveGroup).toHaveBeenCalledTimes(0);
+    });
+  });
+
+  it('should call validateOnFormNavigation and call setActiveGroup if no validation error', async () => {
+    const mockSetActiveGroup = jest.fn();
+    const mockFormRef = {
+      current: {
+        setTouched: jest.fn(),
+        validateForm: jest.fn(() => Promise.resolve(true)),
+        errors: [],
+      },
+    };
+
+    const { getByTestId } = render(
+      <FormNavigation
+        formRef={mockFormRef}
+        activeGroup={1}
+        setActiveGroup={mockSetActiveGroup}
+        totalGroup={3}
+      />,
+    );
+
+    const nextButton = getByTestId('form-nav-btn-next');
+    fireEvent.press(nextButton);
+
+    await waitFor(() => {
+      expect(mockFormRef.current.setTouched).toHaveBeenCalledTimes(1);
+      expect(mockFormRef.current.validateForm).toHaveBeenCalledTimes(1);
+      expect(mockSetActiveGroup).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  it('should call validateOnFormNavigation and not call onSubmit if validation error', async () => {
+    const mockOnSubmit = jest.fn();
+    const mockFormRef = {
+      current: {
+        setTouched: jest.fn(),
+        validateForm: jest.fn(() => Promise.resolve(true)),
+        errors: [1],
+      },
+    };
+
+    const { getByTestId } = render(
+      <FormNavigation
+        formRef={mockFormRef}
+        activeGroup={2}
+        onSubmit={mockOnSubmit}
+        totalGroup={3}
+      />,
+    );
+
+    const submitButton = getByTestId('form-btn-submit');
+    fireEvent.press(submitButton);
+
+    await waitFor(() => {
+      expect(mockFormRef.current.setTouched).toHaveBeenCalledTimes(1);
+      expect(mockFormRef.current.validateForm).toHaveBeenCalledTimes(1);
+      expect(mockOnSubmit).toHaveBeenCalledTimes(0);
+    });
+  });
+
+  it('should call validateOnFormNavigation and call onSubmit if no validation error', async () => {
+    const mockOnSubmit = jest.fn();
+    const mockFormRef = {
+      current: {
+        setTouched: jest.fn(),
+        validateForm: jest.fn(() => Promise.resolve(true)),
+        errors: [],
+      },
+    };
+
+    const { getByTestId } = render(
+      <FormNavigation
+        formRef={mockFormRef}
+        activeGroup={2}
+        onSubmit={mockOnSubmit}
+        totalGroup={3}
+      />,
+    );
+
+    const submitButton = getByTestId('form-btn-submit');
+    fireEvent.press(submitButton);
+
+    await waitFor(() => {
+      expect(mockFormRef.current.setTouched).toHaveBeenCalledTimes(1);
+      expect(mockFormRef.current.validateForm).toHaveBeenCalledTimes(1);
+      expect(mockOnSubmit).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  it('should show Toast notification if validation error when press Next button', async () => {
+    Platform.OS = 'android';
+    ToastAndroid.show = jest.fn();
+
+    const mockFormRef = {
+      current: {
+        setTouched: jest.fn(),
+        validateForm: jest.fn(() => Promise.resolve(true)),
+        errors: [1],
+      },
+    };
+
+    const { getByTestId } = render(
+      <FormNavigation
+        formRef={mockFormRef}
+        activeGroup={1}
+        setActiveGroup={() => jest.fn()}
+        totalGroup={3}
+      />,
+    );
+
+    const nextButton = getByTestId('form-nav-btn-next');
+    fireEvent.press(nextButton);
+
+    await waitFor(() => {
+      expect(mockFormRef.current.setTouched).toHaveBeenCalledTimes(1);
+      expect(mockFormRef.current.validateForm).toHaveBeenCalledTimes(1);
+      expect(ToastAndroid.show).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  it('should not show Toast notification if no validation error when press Next button', async () => {
+    Platform.OS = 'android';
+    ToastAndroid.show = jest.fn();
+
+    const mockFormRef = {
+      current: {
+        setTouched: jest.fn(),
+        validateForm: jest.fn(() => Promise.resolve(true)),
+        errors: [],
+      },
+    };
+
+    const { getByTestId } = render(
+      <FormNavigation
+        formRef={mockFormRef}
+        activeGroup={1}
+        setActiveGroup={() => jest.fn()}
+        totalGroup={3}
+      />,
+    );
+
+    const nextButton = getByTestId('form-nav-btn-next');
+    fireEvent.press(nextButton);
+
+    await waitFor(() => {
+      expect(mockFormRef.current.setTouched).toHaveBeenCalledTimes(1);
+      expect(mockFormRef.current.validateForm).toHaveBeenCalledTimes(1);
+      expect(ToastAndroid.show).toHaveBeenCalledTimes(0);
+    });
+  });
+
+  it('should show Toast notification if validation error when press Submit button', async () => {
+    Platform.OS = 'android';
+    ToastAndroid.show = jest.fn();
+
+    const mockFormRef = {
+      current: {
+        setTouched: jest.fn(),
+        validateForm: jest.fn(() => Promise.resolve(true)),
+        errors: [1],
+      },
+    };
+
+    const { getByTestId } = render(
+      <FormNavigation
+        formRef={mockFormRef}
+        activeGroup={2}
+        setActiveGroup={() => jest.fn()}
+        totalGroup={3}
+      />,
+    );
+
+    const submitButton = getByTestId('form-btn-submit');
+    fireEvent.press(submitButton);
+
+    await waitFor(() => {
+      expect(mockFormRef.current.setTouched).toHaveBeenCalledTimes(1);
+      expect(mockFormRef.current.validateForm).toHaveBeenCalledTimes(1);
+      expect(ToastAndroid.show).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  it('should not show Toast notification if no validation error when press Submit button', async () => {
+    Platform.OS = 'android';
+    ToastAndroid.show = jest.fn();
+
+    const mockFormRef = {
+      current: {
+        setTouched: jest.fn(),
+        validateForm: jest.fn(() => Promise.resolve(true)),
+        errors: [],
+      },
+    };
+
+    const { getByTestId } = render(
+      <FormNavigation
+        formRef={mockFormRef}
+        activeGroup={2}
+        setActiveGroup={() => jest.fn()}
+        totalGroup={3}
+      />,
+    );
+
+    const submitButton = getByTestId('form-btn-submit');
+    fireEvent.press(submitButton);
+
+    await waitFor(() => {
+      expect(mockFormRef.current.setTouched).toHaveBeenCalledTimes(1);
+      expect(mockFormRef.current.validateForm).toHaveBeenCalledTimes(1);
+      expect(ToastAndroid.show).toHaveBeenCalledTimes(0);
     });
   });
 });
