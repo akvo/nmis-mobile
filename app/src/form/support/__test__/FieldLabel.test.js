@@ -9,7 +9,15 @@ describe('FieldLabel component', () => {
     expect(labelElement).toBeDefined();
   });
 
-  it.todo('should not show required sign if requiredSign param is null')
+  it('should not show required sign if requiredSign param is null', () => {
+    const wrapper = render(<FieldLabel keyform={0} name="Question Name" />);
+    const requiredIcon = wrapper.queryByTestId('field-required-icon');
+    expect(requiredIcon).toBeFalsy();
+  });
 
-  it.todo('should show required sign if requiredSign param is not null')
+  it('should show required sign if requiredSign param is not null', () => {
+    const wrapper = render(<FieldLabel keyform={0} name="Question Name" requiredSign="*" />);
+    const requiredIcon = wrapper.queryByTestId('field-required-icon');
+    expect(requiredIcon).toBeTruthy();
+  });
 });

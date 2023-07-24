@@ -66,7 +66,17 @@ export const addSuffix = (addonAfter) => {
   };
 };
 
-const TypeInput = ({ onChange, values, keyform, id, name, addonAfter, addonBefore, required, requiredSign }) => {
+const TypeInput = ({
+  onChange,
+  values,
+  keyform,
+  id,
+  name,
+  addonAfter,
+  addonBefore,
+  required,
+  requiredSign,
+}) => {
   return (
     <View>
       <FieldLabel keyform={keyform} name={name} requiredSign={required ? requiredSign : null} />

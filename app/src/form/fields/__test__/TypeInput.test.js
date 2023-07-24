@@ -44,7 +44,6 @@ describe('TypeInput component', () => {
     expect(inputElement.props.value).toBe(initialValue);
   });
 
-
   test.failing('should not show input preffix if addonBefore not defined', () => {
     const wrapper = render(<TypeInput id="inputField" name="Field Label" />);
 
