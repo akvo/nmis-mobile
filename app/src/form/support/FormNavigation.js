@@ -69,6 +69,8 @@ const FormNavigation = ({
         iconContainerStyle={styles.formNavigationIcon}
         titleStyle={styles.formNavigationTitle}
         testID="form-nav-btn-back"
+        disabled={showQuestionGroupList}
+        disabledStyle={{ backgroundColor: 'transparent' }}
       />
       <Tab.Item
         title={`${activeGroup + 1}/${totalGroup}`}
@@ -83,6 +85,8 @@ const FormNavigation = ({
           iconContainerStyle={styles.formNavigationIcon}
           titleStyle={styles.formNavigationTitle}
           testID="form-nav-btn-next"
+          disabled={showQuestionGroupList}
+          disabledStyle={{ backgroundColor: 'transparent' }}
         />
       ) : (
         <Tab.Item
