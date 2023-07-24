@@ -20,4 +20,10 @@ describe('FieldLabel component', () => {
     const requiredIcon = wrapper.queryByTestId('field-required-icon');
     expect(requiredIcon).toBeTruthy();
   });
+
+  it('should show custom required sign', () => {
+    const wrapper = render(<FieldLabel keyform={0} name="Question Name" requiredSign="**" />);
+    const requiredIcon = wrapper.getByText('**');
+    expect(requiredIcon).toBeTruthy();
+  });
 });

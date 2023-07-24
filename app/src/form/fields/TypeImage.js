@@ -8,7 +8,7 @@ import { FieldLabel } from '../support';
 // TODO: getImageBase64 (ARF)
 // TODO: convertImageToBase64 (ARF)
 
-const TypeImage = ({ onChange, keyform, id, name }) => {
+const TypeImage = ({ onChange, keyform, id, name, required, requiredSign }) => {
   const [showDialog, setShowDialog] = React.useState(false);
   const [selectedImage, setSelectedImage] = React.useState(null);
 
@@ -101,7 +101,7 @@ const TypeImage = ({ onChange, keyform, id, name }) => {
 
   return (
     <View>
-      <FieldLabel keyform={keyform} name={name} />
+      <FieldLabel keyform={keyform} name={name} requiredSign={required ? requiredSign : null} />
       <View style={styles.fieldImageContainer}>
         {selectedImage != null ? (
           <Image
