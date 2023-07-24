@@ -9,3 +9,8 @@ export const UserState = {
 export const AuthState = {
   update: jest.fn(),
 };
+
+export const FormState = {
+  update: jest.fn(),
+  useState: jest.fn(),
+};

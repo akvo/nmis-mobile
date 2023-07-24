@@ -2,7 +2,6 @@ import React from 'react';
 import { render, waitFor } from '@testing-library/react-native';
 jest.useFakeTimers();
 import QuestionGroupList from '../QuestionGroupList';
-import { checkCompleteQuestionGroup } from '../../lib';
 
 const example = {
   name: 'Testing Form',
@@ -110,7 +109,7 @@ const example = {
               order: 2,
             },
           ],
-          meta: false,
+          meta: true,
           translations: [
             {
               name: 'Jenis Kelamin',
@@ -140,10 +139,14 @@ const example = {
 const mockQuestionGroupList = jest.fn();
 const mockQuestionGroupListItem = jest.fn();
 
-jest.mock('../QuestionGroupList', () => ({ form, values = {}, activeQuestionGroup }) => {
-  mockQuestionGroupList(form, values, activeQuestionGroup);
-  return <mock-QuestionGroupList />;
-});
+jest.mock(
+  '../QuestionGroupList',
+  () =>
+    ({ form, values = {}, activeQuestionGroup, dataPointNameText }) => {
+      mockQuestionGroupList(form, values, activeQuestionGroup, dataPointNameText);
+      return <mock-QuestionGroupList />;
+    },
+);
 
 jest.mock('../QuestionGroupListItem', () => ({ name, active, completedQuestionGroup = false }) => {
   mockQuestionGroupListItem(name, active, completedQuestionGroup);
@@ -160,7 +163,17 @@ describe('QuestionGroupList', () => {
     expect(mockQuestionGroupList.mock.calls[0][0]).toEqual(example);
   });
 
-  it.todo('Should read datapoint name');
+  it('Should read datapoint name', () => {
+    render(
+      <QuestionGroupList
+        form={example}
+        activeQuestionGroup={1}
+        values={{ 1: 'Galih' }}
+        dataPointNameText="Galih"
+      />,
+    );
+    expect(mockQuestionGroupList.mock.calls[0][3]).toEqual('Galih');
+  });
 
   it('Should read formik values', () => {
     render(<QuestionGroupList form={example} values={{ 1: 'Galih' }} activeQuestionGroup={1} />);

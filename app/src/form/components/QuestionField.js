@@ -19,13 +19,17 @@ const QuestionField = ({ keyform, field: questionField, setFieldValue, values, v
   const activeLang = UIState.useState((s) => s.lang);
 
   useEffect(() => {
-    if (meta.error && field.name && values?.[field.name]) {
-      setTimeout(() => {
-        delete values?.[field.name];
-        FormState.update((s) => {
-          s.currentValues = values;
-        });
-      }, 100);
+    if (meta.error && field.name) {
+      FormState.update((s) => {
+        const removedErrorValues = Object.keys(s.questionGroupListCurrentValues)
+          .filter((key) => key.toString() !== field.name.toString())
+          .reduce((acc, curr) => ({ ...acc, [curr]: s.questionGroupListCurrentValues[curr] }), {});
+        s.questionGroupListCurrentValues = removedErrorValues;
+      });
+    } else {
+      FormState.update((s) => {
+        s.questionGroupListCurrentValues = { ...s.questionGroupListCurrentValues, ...values };
+      });
     }
   }, [meta.error, field.name, values]);
 
@@ -33,6 +37,16 @@ const QuestionField = ({ keyform, field: questionField, setFieldValue, values, v
     helpers.setTouched({ [field.name]: true });
     FormState.update((s) => {
       s.currentValues = { ...s.currentValues, [id]: value };
+      if (questionField?.meta) {
+        s.dataPointName = s.dataPointName.map((dp) =>
+          dp.id.toString() === id.toString()
+            ? {
+                ...dp,
+                value: value,
+              }
+            : dp,
+        );
+      }
     });
     setFieldValue(id, value);
   };
