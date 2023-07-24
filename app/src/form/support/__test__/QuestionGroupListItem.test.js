@@ -132,12 +132,139 @@ const example = {
             },
           ],
         },
+        {
+          id: 6,
+          name: 'Depend to Gender Male',
+          order: 6,
+          type: 'text',
+          required: true,
+          meta: false,
+          dependency: [
+            {
+              id: 4,
+              options: ['Male'],
+            },
+          ],
+        },
+        {
+          id: 7,
+          name: 'Depend to Gender Female',
+          order: 7,
+          type: 'text',
+          required: false,
+          meta: false,
+          dependency: [
+            {
+              id: 4,
+              options: ['Female'],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      id: 4,
+      name: 'Group 4',
+      order: 4,
+      translations: [
+        {
+          name: 'Grup 4',
+          language: 'id',
+        },
+      ],
+      question: [
+        {
+          id: 8,
+          name: 'Hobby',
+          order: 8,
+          type: 'option',
+          required: false,
+          option: [
+            {
+              id: 3,
+              name: 'Reading',
+              order: 1,
+            },
+            {
+              id: 4,
+              name: 'Programming',
+              order: 2,
+            },
+          ],
+          meta: false,
+        },
+        {
+          id: 9,
+          name: 'What programming language?',
+          order: 9,
+          type: 'input',
+          required: true,
+          meta: false,
+          dependency: [
+            {
+              id: 8,
+              options: ['Programming'],
+            },
+          ],
+        },
       ],
     },
   ],
 };
 
 describe('QuestionGroup & QuestionGroupListItem without mock', () => {
+  describe('checkCompleteQuestionGroup function', () => {
+    it.failing(
+      'Should failing when only one question answered from two required questions in a question group',
+      () => {
+        const values = {
+          2: new Date().toISOString(),
+        };
+        const completed = checkCompleteQuestionGroup(example, values);
+        expect(completed).toEqual([false, true, false, true]);
+      },
+    );
+
+    it('Should check two required questions in a question group', () => {
+      const values = {
+        2: new Date().toISOString(),
+        3: '20',
+      };
+      const completed = checkCompleteQuestionGroup(example, values);
+      expect(completed).toEqual([false, true, false, true]);
+    });
+
+    it('Should ignore not required questions', () => {
+      const completed = checkCompleteQuestionGroup(example, { 4: ['Female'] });
+      expect(completed).toEqual([false, false, true, true]);
+    });
+
+    it('Should ignore dependency question if not answered', () => {
+      const completed = checkCompleteQuestionGroup(example, {});
+      expect(completed).toEqual([false, false, false, true]);
+    });
+
+    it('Should ignore dependency question if not required', () => {
+      const completed = checkCompleteQuestionGroup(example, { 4: ['Female'] });
+      expect(completed).toEqual([false, false, true, true]);
+    });
+
+    it('Should check dependency question if  dependent question answered and dependency question required', () => {
+      const completed = checkCompleteQuestionGroup(example, { 4: ['Male'], 8: ['Programming'] });
+      expect(completed).toEqual([false, false, false, false]);
+    });
+
+    it('Should complete when dependent question answered and required dependency question answered', () => {
+      const completed = checkCompleteQuestionGroup(example, {
+        4: ['Male'],
+        6: 'Lorem ipsum',
+        8: ['Programming'],
+        9: 'Python Language',
+      });
+      expect(completed).toEqual([false, false, true, true]);
+    });
+  });
+
   it('Should read form title', () => {
     const wrapper = render(<QuestionGroupList form={example} activeQuestionGroup={1} />);
     expect(wrapper.getByTestId('form-name').children[0]).toBe(example.name);
@@ -165,41 +292,8 @@ describe('QuestionGroup & QuestionGroupListItem without mock', () => {
 
   it('Should return boolean if completed/not', () => {
     const completed = checkCompleteQuestionGroup(example, { 1: 'Galih' });
-    expect(completed).toEqual([true, false, false]);
+    expect(completed).toEqual([true, false, false, true]);
   });
-
-  it.failing(
-    'Should failing when only one question answered from two required questions in a question group',
-    () => {
-      const values = {
-        2: new Date().toISOString(),
-      };
-      const completed = checkCompleteQuestionGroup(example, values);
-      expect(completed).toEqual([false, true, false]);
-    },
-  );
-
-  it('Should check two requred questions in a question group', () => {
-    const values = {
-      2: new Date().toISOString(),
-      3: '20',
-    };
-    const completed = checkCompleteQuestionGroup(example, values);
-    expect(completed).toEqual([false, true, false]);
-  });
-
-  it('Should ignore not required questions', () => {
-    const values = {
-      2: new Date().toISOString(),
-      3: '20',
-    };
-    const completed = checkCompleteQuestionGroup(example, { 4: ['Male'] });
-    expect(completed).toEqual([false, false, true]);
-  });
-
-  it.todo('Should ignore dependency question if not answered');
-
-  it.todo('Should check dependency question if answered');
 
   it('Should render question group name', () => {
     const wrapper = render(

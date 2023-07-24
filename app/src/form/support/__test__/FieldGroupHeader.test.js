@@ -19,7 +19,7 @@ describe('FieldGroupHeader component', () => {
     expect(descriptionElement.props.children).toBe(description);
   });
 
-  test('name and description is not defined', () => {
+  it('should not render name and description if not defined', () => {
     const { getByTestId, queryByTestId } = render(<FieldGroupHeader />);
 
     const nameEl = getByTestId('text-name');
