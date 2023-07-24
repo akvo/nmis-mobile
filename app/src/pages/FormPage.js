@@ -17,10 +17,6 @@ const FormPage = ({ navigation, route }) => {
     return JSON.parse(selectedForm.json.replace(/''/g, "'"));
   }, [selectedForm]);
 
-  const goBack = () => {
-    navigation.navigate('ManageForm', { ...route?.params });
-  };
-
   const handleOnSubmitForm = async (values, refreshForm) => {
     try {
       const submitData = {
@@ -48,7 +44,7 @@ const FormPage = ({ navigation, route }) => {
   };
 
   return (
-    <BaseLayout title={route?.params?.name} back={goBack}>
+    <BaseLayout title={route?.params?.name}>
       <FormContainer forms={formJSON} initialValues={{}} onSubmit={handleOnSubmitForm} />
     </BaseLayout>
   );

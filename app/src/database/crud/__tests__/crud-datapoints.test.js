@@ -1,6 +1,9 @@
 import crudDataPoints from '../crud-datapoints';
-import { render, renderHook, fireEvent, act, waitFor } from '@testing-library/react-native';
+import { act } from '@testing-library/react-native';
 jest.mock('expo-sqlite');
+import { conn } from '../../conn';
+
+const db = conn.init;
 
 const dataPoints = [
   {
@@ -57,42 +60,89 @@ describe('crudDataPoints function', () => {
     });
   });
 
-  test('selectDataPointById should return the correct data point when given a valid ID', async () => {
-    const mockSelectDataPointById = jest.fn(({ id }) => dataPoints.find((d) => d.id === id));
-    crudDataPoints.selectDataPointById = mockSelectDataPointById;
-    const result = await crudDataPoints.selectDataPointById({ id: 1 });
-    expect(result).toEqual(dataPoints[0]);
-  });
-
-  test('selectDataPointsByFormAndSubmitted should return the correct list of submitted data points', async () => {
-    const mockSelectDataPointsByFormAndSubmitted = jest.fn(({ form, submitted }) =>
-      dataPoints.filter((d) => d.form === form && d.submitted === submitted),
-    );
-    crudDataPoints.selectDataPointsByFormAndSubmitted = mockSelectDataPointsByFormAndSubmitted;
-    const result = await crudDataPoints.selectDataPointsByFormAndSubmitted({
-      form: 123,
-      submitted: 1,
-    });
-    expect(result).toEqual(dataPoints.filter((d) => d.form === 123 && d.submitted));
-  });
-
-  test('selectDataPointsByFormAndSubmitted should return the correct list of saved data points', async () => {
-    const mockSelectDataPointsByFormAndSubmitted = jest.fn(({ form, submitted }) =>
-      dataPoints.filter((d) => d.form === form && d.submitted === submitted),
-    );
-    crudDataPoints.selectDataPointsByFormAndSubmitted = mockSelectDataPointsByFormAndSubmitted;
-    const result = await crudDataPoints.selectDataPointsByFormAndSubmitted({
-      form: 123,
-      submitted: 0,
-    });
-    expect(result).toEqual(dataPoints.filter((d) => d.form === 123 && !d.submitted));
-  });
-
   test('updateDataPoint should update the data point in the database correctly', async () => {
     await act(async () => {
       const updateValue = { ...dataPoints[0], syncedAt: new Date().toISOString() };
       const result = await crudDataPoints.updateDataPoint({ ...updateValue });
       expect(result).toEqual({ rowsAffected: 1 });
     });
+  });
+
+  test('selectDataPointById should return the correct data point when given a valid ID', async () => {
+    const mockData = dataPoints
+      .filter((d) => d.id === 1)
+      .map((d) => ({ ...d, json: JSON.stringify(d.json) }));
+    const mockSelectSql = jest.fn((query, params, successCallback) => {
+      successCallback(null, { rows: { length: mockData.length, _array: mockData } });
+    });
+    db.transaction.mockImplementation((transactionFunction) => {
+      transactionFunction({
+        executeSql: mockSelectSql,
+      });
+    });
+    const result = await crudDataPoints.selectDataPointById({ id: 1 });
+    expect(result).toEqual(dataPoints[0]);
+  });
+
+  test('selectDataPointsByFormAndSubmitted should return the correct list of submitted data points', async () => {
+    const mockData = dataPoints.filter((d) => d.form === 123 && d.submitted);
+    const mockSelectSql = jest.fn((query, params, successCallback) => {
+      successCallback(null, { rows: { length: mockData.length, _array: mockData } });
+    });
+    db.transaction.mockImplementation((transactionFunction) => {
+      transactionFunction({
+        executeSql: mockSelectSql,
+      });
+    });
+    const result = await crudDataPoints.selectDataPointsByFormAndSubmitted({
+      form: 123,
+      submitted: 1,
+    });
+    expect(result).toEqual(mockData);
+  });
+
+  test('selectDataPointsByFormAndSubmitted should return the correct list of saved data points', async () => {
+    const mockData = dataPoints.filter((d) => d.form === 123 && !d.submitted);
+    const mockSelectSql = jest.fn((query, params, successCallback) => {
+      successCallback(null, { rows: { length: mockData.length, _array: mockData } });
+    });
+    db.transaction.mockImplementation((transactionFunction) => {
+      transactionFunction({
+        executeSql: mockSelectSql,
+      });
+    });
+    const result = await crudDataPoints.selectDataPointsByFormAndSubmitted({
+      form: 123,
+      submitted: 0,
+    });
+    expect(result).toEqual(mockData);
+  });
+
+  test('selectSubmissionToSync should return all submitted data point with syncedAt null', async () => {
+    const mockData = dataPoints.filter((d) => !d.submitted && !d.syncedAt);
+    const mockSelectSql = jest.fn((query, params, successCallback) => {
+      successCallback(null, { rows: { length: mockData.length, _array: mockData } });
+    });
+    db.transaction.mockImplementation((transactionFunction) => {
+      transactionFunction({
+        executeSql: mockSelectSql,
+      });
+    });
+    const result = await crudDataPoints.selectSubmissionToSync();
+    expect(result).toEqual(mockData);
+  });
+
+  test('selectSubmissionToSync should return [] if no data points defined', async () => {
+    const mockData = [];
+    const mockSelectSql = jest.fn((query, params, successCallback) => {
+      successCallback(null, { rows: { length: mockData.length, _array: mockData } });
+    });
+    db.transaction.mockImplementation((transactionFunction) => {
+      transactionFunction({
+        executeSql: mockSelectSql,
+      });
+    });
+    const result = await crudDataPoints.selectSubmissionToSync();
+    expect(result).toEqual(mockData);
   });
 });

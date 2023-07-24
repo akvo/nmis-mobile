@@ -76,7 +76,7 @@ describe('Navigation Component', () => {
       </NavigationContainer>,
     );
 
-    expect(backgroundTask.backgroundTaskStatus).toHaveBeenCalledTimes(1);
+    expect(backgroundTask.backgroundTaskStatus).toHaveBeenCalledTimes(2);
     expect(notification.registerForPushNotificationsAsync).toHaveBeenCalledTimes(1);
     expect(Notifications.addNotificationReceivedListener).toHaveBeenCalledTimes(1);
     expect(Notifications.addNotificationResponseReceivedListener).toHaveBeenCalledTimes(1);
