@@ -1,11 +1,11 @@
-CREATE TABLE node (
+CREATE TABLE nodes (
   id INTEGER PRIMARY KEY,
   code VARCHAR(10),
   name VARCHAR(100) NOT NULL,
   parent INTEGER
 );
 
-INSERT INTO node (id, code, name, parent) VALUES
+INSERT INTO nodes (id, code, name, parent) VALUES
 (1, 'KO001', 'Kenya National Government', 0),
 (2, 'KO002', 'Nairobi County Government', 1),
 (3, 'KO003', 'Mombasa County Government', 1),
