@@ -1,4 +1,5 @@
 import React from 'react';
+import { Platform, ToastAndroid } from 'react-native';
 import { Tab } from '@rneui/themed';
 import { styles } from '../styles';
 
@@ -36,6 +37,13 @@ const FormNavigation = ({
     }
     validateOnFormNavigation()
       .then((errors) => {
+        if (errors && Platform.OS === 'android') {
+          ToastAndroid.show(
+            'Please respond to all mandatory question before proceeding',
+            ToastAndroid.SHORT,
+          );
+          return;
+        }
         if (!errors && index === 2 && activeGroup === totalGroup - 1) {
           return onSubmit();
         }
