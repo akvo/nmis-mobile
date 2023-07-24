@@ -53,4 +53,8 @@ describe('TypeGeo', () => {
       expect(navigation.navigate).toHaveBeenCalledWith('MapView', { latitude, longitude });
     });
   });
+
+  test.todo('should not show required sign if required param is false or undefined')
+
+  test.todo('should show required sign if required param is true')
 });

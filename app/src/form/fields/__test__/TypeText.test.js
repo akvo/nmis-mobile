@@ -25,4 +25,8 @@ describe('TypeText component', () => {
     fireEvent.changeText(textAreaField, 'New value');
     expect(onChangeMock).toHaveBeenCalledTimes(1);
   });
+
+  test.todo('should not show required sign if required param is false or undefined')
+
+  test.todo('should show required sign if required param is true')
 });

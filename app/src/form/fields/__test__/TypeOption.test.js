@@ -59,4 +59,8 @@ describe('TypeOption component', () => {
     const dropdown = getByTestId('type-option-dropdown');
     expect(dropdown).toBeDefined();
   });
+
+  test.todo('should not show required sign if required param is false or undefined')
+
+  test.todo('should show required sign if required param is true')
 });

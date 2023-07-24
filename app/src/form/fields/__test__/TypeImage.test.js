@@ -93,6 +93,10 @@ describe('TypeImage component', () => {
       fireEvent.press(getByTestId('btn-remove'));
       expect(setSelectedImage).toHaveBeenCalledTimes(1);
     });
+
+    test.todo('should not show required sign if required param is false or undefined')
+
+    test.todo('should show required sign if required param is true')
   });
 
   describe('Request access external storage', () => {

@@ -44,6 +44,10 @@ describe('TypeNumber component', () => {
     expect(inputElement.props.value).toBe(initialValue);
   });
 
+  test.todo('should not show required sign if required param is false or undefined')
+
+  test.todo('should show required sign if required param is true')
+
   test.failing('should not show input preffix if addonBefore not defined', () => {
     const wrapper = render(<TypeNumber id="inputField" name="Field Label" />);
 
