@@ -2,7 +2,10 @@
 	"id": 563350033,
 	"name": "WASH in Schools",
 	"version": "1.0.0",
-	"cascades": ["/sqlite/cascade-296940912-v2.sqlite"],
+	"cascades": [
+		"/sqlite/cascade-296940912-v2.sqlite",
+		"/sqlite/kenya_organizations.sqlite"
+	],
 	"question_group": [
 		{
 			"name": "Demographics",
@@ -23,8 +26,8 @@
 					"required": true,
 					"meta": true,
 					"source": {
-						"file": "cascade-296940912-v2.sqlite",
-						"parent_id": 273
+						"file": "kenya_organizations.sqlite",
+						"parent_id": 0
 					}
 				},
 				{
@@ -45,7 +48,11 @@
 					"order": 4,
 					"type": "cascade",
 					"required": true,
-					"meta": true
+					"meta": true,
+					"source": {
+						"file": "cascade-296940912-v2.sqlite",
+						"parent_id": 0
+					}
 				},
 				{
 					"id": 561980063,
