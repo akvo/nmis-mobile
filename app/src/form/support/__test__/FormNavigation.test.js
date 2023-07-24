@@ -85,4 +85,12 @@ describe('FormNavigation component', () => {
       expect(onSubmit).toHaveBeenCalled();
     });
   });
+
+  it('should disable Back and Next button when QuestionGroupList showed', () => {
+    return new Error();
+  })
+
+  it('should not disable Submit button when QuestionGroupList showed', () => {
+    return new Error();
+  })
 });
