@@ -4,6 +4,7 @@ import { FieldLabel } from '../support';
 import { styles } from '../styles';
 import { CheckBox } from '@rneui/themed';
 import { Dropdown } from 'react-native-element-dropdown';
+import { i18n } from '../../lib';
 
 const TypeOption = ({
   onChange,
@@ -20,6 +21,8 @@ const TypeOption = ({
     return option.length <= 3;
   }, [option]);
 
+  const translatedOptions = i18n.options(lang, option);
+
   return (
     <View style={styles.optionContainer}>
       <FieldLabel
@@ -30,36 +33,33 @@ const TypeOption = ({
         translations={translations}
       />
       {isRadioGroup ? (
-        option.map((opt, opti) => (
+        translatedOptions.map((opt, opti) => (
           <CheckBox
             key={opti}
             containerStyle={styles.radioFieldContainer}
             textStyle={styles.radioFieldText}
             checked={values?.[id]?.includes(opt.name)}
             onPress={() => {
-              if (onChange) {
-                onChange(id, [opt.name]);
-              }
+              onChange(id, [opt.name]);
             }}
             title={opt.label}
             checkedIcon="dot-circle-o"
             uncheckedIcon="circle-o"
+            testID={`type-option-radio-${opti}`}
           />
         ))
       ) : (
         <Dropdown
           style={[styles.dropdownField]}
-          data={option.map((opt) => ({ label: opt.label, value: opt.name }))}
+          data={translatedOptions}
           search
           maxHeight={300}
           labelField="label"
-          valueField="value"
+          valueField="name"
           searchPlaceholder="Search..."
           value={values?.[id]?.[0] || []}
           onChange={({ value }) => {
-            if (onChange) {
-              onChange(id, [value]);
-            }
+            onChange(id, [value]);
           }}
           testID="type-option-dropdown"
         />

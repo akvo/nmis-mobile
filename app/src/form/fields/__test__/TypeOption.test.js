@@ -1,8 +1,18 @@
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react-native';
+import { render, fireEvent, act, waitFor } from '@testing-library/react-native';
 import TypeOption from '../TypeOption';
 
+// According to the issue on @testing-library/react-native
+import { View } from 'react-native';
+jest.spyOn(View.prototype, 'measureInWindow').mockImplementation((cb) => {
+  cb(18, 113, 357, 50);
+});
+
 describe('TypeOption component', () => {
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
   test('renders radio group options correctly', () => {
     const onChangeMock = jest.fn();
     const values = {};
@@ -58,5 +68,217 @@ describe('TypeOption component', () => {
 
     const dropdown = getByTestId('type-option-dropdown');
     expect(dropdown).toBeDefined();
+  });
+
+  it('should translate option radio group text', () => {
+    const setFieldValueMock = jest.fn();
+    const onChangeMock = jest.fn();
+    const values = { gender: 'male' };
+    const option = [
+      { name: 'male', label: 'Male', translations: [{ language: 'fr', name: 'Masculin' }] },
+      { name: 'female', label: 'Female', translations: [{ language: 'fr', name: 'Feminin' }] },
+    ];
+
+    const activeLang = 'fr';
+
+    const { getByTestId, getByText } = render(
+      <TypeOption
+        lang={activeLang}
+        onChange={onChangeMock}
+        values={values}
+        option={option}
+        setFieldValue={setFieldValueMock}
+        id="gender"
+        name="Gender"
+      />,
+    );
+
+    const radio1 = getByTestId('type-option-radio-0');
+    expect(radio1).toBeDefined();
+    const radio1Text = getByText('Masculin');
+    expect(radio1Text).toBeDefined();
+
+    const radio2 = getByTestId('type-option-radio-1');
+    expect(radio2).toBeDefined();
+    const radio2Text = getByText('Feminin');
+    expect(radio2Text).toBeDefined();
+  });
+
+  it('should translate option dropdown text', async () => {
+    const setFieldValueMock = jest.fn();
+    const values = {};
+
+    const onChangeMock = jest.fn((fieldName, value) => {
+      values[fieldName] = value;
+    });
+    const option = [
+      {
+        id: 1681108456316,
+        code: 'C21A',
+        name: 'Pipeline connection / Piped water to yard/plot',
+        order: 1,
+        translations: [
+          {
+            language: 'fr',
+            name: 'Branchement ONEA',
+          },
+        ],
+      },
+      {
+        id: 1681108456317,
+        code: 'C21B',
+        name: 'Borehole',
+        order: 2,
+        translations: [
+          {
+            language: 'fr',
+            name: 'Forage',
+          },
+        ],
+      },
+      {
+        id: 1681108556330,
+        code: 'C21C',
+        name: 'Modern well',
+        order: 3,
+        translations: [
+          {
+            language: 'fr',
+            name: 'Puits Moderne',
+          },
+        ],
+      },
+      {
+        id: 1681108565845,
+        code: 'C21D',
+        name: 'Traditional well',
+        order: 4,
+        translations: [
+          {
+            language: 'fr',
+            name: 'Puits Traditionnel',
+          },
+        ],
+      },
+    ];
+
+    const activeLang = 'fr';
+
+    const { getByTestId, getByText } = render(
+      <TypeOption
+        lang={activeLang}
+        onChange={onChangeMock}
+        values={values}
+        option={option}
+        setFieldValue={setFieldValueMock}
+        id="maindrinking"
+        name="What is the main drinking water point provided by the school?"
+      />,
+    );
+
+    const dropdownEl = getByTestId('type-option-dropdown');
+    expect(dropdownEl).toBeDefined();
+
+    fireEvent.press(dropdownEl);
+
+    expect(getByText('Branchement ONEA')).toBeDefined();
+    expect(getByText('Puits Moderne')).toBeDefined();
+    expect(getByText('Puits Traditionnel')).toBeDefined();
+
+    const choosedOpt = getByText('Forage');
+    await waitFor(() => expect(choosedOpt).toBeDefined());
+
+    fireEvent.press(choosedOpt);
+
+    act(() => {
+      onChangeMock('maindrinking', ['Borehole']);
+    });
+
+    await waitFor(() => {
+      expect(onChangeMock).toHaveBeenNthCalledWith(2, 'maindrinking', ['Borehole']);
+    });
+  });
+
+  it('should fallback to default language when translation is not available', () => {
+    const setFieldValueMock = jest.fn();
+    const values = {};
+
+    const onChangeMock = jest.fn((fieldName, value) => {
+      values[fieldName] = value;
+    });
+    const option = [
+      {
+        id: 1681108456316,
+        code: 'C21A',
+        name: 'Pipeline connection / Piped water to yard/plot',
+        order: 1,
+        translations: [
+          {
+            language: 'fr',
+            name: 'Branchement ONEA',
+          },
+        ],
+      },
+      {
+        id: 1681108456317,
+        code: 'C21B',
+        name: 'Borehole',
+        order: 2,
+        translations: [
+          {
+            language: 'fr',
+            name: 'Forage',
+          },
+        ],
+      },
+      {
+        id: 1681108556330,
+        code: 'C21C',
+        name: 'Modern well',
+        order: 3,
+        translations: [
+          {
+            language: 'fr',
+            name: 'Puits Moderne',
+          },
+        ],
+      },
+      {
+        id: 1681108565845,
+        code: 'C21D',
+        name: 'Traditional well',
+        order: 4,
+        translations: [
+          {
+            language: 'fr',
+            name: 'Puits Traditionnel',
+          },
+        ],
+      },
+    ];
+
+    const activeLang = 'id'; // set active language to bahasa
+
+    const { getByTestId, getByText } = render(
+      <TypeOption
+        lang={activeLang}
+        onChange={onChangeMock}
+        values={values}
+        option={option}
+        setFieldValue={setFieldValueMock}
+        id="maindrinking"
+        name="What is the main drinking water point provided by the school?"
+      />,
+    );
+
+    const dropdownEl = getByTestId('type-option-dropdown');
+    expect(dropdownEl).toBeDefined();
+
+    fireEvent.press(dropdownEl);
+
+    expect(getByText('Pipeline connection / Piped water to yard/plot')).toBeDefined();
+    expect(getByText('Borehole')).toBeDefined();
+    expect(getByText('Modern well')).toBeDefined();
+    expect(getByText('Traditional well')).toBeDefined();
   });
 });
