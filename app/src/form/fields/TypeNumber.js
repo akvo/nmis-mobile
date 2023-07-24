@@ -16,6 +16,8 @@ const TypeNumber = ({
   lang,
   tooltip,
   translations,
+  required,
+  requiredSign,
 }) => {
   return (
     <View>
@@ -25,6 +27,7 @@ const TypeNumber = ({
         lang={lang}
         tooltip={tooltip}
         translations={translations}
+        requiredSign={required ? requiredSign : null}
       />
       <Input
         inputContainerStyle={styles.inputFieldContainer}

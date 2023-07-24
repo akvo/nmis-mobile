@@ -4,7 +4,18 @@ import { FieldLabel } from '../support';
 import { styles } from '../styles';
 import { Input } from '@rneui/themed';
 
-const TypeText = ({ onChange, values, keyform, id, name, lang, tooltip, translations }) => {
+const TypeText = ({
+  onChange,
+  values,
+  keyform,
+  id,
+  name,
+  lang,
+  tooltip,
+  translations,
+  required,
+  requiredSign,
+}) => {
   return (
     <View>
       <FieldLabel
@@ -13,6 +24,7 @@ const TypeText = ({ onChange, values, keyform, id, name, lang, tooltip, translat
         lang={lang}
         tooltip={tooltip}
         translations={translations}
+        requiredSign={required ? requiredSign : null}
       />
       <Input
         inputContainerStyle={styles.inputFieldContainer}

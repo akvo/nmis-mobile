@@ -23,9 +23,14 @@ const ControlledTooltip = ({ children, popover }) => {
   );
 };
 
-const FieldLabel = ({ keyform = 0, lang = 'en', name, tooltip, translations }) => {
-  const [showTooltip, setShowTooltip] = useState(false);
-
+const FieldLabel = ({
+  keyform = 0,
+  lang = 'en',
+  name,
+  tooltip,
+  translations,
+  requiredSign = null,
+}) => {
   const getTrans = (trans, target) => trans.find((t) => t?.language === target);
 
   let text = name;
@@ -43,13 +48,20 @@ const FieldLabel = ({ keyform = 0, lang = 'en', name, tooltip, translations }) =
   }
 
   return (
-    <View style={styles.fieldLabel}>
-      <Text testID="field-label">{labelText}</Text>
-      {tooltip && (
-        <ControlledTooltip popover={<Text testID="field-tooltip-text">{tooltipText}</Text>}>
-          <Icon name="help-circle" size={18} testID="field-tooltip-icon" />
-        </ControlledTooltip>
+    <View style={styles.fieldLabelContainer}>
+      {requiredSign && (
+        <Text style={styles.fieldRequiredIcon} testID="field-required-icon">
+          {requiredSign}
+        </Text>
       )}
+      <View style={styles.fieldLabel}>
+        <Text testID="field-label">{labelText}</Text>
+        {tooltip && (
+          <ControlledTooltip popover={<Text testID="field-tooltip-text">{tooltipText}</Text>}>
+            <Icon name="help-circle" size={18} testID="field-tooltip-icon" />
+          </ControlledTooltip>
+        )}
+      </View>
     </View>
   );
 };

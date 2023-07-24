@@ -16,6 +16,8 @@ const TypeMultipleOption = ({
   lang,
   tooltip,
   translations,
+  required,
+  requiredSign,
 }) => {
   const translatedOptions = i18n.options(lang, option);
 
@@ -31,6 +33,7 @@ const TypeMultipleOption = ({
         lang={lang}
         tooltip={tooltip}
         translations={translations}
+        requiredSign={required ? requiredSign : null}
       />
       {isCheckBox ? (
         translatedOptions.map((opt, opti) => (

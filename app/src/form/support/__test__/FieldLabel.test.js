@@ -5,48 +5,53 @@ import FieldLabel from '../FieldLabel';
 
 const mockFieldLabel = jest.fn();
 
-jest.mock('../FieldLabel', () => ({ keyform = 0, lang = 'en', name, tooltip, translations }) => {
-  mockFieldLabel(keyform, name, tooltip, translations);
+jest.mock(
+  '../FieldLabel',
+  () =>
+    ({ keyform = 0, lang = 'en', name, tooltip, translations, requiredSign = null }) => {
+      mockFieldLabel(keyform, name, tooltip, translations);
 
-  const toggle = jest.fn().mockImplementation(() => {
-    let toggleState = false;
-    toggleState = !toggleState;
-    return toggleState;
-  });
+      const toggle = jest.fn().mockImplementation(() => {
+        let toggleState = false;
+        toggleState = !toggleState;
+        return toggleState;
+      });
 
-  const getTrans = (trans, target) => trans.find((t) => t?.language === target);
+      const getTrans = (trans, target) => trans.find((t) => t?.language === target);
 
-  let text = name;
-  if (translations?.length) {
-    const findTransText = getTrans(translations, lang);
-    text = findTransText?.text || text;
-  }
-  const prefix = `${keyform + 1}. `;
-  const labelText = prefix + text;
+      let text = name;
+      if (translations?.length) {
+        const findTransText = getTrans(translations, lang);
+        text = findTransText?.text || text;
+      }
+      const prefix = `${keyform + 1}. `;
+      const labelText = prefix + text;
 
-  let tooltipText = tooltip?.text;
-  if (tooltip?.translations?.length) {
-    const findTransTooltip = getTrans(tooltip.translations, lang);
-    tooltipText = findTransTooltip?.text || tooltipText;
-  }
+      let tooltipText = tooltip?.text;
+      if (tooltip?.translations?.length) {
+        const findTransTooltip = getTrans(tooltip.translations, lang);
+        tooltipText = findTransTooltip?.text || tooltipText;
+      }
 
-  const isVisible = toggle();
-  return (
-    <div>
-      <mock-Text testID="field-label">{labelText}</mock-Text>
-      {tooltip && (
+      const isVisible = toggle();
+      return (
         <div>
-          {isVisible && (
-            <mock-ControlledTooltip testID="field-tooltip-text">
-              {tooltipText}
-            </mock-ControlledTooltip>
+          {requiredSign && <mock-Text testID="field-required-icon">{requiredSign}</mock-Text>}
+          <mock-Text testID="field-label">{labelText}</mock-Text>
+          {tooltip && (
+            <div>
+              {isVisible && (
+                <mock-ControlledTooltip testID="field-tooltip-text">
+                  {tooltipText}
+                </mock-ControlledTooltip>
+              )}
+              <mock-QuestionMark testID="field-tooltip-icon" onPress={toggle} />
+            </div>
           )}
-          <mock-QuestionMark testID="field-tooltip-icon" onPress={toggle} />
         </div>
-      )}
-    </div>
-  );
-});
+      );
+    },
+);
 
 describe('FieldLabel component', () => {
   beforeEach(() => {
@@ -229,5 +234,24 @@ describe('FieldLabel component', () => {
     const tooltipText = queryByTestId('field-tooltip-text');
     expect(tooltipText).toBeDefined();
     expect(tooltipText.props.children).toBe(idTooltip);
+  });
+
+  it('should not show required sign if requiredSign param is null', () => {
+    const wrapper = render(<FieldLabel keyform={0} name="Question Name" />);
+    const requiredIcon = wrapper.queryByTestId('field-required-icon');
+    expect(requiredIcon).toBeFalsy();
+  });
+
+  it('should show required sign if requiredSign param is not null', () => {
+    const wrapper = render(<FieldLabel keyform={0} name="Question Name" requiredSign="*" />);
+    const requiredIcon = wrapper.queryByTestId('field-required-icon');
+    expect(requiredIcon).toBeTruthy();
+  });
+
+  it('should show custom required sign', () => {
+    const wrapper = render(<FieldLabel keyform={0} name="Question Name" requiredSign="**" />);
+    const requiredIcon = wrapper.queryByTestId('field-required-icon');
+    expect(requiredIcon).toBeTruthy();
+    expect(requiredIcon.props.children).toEqual('**');
   });
 });

@@ -77,6 +77,8 @@ const TypeInput = ({
   lang,
   tooltip,
   translations,
+  required,
+  requiredSign,
 }) => {
   return (
     <View>
@@ -86,6 +88,7 @@ const TypeInput = ({
         lang={lang}
         tooltip={tooltip}
         translations={translations}
+        requiredSign={required ? requiredSign : null}
       />
       <Input
         inputContainerStyle={styles.inputFieldContainer}

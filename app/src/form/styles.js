@@ -36,6 +36,14 @@ export const styles = StyleSheet.create({
     color: 'red',
     fontStyle: 'italic',
   },
+  fieldLabelContainer: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  fieldRequiredIcon: {
+    color: 'red',
+    paddingLeft: 10,
+  },
   fieldLabel: {
     display: 'flex',
     flexDirection: 'row',

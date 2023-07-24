@@ -16,6 +16,8 @@ const TypeOption = ({
   lang,
   tooltip,
   translations,
+  required,
+  requiredSign,
 }) => {
   const isRadioGroup = React.useMemo(() => {
     return option.length <= 3;
@@ -31,6 +33,7 @@ const TypeOption = ({
         lang={lang}
         tooltip={tooltip}
         translations={translations}
+        requiredSign={required ? requiredSign : null}
       />
       {isRadioGroup ? (
         translatedOptions.map((opt, opti) => (
