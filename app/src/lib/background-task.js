@@ -87,7 +87,7 @@ const syncFormSubmission = async () => {
     api.setToken(session.token);
     // get all datapoints to sync
     const data = await crudDataPoints.selectSubmissionToSync();
-    console.info('[syncFormSubmisiion] data point to sync:', data.length);
+    console.info('[syncFormSubmision] data point to sync:', data.length);
     data.forEach(async (d) => {
       // get user
       const user = await crudUsers.selectUserById({ id: d.user });
@@ -100,14 +100,14 @@ const syncFormSubmission = async () => {
       };
       // sync data point
       const res = await api.post('/sync', syncData);
-      console.info('[syncFormSubmisiion] post sync data point:', res.status, res.data);
+      console.info('[syncFormSubmision] post sync data point:', res.status, res.data);
       if (res.status === 200) {
         // update data point
         await crudDataPoints.updateDataPoint({
           ...d,
           syncedAt: new Date().toISOString(),
         });
-        console.info('[syncFormSubmisiion] updated data point syncedAt:', d.id);
+        console.info('[syncFormSubmision] updated data point syncedAt:', d.id);
       }
     });
   } catch (err) {
