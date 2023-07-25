@@ -55,6 +55,7 @@ const AuthForm = ({ navigation }) => {
             api.setToken(bearerToken);
             await crudConfig.updateConfig({ authenticationCode: passcode });
           }
+          await cascades.createSqliteDir();
           // save forms
           await data.formsUrl.forEach(async (form) => {
             // Fetch form detail
