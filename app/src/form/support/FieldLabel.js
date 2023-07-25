@@ -1,52 +1,12 @@
 import React, { useState } from 'react';
 import { View } from 'react-native';
-import { Text, Tooltip } from '@rneui/themed';
-import Icon from 'react-native-vector-icons/Ionicons';
+import { Text, Tooltip, Icon } from '@rneui/themed';
 import { styles } from '../styles';
 
-const ControlledTooltip = ({ children, popover }) => {
+const FieldLabel = ({ keyform = 0, name, tooltip, requiredSign = null }) => {
   const [open, setOpen] = useState(false);
-  return (
-    <Tooltip
-      visible={open}
-      onOpen={() => {
-        setOpen(true);
-      }}
-      onClose={() => {
-        setOpen(false);
-      }}
-      popover={popover}
-      backgroundColor="#e5e5e5"
-    >
-      {children}
-    </Tooltip>
-  );
-};
-
-const FieldLabel = ({
-  keyform = 0,
-  lang = 'en',
-  name,
-  tooltip,
-  translations,
-  requiredSign = null,
-}) => {
-  const getTrans = (trans, target) => trans.find((t) => t?.language === target);
-
-  let text = name;
-  if (translations?.length) {
-    const findTransText = getTrans(translations, lang);
-    text = findTransText?.text || text;
-  }
-  const prefix = `${keyform + 1}. `;
-  const labelText = prefix + text;
-
-  let tooltipText = tooltip?.text;
-  if (tooltip?.translations?.length) {
-    const findTransTooltip = getTrans(tooltip.translations, lang);
-    tooltipText = findTransTooltip?.text || tooltipText;
-  }
-
+  const labelText = `${keyform + 1}. ${name}`;
+  const tooltipText = tooltip?.text;
   return (
     <View style={styles.fieldLabelContainer}>
       {requiredSign && (
@@ -56,11 +16,24 @@ const FieldLabel = ({
       )}
       <View style={styles.fieldLabel}>
         <Text testID="field-label">{labelText}</Text>
-        {tooltip && (
-          <ControlledTooltip popover={<Text testID="field-tooltip-text">{tooltipText}</Text>}>
-            <Icon name="help-circle" size={18} testID="field-tooltip-icon" />
-          </ControlledTooltip>
+        {tooltipText && (
+          <Icon
+            name="help-circle"
+            type="ionicon"
+            size={18}
+            testID="field-tooltip-icon"
+            onPress={() => setOpen(!open)}
+          />
         )}
+        <Tooltip
+          visible={open}
+          onClose={() => {
+            setOpen(false);
+          }}
+          popover={<Text testID="field-tooltip-text">{tooltipText}</Text>}
+          backgroundColor="#e5e5e5"
+          testID="field-tooltip"
+        />
       </View>
     </View>
   );
