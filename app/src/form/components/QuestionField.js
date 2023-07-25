@@ -13,13 +13,12 @@ import {
 import { useField } from 'formik';
 import { View, Text } from 'react-native';
 import { styles } from '../styles';
-import { FormState, UIState } from '../../store';
+import { FormState } from '../../store';
 import { cascades } from '../../lib';
 
 const QuestionField = ({ keyform, field: questionField, setFieldValue, values, validate }) => {
   const [field, meta, helpers] = useField({ name: questionField.id, validate });
   const [cascadeData, setCascadeData] = useState([]);
-  const activeLang = UIState.useState((s) => s.lang);
 
   useEffect(() => {
     if (meta.error && field.name) {
@@ -110,7 +109,6 @@ const QuestionField = ({ keyform, field: questionField, setFieldValue, values, v
             keyform={keyform}
             onChange={handleOnChangeField}
             values={values}
-            lang={activeLang}
             {...questionField}
           />
         );
