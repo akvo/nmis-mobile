@@ -1,18 +1,36 @@
-const options = (lang, data) =>
-  data.map((d) => {
-    const { translations: transOption, label: labelText, name: nameText } = d || {};
-    if (transOption) {
-      const ft = transOption.find((t) => t?.language === lang);
+const transform = (lang, data) => {
+  const {
+    translations: transOption,
+    label: labelText,
+    name: nameText,
+    form: formText,
+  } = data || {};
+  if (transOption) {
+    const ft = transOption.find((t) => t?.language === lang);
+    if (formText && ft) {
       return {
-        ...d,
-        label: ft?.name || labelText || nameText,
+        ...data,
+        form: ft.name,
       };
     }
-    return d;
-  });
+    if (labelText && ft) {
+      return {
+        ...data,
+        label: ft.name,
+      };
+    }
+    if (!labelText && nameText && ft) {
+      return {
+        ...data,
+        name: ft.name,
+      };
+    }
+  }
+  return data;
+};
 
 const i18n = {
-  options,
+  transform,
 };
 
 export default i18n;
