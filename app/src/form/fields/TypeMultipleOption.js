@@ -4,7 +4,6 @@ import { FieldLabel } from '../support';
 import { styles } from '../styles';
 import { CheckBox } from '@rneui/themed';
 import { MultiSelect } from 'react-native-element-dropdown';
-import { i18n } from '../../lib';
 
 const TypeMultipleOption = ({
   onChange,
@@ -13,30 +12,24 @@ const TypeMultipleOption = ({
   id,
   name,
   option = [],
-  lang,
   tooltip,
-  translations,
   required,
   requiredSign,
 }) => {
-  const translatedOptions = i18n.options(lang, option);
-
   const isCheckBox = React.useMemo(() => {
     return option.length <= 3;
-  }, [translatedOptions]);
+  }, [option]);
 
   return (
     <View style={styles.multipleOptionContainer}>
       <FieldLabel
         keyform={keyform}
         name={name}
-        lang={lang}
         tooltip={tooltip}
-        translations={translations}
         requiredSign={required ? requiredSign : null}
       />
       {isCheckBox ? (
-        translatedOptions.map((opt, opti) => (
+        option.map((opt, opti) => (
           <CheckBox
             key={opti}
             containerStyle={styles.radioFieldContainer}
@@ -54,7 +47,7 @@ const TypeMultipleOption = ({
         <MultiSelect
           style={[styles.dropdownField]}
           selectedStyle={styles.dropdownSelectedList}
-          data={translatedOptions}
+          data={option}
           search
           maxHeight={300}
           labelField="label"

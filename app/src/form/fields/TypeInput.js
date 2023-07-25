@@ -74,9 +74,7 @@ const TypeInput = ({
   name,
   addonAfter,
   addonBefore,
-  lang,
   tooltip,
-  translations,
   required,
   requiredSign,
 }) => {
@@ -85,9 +83,7 @@ const TypeInput = ({
       <FieldLabel
         keyform={keyform}
         name={name}
-        lang={lang}
         tooltip={tooltip}
-        translations={translations}
         requiredSign={required ? requiredSign : null}
       />
       <Input

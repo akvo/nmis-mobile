@@ -5,18 +5,7 @@ import { styles } from '../styles';
 import { Input } from '@rneui/themed';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-const TypeDate = ({
-  onChange,
-  values,
-  keyform,
-  id,
-  name,
-  lang,
-  tooltip,
-  translations,
-  required,
-  requiredSign,
-}) => {
+const TypeDate = ({ onChange, values, keyform, id, name, tooltip, required, requiredSign }) => {
   const now = new Date();
   const [showDatepicker, setShowDatePicker] = React.useState(false);
 
@@ -25,9 +14,7 @@ const TypeDate = ({
       <FieldLabel
         keyform={keyform}
         name={name}
-        lang={lang}
         tooltip={tooltip}
-        translations={translations}
         requiredSign={required ? requiredSign : null}
       />
       <Input
