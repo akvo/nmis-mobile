@@ -65,9 +65,9 @@ const AuthForm = ({ navigation }) => {
 
             // download cascades files
             if (formRes?.data?.cascades?.length) {
-              formRes.data.cascades.forEach(async (cascadeFile) => {
+              formRes.data.cascades.forEach((cascadeFile) => {
                 const downloadUrl = api.getConfig().baseURL + cascadeFile;
-                await cascades.download(downloadUrl, cascadeFile);
+                cascades.download(downloadUrl, cascadeFile);
               });
             }
           });
