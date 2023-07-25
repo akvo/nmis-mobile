@@ -13,11 +13,11 @@ jest.mock('expo-file-system', () => ({
     downloadUrl,
     fileUrl,
   })),
-  readDirectoryAsync: jest.fn(async (fileUri) => ['file.sqlite', 'file.sqlite-journal']),
+  readDirectoryAsync: jest.fn(async (fileUri) => ['file.sqlite', 'file.sqlite-journal', 'db.db']),
   deleteAsync: jest.fn(async (fileUri) => true),
 }));
 
-const DIR_NAME = 'Cascades';
+const DIR_NAME = 'SQLite';
 
 describe('cascades', () => {
   it('should create the sqlite directory if it does not exist', async () => {
@@ -118,6 +118,6 @@ describe('cascades', () => {
 
   it('should drop all files in SQLITE directoy correctly', async () => {
     const Sqlfiles = await cascades.dropFiles();
-    expect(Sqlfiles).toEqual(['file.sqlite', 'file.sqlite-journal']);
+    expect(Sqlfiles).toEqual(['file.sqlite', 'file.sqlite-journal', 'db.db']);
   });
 });
