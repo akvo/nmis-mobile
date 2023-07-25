@@ -9,15 +9,7 @@ const TypeCascade = ({ onChange, values, keyform, id, name, source, dataSource =
 
   const groupBy = (array, property) => {
     const gd = array
-      .sort((a, b) => {
-        if (a.name < b.name) {
-          return -1;
-        }
-        if (a.name > b.name) {
-          return 1;
-        }
-        return 0;
-      })
+      .sort((a, b) => a?.name?.localeCompare(b?.name))
       .reduce((groups, item) => {
         const key = item[property];
         if (!groups[key]) {
@@ -28,8 +20,7 @@ const TypeCascade = ({ onChange, values, keyform, id, name, source, dataSource =
       }, {});
     const groupedData = {};
     Object.entries(gd).forEach(([key, value]) => {
-      const newKey = key === 'null' ? '0' : key;
-      groupedData[newKey] = value;
+      groupedData[key] = value;
     });
     return groupedData;
   };
@@ -48,31 +39,32 @@ const TypeCascade = ({ onChange, values, keyform, id, name, source, dataSource =
         value: null,
       });
     }
-
-    onChange(id, value);
+    const dropdownValues = updatedItems.filter((dd) => dd.value).map((dd) => dd.value);
+    const finalValues = updatedItems.length !== dropdownValues.length ? null : dropdownValues;
+    onChange(id, finalValues);
 
     setDropdownItems(updatedItems);
   };
 
   useEffect(() => {
-    if (dropdownItems.length === 0 && dataSource.length) {
-      const parentID = source?.parent_id || 0;
-      const filterDs = dataSource.filter(
-        (ds) => values[id] === ds?.parent || values[id] === ds?.id || ds?.parent === parentID,
-      );
+    const parentID = source?.parent_id || 0;
+    const filterDs = dataSource.filter(
+      (ds) =>
+        ds?.parent === parentID ||
+        (values[id] && (values[id].includes(ds?.id) || values[id].includes(ds?.parent))),
+    );
+
+    if (dropdownItems.length === 0 && dataSource.length && filterDs.length) {
       const groupedDs = groupBy(filterDs, 'parent');
-      const findValue = dataSource.find((ds) => ds?.id === values[id]);
-      const initialDropdowns = Object.values(groupedDs).map((options) => {
-        const initValue =
-          options?.find((o) => o?.id === findValue?.parent || o?.id === findValue?.id)?.id || null;
+      const initialDropdowns = Object.values(groupedDs).map((options, ox) => {
         return {
           options,
-          value: initValue,
+          value: values[id] ? values[id][ox] : null,
         };
       });
       setDropdownItems(initialDropdowns);
     }
-  }, [dataSource, dropdownItems, source]);
+  }, [dataSource, dropdownItems, source, values, id]);
 
   return (
     <View testID="view-type-cascade">
