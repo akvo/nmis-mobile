@@ -264,7 +264,7 @@ describe('FormPage component', () => {
     expect(wrapper.getByText('Form Name')).toBeDefined();
   });
 
-  test('should show the correct form content based on formJSON', () => {
+  test('should show the correct form content based on formJSON', async () => {
     jest.spyOn(React, 'useMemo').mockReturnValue(exampleTestForm);
     FormState.useState.mockReturnValue({
       form: exampleTestForm,
@@ -273,9 +273,11 @@ describe('FormPage component', () => {
     const wrapper = render(<FormPage navigation={mockNavigation} route={mockRoute} />);
     const { form: mockStateForm } = FormState.useState((s) => s);
 
-    expect(mockFormContainer.mock.calls[0]).toEqual([exampleTestForm, {}, expect.any(Function)]);
-    expect(mockStateForm).toEqual(exampleTestForm);
-    expect(wrapper.getByText('Form Name')).toBeDefined();
+    await waitFor(() => {
+      expect(mockFormContainer.mock.calls[0]).toEqual([exampleTestForm, {}, expect.any(Function)]);
+      expect(mockStateForm).toEqual(exampleTestForm);
+      expect(wrapper.getByText('Form Name')).toBeDefined();
+    });
   });
 
   test('should call handleOnSubmitForm with the correct values when the form is submitted', async () => {
@@ -320,7 +322,7 @@ describe('FormPage component', () => {
     });
   });
 
-  test('should show ToastAndroid if error', async () => {
+  test('should show ToastAndroid if handleOnSubmitForm throw an error', async () => {
     Platform.OS = 'android';
     ToastAndroid.show = jest.fn();
     jest.spyOn(React, 'useMemo').mockReturnValue(exampleTestForm);

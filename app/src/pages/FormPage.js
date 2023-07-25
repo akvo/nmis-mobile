@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform, ToastAndroid } from 'react-native';
+import { Platform, ToastAndroid, Text, TouchableOpacity } from 'react-native';
 import { FormContainer } from '../form';
 import { BaseLayout } from '../components';
 import { FormState } from '../store';
@@ -9,6 +9,7 @@ import { UserState } from '../store';
 const FormPage = ({ navigation, route }) => {
   const selectedForm = FormState.useState((s) => s.form);
   const userId = UserState.useState((s) => s.id);
+  const [onSaveFormParams, setOnSaveFormParams] = React.useState({});
 
   const formJSON = React.useMemo(() => {
     if (!selectedForm?.json) {
@@ -16,6 +17,15 @@ const FormPage = ({ navigation, route }) => {
     }
     return JSON.parse(selectedForm.json.replace(/''/g, "'"));
   }, [selectedForm]);
+
+  const onSaveCallback = React.useCallback((values, refreshForm) => {
+    const state = { values, refreshForm };
+    setOnSaveFormParams(state);
+  }, []);
+
+  const handleOnSaveForm = () => {
+    console.log(onSaveFormParams, '===');
+  };
 
   const handleOnSubmitForm = async (values, refreshForm) => {
     try {
@@ -43,7 +53,12 @@ const FormPage = ({ navigation, route }) => {
 
   return (
     <BaseLayout title={route?.params?.name}>
-      <FormContainer forms={formJSON} initialValues={{}} onSubmit={handleOnSubmitForm} />
+      <FormContainer
+        forms={formJSON}
+        initialValues={{}}
+        onSubmit={handleOnSubmitForm}
+        onSave={onSaveCallback}
+      />
     </BaseLayout>
   );
 };
