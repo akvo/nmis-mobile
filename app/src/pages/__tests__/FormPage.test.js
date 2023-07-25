@@ -349,9 +349,42 @@ describe('FormPage component', () => {
     });
   });
 
-  test.todo('should show Save button');
+  test('should render kebab menu and show dialog when kebab menu clicked', async () => {
+    const wrapper = render(<FormPage navigation={mockNavigation} route={mockRoute} />);
 
-  test.todo('should show Save & Exit button');
+    const kebabMenuElement = wrapper.queryByTestId('form-page-kebab-menu');
+    expect(kebabMenuElement).toBeTruthy();
+    fireEvent.press(kebabMenuElement);
+
+    await waitFor(() => {
+      const dialogMenuElement = wrapper.queryByTestId('form-page-dialog-menu');
+      expect(dialogMenuElement).toBeTruthy();
+    });
+  });
+
+  test('should show Save and Exit button on dialog', async () => {
+    const wrapper = render(<FormPage navigation={mockNavigation} route={mockRoute} />);
+
+    const kebabMenuElement = wrapper.queryByTestId('form-page-kebab-menu');
+    fireEvent.press(kebabMenuElement);
+
+    await waitFor(() => {
+      const saveExitButtonElement = wrapper.queryByTestId('save-and-exit-button');
+      expect(saveExitButtonElement).toBeTruthy();
+    });
+  });
+
+  test('should show Exit without Saving button', async () => {
+    const wrapper = render(<FormPage navigation={mockNavigation} route={mockRoute} />);
+
+    const kebabMenuElement = wrapper.queryByTestId('form-page-kebab-menu');
+    fireEvent.press(kebabMenuElement);
+
+    await waitFor(() => {
+      const exitWithoutSavingButton = wrapper.queryByTestId('exit-without-saving-button');
+      expect(exitWithoutSavingButton).toBeTruthy();
+    });
+  });
 
   test.todo('should call handleOnSaveForm with the correct values when Save button pressed');
 

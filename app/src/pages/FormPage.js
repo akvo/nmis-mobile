@@ -1,5 +1,7 @@
 import React from 'react';
-import { Platform, ToastAndroid, Text, TouchableOpacity } from 'react-native';
+import { Platform, ToastAndroid, StyleSheet } from 'react-native';
+import { Button, Dialog } from '@rneui/themed';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { FormContainer } from '../form';
 import { BaseLayout } from '../components';
 import { FormState } from '../store';
@@ -10,6 +12,7 @@ const FormPage = ({ navigation, route }) => {
   const selectedForm = FormState.useState((s) => s.form);
   const userId = UserState.useState((s) => s.id);
   const [onSaveFormParams, setOnSaveFormParams] = React.useState({});
+  const [showDialogMenu, setShowDialogMenu] = React.useState(false);
 
   const formJSON = React.useMemo(() => {
     if (!selectedForm?.json) {
@@ -52,15 +55,43 @@ const FormPage = ({ navigation, route }) => {
   };
 
   return (
-    <BaseLayout title={route?.params?.name}>
+    <BaseLayout
+      title={route?.params?.name}
+      rightComponent={
+        <Button type="clear" testID="form-page-kebab-menu" onPress={() => setShowDialogMenu(true)}>
+          <Icon name="ellipsis-vertical" size={18} />
+        </Button>
+      }
+    >
       <FormContainer
         forms={formJSON}
         initialValues={{}}
         onSubmit={handleOnSubmitForm}
         onSave={onSaveCallback}
       />
+      <Dialog
+        visible={showDialogMenu}
+        testID="form-page-dialog-menu"
+        overlayStyle={styles.dialogMenuContainer}
+        onBackdropPress={() => setShowDialogMenu(false)}
+      >
+        <Dialog.Button type="solid" title="Save and Exit" testID="save-and-exit-button" />
+        <Dialog.Button
+          type="solid"
+          title="Exit without Saving"
+          testID="exit-without-saving-button"
+          buttonStyle={styles.buttonDanger}
+        />
+      </Dialog>
     </BaseLayout>
   );
 };
+
+const styles = StyleSheet.create({
+  dialogMenuContainer: { flex: 0.13, flexDirection: 'column', justifyContent: 'space-between' },
+  buttonDanger: {
+    backgroundColor: '#D63D39',
+  },
+});
 
 export default FormPage;
