@@ -215,7 +215,49 @@ const exampleTestForm = {
   ],
 };
 
-describe('FormContainer component', () => {
+describe('FormContainer component on save', () => {
+  test('should handle onSave event and return refreshForm', async () => {
+    const handleOnSave = jest.fn();
+
+    const modifiedInitialValues = {
+      1: 'John',
+    };
+
+    render(
+      <FormContainer
+        forms={exampleTestForm}
+        initialValues={modifiedInitialValues}
+        onSave={handleOnSave}
+      />,
+    );
+
+    await waitFor(() => {
+      expect(handleOnSave).toHaveBeenCalledTimes(2);
+      expect(handleOnSave).toHaveBeenCalledWith(
+        {
+          name: '',
+          geo: null,
+          answers: [{}],
+        },
+        expect.any(Function),
+      );
+      expect(handleOnSave).toHaveBeenCalledWith(
+        {
+          name: 'John',
+          geo: null,
+          answers: [
+            {
+              1: 'John',
+            },
+          ],
+        },
+        expect.any(Function),
+      );
+    });
+  });
+});
+
+describe('FormContainer component on submit', () => {
   test('submits form data correctly without dependency', async () => {
     const handleOnSubmit = jest.fn();
     const modifiedInitialValues = {

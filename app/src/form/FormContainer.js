@@ -10,9 +10,30 @@ import { FormState } from '../store';
 
 // TODO:: Allow other not supported yet
 // TODO:: Repeat group not supported yet
-// TODO:: Cascade not supported yet
 
-const FormContainer = ({ forms, initialValues = {}, onSubmit }) => {
+const checkValuesBeforeCallback = (values) =>
+  Object.keys(values)
+    .map((key) => {
+      let value = values[key];
+      // check empty
+      if (
+        typeof value === 'undefined' ||
+        value === null ||
+        (typeof value === 'string' && value.trim() === '')
+      ) {
+        return false;
+      }
+      // check array
+      if (value && Array.isArray(value)) {
+        const check = value.filter((y) => typeof y !== 'undefined' && (y || isNaN(y)));
+        value = check.length ? check : null;
+      }
+      return { [key]: value };
+    })
+    .filter((v) => v)
+    .reduce((res, current) => ({ ...res, ...current }), {});
+
+const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave }) => {
   const formRef = useRef();
   const [activeGroup, setActiveGroup] = useState(0);
   const [showQuestionGroupList, setShowQuestionGroupList] = useState(false);
@@ -29,6 +50,15 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit }) => {
       s.dataPointName = meta;
     });
   }, [forms, initialValues]);
+
+  useEffect(() => {
+    if (onSave) {
+      const results = checkValuesBeforeCallback(currentValues);
+      const { dpName, dpGeo } = generateDataPointName(dataPointName);
+      const values = { name: dpName, geo: dpGeo, answers: [results] };
+      onSave(values, refreshForm);
+    }
+  }, [currentValues, onSave]);
 
   const formDefinition = useMemo(() => {
     return transformForm(forms);
@@ -59,26 +89,7 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit }) => {
   };
 
   const handleOnSubmitForm = (values) => {
-    const results = Object.keys(values)
-      .map((key) => {
-        let value = values[key];
-        // check empty
-        if (
-          typeof value === 'undefined' ||
-          value === null ||
-          (typeof value === 'string' && value.trim() === '')
-        ) {
-          return false;
-        }
-        // check array
-        if (value && Array.isArray(value)) {
-          const check = value.filter((y) => typeof y !== 'undefined' && (y || isNaN(y)));
-          value = check.length ? check : null;
-        }
-        return { [key]: value };
-      })
-      .filter((v) => v)
-      .reduce((res, current) => ({ ...res, ...current }), {});
+    const results = checkValuesBeforeCallback(values);
     if (onSubmit) {
       const { dpName, dpGeo } = generateDataPointName(dataPointName);
       onSubmit({ name: dpName, geo: dpGeo, answers: [results] }, refreshForm);
