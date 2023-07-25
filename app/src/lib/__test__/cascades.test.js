@@ -17,7 +17,7 @@ jest.mock('expo-file-system', () => ({
   deleteAsync: jest.fn(async (fileUri) => true),
 }));
 
-const DIR_NAME = 'Cascades';
+const DIR_NAME = 'SQLite';
 
 describe('cascades', () => {
   it('should create the sqlite directory if it does not exist', async () => {
