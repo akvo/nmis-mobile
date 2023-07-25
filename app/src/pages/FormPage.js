@@ -31,10 +31,8 @@ const FormPage = ({ navigation, route }) => {
       if (Platform.OS === 'android') {
         ToastAndroid.show(`Data point ${values.name} submitted`, ToastAndroid.LONG);
       }
-      setTimeout(() => {
-        refreshForm();
-        navigation.navigate('FormData', { ...route?.params, showSubmitted: true });
-      }, 100);
+      refreshForm();
+      navigation.navigate('FormData', { ...route?.params, showSubmitted: true });
     } catch (err) {
       console.error(err);
       if (Platform.OS === 'android') {

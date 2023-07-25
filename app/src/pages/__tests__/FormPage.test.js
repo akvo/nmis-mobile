@@ -1,9 +1,10 @@
 import React from 'react';
+import { Platform, ToastAndroid } from 'react-native';
 import renderer from 'react-test-renderer';
 import { render, fireEvent, waitFor } from '@testing-library/react-native';
 jest.useFakeTimers();
 import FormPage from '../FormPage';
-import { FormState, UserState } from 'store';
+import { FormState } from 'store';
 import crudDataPoints from '../../database/crud/crud-datapoints';
 
 const mockFormContainer = jest.fn();
@@ -277,35 +278,48 @@ describe('FormPage component', () => {
     expect(wrapper.getByText('Form Name')).toBeDefined();
   });
 
-  test('should call handleOnSubmitForm with the correct values when the form is submitted', () => {
+  test('should call handleOnSubmitForm with the correct values when the form is submitted', async () => {
+    Platform.OS = 'android';
+    ToastAndroid.show = jest.fn();
     jest.spyOn(React, 'useMemo').mockReturnValue(exampleTestForm);
+    const mockSetTimeout = jest.fn();
+    jest.spyOn(window, 'setTimeout').mockImplementation(() => mockSetTimeout);
 
     const wrapper = render(<FormPage navigation={mockNavigation} route={mockRoute} />);
 
     const submitButton = wrapper.getByTestId('mock-submit-button');
     fireEvent.press(submitButton);
 
-    // save datapoint to database
-    expect(crudDataPoints.saveDataPoint).toHaveBeenCalledWith({
-      duration: 0,
-      form: undefined,
-      json: [
-        {
-          1: 'John',
-          2: new Date('01-01-1992'),
-          3: '31',
-          4: ['Male'],
-          5: ['Bachelor'],
-          6: ['Traveling'],
-          7: ['Fried Rice'],
-        },
-      ],
-      name: 'John',
-      submitted: 1,
-      user: null,
-    });
+    await waitFor(() => {
+      // save datapoint to database
+      expect(crudDataPoints.saveDataPoint).toHaveBeenCalledWith({
+        duration: 0,
+        form: undefined,
+        json: [
+          {
+            1: 'John',
+            2: new Date('01-01-1992'),
+            3: '31',
+            4: ['Male'],
+            5: ['Bachelor'],
+            6: ['Traveling'],
+            7: ['Fried Rice'],
+          },
+        ],
+        name: 'John',
+        submitted: 1,
+        user: null,
+      });
 
-    // call refreshForm
+      expect(ToastAndroid.show).toHaveBeenCalledTimes(1);
+      // call refreshForm
+      expect(mockRefreshForm).toHaveBeenCalledTimes(1);
+      expect(mockNavigation.navigate).toHaveBeenCalledWith('FormData', {
+        id: 1,
+        name: 'Form Name',
+        showSubmitted: true,
+      });
+    });
   });
 
   test.todo('should show Save button');
