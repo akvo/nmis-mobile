@@ -75,8 +75,8 @@ describe('TypeOption component', () => {
     const onChangeMock = jest.fn();
     const values = { gender: 'male' };
     const option = [
-      { name: 'male', label: 'Male', translations: [{ language: 'fr', name: 'Masculin' }] },
-      { name: 'female', label: 'Female', translations: [{ language: 'fr', name: 'Feminin' }] },
+      { name: 'male', label: 'Masculin', translations: [{ language: 'fr', name: 'Masculin' }] },
+      { name: 'female', label: 'Feminin', translations: [{ language: 'fr', name: 'Feminin' }] },
     ];
 
     const activeLang = 'fr';
@@ -116,6 +116,7 @@ describe('TypeOption component', () => {
         id: 1681108456316,
         code: 'C21A',
         name: 'Pipeline connection / Piped water to yard/plot',
+        label: 'Branchement ONEA',
         order: 1,
         translations: [
           {
@@ -128,6 +129,7 @@ describe('TypeOption component', () => {
         id: 1681108456317,
         code: 'C21B',
         name: 'Borehole',
+        label: 'Forage',
         order: 2,
         translations: [
           {
@@ -140,6 +142,7 @@ describe('TypeOption component', () => {
         id: 1681108556330,
         code: 'C21C',
         name: 'Modern well',
+        label: 'Puits Moderne',
         order: 3,
         translations: [
           {
@@ -152,6 +155,7 @@ describe('TypeOption component', () => {
         id: 1681108565845,
         code: 'C21D',
         name: 'Traditional well',
+        label: 'Puits Traditionnel',
         order: 4,
         translations: [
           {
@@ -197,89 +201,6 @@ describe('TypeOption component', () => {
     await waitFor(() => {
       expect(onChangeMock).toHaveBeenNthCalledWith(2, 'maindrinking', ['Borehole']);
     });
-  });
-
-  it('should fallback to default language when translation is not available', () => {
-    const setFieldValueMock = jest.fn();
-    const values = {};
-
-    const onChangeMock = jest.fn((fieldName, value) => {
-      values[fieldName] = value;
-    });
-    const option = [
-      {
-        id: 1681108456316,
-        code: 'C21A',
-        name: 'Pipeline connection / Piped water to yard/plot',
-        order: 1,
-        translations: [
-          {
-            language: 'fr',
-            name: 'Branchement ONEA',
-          },
-        ],
-      },
-      {
-        id: 1681108456317,
-        code: 'C21B',
-        name: 'Borehole',
-        order: 2,
-        translations: [
-          {
-            language: 'fr',
-            name: 'Forage',
-          },
-        ],
-      },
-      {
-        id: 1681108556330,
-        code: 'C21C',
-        name: 'Modern well',
-        order: 3,
-        translations: [
-          {
-            language: 'fr',
-            name: 'Puits Moderne',
-          },
-        ],
-      },
-      {
-        id: 1681108565845,
-        code: 'C21D',
-        name: 'Traditional well',
-        order: 4,
-        translations: [
-          {
-            language: 'fr',
-            name: 'Puits Traditionnel',
-          },
-        ],
-      },
-    ];
-
-    const activeLang = 'id'; // set active language to bahasa
-
-    const { getByTestId, getByText } = render(
-      <TypeOption
-        lang={activeLang}
-        onChange={onChangeMock}
-        values={values}
-        option={option}
-        setFieldValue={setFieldValueMock}
-        id="maindrinking"
-        name="What is the main drinking water point provided by the school?"
-      />,
-    );
-
-    const dropdownEl = getByTestId('type-option-dropdown');
-    expect(dropdownEl).toBeDefined();
-
-    fireEvent.press(dropdownEl);
-
-    expect(getByText('Pipeline connection / Piped water to yard/plot')).toBeDefined();
-    expect(getByText('Borehole')).toBeDefined();
-    expect(getByText('Modern well')).toBeDefined();
-    expect(getByText('Traditional well')).toBeDefined();
   });
 
   it('should not show required sign if required param is false and requiredSign is not defined', () => {

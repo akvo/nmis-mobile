@@ -4,7 +4,6 @@ import { FieldLabel } from '../support';
 import { styles } from '../styles';
 import { CheckBox } from '@rneui/themed';
 import { Dropdown } from 'react-native-element-dropdown';
-import { i18n } from '../../lib';
 
 const TypeOption = ({
   onChange,
@@ -13,9 +12,7 @@ const TypeOption = ({
   id,
   name,
   option = [],
-  lang,
   tooltip,
-  translations,
   required,
   requiredSign,
 }) => {
@@ -23,20 +20,16 @@ const TypeOption = ({
     return option.length <= 3;
   }, [option]);
 
-  const translatedOptions = i18n.options(lang, option);
-
   return (
     <View style={styles.optionContainer}>
       <FieldLabel
         keyform={keyform}
         name={name}
-        lang={lang}
         tooltip={tooltip}
-        translations={translations}
         requiredSign={required ? requiredSign : null}
       />
       {isRadioGroup ? (
-        translatedOptions.map((opt, opti) => (
+        option.map((opt, opti) => (
           <CheckBox
             key={opti}
             containerStyle={styles.radioFieldContainer}
@@ -54,7 +47,7 @@ const TypeOption = ({
       ) : (
         <Dropdown
           style={[styles.dropdownField]}
-          data={translatedOptions}
+          data={option}
           search
           maxHeight={300}
           labelField="label"
