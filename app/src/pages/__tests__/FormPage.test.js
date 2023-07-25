@@ -386,7 +386,13 @@ describe('FormPage component', () => {
     });
   });
 
-  test.todo('should call handleOnSaveForm with the correct values when Save button pressed');
+  test.todo(
+    'should show dialog menu with save/exit button when back button pressed or hardwareBackPress',
+  );
+
+  test.todo('should disable Save and Exit button values not defined yet');
 
   test.todo('should call handleOnSaveForm with the correct values when Save & Exit button pressed');
+
+  test.todo('should navigate to Home page when Exit without Saving button pressed');
 });

@@ -75,12 +75,13 @@ const FormPage = ({ navigation, route }) => {
         overlayStyle={styles.dialogMenuContainer}
         onBackdropPress={() => setShowDialogMenu(false)}
       >
-        <Dialog.Button type="solid" title="Save and Exit" testID="save-and-exit-button" />
+        <Dialog.Button type="outline" title="Save and Exit" testID="save-and-exit-button" />
         <Dialog.Button
-          type="solid"
+          type="outline"
           title="Exit without Saving"
           testID="exit-without-saving-button"
           buttonStyle={styles.buttonDanger}
+          titleStyle={styles.textDanger}
         />
       </Dialog>
     </BaseLayout>
@@ -90,7 +91,10 @@ const FormPage = ({ navigation, route }) => {
 const styles = StyleSheet.create({
   dialogMenuContainer: { flex: 0.13, flexDirection: 'column', justifyContent: 'space-between' },
   buttonDanger: {
-    backgroundColor: '#D63D39',
+    borderColor: '#D63D39',
+  },
+  textDanger: {
+    color: '#D63D39',
   },
 });
 
