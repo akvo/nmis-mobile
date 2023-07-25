@@ -285,6 +285,7 @@ describe('FormPage component', () => {
     const submitButton = wrapper.getByTestId('mock-submit-button');
     fireEvent.press(submitButton);
 
+    // save datapoint to database
     expect(crudDataPoints.saveDataPoint).toHaveBeenCalledWith({
       duration: 0,
       form: undefined,
@@ -303,9 +304,15 @@ describe('FormPage component', () => {
       submitted: 1,
       user: null,
     });
+
+    // call refreshForm
   });
 
-  test.todo('should save the value to the database when the form is submitted');
+  test.todo('should show Save button');
 
-  test.todo('should call refreshForm after the value is saved to the database');
+  test.todo('should show Save & Exit button');
+
+  test.todo('should call handleOnSaveForm with the correct values when Save button pressed');
+
+  test.todo('should call handleOnSaveForm with the correct values when Save & Exit button pressed');
 });
