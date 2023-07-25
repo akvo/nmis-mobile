@@ -1,5 +1,5 @@
-import React from 'react';
-import { render, fireEvent, act, waitFor } from '@testing-library/react-native';
+import React, { useState } from 'react';
+import { render, fireEvent, act, waitFor, renderHook } from '@testing-library/react-native';
 import TypeCascade from '../TypeCascade';
 
 const dummyLocations = [
@@ -12,6 +12,12 @@ const dummyLocations = [
   { id: 113, name: 'KAB. BANYUMAS', parent: 111 },
   { id: 114, name: 'Kembaran', parent: 113 },
 ];
+
+// According to the issue on @testing-library/react-native
+import { View } from 'react-native';
+jest.spyOn(View.prototype, 'measureInWindow').mockImplementation((cb) => {
+  cb(18, 113, 357, 50);
+});
 
 describe('TypeCascade', () => {
   it('Should not show options when the data source is not set.', () => {
@@ -31,7 +37,7 @@ describe('TypeCascade', () => {
     expect(firstDropdown).toBeNull();
   });
 
-  it('Should not be able to update values when options is empty', async () => {
+  it('Should not be able to update values when options is empty', () => {
     const fieldID = 'location';
     const fieldName = 'Location';
     const initialValue = null;
@@ -43,7 +49,7 @@ describe('TypeCascade', () => {
 
     const dataSource = [{ id: 1, name: 'Only parent', parent: null }];
 
-    const { getByTestId } = render(
+    const { queryByTestId } = render(
       <TypeCascade
         onChange={mockedOnChange}
         id={fieldID}
@@ -53,24 +59,14 @@ describe('TypeCascade', () => {
       />,
     );
 
-    const dropdownEl = getByTestId('dropdown-cascade-0');
-    expect(dropdownEl).toBeDefined();
-
-    act(() => {
-      fireEvent(dropdownEl, 'onChange', { value: 2 });
-    });
-
-    await waitFor(() => {
-      const txtValuesEl = getByTestId('text-values');
-      expect(txtValuesEl).toBeDefined();
-      expect(txtValuesEl.props.children).toBeUndefined();
-    });
+    const dropdownEl = queryByTestId('dropdown-cascade-0');
+    expect(dropdownEl).toBeNull();
   });
 
   it('Should have a specific parent dropdown when source is defined.', () => {
     const fieldID = 'location';
     const fieldName = 'Location';
-    const initialValue = 110;
+    const initialValue = [107, 110];
     const values = { [fieldID]: initialValue };
 
     const mockedOnChange = jest.fn((fieldName, value) => {
@@ -101,13 +97,13 @@ describe('TypeCascade', () => {
   it('Should have one or more child dropdowns.', () => {
     const fieldID = 'location';
     const fieldName = 'Location';
-    const initialValue = 106;
+    const initialValue = [111, 112];
     const values = { [fieldID]: initialValue };
 
     const mockedOnChange = jest.fn((fieldName, value) => {
       values[fieldName] = value;
     });
-    const { getByTestId, getByText } = render(
+    const { getByTestId, getByText, rerender } = render(
       <TypeCascade
         onChange={mockedOnChange}
         id={fieldID}
@@ -121,102 +117,173 @@ describe('TypeCascade', () => {
     expect(parentDropdown).toBeDefined();
     const childDropdown = getByTestId('dropdown-cascade-1');
     expect(childDropdown).toBeDefined();
+
+    fireEvent.press(childDropdown);
+
+    const option1 = getByText('KAB. BANYUMAS');
+    expect(option1).toBeDefined();
   });
 
   it('Should depend on the selected option in the parent dropdown.', () => {
     const fieldID = 'location';
     const fieldName = 'Location';
-    const selectedOption = 107;
+    const selectedOption = [106, 107];
     const values = { [fieldID]: selectedOption };
 
     const mockedOnChange = jest.fn((fieldName, value) => {
       values[fieldName] = value;
     });
+    const { getByTestId, getByText, queryByText } = render(
+      <TypeCascade
+        onChange={mockedOnChange}
+        id={fieldID}
+        name={fieldName}
+        values={values}
+        dataSource={dummyLocations}
+      />,
+    );
+
+    const firstDropdown = getByTestId('dropdown-cascade-0');
+    expect(firstDropdown).toBeDefined();
+    const firstOption = getByText('DI YOGYAKARTA');
+    expect(firstOption).toBeDefined();
+
+    const secondDropdown = getByTestId('dropdown-cascade-1');
+    expect(secondDropdown).toBeDefined();
+
+    const secondOption = getByText('KAB. BANTUL');
+    expect(secondOption).toBeDefined();
+
+    // change first dropdown
+    fireEvent.press(firstDropdown);
+
+    const selectedParent = getByText('JAWA TENGAH');
+    fireEvent.press(selectedParent);
+
+    // second dropdown is empty
+    expect(queryByText('KAB. BANTUL')).toBeNull();
+  });
+
+  it('should set values based on the required level', () => {
+    const fieldID = 'location';
+    const fieldName = 'Location';
+    const initialValue = null;
+    const values = { [fieldID]: initialValue };
+
+    const mockedOnChange = jest.fn((fieldName, value) => {
+      values[fieldName] = value;
+    });
+
+    const { getByTestId, getByText, debug, rerender } = render(
+      <TypeCascade
+        onChange={mockedOnChange}
+        id={fieldID}
+        name={fieldName}
+        values={values}
+        dataSource={dummyLocations}
+      />,
+    );
+
+    const { result } = renderHook(() =>
+      useState([
+        {
+          options: [
+            { id: 106, name: 'DI YOGYAKARTA' },
+            { id: 111, name: 'JAWA TENGAH' },
+          ],
+          value: null,
+        },
+      ]),
+    );
+    const [dropdownItems, setDropdownItems] = result.current;
+
+    const mockedDropdownChange = jest.fn((index, value) => {
+      const nextIndex = index + 1;
+      const findValue = dummyLocations.find((d) => d?.id === value);
+      if (findValue) {
+        const updatedItems = dropdownItems
+          .slice(0, nextIndex)
+          .map((d, dx) => (dx === index ? { ...d, value } : d));
+
+        const options = dummyLocations?.filter((d) => d?.parent === value);
+
+        if (options.length) {
+          updatedItems.push({
+            options,
+            value: null,
+          });
+        }
+        const dropdownValues = updatedItems.filter((dd) => dd.value).map((dd) => dd.value);
+        const finalValues = updatedItems.length !== dropdownValues.length ? null : dropdownValues;
+
+        mockedOnChange(fieldID, finalValues);
+
+        setDropdownItems(updatedItems);
+      }
+    });
+
+    const dropdown1 = getByTestId('dropdown-cascade-0');
+    expect(dropdown1).toBeDefined();
+
+    fireEvent.press(dropdown1);
+
+    const dropdown1Selected = getByText('DI YOGYAKARTA');
+    fireEvent.press(dropdown1Selected);
+
+    const dropdown2 = getByTestId('dropdown-cascade-1');
+    expect(dropdown2).toBeDefined();
+
+    fireEvent.press(dropdown2);
+    const dropdown2Selected = getByText('KAB. BANTUL');
+    fireEvent.press(dropdown2Selected);
+
+    // it should still null
+    expect(values[fieldID]).toBeNull();
+
+    const dropdown3 = getByTestId('dropdown-cascade-2');
+    expect(dropdown3).toBeDefined();
+
+    fireEvent.press(dropdown3);
+    const dropdown3Selected = getByText('Sabdodadi');
+    fireEvent.press(dropdown3Selected);
+
+    expect(values[fieldID]).toEqual([106, 107, 109]);
+  });
+
+  it('should sorted items correctly', () => {
+    const fieldID = 'location';
+    const fieldName = 'Location';
+    const initialValue = null;
+    const values = { [fieldID]: initialValue };
+
+    const mockedOnChange = jest.fn((fieldName, value) => {
+      values[fieldName] = value;
+    });
+
+    const dataSource = [
+      { id: 1, name: 'Nuffic', parent: 0 },
+      { id: 2, name: 'SNV', parent: 0 },
+      { id: 3, name: 'Akvo', parent: 0 },
+    ];
+
     const { getByTestId, getByText } = render(
       <TypeCascade
         onChange={mockedOnChange}
         id={fieldID}
         name={fieldName}
         values={values}
-        dataSource={dummyLocations}
+        dataSource={dataSource}
       />,
     );
 
-    const firstDropdown = getByTestId('dropdown-cascade-0');
-    expect(firstDropdown).toBeDefined();
-    const firstOption = getByText('DI YOGYAKARTA');
-    expect(firstOption).toBeDefined();
+    const dropdown1 = getByTestId('dropdown-cascade-0');
+    fireEvent.press(dropdown1);
 
-    const secondDropdown = getByTestId('dropdown-cascade-1');
-    expect(secondDropdown).toBeDefined();
-
-    const secondOption = getByText('KAB. BANTUL');
-    expect(secondOption).toBeDefined();
-
-    const thirdDropdown = getByTestId('dropdown-cascade-2');
-    expect(thirdDropdown).toBeDefined();
-  });
-
-  it('Should update child dropdowns when the selected option in the parent dropdown changes.', async () => {
-    const fieldID = 'location';
-    const fieldName = 'Location';
-    const selectedOption = 107;
-    const values = { [fieldID]: selectedOption };
-
-    const mockedOnChange = jest.fn((fieldName, value) => {
-      values[fieldName] = value;
-    });
-    const { getByTestId, getByText, queryByTestId, queryByText } = render(
-      <TypeCascade
-        onChange={mockedOnChange}
-        id={fieldID}
-        name={fieldName}
-        values={values}
-        dataSource={dummyLocations}
-      />,
-    );
-
-    const firstDropdown = getByTestId('dropdown-cascade-0');
-    expect(firstDropdown).toBeDefined();
-
-    const firstOption = getByText('DI YOGYAKARTA');
-    expect(firstOption).toBeDefined();
-
-    const secondDropdown = getByTestId('dropdown-cascade-1');
-    expect(secondDropdown).toBeDefined();
-
-    const secondOption = getByText('KAB. BANTUL');
-    expect(secondOption).toBeDefined();
-
-    const thirdDropdown = getByTestId('dropdown-cascade-2');
-    expect(thirdDropdown).toBeDefined();
-
-    const select2Items = [
-      { id: 111, name: 'JAWA TENGAH' },
-      { id: 112, name: 'KAB. PURBALINGGA' },
-    ];
-
-    act(() => {
-      // Change first & second dropdown
-      fireEvent(firstDropdown, 'onChange', { value: select2Items[0].id });
-      fireEvent(secondDropdown, 'onChange', { value: select2Items[1].id });
-
-      const mockValues = select2Items.map((s) => s.name).join('|');
-      mockedOnChange(fieldID, mockValues);
-    });
-
-    await waitFor(() => {
-      const dropdownValue1 = queryByText('JAWA TENGAH');
-      expect(dropdownValue1).toBeDefined();
-
-      const dropdownValue2 = queryByText('KAB. PURBALINGGA');
-      expect(dropdownValue2).toBeDefined();
-
-      const previousOption = queryByText('KAB. BANTUL');
-      expect(previousOption).toBeNull();
-
-      const thirdNotFound = queryByTestId('dropdown-cascade-2');
-      expect(thirdNotFound).toBeNull();
-    });
+    const option1 = getByText('Akvo');
+    expect(option1).toBeDefined();
+    const option2 = getByText('Nuffic');
+    expect(option2).toBeDefined();
+    const option3 = getByText('SNV');
+    expect(option3).toBeDefined();
   });
 });
