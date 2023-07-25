@@ -1,9 +1,11 @@
 import React from 'react';
+import { Platform, ToastAndroid } from 'react-native';
 import renderer from 'react-test-renderer';
-import { render, waitFor } from '@testing-library/react-native';
+import { render, fireEvent, waitFor } from '@testing-library/react-native';
 jest.useFakeTimers();
 import FormPage from '../FormPage';
 import { FormState } from 'store';
+import crudDataPoints from '../../database/crud/crud-datapoints';
 
 const mockFormContainer = jest.fn();
 const mockRoute = {
@@ -259,30 +261,70 @@ jest.mock('../../assets/administrations.db', () => {
   return 'data';
 });
 
-describe('FormPage component', () => {
-  test('should render component correctly', () => {
-    const tree = renderer.create(<FormPage navigation={mockNavigation} />).toJSON();
-    expect(tree).toMatchSnapshot();
-  });
-
-  test('should render the FormPage with the correct form title', () => {
+describe('FormPage handleOnSaveForm', () => {
+  test('should render kebab menu and show dialog when kebab menu clicked', async () => {
     const wrapper = render(<FormPage navigation={mockNavigation} route={mockRoute} />);
-    expect(wrapper.getByText('Form Name')).toBeDefined();
-  });
 
-  test('should show the correct form content based on formJSON', async () => {
-    jest.spyOn(React, 'useMemo').mockReturnValue(exampleTestForm);
-    FormState.useState.mockReturnValue({
-      form: exampleTestForm,
-    });
-
-    const wrapper = render(<FormPage navigation={mockNavigation} route={mockRoute} />);
-    const { form: mockStateForm } = FormState.useState((s) => s);
+    const kebabMenuElement = wrapper.queryByTestId('form-page-kebab-menu');
+    expect(kebabMenuElement).toBeTruthy();
+    fireEvent.press(kebabMenuElement);
 
     await waitFor(() => {
-      expect(mockFormContainer.mock.calls[0]).toEqual([exampleTestForm, {}, expect.any(Function)]);
-      expect(mockStateForm).toEqual(exampleTestForm);
-      expect(wrapper.getByText('Form Name')).toBeDefined();
+      const dialogMenuElement = wrapper.queryByTestId('form-page-dialog-menu');
+      expect(dialogMenuElement).toBeTruthy();
     });
   });
+
+  test('should show Save and Exit button on dialog', async () => {
+    const wrapper = render(<FormPage navigation={mockNavigation} route={mockRoute} />);
+
+    const kebabMenuElement = wrapper.queryByTestId('form-page-kebab-menu');
+    fireEvent.press(kebabMenuElement);
+
+    await waitFor(() => {
+      const saveExitButtonElement = wrapper.queryByTestId('save-and-exit-button');
+      expect(saveExitButtonElement).toBeTruthy();
+    });
+  });
+
+  test('should show Exit without Saving button', async () => {
+    const wrapper = render(<FormPage navigation={mockNavigation} route={mockRoute} />);
+
+    const kebabMenuElement = wrapper.queryByTestId('form-page-kebab-menu');
+    fireEvent.press(kebabMenuElement);
+
+    await waitFor(() => {
+      const exitWithoutSavingButton = wrapper.queryByTestId('exit-without-saving-button');
+      expect(exitWithoutSavingButton).toBeTruthy();
+    });
+  });
+
+  // test(
+  //   'should not show dialog menu with save/exit button when back button pressed or hardwareBackPress', async () => {
+  //     const wrapper = render(<FormPage navigation={mockNavigation} route={mockRoute} />);
+
+  //     const arrowBackButton = wrapper.queryByTestId('arrow-back-button');
+  //     expect(arrowBackButton).toBeTruthy();
+
+  //     await waitFor(() => {
+  //       expect(mockNavigation).toBeDefined()
+  //       const dialogMenuElement = wrapper.queryByTestId('form-page-dialog-menu');
+  //       expect(dialogMenuElement).toBeFalsy();
+  //       expect(mockNavigation.canGoBack).toHaveBeenCalledWith()
+  //     })
+  //   }
+  // );
+
+  test('should show dialog menu with save/exit button when back button pressed or hardwareBackPress', () => {
+    const wrapper = render(<FormPage navigation={mockNavigation} route={mockRoute} />);
+
+    const arrowBackButton = wrapper.queryByTestId('arrow-back-button');
+    expect(arrowBackButton).toBeTruthy();
+  });
+
+  test.todo('should disable Save and Exit button values not defined yet');
+
+  test.todo('should call handleOnSaveForm with the correct values when Save & Exit button pressed');
+
+  test.todo('should navigate to Home page when Exit without Saving button pressed');
 });

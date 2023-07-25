@@ -26,6 +26,15 @@ const FormPage = ({ navigation, route }) => {
     setOnSaveFormParams(state);
   }, []);
 
+  const handleOnPressArrowBackButton = () => {
+    const values = onSaveFormParams?.values;
+    if (values && Object.keys(values).length) {
+      setShowDialogMenu(true);
+      return;
+    }
+    return navigation?.canGoBack() ? navigation.goBack() : false;
+  };
+
   const handleOnSaveForm = () => {
     console.log(onSaveFormParams, '===');
   };
@@ -57,6 +66,11 @@ const FormPage = ({ navigation, route }) => {
   return (
     <BaseLayout
       title={route?.params?.name}
+      leftComponent={
+        <Button type="clear" onPress={handleOnPressArrowBackButton} testID="arrow-back-button">
+          <Icon name="arrow-back" size={18} />
+        </Button>
+      }
       rightComponent={
         <Button type="clear" testID="form-page-kebab-menu" onPress={() => setShowDialogMenu(true)}>
           <Icon name="ellipsis-vertical" size={18} />
