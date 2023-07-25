@@ -2,7 +2,7 @@
 	"id": 567490004,
 	"name": "Governance and policy",
 	"version": "1.0.0",
-	"cascades": ["/sqlite/cascade-296940912-v2.sqlite"],
+	"cascades": ["/sqlite/kenya_organizations.sqlite"],
 	"question_group": [
 		{
 			"name": "Introduction",
@@ -36,8 +36,8 @@
 					"required": true,
 					"meta": true,
 					"source": {
-						"file": "cascade-296940912-v2.sqlite",
-						"parent_id": 273
+						"file": "kenya_organizations.sqlite",
+						"parent_id": 0
 					}
 				}
 			]

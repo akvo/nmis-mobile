@@ -10,7 +10,6 @@ import { FormState } from '../store';
 
 // TODO:: Allow other not supported yet
 // TODO:: Repeat group not supported yet
-// TODO:: Cascade not supported yet
 
 const FormContainer = ({ forms, initialValues = {}, onSubmit }) => {
   const formRef = useRef();

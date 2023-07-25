@@ -222,6 +222,9 @@ export const generateValidationSchemaFieldLevel = (currentValue, field) => {
     case 'multiple_option':
       yupType = Yup.array();
       break;
+    case 'cascade':
+      yupType = Yup.array();
+      break;
     default:
       yupType = Yup.string();
       break;
