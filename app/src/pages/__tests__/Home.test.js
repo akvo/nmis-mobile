@@ -1,10 +1,144 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
+import { render, waitFor, fireEvent } from '@testing-library/react-native';
 import HomePage from '../Home';
+import crudForms from '../../database/crud/crud-forms';
+import FormState from '../../store/forms';
+
+const mockDateNow = new Date().toISOString();
+const mockForms = [
+  {
+    id: 1,
+    formId: 9001,
+    version: '1.0.0',
+    latest: 1,
+    name: 'Form 1',
+    json: JSON.stringify({ id: 9001, name: 'Form 1', question_group: [] }),
+    createdAt: mockDateNow,
+  },
+  {
+    id: 2,
+    formId: 9002,
+    version: '1.0.1',
+    latest: 1,
+    name: 'Form 2',
+    json: JSON.stringify({ id: 9002, name: 'Form 2', question_group: [] }),
+    createdAt: mockDateNow,
+  },
+  {
+    id: 3,
+    formId: 9002,
+    version: '1.0.0',
+    latest: 0,
+    name: 'Form 2',
+    json: JSON.stringify({ id: 9002, name: 'Form 2', question_group: [] }),
+    createdAt: mockDateNow,
+  },
+];
+
+jest.mock('../../database/crud/crud-forms');
+jest.mock('../../store/forms');
 
 describe('Homepage', () => {
-  test('renders correctly', () => {
-    const tree = renderer.create(<HomePage />).toJSON();
-    expect(tree).toMatchSnapshot();
+  const mockNavigation = {
+    navigate: jest.fn(),
+  };
+  const mockLatestFormVersion = mockForms.filter((form) => form.latest);
+  crudForms.selectLatestFormVersion.mockImplementation(() =>
+    Promise.resolve(mockLatestFormVersion),
+  );
+
+  test('renders correctly', async () => {
+    const tree = render(<HomePage navigation={mockNavigation} />);
+
+    await waitFor(() => expect(tree.toJSON()).toMatchSnapshot());
+  });
+
+  it('should render page title, search field and back button', async () => {
+    const wrapper = render(<HomePage navigation={mockNavigation} />);
+
+    await waitFor(() => {
+      const titleElement = wrapper.getByText('Form Lists');
+      expect(titleElement).toBeDefined();
+
+      const searchField = wrapper.getByTestId('search-bar');
+      expect(searchField).toBeDefined();
+
+      const backButton = wrapper.getByTestId('button-users');
+      expect(backButton).toBeDefined();
+    });
+  });
+
+  it('should load last form version data from database', async () => {
+    const wrapper = render(<HomePage navigation={mockNavigation} />);
+
+    await waitFor(() => {
+      expect(crudForms.selectLatestFormVersion).toHaveBeenCalledTimes(1);
+    });
+
+    const listForm1 = wrapper.queryByTestId('card-touchable-0');
+    expect(listForm1).toBeTruthy();
+
+    const listForm2 = wrapper.queryByTestId('card-touchable-1');
+    expect(listForm2).toBeTruthy();
+
+    const listForm3 = wrapper.queryByTestId('card-touchable-2');
+    expect(listForm3).toBeFalsy();
+  });
+
+  it('should filter forms by search value', async () => {
+    const wrapper = render(<HomePage navigation={mockNavigation} />);
+
+    await waitFor(() => {
+      expect(crudForms.selectLatestFormVersion).toHaveBeenCalledTimes(1);
+    });
+
+    const searchField = wrapper.getByTestId('search-bar');
+    expect(searchField).toBeDefined();
+    fireEvent.changeText(searchField, 'Form 1');
+
+    const listForm1 = wrapper.queryByTestId('card-touchable-0');
+    expect(listForm1).toBeTruthy();
+
+    const listForm2 = wrapper.queryByTestId('card-touchable-1');
+    expect(listForm2).toBeFalsy();
+
+    const listForm3 = wrapper.queryByTestId('card-touchable-2');
+    expect(listForm3).toBeFalsy();
+  });
+
+  it('should navigate to ManageForm page when form list clicked', async () => {
+    const mockFindData = mockForms.find((form) => form.id === 1);
+    FormState.update.mockImplementation(() => mockFindData);
+
+    const wrapper = render(<HomePage navigation={mockNavigation} />);
+
+    await waitFor(() => {
+      expect(crudForms.selectLatestFormVersion).toHaveBeenCalledTimes(1);
+    });
+
+    const listForm1 = wrapper.queryByTestId('card-touchable-0');
+    expect(listForm1).toBeTruthy();
+    fireEvent.press(listForm1);
+
+    await waitFor(() => {
+      expect(FormState.update).toHaveBeenCalledTimes(1);
+      expect(mockNavigation.navigate).toHaveBeenCalledWith('ManageForm', { id: 1, name: 'Form 1' });
+    });
+  });
+
+  it('should navigate to Users page when back button clicked', async () => {
+    const wrapper = render(<HomePage navigation={mockNavigation} />);
+
+    await waitFor(() => {
+      expect(crudForms.selectLatestFormVersion).toHaveBeenCalledTimes(1);
+    });
+
+    const backButton = wrapper.getByTestId('button-users');
+    expect(backButton).toBeDefined();
+    fireEvent.press(backButton);
+
+    await waitFor(() => {
+      expect(mockNavigation.navigate).toHaveBeenCalledWith('Users');
+    });
   });
 });

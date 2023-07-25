@@ -17,7 +17,9 @@ const update = (table, where = {}, data = {}) => {
 };
 
 const read = (table, where = {}, nocase = false) => {
-  const conditions = Object.keys(where).map((key) => `${key} = ?`);
+  const conditions = Object.keys(where).map((key) => {
+    return where[key] === null ? `${key} IS NULL` : `${key} = ?`;
+  });
   let conditionString = '';
   if (conditions.length) {
     conditionString = `WHERE ${conditions.join(' AND ')}`;

@@ -215,6 +215,10 @@ const exampleTestForm = {
   ],
 };
 
+jest.mock('../../assets/administrations.db', () => {
+  return 'data';
+});
+
 describe('FormContainer component', () => {
   test('submits form data correctly without dependency', async () => {
     const handleOnSubmit = jest.fn();

@@ -4,6 +4,7 @@ import { ListItem, Dialog, Text, Icon } from '@rneui/themed';
 import { useNavigation } from '@react-navigation/native';
 import { AuthState, UserState } from '../store';
 import { conn, query } from '../database';
+import { cascades } from '../lib';
 
 const db = conn.init;
 
@@ -31,6 +32,12 @@ const LogoutButton = () => {
     });
     setLoading(false);
     setVisible(false);
+
+    /**
+     * Remove sqlite files
+     */
+    await cascades.dropFiles();
+
     navigation.navigate('GetStarted');
   };
 

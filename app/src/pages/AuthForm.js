@@ -3,7 +3,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { View, StyleSheet, Platform, ToastAndroid } from 'react-native';
 import { Input, CheckBox, Button, Text, Dialog } from '@rneui/themed';
 import { CenterLayout, Image } from '../components';
-import { api } from '../lib';
+import { api, cascades } from '../lib';
 import { AuthState, UserState, UIState } from '../store';
 import { crudSessions, crudForms, crudUsers, crudConfig } from '../database/crud';
 
@@ -55,12 +55,21 @@ const AuthForm = ({ navigation }) => {
             api.setToken(bearerToken);
             await crudConfig.updateConfig({ authenticationCode: passcode });
           }
+          await cascades.createSqliteDir();
           // save forms
           await data.formsUrl.forEach(async (form) => {
             // Fetch form detail
             const formRes = await api.get(form.url);
             const savedForm = await crudForms.addForm({ ...form, formJSON: formRes?.data });
             console.info('Saved Forms...', form.id, savedForm);
+
+            // download cascades files
+            if (formRes?.data?.cascades?.length) {
+              formRes.data.cascades.forEach(async (cascadeFile) => {
+                const downloadUrl = api.getConfig().baseURL + cascadeFile;
+                await cascades.download(downloadUrl, cascadeFile);
+              });
+            }
           });
           // check users exist
           const activeUser = await crudUsers.getActiveUser();

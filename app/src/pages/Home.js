@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Button } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { BaseLayout } from '../components';
@@ -6,8 +6,8 @@ import { FormState } from '../store';
 import { crudForms } from '../database/crud';
 
 const Home = ({ navigation }) => {
-  const [search, setSearch] = React.useState(null);
-  const [data, setData] = React.useState([]);
+  const [search, setSearch] = useState(null);
+  const [data, setData] = useState([]);
 
   const goToManageForm = (id) => {
     const findData = data.find((d) => d?.id === id);
@@ -23,7 +23,7 @@ const Home = ({ navigation }) => {
     navigation.navigate('Users');
   };
 
-  React.useState(() => {
+  useEffect(() => {
     crudForms.selectLatestFormVersion().then((results) => {
       const forms = results.map((r) => ({
         ...r,
@@ -33,11 +33,11 @@ const Home = ({ navigation }) => {
     });
   }, []);
 
-  const filteredData = React.useMemo(() => {
+  const filteredData = useMemo(() => {
     return data.filter(
       (d) => (search && d?.name?.toLowerCase().includes(search.toLowerCase())) || !search,
     );
-  }, [data]);
+  }, [data, search]);
 
   return (
     <BaseLayout

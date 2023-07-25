@@ -158,4 +158,14 @@ export const styles = StyleSheet.create({
   questionGroupListItemName: {
     marginLeft: 10,
   },
+  cascadeContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 6,
+    marginBottom: 25,
+  },
+  cascadeValues: {
+    opacity: 0,
+    marginBottom: -16,
+  },
 });
