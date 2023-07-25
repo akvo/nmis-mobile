@@ -253,6 +253,10 @@ jest.mock('../../form/FormContainer', () => ({ forms, initialValues, onSubmit })
   );
 });
 
+jest.mock('../../assets/administrations.db', () => {
+  return 'data';
+});
+
 describe('FormPage component', () => {
   test('should render component correctly', () => {
     const tree = renderer.create(<FormPage navigation={mockNavigation} />).toJSON();

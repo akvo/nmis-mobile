@@ -248,4 +248,12 @@ describe('conn.tx', () => {
       expect.any(Function),
     );
   });
+
+  test('should execute query where null successfully', async () => {
+    const table = 'users';
+    const where = { name: null };
+    const selectWhereNull = query.read(table, where);
+
+    expect(selectWhereNull).toEqual('SELECT * FROM users WHERE name IS NULL;');
+  });
 });

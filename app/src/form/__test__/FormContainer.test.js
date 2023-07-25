@@ -215,6 +215,10 @@ const exampleTestForm = {
   ],
 };
 
+jest.mock('../../assets/administrations.db', () => {
+  return 'data';
+});
+
 describe('FormContainer component on save', () => {
   test('should handle onSave event and return refreshForm', async () => {
     const handleOnSave = jest.fn();
