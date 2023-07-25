@@ -282,8 +282,6 @@ describe('FormPage component', () => {
     Platform.OS = 'android';
     ToastAndroid.show = jest.fn();
     jest.spyOn(React, 'useMemo').mockReturnValue(exampleTestForm);
-    const mockSetTimeout = jest.fn();
-    jest.spyOn(window, 'setTimeout').mockImplementation(() => mockSetTimeout);
 
     const wrapper = render(<FormPage navigation={mockNavigation} route={mockRoute} />);
 
@@ -319,6 +317,29 @@ describe('FormPage component', () => {
         name: 'Form Name',
         showSubmitted: true,
       });
+    });
+  });
+
+  test('should show ToastAndroid if error', async () => {
+    Platform.OS = 'android';
+    ToastAndroid.show = jest.fn();
+    jest.spyOn(React, 'useMemo').mockReturnValue(exampleTestForm);
+    const consoleErrorSpy = jest.spyOn(console, 'error');
+    crudDataPoints.saveDataPoint.mockImplementation(() => Promise.reject('Error'));
+
+    const wrapper = render(<FormPage navigation={mockNavigation} route={mockRoute} />);
+
+    const submitButton = wrapper.getByTestId('mock-submit-button');
+    fireEvent.press(submitButton);
+
+    await waitFor(() => {
+      // save datapoint to database
+      expect(crudDataPoints.saveDataPoint).toHaveBeenCalledTimes(1);
+      expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
+      expect(ToastAndroid.show).toHaveBeenCalledTimes(1);
+      // call refreshForm
+      expect(mockRefreshForm).not.toHaveBeenCalled();
+      expect(mockNavigation.navigate).not.toHaveBeenCalled();
     });
   });
 
