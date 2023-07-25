@@ -220,7 +220,16 @@ jest.mock('../../assets/administrations.db', () => {
 });
 
 describe('FormContainer component on save', () => {
-  test.todo('should return values as null onSave callback if currentValues not defined');
+  test('should return values as null onSave callback if currentValues not defined', async () => {
+    const handleOnSave = jest.fn();
+
+    render(<FormContainer forms={exampleTestForm} onSave={handleOnSave} />);
+
+    await waitFor(() => {
+      expect(handleOnSave).toHaveBeenCalledTimes(1);
+      expect(handleOnSave).toHaveBeenCalledWith(null, expect.any(Function));
+    });
+  });
 
   test('should handle onSave event and return refreshForm', async () => {
     const handleOnSave = jest.fn();
@@ -239,14 +248,7 @@ describe('FormContainer component on save', () => {
 
     await waitFor(() => {
       expect(handleOnSave).toHaveBeenCalledTimes(2);
-      expect(handleOnSave).toHaveBeenCalledWith(
-        {
-          name: '',
-          geo: null,
-          answers: [{}],
-        },
-        expect.any(Function),
-      );
+      expect(handleOnSave).toHaveBeenCalledWith(null, expect.any(Function));
       expect(handleOnSave).toHaveBeenCalledWith(
         {
           name: 'John',

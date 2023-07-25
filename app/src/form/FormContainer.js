@@ -54,9 +54,12 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave }) => {
   useEffect(() => {
     if (onSave) {
       const results = checkValuesBeforeCallback(currentValues);
+      if (!Object.keys(results).length) {
+        return onSave(null, refreshForm);
+      }
       const { dpName, dpGeo } = generateDataPointName(dataPointName);
       const values = { name: dpName, geo: dpGeo, answers: [results] };
-      onSave(values, refreshForm);
+      return onSave(values, refreshForm);
     }
   }, [currentValues, onSave]);
 
