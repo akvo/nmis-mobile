@@ -14,16 +14,13 @@ const createSqliteDir = async () => {
   }
 };
 
-const download = async (downloadUrl, fileUrl) => {
+const download = (downloadUrl, fileUrl) => {
   const pathSql = fileUrl.replace(/\/sqlite\//, `${DIR_NAME}/`);
-  // download file if not exists
-  if (!(await FileSystem.getInfoAsync(FileSystem.documentDirectory + pathSql)).exists) {
-    const results = await FileSystem.downloadAsync(
-      downloadUrl,
-      FileSystem.documentDirectory + pathSql,
-    );
-    return results;
-  }
+  FileSystem.getInfoAsync(FileSystem.documentDirectory + pathSql).then(({ exists }) => {
+    if (!exists) {
+      FileSystem.downloadAsync(downloadUrl, FileSystem.documentDirectory + pathSql);
+    }
+  });
 };
 
 const loadDataSource = async (source) => {
@@ -50,4 +47,5 @@ export default cascades = {
   loadDataSource,
   download,
   dropFiles,
+  DIR_NAME,
 };
