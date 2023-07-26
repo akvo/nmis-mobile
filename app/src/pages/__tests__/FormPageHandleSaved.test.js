@@ -1,10 +1,8 @@
 import React from 'react';
-import { Platform, ToastAndroid } from 'react-native';
-import renderer from 'react-test-renderer';
+import { BackHandler } from 'react-native';
 import { render, fireEvent, waitFor } from '@testing-library/react-native';
 jest.useFakeTimers();
 import FormPage from '../FormPage';
-import { FormState } from 'store';
 import crudDataPoints from '../../database/crud/crud-datapoints';
 
 const mockFormContainer = jest.fn();
@@ -13,7 +11,6 @@ const mockRoute = {
 };
 const mockNavigation = {
   navigate: jest.fn(),
-  canGoBack: jest.fn(() => Promise.resolve(true)),
   goBack: jest.fn(),
 };
 const mockValues = {
@@ -32,6 +29,7 @@ const mockValues = {
   ],
 };
 const mockRefreshForm = jest.fn();
+const mockOnSave = jest.fn();
 
 const exampleTestForm = {
   name: 'Testing Form',
@@ -246,10 +244,16 @@ const exampleTestForm = {
 };
 
 jest.mock('../../database/crud/crud-datapoints');
-jest.mock('../../form/FormContainer', () => ({ forms, initialValues, onSubmit }) => {
-  mockFormContainer(forms, initialValues, onSubmit);
+jest.mock('../../form/FormContainer', () => ({ forms, initialValues, onSubmit, onSave }) => {
+  mockFormContainer(forms, initialValues, onSubmit, onSave);
   return (
     <mock-FormContainer>
+      <button
+        onPress={() => mockOnSave(mockValues, mockRefreshForm)}
+        testID="mock-save-button-helper"
+      >
+        Save Trigger helper
+      </button>
       <button onPress={() => onSubmit(mockValues, mockRefreshForm)} testID="mock-submit-button">
         Submit
       </button>
@@ -262,6 +266,10 @@ jest.mock('../../assets/administrations.db', () => {
 });
 
 describe('FormPage handleOnSaveForm', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   test('should render kebab menu and show dialog when kebab menu clicked', async () => {
     const wrapper = render(<FormPage navigation={mockNavigation} route={mockRoute} />);
 
@@ -270,59 +278,38 @@ describe('FormPage handleOnSaveForm', () => {
     fireEvent.press(kebabMenuElement);
 
     await waitFor(() => {
-      const dialogMenuElement = wrapper.queryByTestId('save-dialog-menu');
-      expect(dialogMenuElement).toBeTruthy();
+      const dropdownMenuElement = wrapper.queryByTestId('save-dropdown-menu');
+      expect(dropdownMenuElement).toBeTruthy();
     });
   });
 
-  test('should show Save and Exit button on dialog', async () => {
-    const wrapper = render(<FormPage navigation={mockNavigation} route={mockRoute} />);
+  test('should show saved dialog menu when back button pressed', async () => {
+    const mockSetOnSaveFormParams = jest.fn();
+    const mockOnSaveFormParams = { values: mockValues, refreshForm: mockRefreshForm };
+    jest
+      .spyOn(React, 'useState')
+      .mockImplementation(() => [mockOnSaveFormParams, mockSetOnSaveFormParams]);
 
-    const kebabMenuElement = wrapper.queryByTestId('form-page-kebab-menu');
-    fireEvent.press(kebabMenuElement);
+    const mockSetShowDialogMenu = jest.fn();
+    jest.spyOn(React, 'useState').mockImplementation(() => [true, mockSetShowDialogMenu]);
 
-    await waitFor(() => {
-      const saveExitButtonElement = wrapper.queryByTestId('save-and-exit-button');
-      expect(saveExitButtonElement).toBeTruthy();
-    });
-  });
-
-  test('should show Exit without Saving button', async () => {
-    const wrapper = render(<FormPage navigation={mockNavigation} route={mockRoute} />);
-
-    const kebabMenuElement = wrapper.queryByTestId('form-page-kebab-menu');
-    fireEvent.press(kebabMenuElement);
-
-    await waitFor(() => {
-      const exitWithoutSavingButton = wrapper.queryByTestId('exit-without-saving-button');
-      expect(exitWithoutSavingButton).toBeTruthy();
-    });
-  });
-
-  // test(
-  //   'should not show dialog menu with save/exit button when back button pressed or hardwareBackPress', async () => {
-  //     const wrapper = render(<FormPage navigation={mockNavigation} route={mockRoute} />);
-
-  //     const arrowBackButton = wrapper.queryByTestId('arrow-back-button');
-  //     expect(arrowBackButton).toBeTruthy();
-
-  //     await waitFor(() => {
-  //       expect(mockNavigation).toBeDefined()
-  //       const dialogMenuElement = wrapper.queryByTestId('save-dialog-menu');
-  //       expect(dialogMenuElement).toBeFalsy();
-  //       expect(mockNavigation.canGoBack).toHaveBeenCalledWith()
-  //     })
-  //   }
-  // );
-
-  test('should show dialog menu with save/exit button when back button pressed or hardwareBackPress', () => {
     const wrapper = render(<FormPage navigation={mockNavigation} route={mockRoute} />);
 
     const arrowBackButton = wrapper.queryByTestId('arrow-back-button');
     expect(arrowBackButton).toBeTruthy();
-  });
 
-  test.todo('should disable Save and Exit button values not defined yet');
+    const savedTrigger = wrapper.queryByTestId('mock-save-button-helper');
+    expect(savedTrigger).toBeTruthy();
+
+    fireEvent.press(savedTrigger);
+    fireEvent.press(arrowBackButton);
+
+    const dialogMenuElement = wrapper.queryByTestId('save-dialog-menu');
+    await waitFor(() => {
+      expect(mockOnSave).toHaveBeenCalledWith(mockValues, mockRefreshForm);
+      expect(dialogMenuElement.props.visible).toEqual(true);
+    });
+  });
 
   test.todo('should call handleOnSaveForm with the correct values when Save & Exit button pressed');
 

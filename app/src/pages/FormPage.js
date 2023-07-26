@@ -1,6 +1,6 @@
 import React from 'react';
-import { Platform, ToastAndroid } from 'react-native';
-import { Button, Dialog } from '@rneui/themed';
+import { Platform, ToastAndroid, BackHandler } from 'react-native';
+import { Button } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { FormContainer } from '../form';
 import { SaveDialogMenu, SaveDropdownMenu } from '../form/support';
@@ -15,6 +15,21 @@ const FormPage = ({ navigation, route }) => {
   const [onSaveFormParams, setOnSaveFormParams] = React.useState({});
   const [showDialogMenu, setShowDialogMenu] = React.useState(false);
   const [showDropdownMenu, setShowDropdownMenu] = React.useState(false);
+
+  React.useEffect(() => {
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
+      const values = onSaveFormParams?.values;
+      if (values && Object.keys(values).length) {
+        setShowDialogMenu(true);
+        return true;
+      }
+      if (onSaveFormParams?.refreshForm) {
+        onSaveFormParams.refreshForm();
+      }
+      return false;
+    });
+    return () => backHandler.remove();
+  }, [onSaveFormParams]);
 
   const formJSON = React.useMemo(() => {
     if (!selectedForm?.json) {
@@ -34,7 +49,10 @@ const FormPage = ({ navigation, route }) => {
       setShowDialogMenu(true);
       return;
     }
-    return navigation?.canGoBack() ? navigation.goBack() : false;
+    if (onSaveFormParams?.refreshForm) {
+      onSaveFormParams.refreshForm();
+    }
+    return navigation.goBack();
   };
 
   const handleOnSaveForm = () => {
