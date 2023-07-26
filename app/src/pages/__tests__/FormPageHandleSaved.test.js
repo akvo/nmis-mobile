@@ -311,7 +311,37 @@ describe('FormPage handleOnSaveForm', () => {
     });
   });
 
-  test.todo('should call handleOnSaveForm with the correct values when Save & Exit button pressed');
+  test.todo(
+    'should call handleOnSaveAndExit with the correct values when Save & Exit button pressed',
+  );
 
-  test.todo('should navigate to Home page when Exit without Saving button pressed');
+  test('should call handleOnExit and navigate to Home page when Exit without Saving button pressed', async () => {
+    const mockSetOnSaveFormParams = jest.fn();
+    const mockOnSaveFormParams = { values: mockValues, refreshForm: mockRefreshForm };
+    jest
+      .spyOn(React, 'useState')
+      .mockImplementation(() => [mockOnSaveFormParams, mockSetOnSaveFormParams]);
+
+    const mockSetShowDialogMenu = jest.fn();
+    jest.spyOn(React, 'useState').mockImplementation(() => [true, mockSetShowDialogMenu]);
+
+    const wrapper = render(<FormPage navigation={mockNavigation} route={mockRoute} />);
+
+    const arrowBackButton = wrapper.queryByTestId('arrow-back-button');
+    expect(arrowBackButton).toBeTruthy();
+    fireEvent.press(arrowBackButton);
+
+    const dialogMenuElement = wrapper.queryByTestId('save-dialog-menu');
+    await waitFor(() => {
+      expect(dialogMenuElement.props.visible).toEqual(true);
+    });
+
+    const exitButtonElement = wrapper.queryByTestId('exit-without-saving-button');
+    expect(exitButtonElement).toBeTruthy();
+    fireEvent.press(exitButtonElement);
+
+    await waitFor(() => {
+      expect(mockNavigation.navigate).toHaveBeenCalledWith('Home');
+    });
+  });
 });

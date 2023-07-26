@@ -55,8 +55,15 @@ const FormPage = ({ navigation, route }) => {
     return navigation.goBack();
   };
 
-  const handleOnSaveForm = () => {
+  const handleOnSaveAndExit = () => {
     console.log(onSaveFormParams, '===');
+  };
+
+  const handleOnExit = () => {
+    if (onSaveFormParams?.refreshForm) {
+      onSaveFormParams.refreshForm();
+    }
+    return navigation.navigate('Home');
   };
 
   const handleOnSubmitForm = async (values, refreshForm) => {
@@ -104,6 +111,8 @@ const FormPage = ({ navigation, route }) => {
               <Icon name="ellipsis-vertical" size={18} />
             </Button>
           }
+          handleOnExit={handleOnExit}
+          handleOnSaveAndExit={handleOnSaveAndExit}
         />
       }
     >
@@ -113,7 +122,12 @@ const FormPage = ({ navigation, route }) => {
         onSubmit={handleOnSubmitForm}
         onSave={onSaveCallback}
       />
-      <SaveDialogMenu visible={showDialogMenu} setVisible={setShowDialogMenu} />
+      <SaveDialogMenu
+        visible={showDialogMenu}
+        setVisible={setShowDialogMenu}
+        handleOnExit={handleOnExit}
+        handleOnSaveAndExit={handleOnSaveAndExit}
+      />
     </BaseLayout>
   );
 };
