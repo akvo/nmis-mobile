@@ -1,6 +1,6 @@
 import React from 'react';
 import { Platform, ToastAndroid, BackHandler } from 'react-native';
-import { Button } from '@rneui/themed';
+import { Button, Dialog, Text } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { FormContainer } from '../form';
 import { SaveDialogMenu, SaveDropdownMenu } from '../form/support';
@@ -15,6 +15,7 @@ const FormPage = ({ navigation, route }) => {
   const [onSaveFormParams, setOnSaveFormParams] = React.useState({});
   const [showDialogMenu, setShowDialogMenu] = React.useState(false);
   const [showDropdownMenu, setShowDropdownMenu] = React.useState(false);
+  const [showExitConfirmationDialog, setShowExitConfirmationDialog] = React.useState(false);
 
   React.useEffect(() => {
     const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
@@ -82,6 +83,11 @@ const FormPage = ({ navigation, route }) => {
     }
   };
 
+  const handleShowExitConfirmationDialog = () => {
+    setShowDropdownMenu(false);
+    setShowExitConfirmationDialog(true);
+  };
+
   const handleOnExit = () => {
     if (onSaveFormParams?.refreshForm) {
       onSaveFormParams.refreshForm();
@@ -134,7 +140,7 @@ const FormPage = ({ navigation, route }) => {
               <Icon name="ellipsis-vertical" size={18} />
             </Button>
           }
-          handleOnExit={handleOnExit}
+          handleOnExit={handleShowExitConfirmationDialog}
           handleOnSaveAndExit={handleOnSaveAndExit}
         />
       }
@@ -148,9 +154,20 @@ const FormPage = ({ navigation, route }) => {
       <SaveDialogMenu
         visible={showDialogMenu}
         setVisible={setShowDialogMenu}
-        handleOnExit={handleOnExit}
+        handleOnExit={handleShowExitConfirmationDialog}
         handleOnSaveAndExit={handleOnSaveAndExit}
       />
+      <Dialog visible={showExitConfirmationDialog} testID="exit-confirmation-dialog">
+        <Text testID="exit-confirmation-text">Are you sure want to exit form submission?</Text>
+        <Dialog.Actions>
+          <Dialog.Button title="Exit" onPress={handleOnExit} testID="exit-confirmation-ok" />
+          <Dialog.Button
+            title="Cancel"
+            onPress={() => setShowExitConfirmationDialog(false)}
+            testID="exit-confirmation-cancel"
+          />
+        </Dialog.Actions>
+      </Dialog>
     </BaseLayout>
   );
 };

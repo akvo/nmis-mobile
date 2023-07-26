@@ -422,6 +422,17 @@ describe('FormPage handleOnSaveForm', () => {
     expect(exitButtonElement).toBeTruthy();
     fireEvent.press(exitButtonElement);
 
+    const exitConfirmationDialogElement = wrapper.getByTestId('exit-confirmation-dialog');
+    await waitFor(() => {
+      expect(exitConfirmationDialogElement.props.visible).toEqual(true);
+      expect(wrapper.getByTestId('exit-confirmation-text')).toBeDefined();
+      expect(wrapper.getByTestId('exit-confirmation-ok')).toBeDefined();
+      expect(wrapper.getByTestId('exit-confirmation-cancel')).toBeDefined();
+    });
+
+    const okExitConfirmationButtonElement = wrapper.getByTestId('exit-confirmation-ok');
+    fireEvent.press(okExitConfirmationButtonElement);
+
     await waitFor(() => {
       expect(mockNavigation.navigate).toHaveBeenCalledWith('Home');
     });
