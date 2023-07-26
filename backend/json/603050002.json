@@ -3,7 +3,8 @@
 	"name": "Urban Sanitation",
 	"version": "1.0.0",
 	"cascades": [
-		"/sqlite/cascade-296940912-v2.sqlite"
+		"/sqlite/cascade-296940912-v2.sqlite",
+		"/sqlite/kenya_organizations.sqlite"
 	],
 	"translations": [
 		{
