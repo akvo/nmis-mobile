@@ -13,12 +13,18 @@ const TypeNumber = ({
   name,
   addonAfter,
   addonBefore,
+  tooltip,
   required,
   requiredSign,
 }) => {
   return (
     <View>
-      <FieldLabel keyform={keyform} name={name} requiredSign={required ? requiredSign : null} />
+      <FieldLabel
+        keyform={keyform}
+        name={name}
+        tooltip={tooltip}
+        requiredSign={required ? requiredSign : null}
+      />
       <Input
         inputContainerStyle={styles.inputFieldContainer}
         keyboardType="numeric"

@@ -12,6 +12,7 @@ const TypeMultipleOption = ({
   id,
   name,
   option = [],
+  tooltip,
   required,
   requiredSign,
 }) => {
@@ -21,7 +22,12 @@ const TypeMultipleOption = ({
 
   return (
     <View style={styles.multipleOptionContainer}>
-      <FieldLabel keyform={keyform} name={name} requiredSign={required ? requiredSign : null} />
+      <FieldLabel
+        keyform={keyform}
+        name={name}
+        tooltip={tooltip}
+        requiredSign={required ? requiredSign : null}
+      />
       {isCheckBox ? (
         option.map((opt, opti) => (
           <CheckBox
@@ -43,11 +49,11 @@ const TypeMultipleOption = ({
         <MultiSelect
           style={[styles.dropdownField]}
           selectedStyle={styles.dropdownSelectedList}
-          data={option.map((opt) => ({ label: opt.label, value: opt.name }))}
+          data={option}
           search
           maxHeight={300}
           labelField="label"
-          valueField="value"
+          valueField="name"
           searchPlaceholder="Search..."
           value={values?.[id] || []}
           onChange={(value) => {

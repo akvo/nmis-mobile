@@ -6,7 +6,7 @@ import { styles } from './styles';
 import { FormNavigation, QuestionGroupList } from './support';
 import QuestionGroup from './components/QuestionGroup';
 import { transformForm, generateDataPointName } from './lib';
-import { FormState } from '../store';
+import { FormState, UIState } from '../store';
 
 // TODO:: Allow other not supported yet
 // TODO:: Repeat group not supported yet
@@ -40,6 +40,7 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave }) => {
   const { currentValues, questionGroupListCurrentValues, dataPointName } = FormState.useState(
     (s) => s,
   );
+  const activeLang = UIState.useState((s) => s.lang);
 
   useEffect(() => {
     const meta = forms.question_group
@@ -64,8 +65,8 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave }) => {
   }, [currentValues, onSave]);
 
   const formDefinition = useMemo(() => {
-    return transformForm(forms);
-  }, [forms]);
+    return transformForm(forms, activeLang);
+  }, [forms, activeLang]);
 
   const currentGroup = useMemo(() => {
     return formDefinition.question_group.find((qg) => qg.id === activeGroup);

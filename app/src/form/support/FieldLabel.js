@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
-import { Text } from '@rneui/themed';
+import { Text, Tooltip, Icon } from '@rneui/themed';
 import { styles } from '../styles';
 
-const FieldLabel = ({ keyform, name = '', requiredSign = null }) => {
+const FieldLabel = ({ keyform = 0, name, tooltip, requiredSign = null }) => {
+  const [open, setOpen] = useState(false);
+  const labelText = `${keyform + 1}. ${name}`;
+  const tooltipText = tooltip?.text;
   return (
     <View style={styles.fieldLabelContainer}>
       {requiredSign && (
@@ -11,9 +14,27 @@ const FieldLabel = ({ keyform, name = '', requiredSign = null }) => {
           {requiredSign}
         </Text>
       )}
-      <Text style={styles.fieldLabel} testID="field-label">
-        {!isNaN(keyform) ? `${keyform + 1}. ${name}` : name}
-      </Text>
+      <View style={styles.fieldLabel}>
+        <Text testID="field-label">{labelText}</Text>
+        {tooltipText && (
+          <Icon
+            name="help-circle"
+            type="ionicon"
+            size={18}
+            testID="field-tooltip-icon"
+            onPress={() => setOpen(!open)}
+          />
+        )}
+        <Tooltip
+          visible={open}
+          onClose={() => {
+            setOpen(false);
+          }}
+          popover={<Text testID="field-tooltip-text">{tooltipText}</Text>}
+          backgroundColor="#e5e5e5"
+          testID="field-tooltip"
+        />
+      </View>
     </View>
   );
 };
