@@ -39,6 +39,7 @@ const AddUser = ({ navigation }) => {
         if (data?.active) {
           UserState.update((s) => {
             s.id = insertId;
+            s.name = data.name;
           });
         }
         if (Platform.OS === 'android') {
