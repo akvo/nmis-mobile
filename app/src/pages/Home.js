@@ -9,6 +9,7 @@ const Home = ({ navigation }) => {
   const [search, setSearch] = useState(null);
   const [data, setData] = useState([]);
   const currentUserName = UserState.useState((s) => s.name);
+  const subTitleText = currentUserName ? `User: ${currentUserName}` : null;
 
   const goToManageForm = (id) => {
     const findData = data.find((d) => d?.id === id);
@@ -43,7 +44,7 @@ const Home = ({ navigation }) => {
   return (
     <BaseLayout
       title="Form Lists"
-      subTitle={currentUserName}
+      subTitle={subTitleText}
       search={{
         show: true,
         placeholder: 'Search form',
