@@ -3,7 +3,7 @@ import * as FileSystem from 'expo-file-system';
 import * as SQLite from 'expo-sqlite';
 import { conn, query } from '../database';
 
-const DIR_NAME = 'Cascades';
+const DIR_NAME = 'SQLite';
 
 const createSqliteDir = async () => {
   /**
@@ -14,16 +14,13 @@ const createSqliteDir = async () => {
   }
 };
 
-const download = async (downloadUrl, fileUrl) => {
+const download = (downloadUrl, fileUrl) => {
   const pathSql = fileUrl.replace(/\/sqlite\//, `${DIR_NAME}/`);
-  // download file if not exists
-  if (!(await FileSystem.getInfoAsync(FileSystem.documentDirectory + pathSql)).exists) {
-    const results = await FileSystem.downloadAsync(
-      downloadUrl,
-      FileSystem.documentDirectory + pathSql,
-    );
-    return results;
-  }
+  FileSystem.getInfoAsync(FileSystem.documentDirectory + pathSql).then(({ exists }) => {
+    if (!exists) {
+      FileSystem.downloadAsync(downloadUrl, FileSystem.documentDirectory + pathSql);
+    }
+  });
 };
 
 const loadDataSource = async (source) => {
@@ -37,8 +34,10 @@ const loadDataSource = async (source) => {
 const dropFiles = async () => {
   const Sqlfiles = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory + DIR_NAME);
   Sqlfiles.forEach(async (file) => {
-    const fileUri = FileSystem.documentDirectory + `${DIR_NAME}/${file}`;
-    await FileSystem.deleteAsync(fileUri);
+    if (file.includes('sqlite')) {
+      const fileUri = FileSystem.documentDirectory + `${DIR_NAME}/${file}`;
+      await FileSystem.deleteAsync(fileUri);
+    }
   });
   return Sqlfiles;
 };
@@ -48,4 +47,5 @@ export default cascades = {
   loadDataSource,
   download,
   dropFiles,
+  DIR_NAME,
 };
