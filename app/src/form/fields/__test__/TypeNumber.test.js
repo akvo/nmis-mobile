@@ -10,7 +10,7 @@ describe('TypeNumber component', () => {
 
     const fieldLabel = getByTestId('field-label');
     expect(fieldLabel).toBeDefined();
-    expect(getByText('Field Name')).toBeDefined();
+    expect(getByText('1. Field Name')).toBeDefined();
 
     const inputElement = getByTestId('type-number');
     expect(inputElement).toBeDefined();

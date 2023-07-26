@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import { i18n } from '../../lib';
 
 const intersection = (array1, array2) => {
   const set1 = new Set(array1);
@@ -26,21 +27,30 @@ const getDependencyAncestors = (questions, current, dependencies) => {
   return current;
 };
 
-export const transformForm = (forms) => {
+export const transformForm = (forms, lang = 'en') => {
+  const nonEnglish = lang != 'en';
+  if (nonEnglish) {
+    forms = i18n.transform(lang, forms);
+  }
   const questions = forms?.question_group
     .map((x) => {
       return x.question;
     })
-    .flatMap((x) => x)
-    .map((x) => {
-      if (x.type === 'option' || x.type === 'multiple_option') {
-        const options = x.option.map((o) => ({ ...o, label: o.name }));
+    .flatMap((q) => q)
+    .map((q) => (nonEnglish ? i18n.transform(lang, q) : q))
+    .map((q) => {
+      if (q.type === 'option' || q.type === 'multiple_option') {
+        const options = q.option
+          .map((o) => ({ ...o, label: o.name }))
+          .map((o) => {
+            return nonEnglish ? i18n.transform(lang, o) : o;
+          });
         return {
-          ...x,
+          ...q,
           option: options.sort((a, b) => a.order - b.order),
         };
       }
-      return x;
+      return q;
     });
 
   const transformed = questions.map((x) => {
@@ -72,8 +82,9 @@ export const transformForm = (forms) => {
           repeat = { repeat: 1 };
           repeats = { repeats: [0] };
         }
+        const translatedQg = nonEnglish ? i18n.transform(lang, qg) : qg;
         return {
-          ...qg,
+          ...translatedQg,
           ...repeat,
           ...repeats,
           id: qg?.id || qgi,
