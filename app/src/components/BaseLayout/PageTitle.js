@@ -82,6 +82,7 @@ const styles = StyleSheet.create({
   subTitle: {
     fontWeight: 400,
     fontStyle: 'italic',
+    textAlign: 'center',
   },
 });
 
