@@ -96,7 +96,12 @@ const AuthForm = ({ navigation }) => {
         }
       })
       .catch((err) => {
-        setError(err?.message);
+        const { status: errStatus } = err?.response;
+        if (errStatus === 401) {
+          setError('Invalid enumerator ID');
+        } else {
+          setError(err?.message);
+        }
       })
       .finally(() => setLoading(false));
   };
