@@ -55,8 +55,31 @@ const FormPage = ({ navigation, route }) => {
     return navigation.goBack();
   };
 
-  const handleOnSaveAndExit = () => {
-    console.log(onSaveFormParams, '===');
+  const handleOnSaveAndExit = async () => {
+    const { values, refreshForm } = onSaveFormParams;
+    try {
+      const saveData = {
+        form: selectedForm.id,
+        user: userId,
+        name: values?.name || 'Untitled',
+        submitted: 0,
+        duration: 0, // TODO:: set duration
+        json: values?.answers || [],
+      };
+      await crudDataPoints.saveDataPoint(saveData);
+      if (Platform.OS === 'android') {
+        ToastAndroid.show(`Data point ${values?.name} saved`, ToastAndroid.LONG);
+      }
+      if (refreshForm) {
+        refreshForm();
+      }
+      navigation.navigate('ManageForm', { ...route?.params });
+    } catch (err) {
+      console.error(err);
+      if (Platform.OS === 'android') {
+        ToastAndroid.show(`Error! Can't save data point ${values?.name}`, ToastAndroid.LONG);
+      }
+    }
   };
 
   const handleOnExit = () => {
@@ -81,7 +104,7 @@ const FormPage = ({ navigation, route }) => {
         ToastAndroid.show(`Data point ${values.name} submitted`, ToastAndroid.LONG);
       }
       refreshForm();
-      navigation.navigate('FormData', { ...route?.params, showSubmitted: true });
+      navigation.navigate('ManageForm', { ...route?.params });
     } catch (err) {
       console.error(err);
       if (Platform.OS === 'android') {

@@ -40,6 +40,7 @@ const dataPointsQuery = () => {
       return rows._array;
     },
     saveDataPoint: async ({ form, user, name, submitted, duration, json }) => {
+      const submittedAt = submitted ? { submittedAt: new Date().toISOString() } : {};
       const insertQuery = query.insert('datapoints', {
         form,
         user,
@@ -47,7 +48,7 @@ const dataPointsQuery = () => {
         submitted,
         duration,
         createdAt: new Date().toISOString(),
-        submittedAt: submitted ? new Date().toISOString() : null,
+        ...submittedAt,
         json: json ? JSON.stringify(json).replace(/'/g, "''") : null,
       });
       return await conn.tx(db, insertQuery, []);

@@ -294,10 +294,9 @@ describe('FormPage handleOnSubmitForm', () => {
       expect(ToastAndroid.show).toHaveBeenCalledTimes(1);
       // call refreshForm
       expect(mockRefreshForm).toHaveBeenCalledTimes(1);
-      expect(mockNavigation.navigate).toHaveBeenCalledWith('FormData', {
+      expect(mockNavigation.navigate).toHaveBeenCalledWith('ManageForm', {
         id: 1,
         name: 'Form Name',
-        showSubmitted: true,
       });
     });
   });

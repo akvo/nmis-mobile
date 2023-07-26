@@ -1,5 +1,5 @@
 import React from 'react';
-import { BackHandler } from 'react-native';
+import { Platform, ToastAndroid } from 'react-native';
 import { render, fireEvent, waitFor } from '@testing-library/react-native';
 jest.useFakeTimers();
 import FormPage from '../FormPage';
@@ -311,9 +311,91 @@ describe('FormPage handleOnSaveForm', () => {
     });
   });
 
-  test.todo(
-    'should call handleOnSaveAndExit with the correct values when Save & Exit button pressed',
-  );
+  test('should call handleOnSaveAndExit with the correct values when Save & Exit button pressed', async () => {
+    Platform.OS = 'android';
+    ToastAndroid.show = jest.fn();
+    jest.spyOn(React, 'useMemo').mockReturnValue(exampleTestForm);
+
+    const mockSetOnSaveFormParams = jest.fn();
+    const mockOnSaveFormParams = { values: mockValues, refreshForm: mockRefreshForm };
+    jest
+      .spyOn(React, 'useState')
+      .mockImplementation(() => [mockOnSaveFormParams, mockSetOnSaveFormParams]);
+
+    const mockSetShowDialogMenu = jest.fn();
+    jest.spyOn(React, 'useState').mockImplementation(() => [true, mockSetShowDialogMenu]);
+
+    const wrapper = render(<FormPage navigation={mockNavigation} route={mockRoute} />);
+
+    const arrowBackButton = wrapper.queryByTestId('arrow-back-button');
+    expect(arrowBackButton).toBeTruthy();
+    fireEvent.press(arrowBackButton);
+
+    const dialogMenuElement = wrapper.queryByTestId('save-dialog-menu');
+    await waitFor(() => {
+      expect(dialogMenuElement.props.visible).toEqual(true);
+    });
+
+    const saveButtonElement = wrapper.queryByTestId('save-and-exit-button');
+    expect(saveButtonElement).toBeTruthy();
+    fireEvent.press(saveButtonElement);
+
+    await waitFor(() => {
+      expect(crudDataPoints.saveDataPoint).toHaveBeenCalledWith({
+        duration: 0,
+        form: undefined,
+        json: [],
+        name: 'Untitled',
+        submitted: 0,
+        user: null,
+      });
+      expect(ToastAndroid.show).toHaveBeenCalledTimes(1);
+      expect(mockNavigation.navigate).toHaveBeenCalledWith('ManageForm', {
+        id: 1,
+        name: 'Form Name',
+      });
+    });
+  });
+
+  test('should show ToastAndroid if handleOnSaveAndExit throw an error', async () => {
+    Platform.OS = 'android';
+    ToastAndroid.show = jest.fn();
+    jest.spyOn(React, 'useMemo').mockReturnValue(exampleTestForm);
+    const consoleErrorSpy = jest.spyOn(console, 'error');
+    crudDataPoints.saveDataPoint.mockImplementation(() => Promise.reject('Error'));
+
+    const mockSetOnSaveFormParams = jest.fn();
+    const mockOnSaveFormParams = { values: mockValues, refreshForm: mockRefreshForm };
+    jest
+      .spyOn(React, 'useState')
+      .mockImplementation(() => [mockOnSaveFormParams, mockSetOnSaveFormParams]);
+
+    const mockSetShowDialogMenu = jest.fn();
+    jest.spyOn(React, 'useState').mockImplementation(() => [true, mockSetShowDialogMenu]);
+
+    const wrapper = render(<FormPage navigation={mockNavigation} route={mockRoute} />);
+
+    const arrowBackButton = wrapper.queryByTestId('arrow-back-button');
+    expect(arrowBackButton).toBeTruthy();
+    fireEvent.press(arrowBackButton);
+
+    const dialogMenuElement = wrapper.queryByTestId('save-dialog-menu');
+    await waitFor(() => {
+      expect(dialogMenuElement.props.visible).toEqual(true);
+    });
+
+    const saveButtonElement = wrapper.queryByTestId('save-and-exit-button');
+    expect(saveButtonElement).toBeTruthy();
+    fireEvent.press(saveButtonElement);
+
+    await waitFor(() => {
+      expect(crudDataPoints.saveDataPoint).toHaveBeenCalledTimes(1);
+      expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
+      expect(ToastAndroid.show).toHaveBeenCalledTimes(1);
+      expect(mockRefreshForm).not.toHaveBeenCalled();
+      expect(mockNavigation.navigate).not.toHaveBeenCalled();
+    });
+  });
 
   test('should call handleOnExit and navigate to Home page when Exit without Saving button pressed', async () => {
     const mockSetOnSaveFormParams = jest.fn();
