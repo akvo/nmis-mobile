@@ -18,7 +18,7 @@ const FieldLabel = ({ keyform = 0, name, tooltip, requiredSign = null }) => {
         <Text testID="field-label">{labelText}</Text>
         {tooltipText && (
           <Icon
-            name="help-circle"
+            name="information-circle"
             type="ionicon"
             size={18}
             testID="field-tooltip-icon"
