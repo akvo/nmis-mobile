@@ -314,11 +314,9 @@ describe('FormPage handleOnSubmitForm', () => {
     fireEvent.press(submitButton);
 
     await waitFor(() => {
-      // save datapoint to database
       expect(crudDataPoints.saveDataPoint).toHaveBeenCalledTimes(1);
       expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
       expect(ToastAndroid.show).toHaveBeenCalledTimes(1);
-      // call refreshForm
       expect(mockRefreshForm).not.toHaveBeenCalled();
       expect(mockNavigation.navigate).not.toHaveBeenCalled();
     });

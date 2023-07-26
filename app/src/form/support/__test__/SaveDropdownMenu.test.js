@@ -1,6 +1,13 @@
 import React from 'react';
-import { render, fireEvent, act } from '@testing-library/react-native';
+import { render, fireEvent, act, waitFor } from '@testing-library/react-native';
 import SaveDropdownMenu from '../SaveDropdownMenu';
+import UIState from '../../../store/ui';
+
+// According to the issue on @testing-library/react-native (for dropdown)
+import { View } from 'react-native';
+jest.spyOn(View.prototype, 'measureInWindow').mockImplementation((cb) => {
+  cb(18, 113, 357, 50);
+});
 
 describe('SaveDropdownMenu component', () => {
   beforeEach(() => {
@@ -132,7 +139,67 @@ describe('SaveDropdownMenu component', () => {
     expect(mockHandleOnExit).toHaveBeenCalledTimes(1);
   });
 
-  it.todo('should show Language selection popup onPress Language Selection button');
+  it('should show Language selection popup onPress Language Selection button', async () => {
+    const wrapper = render(<SaveDropdownMenu visible={true} setVisible={jest.fn()} />);
 
-  it.todo('should update activeLang when select a language on Language selection popup');
+    const dropdownMenuElement = wrapper.queryByTestId('save-dropdown-menu');
+    expect(dropdownMenuElement).toBeTruthy();
+    const menuItemElements =
+      dropdownMenuElement.props.children[1].props.children.props.children.props.children.props
+        .children.props.children;
+
+    expect(menuItemElements[3].props.testID).toEqual('language-selection-menu-item');
+    expect(menuItemElements[3].props.children).toEqual('Language Selection');
+
+    const languageDialogElement = wrapper.queryByTestId('settings-form-dialog');
+    expect(languageDialogElement).toBeTruthy();
+    expect(languageDialogElement.props.visible).toEqual(false);
+
+    act(() => menuItemElements[3].props.onPress());
+
+    await waitFor(() => {
+      expect(languageDialogElement.props.visible).toEqual(true);
+    });
+  });
+
+  it('should update activeLang when select a language on Language selection popup', async () => {
+    UIState.update = jest.fn();
+
+    const wrapper = render(<SaveDropdownMenu visible={true} setVisible={jest.fn()} />);
+
+    const dropdownMenuElement = wrapper.queryByTestId('save-dropdown-menu');
+    expect(dropdownMenuElement).toBeTruthy();
+    const menuItemElements =
+      dropdownMenuElement.props.children[1].props.children.props.children.props.children.props
+        .children.props.children;
+
+    expect(menuItemElements[3].props.testID).toEqual('language-selection-menu-item');
+    expect(menuItemElements[3].props.children).toEqual('Language Selection');
+
+    const languageDialogElement = wrapper.queryByTestId('settings-form-dialog');
+    expect(languageDialogElement).toBeTruthy();
+    expect(languageDialogElement.props.visible).toEqual(false);
+
+    act(() => menuItemElements[3].props.onPress());
+
+    await waitFor(() => {
+      expect(languageDialogElement.props.visible).toEqual(true);
+    });
+
+    const languageDropdownElement = wrapper.getByTestId('settings-form-dropdown');
+    fireEvent.press(languageDropdownElement);
+
+    const choosedLang = wrapper.getByText('English');
+    await waitFor(() => {
+      expect(choosedLang).toBeTruthy();
+    });
+    fireEvent.press(choosedLang);
+
+    const okButtonElement = wrapper.getByTestId('settings-form-dialog-ok');
+    fireEvent.press(okButtonElement);
+
+    await waitFor(() => {
+      expect(UIState.update).toHaveBeenCalled();
+    });
+  });
 });
