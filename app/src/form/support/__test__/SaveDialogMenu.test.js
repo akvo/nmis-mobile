@@ -1,6 +1,6 @@
 import React from 'react';
 import SaveDialogMenu from '../SaveDialogMenu';
-import { render, fireEvent, waitFor } from '@testing-library/react-native';
+import { render, fireEvent } from '@testing-library/react-native';
 
 describe('SaveDialogMenu component', () => {
   it('should not show dialog if visible prop false', () => {

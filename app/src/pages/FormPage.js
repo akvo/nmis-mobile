@@ -1,9 +1,9 @@
 import React from 'react';
-import { Platform, ToastAndroid, StyleSheet } from 'react-native';
+import { Platform, ToastAndroid } from 'react-native';
 import { Button, Dialog } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { FormContainer } from '../form';
-import { SaveDialogMenu } from '../form/support';
+import { SaveDialogMenu, SaveDropdownMenu } from '../form/support';
 import { BaseLayout } from '../components';
 import { FormState } from '../store';
 import { crudDataPoints } from '../database/crud';
@@ -14,6 +14,7 @@ const FormPage = ({ navigation, route }) => {
   const userId = UserState.useState((s) => s.id);
   const [onSaveFormParams, setOnSaveFormParams] = React.useState({});
   const [showDialogMenu, setShowDialogMenu] = React.useState(false);
+  const [showDropdownMenu, setShowDropdownMenu] = React.useState(false);
 
   const formJSON = React.useMemo(() => {
     if (!selectedForm?.json) {
@@ -73,9 +74,19 @@ const FormPage = ({ navigation, route }) => {
         </Button>
       }
       rightComponent={
-        <Button type="clear" testID="form-page-kebab-menu" onPress={() => setShowDialogMenu(true)}>
-          <Icon name="ellipsis-vertical" size={18} />
-        </Button>
+        <SaveDropdownMenu
+          visible={showDropdownMenu}
+          setVisible={setShowDropdownMenu}
+          anchor={
+            <Button
+              type="clear"
+              testID="form-page-kebab-menu"
+              onPress={() => setShowDropdownMenu(true)}
+            >
+              <Icon name="ellipsis-vertical" size={18} />
+            </Button>
+          }
+        />
       }
     >
       <FormContainer

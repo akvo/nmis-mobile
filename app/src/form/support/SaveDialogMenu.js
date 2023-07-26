@@ -10,7 +10,7 @@ const SaveDialogMenu = ({ visible, setVisible, handleOnSaveAndExit, handleOnExit
       overlayStyle={styles.dialogMenuContainer}
       onBackdropPress={() => {
         if (setVisible) {
-          setVisible(false);
+          return setVisible(false);
         }
       }}
     >
@@ -20,7 +20,7 @@ const SaveDialogMenu = ({ visible, setVisible, handleOnSaveAndExit, handleOnExit
         testID="save-and-exit-button"
         onPress={() => {
           if (handleOnSaveAndExit) {
-            handleOnSaveAndExit();
+            return handleOnSaveAndExit();
           }
         }}
       />
@@ -32,7 +32,7 @@ const SaveDialogMenu = ({ visible, setVisible, handleOnSaveAndExit, handleOnExit
         titleStyle={styles.textDanger}
         onPress={() => {
           if (handleOnExit) {
-            handleOnExit();
+            return handleOnExit();
           }
         }}
       />
