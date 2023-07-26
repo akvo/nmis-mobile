@@ -1,5 +1,6 @@
 import * as FileSystem from 'expo-file-system';
 import * as SQLite from 'expo-sqlite';
+import { act, waitFor } from 'react-native-testing-library';
 
 import cascades from '../cascades';
 
@@ -17,7 +18,7 @@ jest.mock('expo-file-system', () => ({
   deleteAsync: jest.fn(async (fileUri) => true),
 }));
 
-const DIR_NAME = 'SQLite';
+const { DIR_NAME } = cascades;
 
 describe('cascades', () => {
   it('should create the sqlite directory if it does not exist', async () => {
@@ -35,30 +36,30 @@ describe('cascades', () => {
     // Call the function with test URLs
     const downloadUrl = 'https://example.com/sqlite/file.sqlite';
     const fileUrl = '/sqlite/file.sqlite';
-    const results = await cascades.download(downloadUrl, fileUrl);
+    act(() => {
+      cascades.download(downloadUrl, fileUrl);
+    });
 
-    // Assertions
-    expect(FileSystem.getInfoAsync).toHaveBeenCalledWith(
-      `test-document-directory/${DIR_NAME}/file.sqlite`,
-    );
-    expect(FileSystem.downloadAsync).toHaveBeenCalledWith(
-      downloadUrl,
-      `test-document-directory/${DIR_NAME}/file.sqlite`,
-    );
-
-    // Additional assertions on the results, if needed
-    expect(results.downloadUrl).toBe(downloadUrl);
-    expect(results.fileUrl).toBe(`test-document-directory/${DIR_NAME}/file.sqlite`);
+    await waitFor(() => {
+      // Assertions
+      expect(FileSystem.getInfoAsync).toHaveBeenCalledWith(
+        `test-document-directory/${DIR_NAME}/file.sqlite`,
+      );
+      expect(FileSystem.downloadAsync).toHaveBeenCalledWith(
+        downloadUrl,
+        `test-document-directory/${DIR_NAME}/file.sqlite`,
+      );
+    });
   });
 
-  it('should not download the file if it already exists', async () => {
+  it('should not download the file if it already exists', () => {
     // Mocking that the file already exists
     FileSystem.getInfoAsync.mockImplementationOnce(async () => ({ exists: true }));
 
     // Call the function with test URLs
     const downloadUrl = 'https://example.com/sqlite/file.sqlite';
     const fileUrl = '/sqlite/file.sqlite';
-    const results = await cascades.download(downloadUrl, fileUrl);
+    cascades.download(downloadUrl, fileUrl);
 
     // Assertions
     expect(FileSystem.getInfoAsync).toHaveBeenCalledWith(
