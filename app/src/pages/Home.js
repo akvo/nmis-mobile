@@ -2,12 +2,13 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Button } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { BaseLayout } from '../components';
-import { FormState } from '../store';
+import { FormState, UserState } from '../store';
 import { crudForms } from '../database/crud';
 
 const Home = ({ navigation }) => {
   const [search, setSearch] = useState(null);
   const [data, setData] = useState([]);
+  const currentUserName = UserState.useState((s) => s.name);
 
   const goToManageForm = (id) => {
     const findData = data.find((d) => d?.id === id);
@@ -42,6 +43,7 @@ const Home = ({ navigation }) => {
   return (
     <BaseLayout
       title="Form Lists"
+      subTitle={currentUserName}
       search={{
         show: true,
         placeholder: 'Search form',
