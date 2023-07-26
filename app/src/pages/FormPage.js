@@ -5,9 +5,10 @@ import { BaseLayout } from '../components';
 import { FormState } from '../store';
 import { crudDataPoints } from '../database/crud';
 import { UserState } from '../store';
+import { generateDataPointName } from '../form/lib';
 
 const FormPage = ({ navigation, route }) => {
-  const selectedForm = FormState.useState((s) => s.form);
+  const { form: selectedForm, dataPointName } = FormState.useState((s) => s);
   const userId = UserState.useState((s) => s.id);
 
   const formJSON = React.useMemo(() => {
@@ -16,6 +17,8 @@ const FormPage = ({ navigation, route }) => {
     }
     return JSON.parse(selectedForm.json.replace(/''/g, "'"));
   }, [selectedForm]);
+
+  const { dpName: subTitleText } = generateDataPointName(dataPointName);
 
   const handleOnSubmitForm = async (values, refreshForm) => {
     try {
@@ -44,7 +47,7 @@ const FormPage = ({ navigation, route }) => {
   };
 
   return (
-    <BaseLayout title={route?.params?.name}>
+    <BaseLayout title={route?.params?.name} subTitle={subTitleText}>
       <FormContainer forms={formJSON} initialValues={{}} onSubmit={handleOnSubmitForm} />
     </BaseLayout>
   );
