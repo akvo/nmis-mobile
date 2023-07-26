@@ -130,17 +130,20 @@ exports[`Homepage renders correctly 1`] = `
           }
         }
       >
-        <Text
-          accessibilityRole="text"
-          style={
-            {
-              "color": "#242424",
-              "fontSize": 18,
+        <View>
+          <Text
+            accessibilityRole="text"
+            style={
+              {
+                "color": "#242424",
+                "fontSize": 18,
+              }
             }
-          }
-        >
-          Form Lists
-        </Text>
+            testID="page-title"
+          >
+            Form Lists
+          </Text>
+        </View>
       </View>
       <View
         style={

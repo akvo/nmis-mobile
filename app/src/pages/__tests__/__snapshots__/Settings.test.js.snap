@@ -130,17 +130,20 @@ exports[`SettingsPage renders correctly 1`] = `
           }
         }
       >
-        <Text
-          accessibilityRole="text"
-          style={
-            {
-              "color": "#242424",
-              "fontSize": 18,
+        <View>
+          <Text
+            accessibilityRole="text"
+            style={
+              {
+                "color": "#242424",
+                "fontSize": 18,
+              }
             }
-          }
-        >
-          Settings
-        </Text>
+            testID="page-title"
+          >
+            Settings
+          </Text>
+        </View>
       </View>
       <View
         style={
