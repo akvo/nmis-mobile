@@ -270,7 +270,7 @@ describe('FormPage handleOnSaveForm', () => {
     fireEvent.press(kebabMenuElement);
 
     await waitFor(() => {
-      const dialogMenuElement = wrapper.queryByTestId('form-page-dialog-menu');
+      const dialogMenuElement = wrapper.queryByTestId('save-dialog-menu');
       expect(dialogMenuElement).toBeTruthy();
     });
   });
@@ -308,7 +308,7 @@ describe('FormPage handleOnSaveForm', () => {
 
   //     await waitFor(() => {
   //       expect(mockNavigation).toBeDefined()
-  //       const dialogMenuElement = wrapper.queryByTestId('form-page-dialog-menu');
+  //       const dialogMenuElement = wrapper.queryByTestId('save-dialog-menu');
   //       expect(dialogMenuElement).toBeFalsy();
   //       expect(mockNavigation.canGoBack).toHaveBeenCalledWith()
   //     })

@@ -23,12 +23,7 @@ exports[`FormPage component should render component correctly 1`] = `
   <Modal
     hardwareAccelerated={false}
     onRequestClose={[Function]}
-    style={
-      {
-        "width": "100%",
-      }
-    }
-    testID="form-page-dialog-menu"
+    testID="save-dialog-menu"
     transparent={true}
     visible={false}
   />

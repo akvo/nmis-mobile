@@ -3,6 +3,7 @@ import { Platform, ToastAndroid, StyleSheet } from 'react-native';
 import { Button, Dialog } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { FormContainer } from '../form';
+import { SaveDialogMenu } from '../form/support';
 import { BaseLayout } from '../components';
 import { FormState } from '../store';
 import { crudDataPoints } from '../database/crud';
@@ -83,33 +84,9 @@ const FormPage = ({ navigation, route }) => {
         onSubmit={handleOnSubmitForm}
         onSave={onSaveCallback}
       />
-      <Dialog
-        visible={showDialogMenu}
-        testID="form-page-dialog-menu"
-        overlayStyle={styles.dialogMenuContainer}
-        onBackdropPress={() => setShowDialogMenu(false)}
-      >
-        <Dialog.Button type="outline" title="Save and Exit" testID="save-and-exit-button" />
-        <Dialog.Button
-          type="outline"
-          title="Exit without Saving"
-          testID="exit-without-saving-button"
-          buttonStyle={styles.buttonDanger}
-          titleStyle={styles.textDanger}
-        />
-      </Dialog>
+      <SaveDialogMenu visible={showDialogMenu} setVisible={setShowDialogMenu} />
     </BaseLayout>
   );
 };
-
-const styles = StyleSheet.create({
-  dialogMenuContainer: { flex: 0.13, flexDirection: 'column', justifyContent: 'space-between' },
-  buttonDanger: {
-    borderColor: '#D63D39',
-  },
-  textDanger: {
-    color: '#D63D39',
-  },
-});
 
 export default FormPage;
