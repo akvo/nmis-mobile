@@ -36,7 +36,9 @@ const TypeOption = ({
             textStyle={styles.radioFieldText}
             checked={values?.[id]?.includes(opt.name)}
             onPress={() => {
-              onChange(id, [opt.name]);
+              if (onChange) {
+                onChange(id, [opt.name]);
+              }
             }}
             title={opt.label}
             checkedIcon="dot-circle-o"
@@ -54,8 +56,10 @@ const TypeOption = ({
           valueField="name"
           searchPlaceholder="Search..."
           value={values?.[id]?.[0] || []}
-          onChange={({ value }) => {
-            onChange(id, [value]);
+          onChange={({ name: value }) => {
+            if (onChange) {
+              onChange(id, [value]);
+            }
           }}
           testID="type-option-dropdown"
         />
