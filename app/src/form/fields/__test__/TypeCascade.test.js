@@ -286,4 +286,127 @@ describe('TypeCascade', () => {
     const option3 = getByText('SNV');
     expect(option3).toBeDefined();
   });
+
+  it('should not show required sign if required param is false and requiredSign is not defined', () => {
+    const fieldID = 'location';
+    const fieldName = 'Location';
+    const initialValue = null;
+    const values = { [fieldID]: initialValue };
+
+    const mockedOnChange = jest.fn((fieldName, value) => {
+      values[fieldName] = value;
+    });
+
+    const dataSource = [
+      { id: 1, name: 'Nuffic', parent: 0 },
+      { id: 2, name: 'SNV', parent: 0 },
+      { id: 3, name: 'Akvo', parent: 0 },
+    ];
+
+    const wrapper = render(
+      <TypeCascade
+        onChange={mockedOnChange}
+        id={fieldID}
+        name={fieldName}
+        values={values}
+        dataSource={dataSource}
+        required={false}
+      />,
+    );
+    const requiredIcon = wrapper.queryByTestId('field-required-icon');
+    expect(requiredIcon).toBeFalsy();
+  });
+
+  it('should not show required sign if required param is false but requiredSign is defined', () => {
+    const fieldID = 'location';
+    const fieldName = 'Location';
+    const initialValue = null;
+    const values = { [fieldID]: initialValue };
+
+    const mockedOnChange = jest.fn((fieldName, value) => {
+      values[fieldName] = value;
+    });
+
+    const dataSource = [
+      { id: 1, name: 'Nuffic', parent: 0 },
+      { id: 2, name: 'SNV', parent: 0 },
+      { id: 3, name: 'Akvo', parent: 0 },
+    ];
+
+    const wrapper = render(
+      <TypeCascade
+        onChange={mockedOnChange}
+        id={fieldID}
+        name={fieldName}
+        values={values}
+        dataSource={dataSource}
+        required={false}
+        requiredSign="*"
+      />,
+    );
+    const requiredIcon = wrapper.queryByTestId('field-required-icon');
+    expect(requiredIcon).toBeFalsy();
+  });
+
+  it('should not show required sign if required param is true and requiredSign defined', () => {
+    const fieldID = 'location';
+    const fieldName = 'Location';
+    const initialValue = null;
+    const values = { [fieldID]: initialValue };
+
+    const mockedOnChange = jest.fn((fieldName, value) => {
+      values[fieldName] = value;
+    });
+
+    const dataSource = [
+      { id: 1, name: 'Nuffic', parent: 0 },
+      { id: 2, name: 'SNV', parent: 0 },
+      { id: 3, name: 'Akvo', parent: 0 },
+    ];
+
+    const wrapper = render(
+      <TypeCascade
+        onChange={mockedOnChange}
+        id={fieldID}
+        name={fieldName}
+        values={values}
+        dataSource={dataSource}
+        required={true}
+        requiredSign="*"
+      />,
+    );
+    const requiredIcon = wrapper.queryByTestId('field-required-icon');
+    expect(requiredIcon).toBeTruthy();
+  });
+
+  it('should show required sign with custom requiredSign', () => {
+    const fieldID = 'location';
+    const fieldName = 'Location';
+    const initialValue = null;
+    const values = { [fieldID]: initialValue };
+
+    const mockedOnChange = jest.fn((fieldName, value) => {
+      values[fieldName] = value;
+    });
+
+    const dataSource = [
+      { id: 1, name: 'Nuffic', parent: 0 },
+      { id: 2, name: 'SNV', parent: 0 },
+      { id: 3, name: 'Akvo', parent: 0 },
+    ];
+
+    const wrapper = render(
+      <TypeCascade
+        onChange={mockedOnChange}
+        id={fieldID}
+        name={fieldName}
+        values={values}
+        dataSource={dataSource}
+        required={true}
+        requiredSign="**"
+      />,
+    );
+    const requiredIcon = wrapper.getByText('**');
+    expect(requiredIcon).toBeTruthy();
+  });
 });

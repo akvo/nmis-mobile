@@ -12,6 +12,7 @@ const TypeOption = ({
   id,
   name,
   option = [],
+  tooltip,
   required,
   requiredSign,
 }) => {
@@ -21,7 +22,12 @@ const TypeOption = ({
 
   return (
     <View style={styles.optionContainer}>
-      <FieldLabel keyform={keyform} name={name} requiredSign={required ? requiredSign : null} />
+      <FieldLabel
+        keyform={keyform}
+        name={name}
+        tooltip={tooltip}
+        requiredSign={required ? requiredSign : null}
+      />
       {isRadioGroup ? (
         option.map((opt, opti) => (
           <CheckBox
@@ -37,19 +43,20 @@ const TypeOption = ({
             title={opt.label}
             checkedIcon="dot-circle-o"
             uncheckedIcon="circle-o"
+            testID={`type-option-radio-${opti}`}
           />
         ))
       ) : (
         <Dropdown
           style={[styles.dropdownField]}
-          data={option.map((opt) => ({ label: opt.label, value: opt.name }))}
+          data={option}
           search
           maxHeight={300}
           labelField="label"
-          valueField="value"
+          valueField="name"
           searchPlaceholder="Search..."
           value={values?.[id]?.[0] || []}
-          onChange={({ value }) => {
+          onChange={({ name: value }) => {
             if (onChange) {
               onChange(id, [value]);
             }

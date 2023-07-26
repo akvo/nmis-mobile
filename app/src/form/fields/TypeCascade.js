@@ -4,7 +4,18 @@ import { Dropdown } from 'react-native-element-dropdown';
 import { FieldLabel } from '../support';
 import { styles } from '../styles';
 
-const TypeCascade = ({ onChange, values, keyform, id, name, source, dataSource = [] }) => {
+const TypeCascade = ({
+  onChange,
+  values,
+  keyform,
+  id,
+  name,
+  tooltip,
+  required,
+  requiredSign,
+  source,
+  dataSource = [],
+}) => {
   const [dropdownItems, setDropdownItems] = useState([]);
 
   const groupBy = (array, property) => {
@@ -68,7 +79,12 @@ const TypeCascade = ({ onChange, values, keyform, id, name, source, dataSource =
 
   return (
     <View testID="view-type-cascade">
-      <FieldLabel keyform={keyform} name={name} />
+      <FieldLabel
+        keyform={keyform}
+        name={name}
+        tooltip={tooltip}
+        requiredSign={required ? requiredSign : null}
+      />
       <Text testID="text-values" style={styles.cascadeValues}>
         {values[id]}
       </Text>
