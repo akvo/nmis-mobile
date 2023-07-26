@@ -10,6 +10,13 @@ import { crudUsers } from '../../database/crud';
 
 jest.mock('../../lib/api');
 jest.mock('../../database/crud');
+// Mock the fetch function
+global.fetch = jest.fn(() =>
+  Promise.resolve({
+    json: () => Promise.resolve({ data: 'mocked data' }),
+    status: 200,
+  }),
+);
 
 describe('AuthFormPage', () => {
   test('renders correctly', () => {
