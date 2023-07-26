@@ -85,8 +85,8 @@
 					"required": true,
 					"meta": true,
 					"source": {
-						"file": "cascade-296940912-v2.sqlite",
-						"parent_id": 273
+						"file": "kenya_organizations.sqlite",
+						"parent_id": 0
 					},
 					"translations": [
 						{
