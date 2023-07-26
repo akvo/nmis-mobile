@@ -1,58 +1,97 @@
 import React from 'react';
+import { render, fireEvent, act } from '@testing-library/react-native';
 import SaveDropdownMenu from '../SaveDropdownMenu';
-import { render, fireEvent, waitFor } from '@testing-library/react-native';
 
-describe('SaveDialogMenu component', () => {
+describe('SaveDropdownMenu component', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it('should not show dropdown menu if visible prop false', () => {
     const wrapper = render(<SaveDropdownMenu visible={false} setVisible={jest.fn()} />);
 
     const dropdownMenuElement = wrapper.queryByTestId('save-dropdown-menu');
-    expect(dropdownMenuElement).toBeDefined();
+    expect(dropdownMenuElement).toBeTruthy();
     expect(dropdownMenuElement.props.children[1]._owner.stateNode.props.visible).toEqual(false);
+  });
+
+  it('should show dropdown menu anchor and call setVisible function when pressed', () => {
+    const mockSetVisible = jest.fn();
+
+    const wrapper = render(<SaveDropdownMenu visible={false} setVisible={mockSetVisible} />);
+
+    const anchorElement = wrapper.queryByTestId('anchor-dropdown-menu');
+    expect(anchorElement).toBeTruthy();
+    fireEvent.press(anchorElement);
+
+    expect(mockSetVisible).toHaveBeenCalledTimes(1);
+    expect(mockSetVisible).toHaveBeenCalledWith(true);
+  });
+
+  it('should show dropdown menu anchor from anchor prop and call setVisible function when pressed', () => {
+    const mockSetVisible = jest.fn();
+    const anchorButton = (
+      <mock-Button testID="anchor-click" onPress={mockSetVisible}>
+        Click
+      </mock-Button>
+    );
+
+    const wrapper = render(
+      <SaveDropdownMenu visible={false} setVisible={mockSetVisible} anchor={anchorButton} />,
+    );
+
+    const anchorElement = wrapper.queryByTestId('anchor-click');
+    expect(anchorElement).toBeTruthy();
+    fireEvent.press(anchorElement);
+
+    expect(mockSetVisible).toHaveBeenCalledTimes(1);
   });
 
   it('should show dropdown menu if visible prop true', () => {
     const wrapper = render(<SaveDropdownMenu visible={true} setVisible={jest.fn()} />);
 
     const dropdownMenuElement = wrapper.queryByTestId('save-dropdown-menu');
-    expect(dropdownMenuElement).toBeDefined();
+    expect(dropdownMenuElement).toBeTruthy();
     expect(dropdownMenuElement.props.children[1]._owner.stateNode.props.visible).toEqual(true);
   });
 
-  it.todo('should show dropdown menu anchor')
-
-  it.todo('should show dropdown menu anchor from anchor prop')
-
-  it('should show Save and Exit button as dropdown menu item', async () => {
+  it('should have Save and Exit button as dropdown menu item', async () => {
     const wrapper = render(<SaveDropdownMenu visible={true} setVisible={jest.fn()} />);
 
     const dropdownMenuElement = wrapper.queryByTestId('save-dropdown-menu');
-    expect(dropdownMenuElement).toBeDefined();
+    expect(dropdownMenuElement).toBeTruthy();
+    const menuItemElements =
+      dropdownMenuElement.props.children[1].props.children.props.children.props.children.props
+        .children.props.children;
 
-    await waitFor(() => {
-      const saveAndExitItemElement = wrapper.getByTestId('save-and-exit-menu-item');
-      expect(saveAndExitItemElement).toBeDefined();
-    });
+    expect(menuItemElements[0].props.testID).toEqual('save-and-exit-menu-item');
+    expect(menuItemElements[0].props.children).toEqual('Save and Exit');
   });
 
-  it('should show Exit without Saving button as dropdown menu item', () => {
+  it('should have Exit without Saving button as dropdown menu item', () => {
     const wrapper = render(<SaveDropdownMenu visible={true} setVisible={jest.fn()} />);
 
     const dropdownMenuElement = wrapper.queryByTestId('save-dropdown-menu');
-    expect(dropdownMenuElement).toBeDefined();
+    expect(dropdownMenuElement).toBeTruthy();
+    const menuItemElements =
+      dropdownMenuElement.props.children[1].props.children.props.children.props.children.props
+        .children.props.children;
 
-    const exitWithoutSavingItemElement = wrapper.queryByTestId('exit-without-saving-menu-item');
-    expect(exitWithoutSavingItemElement).toBeDefined();
+    expect(menuItemElements[1].props.testID).toEqual('exit-without-saving-menu-item');
+    expect(menuItemElements[1].props.children).toEqual('Exit without Saving');
   });
 
-  it('should show Language Selection button as dropdown menu item', () => {
+  it('should have Language Selection button as dropdown menu item', () => {
     const wrapper = render(<SaveDropdownMenu visible={true} setVisible={jest.fn()} />);
 
     const dropdownMenuElement = wrapper.queryByTestId('save-dropdown-menu');
-    expect(dropdownMenuElement).toBeDefined();
+    expect(dropdownMenuElement).toBeTruthy();
+    const menuItemElements =
+      dropdownMenuElement.props.children[1].props.children.props.children.props.children.props
+        .children.props.children;
 
-    const languageSelectionItemElement = wrapper.queryByTestId('language-selection-menu-item');
-    expect(languageSelectionItemElement).toBeDefined();
+    expect(menuItemElements[3].props.testID).toEqual('language-selection-menu-item');
+    expect(menuItemElements[3].props.children).toEqual('Language Selection');
   });
 
   it('should call handleOnSaveAndExit function onPress Save and Exit button', () => {
@@ -67,16 +106,31 @@ describe('SaveDialogMenu component', () => {
     );
 
     const dropdownMenuElement = wrapper.queryByTestId('save-dropdown-menu');
-    expect(dropdownMenuElement).toBeDefined();
+    expect(dropdownMenuElement).toBeTruthy();
+    const menuItemElements =
+      dropdownMenuElement.props.children[1].props.children.props.children.props.children.props
+        .children.props.children;
 
-    const saveAndExitItemElement = wrapper.queryByTestId('save-and-exit-menu-item');
-    expect(saveAndExitItemElement).toBeDefined();
-    console.log(saveAndExitItemElement);
-
+    act(() => menuItemElements[0].props.onPress());
     expect(mockHandleOnSaveAndExit).toHaveBeenCalledTimes(1);
   });
 
-  it.todo('should call handleOnExit function onPress Exit without Saving button');
+  it('should call handleOnExit function onPress Exit without Saving button', () => {
+    const mockHandleOnExit = jest.fn();
+
+    const wrapper = render(
+      <SaveDropdownMenu visible={true} setVisible={jest.fn()} handleOnExit={mockHandleOnExit} />,
+    );
+
+    const dropdownMenuElement = wrapper.queryByTestId('save-dropdown-menu');
+    expect(dropdownMenuElement).toBeTruthy();
+    const menuItemElements =
+      dropdownMenuElement.props.children[1].props.children.props.children.props.children.props
+        .children.props.children;
+
+    act(() => menuItemElements[1].props.onPress());
+    expect(mockHandleOnExit).toHaveBeenCalledTimes(1);
+  });
 
   it.todo('should show Language selection popup onPress Language Selection button');
 

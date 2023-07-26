@@ -1,13 +1,13 @@
 import React from 'react';
-import SaveDialogMenu from '../SaveDialogMenu';
 import { render, fireEvent } from '@testing-library/react-native';
+import SaveDialogMenu from '../SaveDialogMenu';
 
 describe('SaveDialogMenu component', () => {
   it('should not show dialog if visible prop false', () => {
     const wrapper = render(<SaveDialogMenu visible={false} setVisible={jest.fn()} />);
 
     const dialogElement = wrapper.queryByTestId('save-dialog-menu');
-    expect(dialogElement).toBeDefined();
+    expect(dialogElement).toBeTruthy();
     expect(dialogElement.props.visible).toEqual(false);
   });
 
@@ -15,7 +15,7 @@ describe('SaveDialogMenu component', () => {
     const wrapper = render(<SaveDialogMenu visible={true} setVisible={jest.fn()} />);
 
     const dialogElement = wrapper.queryByTestId('save-dialog-menu');
-    expect(dialogElement).toBeDefined();
+    expect(dialogElement).toBeTruthy();
     expect(dialogElement.props.visible).toEqual(true);
   });
 
@@ -23,20 +23,20 @@ describe('SaveDialogMenu component', () => {
     const wrapper = render(<SaveDialogMenu visible={true} setVisible={jest.fn()} />);
 
     const dialogElement = wrapper.queryByTestId('save-dialog-menu');
-    expect(dialogElement).toBeDefined();
+    expect(dialogElement).toBeTruthy();
 
     const saveAndExitButtonElement = wrapper.queryByTestId('save-and-exit-button');
-    expect(saveAndExitButtonElement).toBeDefined();
+    expect(saveAndExitButtonElement).toBeTruthy();
   });
 
   it('should show Exit without Saving button on dialog', () => {
     const wrapper = render(<SaveDialogMenu visible={true} setVisible={jest.fn()} />);
 
     const dialogElement = wrapper.queryByTestId('save-dialog-menu');
-    expect(dialogElement).toBeDefined();
+    expect(dialogElement).toBeTruthy();
 
     const exitWithoutSavingButtonElement = wrapper.queryByTestId('exit-without-saving-button');
-    expect(exitWithoutSavingButtonElement).toBeDefined();
+    expect(exitWithoutSavingButtonElement).toBeTruthy();
   });
 
   it('should call handleOnSaveAndExit function onPress Save and Exit button', () => {
@@ -51,10 +51,10 @@ describe('SaveDialogMenu component', () => {
     );
 
     const dialogElement = wrapper.queryByTestId('save-dialog-menu');
-    expect(dialogElement).toBeDefined();
+    expect(dialogElement).toBeTruthy();
 
     const saveAndExitButtonElement = wrapper.queryByTestId('save-and-exit-button');
-    expect(saveAndExitButtonElement).toBeDefined();
+    expect(saveAndExitButtonElement).toBeTruthy();
     fireEvent.press(saveAndExitButtonElement);
 
     expect(mockHandleOnSaveAndExit).toBeCalledTimes(1);
@@ -72,10 +72,10 @@ describe('SaveDialogMenu component', () => {
     );
 
     const dialogElement = wrapper.queryByTestId('save-dialog-menu');
-    expect(dialogElement).toBeDefined();
+    expect(dialogElement).toBeTruthy();
 
     const exitWithoutSavingButtonElement = wrapper.queryByTestId('exit-without-saving-button');
-    expect(exitWithoutSavingButtonElement).toBeDefined();
+    expect(exitWithoutSavingButtonElement).toBeTruthy();
     fireEvent.press(exitWithoutSavingButtonElement);
 
     expect(mockHandleExitWithoutSaving).toBeCalledTimes(1);

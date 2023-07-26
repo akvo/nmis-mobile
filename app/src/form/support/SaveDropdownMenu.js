@@ -5,11 +5,12 @@ import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
 const SaveDropdownMenu = ({ anchor, visible, setVisible, handleOnSaveAndExit, handleOnExit }) => {
   return (
     <Menu
+      animationDuration={0}
       visible={visible}
       anchor={
         anchor || (
           <Button
-            testID="show-dropdown-menu"
+            testID="anchor-dropdown-menu"
             onPress={() => {
               if (setVisible) {
                 setVisible(true);
