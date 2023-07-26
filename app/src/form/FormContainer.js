@@ -21,14 +21,16 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit }) => {
   const activeLang = UIState.useState((s) => s.lang);
 
   useEffect(() => {
-    const meta = forms.question_group
-      .filter((qg) => !qg?.repeatable)
-      .flatMap((qg) => qg.question.filter((q) => q?.meta))
-      .map((q) => ({ id: q.id, type: q.type, value: initialValues?.[q.id] || null }));
-    FormState.update((s) => {
-      s.dataPointName = meta;
-    });
-  }, [forms, initialValues]);
+    if (!dataPointName?.length && forms?.question_group?.length) {
+      const meta = forms.question_group
+        .filter((qg) => !qg?.repeatable)
+        .flatMap((qg) => qg.question.filter((q) => q?.meta))
+        .map((q) => ({ id: q.id, type: q.type, value: initialValues?.[q.id] || null }));
+      FormState.update((s) => {
+        s.dataPointName = meta;
+      });
+    }
+  }, [forms, initialValues, dataPointName]);
 
   const formDefinition = useMemo(() => {
     return transformForm(forms, activeLang);
