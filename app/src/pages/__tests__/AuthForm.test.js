@@ -81,6 +81,8 @@ describe('AuthFormPage', () => {
       ],
       syncToken: 'Bearer eyjtoken',
     };
+
+    api.getConfig.mockImplementation(() => ({ baseURL: 'http://example.com' }));
     api.post.mockImplementation(() => Promise.resolve({ data: mockAuthPostData }));
 
     const { getByTestId } = render(<AuthFormPage navigation={navigation} />);
@@ -118,6 +120,8 @@ describe('AuthFormPage', () => {
       syncToken: 'Bearer eyjtoken',
     };
     const mockUser = { id: 1, name: 'John Doe', password: 'qwerty' };
+
+    api.getConfig.mockImplementation(() => ({ baseURL: 'http://example.com' }));
     api.post.mockImplementation(() => Promise.resolve({ data: mockAuthPostData }));
     crudUsers.getActiveUser.mockImplementation(() => Promise.resolve(mockUser));
     const { result: userStateRef } = renderHook(() => UserState.useState((s) => s));

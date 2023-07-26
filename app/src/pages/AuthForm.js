@@ -59,13 +59,18 @@ const AuthForm = ({ navigation }) => {
           // save forms
           await data.formsUrl.forEach(async (form) => {
             // Fetch form detail
-            const formRes = await api.get(form.url);
-            const savedForm = await crudForms.addForm({ ...form, formJSON: formRes?.data });
+            const formsUrl = api.getConfig().baseURL + form.url;
+            /**
+             * Replace api.get from axios with default fetch function to prevent response caching while using dummy token.
+             * */
+            const response = await fetch(formsUrl);
+            const formJSON = await response.json();
+            const savedForm = await crudForms.addForm({ ...form, formJSON });
             console.info('Saved Forms...', form.id, savedForm);
 
             // download cascades files
-            if (formRes?.data?.cascades?.length) {
-              formRes.data.cascades.forEach((cascadeFile) => {
+            if (formJSON?.cascades?.length) {
+              formJSON.cascades.forEach((cascadeFile) => {
                 const downloadUrl = api.getConfig().baseURL + cascadeFile;
                 cascades.download(downloadUrl, cascadeFile);
               });
