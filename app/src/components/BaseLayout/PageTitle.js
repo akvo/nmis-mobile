@@ -1,5 +1,6 @@
 import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { View, StyleSheet } from 'react-native';
 import { Header, Text, Button } from '@rneui/themed';
 import { useNavigation } from '@react-navigation/native';
 
@@ -27,6 +28,7 @@ const BackButton = ({ navigation }) => {
 
 const PageTitle = ({
   text,
+  subTitle = null,
   leftComponent = null,
   leftContainerStyle = {},
   rightComponent = null,
@@ -54,9 +56,16 @@ const PageTitle = ({
       testID="base-layout-page-title"
     >
       {!leftComponent && <BackButton navigation={navigation} />}
-      <Text h4Style={{ fontSize: 18 }} h4>
-        {text}
-      </Text>
+      <View>
+        <Text h4Style={styles.title} testID="page-title" h4>
+          {text}
+        </Text>
+        {subTitle && (
+          <Text testID="page-subtitle" style={styles.subTitle}>
+            {subTitle}
+          </Text>
+        )}
+      </View>
       {!rightComponent && (
         <Button type="clear" testID="more-options-button" onPress={handleSettingsPress}>
           <Icon name="ellipsis-vertical" size={18} />
@@ -65,5 +74,15 @@ const PageTitle = ({
     </Header>
   );
 };
+
+const styles = StyleSheet.create({
+  title: {
+    fontSize: 18,
+  },
+  subTitle: {
+    fontWeight: 400,
+    fontStyle: 'italic',
+  },
+});
 
 export default PageTitle;
