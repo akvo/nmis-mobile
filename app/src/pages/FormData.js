@@ -8,7 +8,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 const FormData = ({ navigation, route }) => {
   const formId = route?.params?.id;
   const showSubmitted = route?.params?.showSubmitted || false;
-  const activeUserId = UserState.useState(s => s.id)
+  const activeUserId = UserState.useState((s) => s.id);
 
   const [data, setData] = useState([]);
 

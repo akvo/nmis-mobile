@@ -131,7 +131,7 @@ describe('crudDataPoints function', () => {
     const result = await crudDataPoints.selectDataPointsByFormAndSubmitted({
       form: 123,
       submitted: 0,
-      user: 2
+      user: 2,
     });
     expect(result).toEqual(mockData);
   });
