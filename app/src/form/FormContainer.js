@@ -47,12 +47,21 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave }) => {
       const meta = forms.question_group
         .filter((qg) => !qg?.repeatable)
         .flatMap((qg) => qg.question.filter((q) => q?.meta))
-        .map((q) => ({ id: q.id, type: q.type, value: initialValues?.[q.id] || null }));
+        .map((q) => ({ id: q.id, type: q.type, value: null }));
       FormState.update((s) => {
         s.dataPointName = meta;
       });
     }
-  }, [forms, initialValues, dataPointName]);
+  }, [forms, dataPointName]);
+
+  useEffect(() => {
+    const checkDataPointName = dataPointName.filter((x) => !x.value);
+    if (Object.keys(initialValues).length && checkDataPointName.length) {
+      FormState.update((s) => {
+        s.dataPointName = dataPointName.map((x) => ({ ...x, value: initialValues?.[x.id] }));
+      });
+    }
+  }, [initialValues, dataPointName]);
 
   useEffect(() => {
     if (onSave) {

@@ -88,6 +88,7 @@ const FormPage = ({ navigation, route }) => {
 
   const handleShowExitConfirmationDialog = () => {
     setShowDropdownMenu(false);
+    setShowDialogMenu(false);
     setShowExitConfirmationDialog(true);
   };
 
