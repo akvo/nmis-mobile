@@ -16,6 +16,21 @@ describe('i18n library', () => {
     expect(result).toEqual(expected);
   });
 
+  it('should translate tooltip correctly', () => {
+    const data = {
+      text: 'Actual location',
+      translations: [{ language: 'fr', name: 'Emplacement réel' }],
+    };
+    const expected = {
+      text: 'Emplacement réel',
+      translations: [{ language: 'fr', name: 'Emplacement réel' }],
+    };
+    const activeLang = 'fr';
+    const result = i18n.transform(activeLang, data);
+
+    expect(result).toEqual(expected);
+  });
+
   it('should translate question group correctly', () => {
     const data = {
       name: 'Introduction',

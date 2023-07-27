@@ -50,6 +50,13 @@ export const transformForm = (forms, lang = 'en') => {
           option: options.sort((a, b) => a.order - b.order),
         };
       }
+      if (q?.tooltip) {
+        const transTooltip = nonEnglish ? i18n.transform(lang, q.tooltip) : q.tooltip;
+        return {
+          ...q,
+          tooltip: transTooltip,
+        };
+      }
       return q;
     });
 

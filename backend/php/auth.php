@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo json_encode(array(
             'message' => 'Success',
             'formsUrl' => $form_list,
-            'syncToken' => 'Bearer eyjtoken',
+            'syncToken' => 'eyjtoken',
         ));
     } else {
         http_response_code(401);
