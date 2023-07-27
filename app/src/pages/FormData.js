@@ -22,13 +22,13 @@ const FormData = ({ navigation, route }) => {
     results = results.map((res) => {
       const createdAt = new Date(res.createdAt).toLocaleDateString('en-GB');
       const syncedAt = res.syncedAt ? new Date(res.syncedAt).toLocaleDateString('en-GB') : '-';
+      let subtitlesTemp = [`Created: ${createdAt}`, `Survey Duration: ${res.duration}`];
+      if (showSubmitted) {
+        subtitlesTemp = [...subtitlesTemp, `Sync: ${syncedAt}`];
+      }
       return {
         ...res,
-        subtitles: [
-          `Created: ${createdAt}`,
-          `Survey Duration: ${res.duration}`,
-          `Sync: ${syncedAt}`,
-        ],
+        subtitles: subtitlesTemp,
       };
     });
     setData(results);
@@ -37,6 +37,17 @@ const FormData = ({ navigation, route }) => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  const handleFormDataListAction = (id) => {
+    if (showSubmitted) {
+      return null;
+    }
+    return navigation.navigate('FormPage', {
+      ...route?.params,
+      dataPointId: id,
+      newSubmission: false,
+    });
+  };
 
   return (
     <BaseLayout
@@ -51,7 +62,7 @@ const FormData = ({ navigation, route }) => {
         </Button>
       }
     >
-      <BaseLayout.Content data={data} />
+      <BaseLayout.Content data={data} action={handleFormDataListAction} />
     </BaseLayout>
   );
 };
