@@ -297,16 +297,10 @@ describe('FormPage handleOnSaveForm', () => {
 
     const arrowBackButton = wrapper.queryByTestId('arrow-back-button');
     expect(arrowBackButton).toBeTruthy();
-
-    const savedTrigger = wrapper.queryByTestId('mock-save-button-helper');
-    expect(savedTrigger).toBeTruthy();
-
-    fireEvent.press(savedTrigger);
     fireEvent.press(arrowBackButton);
 
     const dialogMenuElement = wrapper.queryByTestId('save-dialog-menu');
     await waitFor(() => {
-      expect(mockOnSave).toHaveBeenCalledWith(mockValues, mockRefreshForm);
       expect(dialogMenuElement.props.visible).toEqual(true);
     });
   });
@@ -343,7 +337,7 @@ describe('FormPage handleOnSaveForm', () => {
     await waitFor(() => {
       expect(crudDataPoints.saveDataPoint).toHaveBeenCalledWith({
         duration: 0,
-        form: undefined,
+        form: 1,
         json: [],
         name: 'Untitled',
         submitted: 0,

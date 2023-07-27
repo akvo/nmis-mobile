@@ -274,7 +274,7 @@ describe('FormPage handleOnSubmitForm', () => {
       // save datapoint to database
       expect(crudDataPoints.saveDataPoint).toHaveBeenCalledWith({
         duration: 0,
-        form: undefined,
+        form: 1,
         json: [
           {
             1: 'John',

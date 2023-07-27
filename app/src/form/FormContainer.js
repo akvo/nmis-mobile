@@ -101,7 +101,7 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave }) => {
       s.questionGroupListCurrentValues = {};
       s.dataPointName = [];
     });
-    formRef.current.resetForm();
+    formRef.current?.resetForm();
   };
 
   const handleOnSubmitForm = (values) => {

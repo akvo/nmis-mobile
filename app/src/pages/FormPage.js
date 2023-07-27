@@ -1,5 +1,12 @@
 import React from 'react';
-import { Platform, ToastAndroid, BackHandler } from 'react-native';
+import {
+  Platform,
+  ToastAndroid,
+  BackHandler,
+  ActivityIndicator,
+  StyleSheet,
+  View,
+} from 'react-native';
 import { Button, Dialog, Text } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { FormContainer } from '../form';
@@ -18,10 +25,11 @@ const FormPage = ({ navigation, route }) => {
   const [showDropdownMenu, setShowDropdownMenu] = React.useState(false);
   const [showExitConfirmationDialog, setShowExitConfirmationDialog] = React.useState(false);
 
+  const currentFormId = route?.params?.id;
   // continue saved submission
   const savedDataPointId = route?.params?.dataPointId;
-  const savedFormId = route?.params?.id;
   const isNewSubmission = route?.params?.newSubmission;
+  const [initialValues, setInitialValues] = React.useState({});
 
   React.useEffect(() => {
     const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
@@ -39,15 +47,31 @@ const FormPage = ({ navigation, route }) => {
   }, [onSaveFormParams]);
 
   React.useEffect(() => {
-    if (!isNewSubmission && savedDataPointId && savedFormId) {
+    if (isNewSubmission) {
+      fetchSavedSubmission();
     }
-  }, [isNewSubmission, savedDataPointId, savedFormId]);
+    fetchForm();
+  }, []);
+
+  const fetchForm = async () => {
+    const currentForm = await crudForms.selectFormById({ id: currentFormId });
+    FormState.update((s) => {
+      s.form = currentForm;
+    });
+  };
+
+  const fetchSavedSubmission = async () => {
+    const currentDataPoint = await crudDataPoints.selectDataPointById({ id: savedDataPointId });
+    if (currentDataPoint?.json) {
+      setInitialValues(currentDataPoint.json);
+    }
+  };
 
   const formJSON = React.useMemo(() => {
     if (!selectedForm?.json) {
       return {};
     }
-    return JSON.parse(selectedForm.json.replace(/''/g, "'"));
+    return selectedForm.json;
   }, [selectedForm]);
 
   const { dpName: subTitleText } = generateDataPointName(dataPointName);
@@ -73,7 +97,7 @@ const FormPage = ({ navigation, route }) => {
     const { values, refreshForm } = onSaveFormParams;
     try {
       const saveData = {
-        form: selectedForm.id,
+        form: currentFormId,
         user: userId,
         name: values?.name || 'Untitled',
         submitted: 0,
@@ -112,7 +136,7 @@ const FormPage = ({ navigation, route }) => {
   const handleOnSubmitForm = async (values, refreshForm) => {
     try {
       const submitData = {
-        form: selectedForm.id,
+        form: currentFormId,
         user: userId,
         name: values.name,
         submitted: 1,
@@ -160,12 +184,18 @@ const FormPage = ({ navigation, route }) => {
         />
       }
     >
-      <FormContainer
-        forms={formJSON}
-        initialValues={{}}
-        onSubmit={handleOnSubmitForm}
-        onSave={onSaveCallback}
-      />
+      {Object.keys(formJSON).length ? (
+        <FormContainer
+          forms={formJSON}
+          initialValues={initialValues}
+          onSubmit={handleOnSubmitForm}
+          onSave={onSaveCallback}
+        />
+      ) : (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator />
+        </View>
+      )}
       <SaveDialogMenu
         visible={showDialogMenu}
         setVisible={setShowDialogMenu}
@@ -186,5 +216,13 @@ const FormPage = ({ navigation, route }) => {
     </BaseLayout>
   );
 };
+
+const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
+});
 
 export default FormPage;

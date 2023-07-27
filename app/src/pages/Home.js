@@ -13,12 +13,7 @@ const Home = ({ navigation }) => {
 
   const goToManageForm = (id) => {
     const findData = data.find((d) => d?.id === id);
-    FormState.update((s) => {
-      s.form = findData;
-    });
-    setTimeout(() => {
-      navigation.navigate('ManageForm', { id: id, name: findData.name });
-    }, 100);
+    navigation.navigate('ManageForm', { id: id, name: findData.name });
   };
 
   const goToUsers = () => {

@@ -10,10 +10,13 @@ const formsQuery = () => {
       if (!rows.length) {
         return [];
       }
-      return rows._array;
+      return rows._array.map((x) => ({
+        ...x,
+        json: JSON.parse(x.json.replace(/''/g, "'")),
+      }));
     },
-    selectFormById: async ({ id: formId }) => {
-      const { rows } = await conn.tx(db, query.read('forms', { formId }), [formId]);
+    selectFormById: async ({ id }) => {
+      const { rows } = await conn.tx(db, query.read('forms', { id }), [id]);
       if (!rows.length) {
         return {};
       }
