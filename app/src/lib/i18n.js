@@ -4,6 +4,7 @@ const transform = (lang, data) => {
     label: labelText,
     name: nameText,
     form: formText,
+    text: textValue,
   } = data || {};
   if (transOption) {
     const ft = transOption.find((t) => t?.language === lang);
@@ -23,6 +24,12 @@ const transform = (lang, data) => {
       return {
         ...data,
         name: ft.name,
+      };
+    }
+    if (textValue && ft) {
+      return {
+        ...data,
+        text: ft.name,
       };
     }
   }

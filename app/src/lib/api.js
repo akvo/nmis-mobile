@@ -19,7 +19,7 @@ const API = () => {
     return api?.token
       ? {
           ...current,
-          headers: { ...config.headers, Authorization: api.token },
+          headers: { ...config.headers, Authorization: `Bearer ${api.token}` },
         }
       : current;
   };
