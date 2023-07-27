@@ -1,18 +1,8 @@
-import { Platform } from 'react-native';
 import { Asset } from 'expo-asset';
 import * as FileSystem from 'expo-file-system';
 import * as SQLite from 'expo-sqlite';
 
 const openDatabase = () => {
-  if (Platform.OS === 'web') {
-    return {
-      transaction: () => {
-        return {
-          executeSql: () => {},
-        };
-      },
-    };
-  }
   const db = SQLite.openDatabase('db.db');
   return db;
 };
@@ -24,13 +14,29 @@ const tx = (db, query, params = []) => {
     db.transaction(
       (transaction) => {
         if (Array.isArray(query)) {
-          const results = [];
-          query.forEach(async (q) => {
-            transaction.executeSql(q, params, (_, resultSet) => {
-              results.push(resultSet); // Store the result set in the array
+          const promises = query.map((q) => {
+            return new Promise((innerResolve, innerReject) => {
+              transaction.executeSql(
+                q,
+                params,
+                (_, resultSet) => {
+                  innerResolve(resultSet);
+                },
+                (_, error) => {
+                  innerReject(error);
+                  return false; // Rollback the transaction
+                },
+              );
             });
           });
-          resolve(results);
+
+          Promise.all(promises)
+            .then((results) => {
+              resolve(results);
+            })
+            .catch((error) => {
+              reject(error);
+            });
         } else {
           transaction.executeSql(
             query,
