@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from '@rneui/themed';
 import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
+import { StyleSheet } from 'react-native';
 import { config } from '../../pages/Settings/config';
 import DialogForm from '../../pages/Settings/DialogForm';
 import { UIState } from '../../store';
@@ -47,6 +48,7 @@ const SaveDropdownMenu = ({ anchor, visible, setVisible, handleOnSaveAndExit, ha
           }
         }}
         testID="save-dropdown-menu"
+        style={styles.dropdownContainer}
       >
         <MenuItem
           onPress={() => {
@@ -88,5 +90,11 @@ const SaveDropdownMenu = ({ anchor, visible, setVisible, handleOnSaveAndExit, ha
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  dropdownContainer: {
+    marginTop: 50,
+  },
+});
 
 export default SaveDropdownMenu;
