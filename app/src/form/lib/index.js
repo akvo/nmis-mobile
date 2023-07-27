@@ -236,6 +236,12 @@ export const generateValidationSchemaFieldLevel = (currentValue, field) => {
     case 'cascade':
       yupType = Yup.array();
       break;
+    case 'geo':
+      yupType = Yup.object().shape({
+        lat: Yup.string().nullable(),
+        lng: Yup.string().nullable(),
+      });
+      break;
     default:
       yupType = Yup.string();
       break;
