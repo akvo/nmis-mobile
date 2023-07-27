@@ -129,6 +129,7 @@ const Navigation = (props) => {
     if (['Home', 'ManageForm'].includes(currentRoute)) {
       // reset form values
       FormState.update((s) => {
+        s.form = {};
         s.currentValues = {};
         s.questionGroupListCurrentValues = {};
         s.dataPointName = [];

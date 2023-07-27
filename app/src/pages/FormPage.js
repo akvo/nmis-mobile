@@ -6,7 +6,7 @@ import { FormContainer } from '../form';
 import { SaveDialogMenu, SaveDropdownMenu } from '../form/support';
 import { BaseLayout } from '../components';
 import { FormState } from '../store';
-import { crudDataPoints } from '../database/crud';
+import { crudDataPoints, crudForms } from '../database/crud';
 import { UserState } from '../store';
 import { generateDataPointName } from '../form/lib';
 
@@ -17,6 +17,11 @@ const FormPage = ({ navigation, route }) => {
   const [showDialogMenu, setShowDialogMenu] = React.useState(false);
   const [showDropdownMenu, setShowDropdownMenu] = React.useState(false);
   const [showExitConfirmationDialog, setShowExitConfirmationDialog] = React.useState(false);
+
+  // continue saved submission
+  const savedDataPointId = route?.params?.dataPointId;
+  const savedFormId = route?.params?.id;
+  const isNewSubmission = route?.params?.newSubmission;
 
   React.useEffect(() => {
     const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
@@ -32,6 +37,11 @@ const FormPage = ({ navigation, route }) => {
     });
     return () => backHandler.remove();
   }, [onSaveFormParams]);
+
+  React.useEffect(() => {
+    if (!isNewSubmission && savedDataPointId && savedFormId) {
+    }
+  }, [isNewSubmission, savedDataPointId, savedFormId]);
 
   const formJSON = React.useMemo(() => {
     if (!selectedForm?.json) {

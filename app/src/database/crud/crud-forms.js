@@ -12,6 +12,17 @@ const formsQuery = () => {
       }
       return rows._array;
     },
+    selectFormById: async ({ id: formId }) => {
+      const { rows } = await conn.tx(db, query.read('forms', { formId }), [formId]);
+      if (!rows.length) {
+        return {};
+      }
+      const current = rows._array[0];
+      return {
+        ...current,
+        json: JSON.parse(current.json.replace(/''/g, "'")),
+      };
+    },
     selectFormByIdAndVersion: async ({ id: formId, version }) => {
       const { rows } = await conn.tx(db, query.read('forms', { formId, version }), [
         formId,
