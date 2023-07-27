@@ -130,17 +130,20 @@ exports[`AddUserPage renders correctly 1`] = `
           }
         }
       >
-        <Text
-          accessibilityRole="text"
-          style={
-            {
-              "color": "#242424",
-              "fontSize": 18,
+        <View>
+          <Text
+            accessibilityRole="text"
+            style={
+              {
+                "color": "#242424",
+                "fontSize": 18,
+              }
             }
-          }
-        >
-          Create New Profile
-        </Text>
+            testID="page-title"
+          >
+            Create New Profile
+          </Text>
+        </View>
       </View>
       <View
         style={

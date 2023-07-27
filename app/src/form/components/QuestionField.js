@@ -39,7 +39,10 @@ const QuestionField = ({ keyform, field: questionField, setFieldValue, values, v
     helpers.setTouched({ [field.name]: true });
     FormState.update((s) => {
       s.currentValues = { ...s.currentValues, [id]: value };
-      if (questionField?.meta) {
+    });
+
+    if (questionField?.meta) {
+      FormState.update((s) => {
         s.dataPointName = s.dataPointName.map((dp) =>
           dp.id.toString() === id.toString()
             ? {
@@ -48,8 +51,8 @@ const QuestionField = ({ keyform, field: questionField, setFieldValue, values, v
               }
             : dp,
         );
-      }
-    });
+      });
+    }
     setFieldValue(id, value);
   };
 

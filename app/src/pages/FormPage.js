@@ -8,9 +8,10 @@ import { BaseLayout } from '../components';
 import { FormState } from '../store';
 import { crudDataPoints } from '../database/crud';
 import { UserState } from '../store';
+import { generateDataPointName } from '../form/lib';
 
 const FormPage = ({ navigation, route }) => {
-  const selectedForm = FormState.useState((s) => s.form);
+  const { form: selectedForm, dataPointName } = FormState.useState((s) => s);
   const userId = UserState.useState((s) => s.id);
   const [onSaveFormParams, setOnSaveFormParams] = React.useState({});
   const [showDialogMenu, setShowDialogMenu] = React.useState(false);
@@ -38,6 +39,8 @@ const FormPage = ({ navigation, route }) => {
     }
     return JSON.parse(selectedForm.json.replace(/''/g, "'"));
   }, [selectedForm]);
+
+  const { dpName: subTitleText } = generateDataPointName(dataPointName);
 
   const onSaveCallback = React.useCallback((values, refreshForm) => {
     const state = { values, refreshForm };
@@ -122,6 +125,7 @@ const FormPage = ({ navigation, route }) => {
   return (
     <BaseLayout
       title={route?.params?.name}
+      subTitle={subTitleText}
       leftComponent={
         <Button type="clear" onPress={handleOnPressArrowBackButton} testID="arrow-back-button">
           <Icon name="arrow-back" size={18} />

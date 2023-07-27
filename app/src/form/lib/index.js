@@ -257,5 +257,5 @@ export const generateDataPointName = (dataPointNameValues) => {
     .map((x) => x.value)
     .join(' - ');
   const dpGeo = dataPointNameValues.find((d) => d.type === 'geo')?.value || null;
-  return { dpName: dpName === '' ? 'Untitled' : dpName, dpGeo };
+  return { dpName, dpGeo };
 };
