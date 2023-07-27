@@ -33,7 +33,7 @@ const dataPoints = [
   {
     id: 3,
     form: 123,
-    user: 1,
+    user: 2,
     name: 'Data point 3 name',
     submitted: 0,
     duration: 2.7,
@@ -114,6 +114,24 @@ describe('crudDataPoints function', () => {
     const result = await crudDataPoints.selectDataPointsByFormAndSubmitted({
       form: 123,
       submitted: 0,
+    });
+    expect(result).toEqual(mockData);
+  });
+
+  test('selectDataPointsByFormAndSubmitted should return the correct list of saved data points filtered by user id', async () => {
+    const mockData = dataPoints.filter((d) => d.form === 123 && !d.submitted && d.user === 2);
+    const mockSelectSql = jest.fn((query, params, successCallback) => {
+      successCallback(null, { rows: { length: mockData.length, _array: mockData } });
+    });
+    db.transaction.mockImplementation((transactionFunction) => {
+      transactionFunction({
+        executeSql: mockSelectSql,
+      });
+    });
+    const result = await crudDataPoints.selectDataPointsByFormAndSubmitted({
+      form: 123,
+      submitted: 0,
+      user: 2
     });
     expect(result).toEqual(mockData);
   });

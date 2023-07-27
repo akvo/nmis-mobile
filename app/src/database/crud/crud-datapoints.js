@@ -17,11 +17,10 @@ const selectDataPointById = async ({ id }) => {
 const dataPointsQuery = () => {
   return {
     selectDataPointById,
-    selectDataPointsByFormAndSubmitted: async ({ form, submitted }) => {
-      const { rows } = await conn.tx(db, query.read('datapoints', { form, submitted }), [
-        form,
-        submitted,
-      ]);
+    selectDataPointsByFormAndSubmitted: async ({ form, submitted, user }) => {
+      const columns = user ? { form, submitted, user } : { form, submitted };
+      const params = user ? [form, submitted, user] : [form, submitted];
+      const { rows } = await conn.tx(db, query.read('datapoints', { ...columns }), [...params]);
       if (!rows.length) {
         return [];
       }
