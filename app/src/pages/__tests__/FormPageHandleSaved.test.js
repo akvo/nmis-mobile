@@ -7,7 +7,7 @@ import crudDataPoints from '../../database/crud/crud-datapoints';
 
 const mockFormContainer = jest.fn();
 const mockRoute = {
-  params: { id: 1, name: 'Form Name' },
+  params: { id: 1, name: 'Form Name', dataPointId: 1, newSubmission: true },
 };
 const mockNavigation = {
   navigate: jest.fn(),
@@ -344,10 +344,7 @@ describe('FormPage handleOnSaveForm', () => {
         user: null,
       });
       expect(ToastAndroid.show).toHaveBeenCalledTimes(1);
-      expect(mockNavigation.navigate).toHaveBeenCalledWith('ManageForm', {
-        id: 1,
-        name: 'Form Name',
-      });
+      expect(mockNavigation.navigate).toHaveBeenCalledWith('ManageForm', mockRoute.params);
     });
   });
 

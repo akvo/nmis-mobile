@@ -30,6 +30,7 @@ const FormPage = ({ navigation, route }) => {
   const savedDataPointId = route?.params?.dataPointId;
   const isNewSubmission = route?.params?.newSubmission;
   const [initialValues, setInitialValues] = React.useState({});
+  const [currentDataPoint, setCurrentDataPoint] = React.useState({});
 
   React.useEffect(() => {
     const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
@@ -47,7 +48,7 @@ const FormPage = ({ navigation, route }) => {
   }, [onSaveFormParams]);
 
   React.useEffect(() => {
-    if (isNewSubmission) {
+    if (!isNewSubmission) {
       fetchSavedSubmission();
     }
     fetchForm();
@@ -61,9 +62,10 @@ const FormPage = ({ navigation, route }) => {
   };
 
   const fetchSavedSubmission = async () => {
-    const currentDataPoint = await crudDataPoints.selectDataPointById({ id: savedDataPointId });
-    if (currentDataPoint?.json) {
-      setInitialValues(currentDataPoint.json);
+    const dpValue = await crudDataPoints.selectDataPointById({ id: savedDataPointId });
+    setCurrentDataPoint(dpValue);
+    if (dpValue?.json?.length) {
+      setInitialValues(dpValue.json[0]);
     }
   };
 
@@ -104,7 +106,10 @@ const FormPage = ({ navigation, route }) => {
         duration: 0, // TODO:: set duration
         json: values?.answers || [],
       };
-      await crudDataPoints.saveDataPoint(saveData);
+      const dbCall = isNewSubmission
+        ? crudDataPoints.saveDataPoint
+        : crudDataPoints.updateDataPoint;
+      await dbCall({ ...currentDataPoint, ...saveData });
       if (Platform.OS === 'android') {
         ToastAndroid.show(`Data point ${values?.name} saved`, ToastAndroid.LONG);
       }
@@ -143,7 +148,10 @@ const FormPage = ({ navigation, route }) => {
         duration: 0, // TODO:: set duration
         json: values.answers,
       };
-      await crudDataPoints.saveDataPoint(submitData);
+      const dbCall = isNewSubmission
+        ? crudDataPoints.saveDataPoint
+        : crudDataPoints.updateDataPoint;
+      await dbCall({ ...currentDataPoint, ...submitData });
       if (Platform.OS === 'android') {
         ToastAndroid.show(`Data point ${values.name} submitted`, ToastAndroid.LONG);
       }
