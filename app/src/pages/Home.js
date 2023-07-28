@@ -2,14 +2,18 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Button } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { BaseLayout } from '../components';
-import { FormState, UserState } from '../store';
+import { FormState, UserState, UIState } from '../store';
 import { crudForms } from '../database/crud';
+import { i18n } from '../lib';
 
 const Home = ({ navigation }) => {
   const [search, setSearch] = useState(null);
   const [data, setData] = useState([]);
+  const activeLang = UIState.useState((s) => s.lang);
+  const trans = i18n.text(activeLang);
+
   const currentUserName = UserState.useState((s) => s.name);
-  const subTitleText = currentUserName ? `User: ${currentUserName}` : null;
+  const subTitleText = currentUserName ? `${trans.userLabel} ${currentUserName}` : null;
 
   const goToManageForm = (id) => {
     const findData = data.find((d) => d?.id === id);
@@ -29,7 +33,12 @@ const Home = ({ navigation }) => {
     crudForms.selectLatestFormVersion().then((results) => {
       const forms = results.map((r) => ({
         ...r,
-        subtitles: [`Version: ${r.version}`, 'Submitted: 20', 'Draft: 1', 'Synced: 11'],
+        subtitles: [
+          `${trans.versionLabel}${r.version}`,
+          `${trans.submittedLabel} 20`,
+          `${trans.draftLabel}1`,
+          `${trans.syncLabel}11`,
+        ],
       }));
       setData(forms);
     });
@@ -43,11 +52,11 @@ const Home = ({ navigation }) => {
 
   return (
     <BaseLayout
-      title="Form Lists"
+      title={trans.homePageTitle}
       subTitle={subTitleText}
       search={{
         show: true,
-        placeholder: 'Search form',
+        placeholder: trans.homeSearch,
         value: search,
         action: setSearch,
       }}
