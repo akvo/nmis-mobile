@@ -31,7 +31,10 @@ const FormData = ({ navigation, route }) => {
     results = results.map((res) => {
       const createdAt = new Date(res.createdAt).toLocaleDateString('en-GB');
       const syncedAt = res.syncedAt ? new Date(res.syncedAt).toLocaleDateString('en-GB') : '-';
-      let subtitlesTemp = [`${trans.createdLabel}${createdAt}`, `${trans.surveyDurationLabel}${res.duration}`];
+      let subtitlesTemp = [
+        `${trans.createdLabel}${createdAt}`,
+        `${trans.surveyDurationLabel}${res.duration}`,
+      ];
       if (showSubmitted) {
         subtitlesTemp = [...subtitlesTemp, `${trans.syncLabel}${syncedAt}`];
       }
