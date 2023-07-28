@@ -34,8 +34,8 @@ describe('cascades', () => {
 
   it('should download the file if it does not exist', async () => {
     // Call the function with test URLs
-    const downloadUrl = 'https://example.com/sqlite/file.sqlite';
-    const fileUrl = '/sqlite/file.sqlite';
+    const downloadUrl = 'https://example.com/api/v1/device/sqlite/file.sqlite';
+    const fileUrl = '/device/sqlite/file.sqlite';
     act(() => {
       cascades.download(downloadUrl, fileUrl);
     });
