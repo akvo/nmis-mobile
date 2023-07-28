@@ -4,6 +4,8 @@ import { FieldLabel } from '../support';
 import { styles } from '../styles';
 import { CheckBox } from '@rneui/themed';
 import { Dropdown } from 'react-native-element-dropdown';
+import { UIState } from '../../store';
+import { i18n } from '../../lib';
 
 const TypeOption = ({
   onChange,
@@ -19,6 +21,8 @@ const TypeOption = ({
   const isRadioGroup = React.useMemo(() => {
     return option.length <= 3;
   }, [option]);
+  const activeLang = UIState.useState((s) => s.lang);
+  const trans = i18n.text(activeLang);
 
   return (
     <View style={styles.optionContainer}>
@@ -54,7 +58,7 @@ const TypeOption = ({
           maxHeight={300}
           labelField="label"
           valueField="name"
-          searchPlaceholder="Search..."
+          searchPlaceholder={trans.searchPlaceholder}
           value={values?.[id]?.[0] || []}
           onChange={({ name: value }) => {
             if (onChange) {
@@ -62,6 +66,7 @@ const TypeOption = ({
             }
           }}
           testID="type-option-dropdown"
+          placeholder={trans.selectItem}
         />
       )}
     </View>
