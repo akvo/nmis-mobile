@@ -15,18 +15,17 @@ const checkValuesBeforeCallback = (values) =>
   Object.keys(values)
     .map((key) => {
       let value = values[key];
-      // check empty
-      if (
-        typeof value === 'undefined' ||
-        value === null ||
-        (typeof value === 'string' && value.trim() === '')
-      ) {
-        return false;
+      if (typeof value === 'string') {
+        value = value.trim();
       }
       // check array
       if (value && Array.isArray(value)) {
         const check = value.filter((y) => typeof y !== 'undefined' && (y || isNaN(y)));
         value = check.length ? check : null;
+      }
+      // check empty
+      if (!value && value !== 0) {
+        return false;
       }
       return { [key]: value };
     })
