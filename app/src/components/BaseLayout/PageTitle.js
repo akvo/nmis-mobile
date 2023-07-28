@@ -9,15 +9,7 @@ const BackButton = ({ navigation }) => {
     navigation.goBack();
   };
 
-  const hasPreviousScreen = () => {
-    try {
-      return navigation.canGoBack();
-    } catch {
-      return false;
-    }
-  };
-
-  return hasPreviousScreen ? (
+  return navigation.canGoBack() ? (
     <Button type="clear" onPress={handleGoBackPress} testID="arrow-back-button">
       <Icon name="arrow-back" size={18} />
     </Button>
@@ -50,22 +42,24 @@ const PageTitle = ({
       statusBarProps={{
         backgroundColor: '#171717',
       }}
-      containerStyle={{
-        height: 80,
-      }}
+      containerStyle={styles.container}
       testID="base-layout-page-title"
     >
       {!leftComponent && <BackButton navigation={navigation} />}
-      <View>
-        <Text h4Style={styles.title} testID="page-title" h4>
-          {text}
-        </Text>
-        {subTitle && (
+      {subTitle ? (
+        <View>
+          <Text h4Style={styles.title} testID="page-title" h4>
+            {text}
+          </Text>
           <Text testID="page-subtitle" style={styles.subTitle}>
             {subTitle}
           </Text>
-        )}
-      </View>
+        </View>
+      ) : (
+        <Text h4Style={styles.onlyTitle} testID="page-title" h4>
+          {text}
+        </Text>
+      )}
       {!rightComponent && (
         <Button type="clear" testID="more-options-button" onPress={handleSettingsPress}>
           <Icon name="ellipsis-vertical" size={18} />
@@ -76,7 +70,14 @@ const PageTitle = ({
 };
 
 const styles = StyleSheet.create({
+  container: {
+    minheight: 78,
+  },
   title: {
+    fontSize: 18,
+  },
+  onlyTitle: {
+    paddingTop: 4,
     fontSize: 18,
   },
   subTitle: {

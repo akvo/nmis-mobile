@@ -119,6 +119,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     gap: 8,
+    marginBottom: 18,
   },
   questionGroupListContainer: {
     paddingVertical: 24,
