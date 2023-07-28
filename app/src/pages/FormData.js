@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { BaseLayout } from '../components';
-import { crudDataPoints } from '../database/crud';
 import { Button } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/Ionicons';
+
+import { BaseLayout } from '../components';
+import { crudDataPoints } from '../database/crud';
+import { i18n } from '../lib';
+import { UIState } from '../store';
 
 const FormData = ({ navigation, route }) => {
   const formId = route?.params?.id;
   const showSubmitted = route?.params?.showSubmitted || false;
+  const activeLang = UIState.useState((s) => s.lang);
+  const trans = i18n.text(activeLang);
+
   const [data, setData] = useState([]);
 
   const goBack = () => {
@@ -25,9 +31,9 @@ const FormData = ({ navigation, route }) => {
       return {
         ...res,
         subtitles: [
-          `Created: ${createdAt}`,
-          `Survey Duration: ${res.duration}`,
-          `Sync: ${syncedAt}`,
+          `${trans.createdLabel}${createdAt}`,
+          `${trans.surveyDurationLabel}${res.duration}`,
+          `${trans.syncLabel}${syncedAt}`,
         ],
       };
     });
@@ -43,7 +49,7 @@ const FormData = ({ navigation, route }) => {
       title={route?.params?.name}
       search={{
         show: true,
-        placeholder: 'Search datapoint',
+        placeholder: trans.formDataSearch,
       }}
       leftComponent={
         <Button type="clear" onPress={goBack} testID="arrow-back-button">
