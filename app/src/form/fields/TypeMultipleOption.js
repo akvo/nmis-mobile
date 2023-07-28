@@ -4,6 +4,8 @@ import { FieldLabel } from '../support';
 import { styles } from '../styles';
 import { CheckBox } from '@rneui/themed';
 import { MultiSelect } from 'react-native-element-dropdown';
+import { UIState } from '../../store';
+import { i18n } from '../../lib';
 
 const TypeMultipleOption = ({
   onChange,
@@ -19,6 +21,8 @@ const TypeMultipleOption = ({
   const isCheckBox = React.useMemo(() => {
     return option.length <= 3;
   }, [option]);
+  const activeLang = UIState.useState((s) => s.lang);
+  const trans = i18n.text(activeLang);
 
   return (
     <View style={styles.multipleOptionContainer}>
@@ -54,7 +58,8 @@ const TypeMultipleOption = ({
           maxHeight={300}
           labelField="label"
           valueField="name"
-          searchPlaceholder="Search..."
+          searchPlaceholder={trans.searchPlaceholder}
+          placeholder={trans.selectItem}
           value={values?.[id] || []}
           onChange={(value) => {
             if (onChange) {
