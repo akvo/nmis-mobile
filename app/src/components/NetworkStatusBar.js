@@ -3,14 +3,17 @@ import { View, Text, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import { UIState } from '../store';
+import { i18n } from '../lib';
 
 const NetworkStatusBar = () => {
-  const isOnline = UIState.useState((s) => s.online);
+  const { online: isOnline, lang: activeLang } = UIState.useState((s) => s);
+  const trans = i18n.text(activeLang);
+
   return isOnline ? null : (
     <View style={styles.container}>
       <Icon name="cloud-offline" testID="offline-icon" style={styles.icon} />
       <Text style={styles.text} testID="offline-text">
-        You're offline...
+        {trans.offlineText}
       </Text>
     </View>
   );
