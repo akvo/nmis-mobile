@@ -83,7 +83,7 @@ describe('FormDataPage', () => {
     await waitFor(() => {
       expect(wrapper.getByText('Form Name')).toBeTruthy();
       expect(wrapper.getByText('Created: 18/07/2023')).toBeTruthy();
-      expect(wrapper.getByText('Survey Duration: 30 minutes')).toBeTruthy();
+      expect(wrapper.getByText('Survey duration: 30 minutes')).toBeTruthy();
       expect(wrapper.queryByText('Sync: -')).toBeFalsy();
     });
   });
