@@ -1,9 +1,9 @@
 import React from 'react';
-import renderer from 'react-test-renderer';
-import { render, waitFor } from '@testing-library/react-native';
+import { Platform, ToastAndroid } from 'react-native';
+import { render, fireEvent, waitFor } from '@testing-library/react-native';
 jest.useFakeTimers();
 import FormPage from '../FormPage';
-import { FormState } from 'store';
+import crudDataPoints from '../../database/crud/crud-datapoints';
 
 const mockFormContainer = jest.fn();
 const mockRoute = {
@@ -259,30 +259,66 @@ jest.mock('../../assets/administrations.db', () => {
   return 'data';
 });
 
-describe('FormPage component', () => {
-  test('should render component correctly', () => {
-    const tree = renderer.create(<FormPage navigation={mockNavigation} />).toJSON();
-    expect(tree).toMatchSnapshot();
-  });
-
-  test('should render the FormPage with the correct form title', () => {
-    const wrapper = render(<FormPage navigation={mockNavigation} route={mockRoute} />);
-    expect(wrapper.getByText('Form Name')).toBeDefined();
-  });
-
-  test('should show the correct form content based on formJSON', async () => {
+describe('FormPage handleOnSubmitForm', () => {
+  test('should call handleOnSubmitForm with the correct values when the form is submitted', async () => {
+    Platform.OS = 'android';
+    ToastAndroid.show = jest.fn();
     jest.spyOn(React, 'useMemo').mockReturnValue(exampleTestForm);
-    FormState.useState.mockReturnValue({
-      form: exampleTestForm,
-    });
 
     const wrapper = render(<FormPage navigation={mockNavigation} route={mockRoute} />);
-    const { form: mockStateForm } = FormState.useState((s) => s);
+
+    const submitButton = wrapper.getByTestId('mock-submit-button');
+    fireEvent.press(submitButton);
 
     await waitFor(() => {
-      expect(mockFormContainer.mock.calls[0]).toEqual([exampleTestForm, {}, expect.any(Function)]);
-      expect(mockStateForm).toEqual(exampleTestForm);
-      expect(wrapper.getByText('Form Name')).toBeDefined();
+      // save datapoint to database
+      expect(crudDataPoints.saveDataPoint).toHaveBeenCalledWith({
+        duration: 0,
+        form: undefined,
+        json: [
+          {
+            1: 'John',
+            2: new Date('01-01-1992'),
+            3: '31',
+            4: ['Male'],
+            5: ['Bachelor'],
+            6: ['Traveling'],
+            7: ['Fried Rice'],
+          },
+        ],
+        name: 'John',
+        submitted: 1,
+        user: null,
+      });
+
+      expect(ToastAndroid.show).toHaveBeenCalledTimes(1);
+      // call refreshForm
+      expect(mockRefreshForm).toHaveBeenCalledTimes(1);
+      expect(mockNavigation.navigate).toHaveBeenCalledWith('ManageForm', {
+        id: 1,
+        name: 'Form Name',
+      });
+    });
+  });
+
+  test('should show ToastAndroid if handleOnSubmitForm throw an error', async () => {
+    Platform.OS = 'android';
+    ToastAndroid.show = jest.fn();
+    jest.spyOn(React, 'useMemo').mockReturnValue(exampleTestForm);
+    const consoleErrorSpy = jest.spyOn(console, 'error');
+    crudDataPoints.saveDataPoint.mockImplementation(() => Promise.reject('Error'));
+
+    const wrapper = render(<FormPage navigation={mockNavigation} route={mockRoute} />);
+
+    const submitButton = wrapper.getByTestId('mock-submit-button');
+    fireEvent.press(submitButton);
+
+    await waitFor(() => {
+      expect(crudDataPoints.saveDataPoint).toHaveBeenCalledTimes(1);
+      expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
+      expect(ToastAndroid.show).toHaveBeenCalledTimes(1);
+      expect(mockRefreshForm).not.toHaveBeenCalled();
+      expect(mockNavigation.navigate).not.toHaveBeenCalled();
     });
   });
 });

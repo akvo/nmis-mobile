@@ -11,7 +11,28 @@ import { FormState, UIState } from '../store';
 // TODO:: Allow other not supported yet
 // TODO:: Repeat group not supported yet
 
-const FormContainer = ({ forms, initialValues = {}, onSubmit }) => {
+const checkValuesBeforeCallback = (values) =>
+  Object.keys(values)
+    .map((key) => {
+      let value = values[key];
+      if (typeof value === 'string') {
+        value = value.trim();
+      }
+      // check array
+      if (value && Array.isArray(value)) {
+        const check = value.filter((y) => typeof y !== 'undefined' && (y || isNaN(y)));
+        value = check.length ? check : null;
+      }
+      // check empty
+      if (!value && value !== 0) {
+        return false;
+      }
+      return { [key]: value };
+    })
+    .filter((v) => v)
+    .reduce((res, current) => ({ ...res, ...current }), {});
+
+const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave }) => {
   const formRef = useRef();
   const [activeGroup, setActiveGroup] = useState(0);
   const [showQuestionGroupList, setShowQuestionGroupList] = useState(false);
@@ -25,12 +46,33 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit }) => {
       const meta = forms.question_group
         .filter((qg) => !qg?.repeatable)
         .flatMap((qg) => qg.question.filter((q) => q?.meta))
-        .map((q) => ({ id: q.id, type: q.type, value: initialValues?.[q.id] || null }));
+        .map((q) => ({ id: q.id, type: q.type, value: null }));
       FormState.update((s) => {
         s.dataPointName = meta;
       });
     }
-  }, [forms, initialValues, dataPointName]);
+  }, [forms, dataPointName]);
+
+  useEffect(() => {
+    const checkDataPointName = dataPointName.filter((x) => !x.value);
+    if (Object.keys(initialValues).length && checkDataPointName.length) {
+      FormState.update((s) => {
+        s.dataPointName = dataPointName.map((x) => ({ ...x, value: initialValues?.[x.id] }));
+      });
+    }
+  }, [initialValues, dataPointName]);
+
+  useEffect(() => {
+    if (onSave) {
+      const results = checkValuesBeforeCallback(currentValues);
+      if (!Object.keys(results).length) {
+        return onSave(null, refreshForm);
+      }
+      const { dpName, dpGeo } = generateDataPointName(dataPointName);
+      const values = { name: dpName, geo: dpGeo, answers: [results] };
+      return onSave(values, refreshForm);
+    }
+  }, [currentValues, onSave]);
 
   const formDefinition = useMemo(() => {
     return transformForm(forms, activeLang);
@@ -61,26 +103,7 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit }) => {
   };
 
   const handleOnSubmitForm = (values) => {
-    const results = Object.keys(values)
-      .map((key) => {
-        let value = values[key];
-        // check empty
-        if (
-          typeof value === 'undefined' ||
-          value === null ||
-          (typeof value === 'string' && value.trim() === '')
-        ) {
-          return false;
-        }
-        // check array
-        if (value && Array.isArray(value)) {
-          const check = value.filter((y) => typeof y !== 'undefined' && (y || isNaN(y)));
-          value = check.length ? check : null;
-        }
-        return { [key]: value };
-      })
-      .filter((v) => v)
-      .reduce((res, current) => ({ ...res, ...current }), {});
+    const results = checkValuesBeforeCallback(values);
     if (onSubmit) {
       const { dpName, dpGeo } = generateDataPointName(dataPointName);
       onSubmit({ name: dpName, geo: dpGeo, answers: [results] }, refreshForm);

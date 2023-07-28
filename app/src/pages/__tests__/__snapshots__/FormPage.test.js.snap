@@ -20,5 +20,24 @@ exports[`FormPage component should render component correctly 1`] = `
       Submit
     </button>
   </mock-FormContainer>
+  <Modal
+    hardwareAccelerated={false}
+    onRequestClose={[Function]}
+    testID="save-dialog-menu"
+    transparent={true}
+    visible={false}
+  />
+  <Modal
+    hardwareAccelerated={false}
+    onRequestClose={[Function]}
+    style={
+      {
+        "width": "100%",
+      }
+    }
+    testID="exit-confirmation-dialog"
+    transparent={true}
+    visible={false}
+  />
 </View>
 `;
