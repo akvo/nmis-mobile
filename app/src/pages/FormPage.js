@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   StyleSheet,
   View,
+  AppState,
 } from 'react-native';
 import { Button, Dialog, Text } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -13,9 +14,9 @@ import { FormContainer } from '../form';
 import { SaveDialogMenu, SaveDropdownMenu } from '../form/support';
 import { BaseLayout } from '../components';
 import { FormState } from '../store';
-import { crudDataPoints, crudForms } from '../database/crud';
+import { crudDataPoints } from '../database/crud';
 import { UserState } from '../store';
-import { generateDataPointName } from '../form/lib';
+import { generateDataPointName, timer } from '../form/lib';
 
 const FormPage = ({ navigation, route }) => {
   const { form: selectedForm, dataPointName } = FormState.useState((s) => s);

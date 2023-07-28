@@ -275,3 +275,14 @@ export const generateDataPointName = (dataPointNameValues) => {
   }
   return { dpName, dpGeo };
 };
+
+export const timer = () => {
+  let counter = 0;
+  const timerInterval = setInterval(() => {
+    counter++;
+  }, 1000);
+  return {
+    counter: counter,
+    clearTimer: () => clearInterval(timerInterval),
+  };
+};
