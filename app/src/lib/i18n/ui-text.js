@@ -21,7 +21,7 @@ const uiText = {
     getStartedTitle1: 'Get Started',
     getStartedTitle2: 'collecting data the',
     getStartedTitle3: 'smart way',
-    getStartedInputServer: 'Input server URL',
+    getStartedInputServer: 'Input Server URL',
     selectItem: 'Select item',
     success: 'Success!',
     errorSaveToDB: 'Unable to save the data to the database',
