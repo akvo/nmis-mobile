@@ -64,7 +64,7 @@ describe('AuthFormPage', () => {
     expect(api.post).toHaveBeenCalledWith('/auth', expect.any(FormData), {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
-    await waitFor(() => expect(getByText('Invalid enumerator ID')).toBeDefined());
+    await waitFor(() => expect(getByText('Invalid enumerator passcode')).toBeDefined());
   });
 
   it('should navigate to add user if no user defined after auth process', async () => {

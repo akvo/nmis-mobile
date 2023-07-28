@@ -1,9 +1,9 @@
 import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { View, StyleSheet, Platform, ToastAndroid } from 'react-native';
-import { Input, CheckBox, Button, Text, Dialog } from '@rneui/themed';
+import { Input, Button, Text, Dialog } from '@rneui/themed';
 import { CenterLayout, Image } from '../components';
-import { api, cascades } from '../lib';
+import { api, cascades, i18n } from '../lib';
 import { AuthState, UserState, UIState } from '../store';
 import { crudSessions, crudForms, crudUsers, crudConfig } from '../database/crud';
 
@@ -17,11 +17,12 @@ const ToggleEye = ({ hidden, onPress }) => {
 };
 
 const AuthForm = ({ navigation }) => {
-  const isNetworkAvailable = UIState.useState((s) => s.online);
+  const { online: isNetworkAvailable, lang: activeLang } = UIState.useState((s) => s);
   const [passcode, setPasscode] = React.useState(null);
   const [hidden, setHidden] = React.useState(true);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(null);
+  const trans = i18n.text(activeLang);
 
   const toggleHidden = () => setHidden(!hidden);
   const goTo = (page) => navigation.navigate(page);
@@ -32,7 +33,7 @@ const AuthForm = ({ navigation }) => {
     // check connection
     if (!isNetworkAvailable) {
       if (Platform.OS === 'android') {
-        ToastAndroid.show('No connection', ToastAndroid.LONG);
+        ToastAndroid.show(trans.authErrorNoConn, ToastAndroid.LONG);
       }
       return false;
     }
@@ -97,8 +98,8 @@ const AuthForm = ({ navigation }) => {
       })
       .catch((err) => {
         const { status: errStatus } = err?.response;
-        if (errStatus === 401) {
-          setError('Invalid enumerator ID');
+        if ([400, 401].includes(errStatus)) {
+          setError(trans.authErrorPasscode);
         } else {
           setError(err?.message);
         }
@@ -106,14 +107,14 @@ const AuthForm = ({ navigation }) => {
       .finally(() => setLoading(false));
   };
 
-  const titles = ['Use the Enumerator ID', 'provided to you by your', 'project admin'];
+  const titles = [trans.authTitle1, trans.authTitle2, trans.authTitle3];
   return (
     <CenterLayout>
       <Image />
       <CenterLayout.Titles items={titles} />
       <View style={styles.container}>
         <Input
-          placeholder="Enumerator ID"
+          placeholder={trans.authInputPasscode}
           secureTextEntry={hidden}
           rightIcon={<ToggleEye hidden={hidden} onPress={toggleHidden} />}
           testID="auth-password-field"
@@ -133,12 +134,12 @@ const AuthForm = ({ navigation }) => {
         onPress={handleOnPressLogin}
         testID="auth-login-button"
       >
-        LOG IN
+        {trans.buttonLogin}
       </Button>
       {/* Loading dialog */}
       <Dialog isVisible={loading} style={styles.dialogLoadingContainer}>
         <Dialog.Loading />
-        <Text style={styles.dialogLoadingText}>Fetching data</Text>
+        <Text style={styles.dialogLoadingText}>{trans.fetchingData}</Text>
       </Dialog>
     </CenterLayout>
   );
