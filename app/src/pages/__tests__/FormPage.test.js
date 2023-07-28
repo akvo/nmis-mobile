@@ -17,17 +17,15 @@ const mockNavigation = {
 const mockValues = {
   name: 'John',
   geo: null,
-  answers: [
-    {
-      1: 'John',
-      2: new Date('01-01-1992'),
-      3: '31',
-      4: ['Male'],
-      5: ['Bachelor'],
-      6: ['Traveling'],
-      7: ['Fried Rice'],
-    },
-  ],
+  answers: {
+    1: 'John',
+    2: new Date('01-01-1992'),
+    3: '31',
+    4: ['Male'],
+    5: ['Bachelor'],
+    6: ['Traveling'],
+    7: ['Fried Rice'],
+  },
 };
 const mockRefreshForm = jest.fn();
 

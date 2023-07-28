@@ -33,8 +33,6 @@ const FormPage = ({ navigation, route }) => {
   const [currentDataPoint, setCurrentDataPoint] = React.useState({});
   const [loading, setLoading] = React.useState(false);
 
-  console.log(currentDataPoint);
-
   React.useEffect(() => {
     const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
       const values = onSaveFormParams?.values;
@@ -60,8 +58,8 @@ const FormPage = ({ navigation, route }) => {
     setLoading(true);
     const dpValue = await crudDataPoints.selectDataPointById({ id: savedDataPointId });
     setCurrentDataPoint(dpValue);
-    if (dpValue?.json?.length) {
-      setInitialValues(dpValue.json[0]);
+    if (dpValue?.json && Object.keys(dpValue.json)?.length) {
+      setInitialValues(dpValue.json);
     }
     setLoading(false);
   }, [savedDataPointId]);
@@ -102,7 +100,7 @@ const FormPage = ({ navigation, route }) => {
         geo: values?.geo || null,
         submitted: 0,
         duration: 0, // TODO:: set duration
-        json: values?.answers || [],
+        json: values?.answers || {},
       };
       const dbCall = isNewSubmission
         ? crudDataPoints.saveDataPoint
@@ -138,6 +136,24 @@ const FormPage = ({ navigation, route }) => {
 
   const handleOnSubmitForm = async (values, refreshForm) => {
     try {
+      // TODO:: Remove this, need to handle in Type Question component (geo)
+      const answers = {};
+      formJSON.question_group
+        .flatMap((qg) => qg.question)
+        .forEach((q) => {
+          let val = values.answers?.[q.id];
+          if (!val && val !== 0) {
+            return;
+          }
+          if (q.type === 'cascade') {
+            val = val.slice(-1)[0];
+          }
+          if (q.type === 'geo') {
+            val = [val.lat, val.lng];
+          }
+          answers[q.id] = val;
+        });
+      // TODO:: submittedAt still null
       const submitData = {
         form: currentFormId,
         user: userId,
@@ -145,8 +161,9 @@ const FormPage = ({ navigation, route }) => {
         geo: values.geo,
         submitted: 1,
         duration: 0, // TODO:: set duration
-        json: values.answers,
+        json: answers,
       };
+
       const dbCall = isNewSubmission
         ? crudDataPoints.saveDataPoint
         : crudDataPoints.updateDataPoint;

@@ -69,7 +69,7 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave }) => {
         return onSave(null, refreshForm);
       }
       const { dpName, dpGeo } = generateDataPointName(dataPointName);
-      const values = { name: dpName, geo: dpGeo, answers: [results] };
+      const values = { name: dpName, geo: dpGeo, answers: results };
       return onSave(values, refreshForm);
     }
   }, [currentValues, onSave]);
@@ -106,7 +106,7 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave }) => {
     const results = checkValuesBeforeCallback(values);
     if (onSubmit) {
       const { dpName, dpGeo } = generateDataPointName(dataPointName);
-      onSubmit({ name: dpName, geo: dpGeo, answers: [results] }, refreshForm);
+      onSubmit({ name: dpName, geo: dpGeo, answers: results }, refreshForm);
     }
   };
 

@@ -102,6 +102,7 @@ const syncFormSubmission = async () => {
         geo: geo,
         answers: JSON.parse(d.json.replace(/''/g, "'")),
       };
+      console.info('[syncFormSubmision] SyncData:', syncData);
       // sync data point
       const res = await api.post('/sync', syncData);
       console.info('[syncFormSubmision] post sync data point:', res.status, res.data);
