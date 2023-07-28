@@ -88,7 +88,7 @@ describe('crudForms function', () => {
       const mockResult = mockData[0];
       expect(result).toEqual({
         ...mockResult,
-        json: JSON.parse(mockResult.json),
+        json: mockResult.json,
       });
     });
   });

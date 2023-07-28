@@ -17,11 +17,7 @@ const formsQuery = () => {
       if (!rows.length) {
         return {};
       }
-      const current = rows._array[0];
-      return {
-        ...current,
-        json: JSON.parse(current.json.replace(/''/g, "'")),
-      };
+      return rows._array[0];
     },
     selectFormByIdAndVersion: async ({ id: formId, version }) => {
       const { rows } = await conn.tx(db, query.read('forms', { formId, version }), [

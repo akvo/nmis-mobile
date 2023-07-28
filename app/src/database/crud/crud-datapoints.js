@@ -38,12 +38,13 @@ const dataPointsQuery = () => {
       }
       return rows._array;
     },
-    saveDataPoint: async ({ form, user, name, submitted, duration, json }) => {
+    saveDataPoint: async ({ form, user, name, geo, submitted, duration, json }) => {
       const submittedAt = submitted ? { submittedAt: new Date().toISOString() } : {};
       const insertQuery = query.insert('datapoints', {
         form,
         user,
         name,
+        geo,
         submitted,
         duration,
         createdAt: new Date().toISOString(),
@@ -52,12 +53,22 @@ const dataPointsQuery = () => {
       });
       return await conn.tx(db, insertQuery, []);
     },
-    updateDataPoint: async ({ id, name, submitted, duration, submittedAt, syncedAt, json }) => {
+    updateDataPoint: async ({
+      id,
+      name,
+      geo,
+      submitted,
+      duration,
+      submittedAt,
+      syncedAt,
+      json,
+    }) => {
       const updateQuery = query.update(
         'datapoints',
         { id },
         {
           name,
+          geo,
           submitted,
           duration,
           submittedAt,
