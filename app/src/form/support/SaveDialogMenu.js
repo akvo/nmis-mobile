@@ -1,8 +1,13 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
 import { Dialog } from '@rneui/themed';
+import { UIState } from '../../store';
+import { i18n } from '../../lib';
 
 const SaveDialogMenu = ({ visible, setVisible, handleOnSaveAndExit, handleOnExit }) => {
+  const activeLang = UIState.useState((s) => s.lang);
+  const trans = i18n.text(activeLang);
+
   return (
     <Dialog
       visible={visible}
@@ -16,7 +21,7 @@ const SaveDialogMenu = ({ visible, setVisible, handleOnSaveAndExit, handleOnExit
     >
       <Dialog.Button
         type="outline"
-        title="Save and Exit"
+        title={trans.buttonSaveNExit}
         testID="save-and-exit-button"
         onPress={() => {
           if (handleOnSaveAndExit) {
@@ -26,7 +31,7 @@ const SaveDialogMenu = ({ visible, setVisible, handleOnSaveAndExit, handleOnExit
       />
       <Dialog.Button
         type="outline"
-        title="Exit without Saving"
+        title={trans.buttonExitWoSaving}
         testID="exit-without-saving-button"
         buttonStyle={styles.buttonDanger}
         titleStyle={styles.textDanger}
