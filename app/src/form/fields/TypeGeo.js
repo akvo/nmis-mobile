@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { Text, Button } from '@rneui/themed';
 import { useNavigation } from '@react-navigation/native';
 
-import { MapState } from '../../store';
+import { MapState, UIState } from '../../store';
 import { FieldLabel } from '../support';
 import { styles } from '../styles';
 import { loc } from '../../lib';
@@ -12,35 +12,61 @@ const TypeGeo = ({ onChange, values, keyform, id, name, tooltip, required, requi
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const { latitude, longitude } = MapState.useState((s) => s);
+  const isOnline = UIState.useState((s) => s.online);
 
   const navigation = useNavigation();
 
   const handleOpenMapPress = () => {
     const geoVal = values?.[id];
-    let params = location?.coords;
-    if (geoVal) {
-      const [lat, lng] = geoVal?.split('|');
-      params = { latitude: lat, longitude: lng };
-    }
+    const params =
+      geoVal?.lat && geoVal?.lng
+        ? { latitude: geoVal.lat, longitude: geoVal.lng }
+        : location?.coords;
+
     navigation.navigate('MapView', params);
   };
   useEffect(() => {
-    try {
-      if (location === null) {
-        loc.getCurrentLocation(
-          (res) => {
-            setLocation(res);
-          },
-          (err) => {
-            setLocation({});
-            setErrorMsg(err.message);
-          },
-        );
-      }
-    } catch {
-      setLocation({});
+    if (location === null) {
+      loc.getCurrentLocation(
+        (res) => {
+          setLocation(res);
+          const { latitude: lat, longitude: lng } = res?.coords || {};
+          onChange(id, { lat, lng });
+        },
+        (err) => {
+          setLocation({});
+          onChange(id, {});
+          setErrorMsg(err.message);
+        },
+      );
     }
   }, [location]);
+
+  useEffect(() => {
+    /**
+     * Update from leaflet
+     */
+    if (
+      latitude &&
+      longitude &&
+      values?.[id]?.lat !== latitude &&
+      values?.[id]?.lng !== longitude
+    ) {
+      onChange(id, { lat: latitude, lng: longitude });
+    }
+    /**
+     * Update from current location
+     */
+    if (
+      !latitude &&
+      !longitude &&
+      location?.coords &&
+      values?.[id]?.lat !== location?.coords?.latitude &&
+      values?.[id]?.lng !== location?.coords?.longitude
+    ) {
+      onChange(id, { lat: location.coords.latitude, lng: location.coords.longitude });
+    }
+  }, [latitude, longitude, values, id, location]);
 
   const text = useMemo(() => {
     if (errorMsg) {
@@ -54,15 +80,6 @@ const TypeGeo = ({ onChange, values, keyform, id, name, tooltip, required, requi
     }
     return 'Waiting..';
   }, [errorMsg, location, latitude, longitude]);
-
-  useEffect(() => {
-    if (!onChange) {
-      return;
-    }
-    if ((text && !values?.[id]) || (values?.[id] && values[id] !== text)) {
-      onChange(id, text);
-    }
-  }, [values, id, text]);
 
   const [latText, lngText] = text?.split('|');
   return (
@@ -84,9 +101,11 @@ const TypeGeo = ({ onChange, values, keyform, id, name, tooltip, required, requi
             {text}
           </Text>
         )}
-        <Button type="outline" onPress={handleOpenMapPress} testID="button-open-map">
-          Open Map
-        </Button>
+        {isOnline && (
+          <Button type="outline" onPress={handleOpenMapPress} testID="button-open-map">
+            Open Map
+          </Button>
+        )}
       </View>
     </View>
   );

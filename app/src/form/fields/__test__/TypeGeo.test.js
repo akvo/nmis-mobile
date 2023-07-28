@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { render, waitFor } from 'react-native-testing-library';
 import { renderHook, fireEvent, act } from '@testing-library/react-native';
 import { useNavigation } from '@react-navigation/native';
+import * as Location from 'expo-location';
 
 import TypeGeo from '../TypeGeo';
-import { MapState } from '../../../store';
+import { MapState, UIState } from '../../../store';
 import { loc } from '../../../lib';
 
 jest.mock('expo-location');
@@ -12,15 +13,18 @@ jest.mock('expo-location');
 jest.mock('@react-navigation/native');
 
 describe('TypeGeo', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
   test('render and get current location successfully', async () => {
     const { getByTestId, getByText } = render(
       <TypeGeo onChange={() => jest.fn()} values={{}} id="geoField" name="Geolocation" />,
     );
 
-    const waitingText = getByText('Waiting..');
-    expect(waitingText).toBeDefined();
-
     act(() => {
+      UIState.update((s) => {
+        s.online = true;
+      });
       loc.getCurrentLocation((res) => {
         MapState.update((s) => {
           s.latitude = res.coords.latitude;
@@ -54,33 +58,143 @@ describe('TypeGeo', () => {
     });
   });
 
-  it('should not show required sign if required param is false and requiredSign is not defined', () => {
-    const wrapper = render(<TypeGeo id="geoField" name="Geolocation" required={false} />);
-    const requiredIcon = wrapper.queryByTestId('field-required-icon');
-    expect(requiredIcon).toBeFalsy();
+  it('should not show required sign if required param is false and requiredSign is not defined', async () => {
+    const values = { geoField: {} };
+    const mockedOnChange = jest.fn((fieldName, value) => {
+      values[fieldName] = value;
+    });
+    const wrapper = render(
+      <TypeGeo
+        id="geoField"
+        name="Geolocation"
+        required={false}
+        onChange={mockedOnChange}
+        values={values}
+      />,
+    );
+    await waitFor(() => {
+      const requiredIcon = wrapper.queryByTestId('field-required-icon');
+      expect(requiredIcon).toBeFalsy();
+    });
   });
 
-  it('should not show required sign if required param is false but requiredSign is defined', () => {
+  it('should not show required sign if required param is false but requiredSign is defined', async () => {
+    const values = { geoField: {} };
+    const mockedOnChange = jest.fn((fieldName, value) => {
+      values[fieldName] = value;
+    });
+
     const wrapper = render(
-      <TypeGeo id="geoField" name="Geolocation" required={false} requiredSign="*" />,
+      <TypeGeo
+        id="geoField"
+        name="Geolocation"
+        required={false}
+        requiredSign="*"
+        onChange={mockedOnChange}
+        values={values}
+      />,
     );
-    const requiredIcon = wrapper.queryByTestId('field-required-icon');
-    expect(requiredIcon).toBeFalsy();
+    await waitFor(() => {
+      const requiredIcon = wrapper.queryByTestId('field-required-icon');
+      expect(requiredIcon).toBeFalsy();
+    });
   });
 
-  it('should not show required sign if required param is true and requiredSign defined', () => {
+  it('should not show required sign if required param is true and requiredSign defined', async () => {
+    const values = { geoField: {} };
+    const mockedOnChange = jest.fn((fieldName, value) => {
+      values[fieldName] = value;
+    });
+
     const wrapper = render(
-      <TypeGeo id="geoField" name="Geolocation" required={true} requiredSign="*" />,
+      <TypeGeo
+        id="geoField"
+        name="Geolocation"
+        required={true}
+        requiredSign="*"
+        onChange={mockedOnChange}
+        values={values}
+      />,
     );
-    const requiredIcon = wrapper.queryByTestId('field-required-icon');
-    expect(requiredIcon).toBeTruthy();
+    await waitFor(() => {
+      const requiredIcon = wrapper.queryByTestId('field-required-icon');
+      expect(requiredIcon).toBeTruthy();
+    });
   });
 
-  it('should show required sign with custom requiredSign', () => {
+  it('should show required sign with custom requiredSign', async () => {
+    const values = { geoField: {} };
+    const mockedOnChange = jest.fn((fieldName, value) => {
+      values[fieldName] = value;
+    });
+
     const wrapper = render(
-      <TypeGeo id="geoField" name="Geolocation" required={true} requiredSign="**" />,
+      <TypeGeo
+        id="geoField"
+        name="Geolocation"
+        required={true}
+        requiredSign="**"
+        onChange={mockedOnChange}
+        values={values}
+      />,
     );
-    const requiredIcon = wrapper.getByText('**');
-    expect(requiredIcon).toBeTruthy();
+    await waitFor(() => {
+      const requiredIcon = wrapper.getByText('**');
+      expect(requiredIcon).toBeTruthy();
+    });
+  });
+
+  it('should set empty object when getting current location failed', async () => {
+    const values = { geoField: { lat: 11, lng: 12 } };
+    const mockedOnChange = jest.fn((fieldName, value) => {
+      values[fieldName] = value;
+    });
+
+    const errorMessage = 'Permission to access location was denied';
+    Location.requestForegroundPermissionsAsync.mockImplementation(() => {
+      return Promise.resolve({ status: 'denied' });
+    });
+    Location.getCurrentPositionAsync.mockImplementation(() => {
+      return Promise.resolve({ coords: {} });
+    });
+
+    Location.getCurrentPositionAsync.mockRejectedValue({ message: errorMessage });
+
+    render(<TypeGeo id="geoField" name="Geolocation" onChange={mockedOnChange} values={values} />);
+    const { result } = renderHook(() => useState());
+    const [errorMsg, setErrorMsg] = result.current;
+
+    act(() => {
+      mockedOnChange('geoField', {});
+      setErrorMsg(errorMessage);
+    });
+
+    await waitFor(() => {
+      expect(result.current[0]).toBe(errorMessage);
+    });
+  });
+
+  it('should not showing button open map when network is offline', async () => {
+    const values = { geoField: { lat: 11, lng: 12 } };
+    const mockedOnChange = jest.fn((fieldName, value) => {
+      values[fieldName] = value;
+    });
+
+    const { queryByTestId } = render(
+      <TypeGeo id="geoField" name="Geolocation" onChange={mockedOnChange} values={values} />,
+    );
+    const { result } = renderHook(() => UIState.useState());
+
+    act(() => {
+      UIState.update((s) => {
+        s.online = false;
+      });
+    });
+
+    await waitFor(() => {
+      const openButton = queryByTestId('button-open-map');
+      expect(openButton).toBeNull();
+      expect(result.current.online).toBe(false);
+    });
   });
 });

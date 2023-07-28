@@ -45,7 +45,7 @@ curl -X POST -d "code=testing123" -s http://localhost:8080/auth | jq
       "version": "1.0.0"
     }
   ],
-  "syncToken": "Bearer eyjtoken"
+  "syncToken": "eyjtoken"
 }
 #+end_example
 
