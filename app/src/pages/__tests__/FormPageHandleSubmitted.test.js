@@ -287,6 +287,7 @@ describe('FormPage handleOnSubmitForm', () => {
         },
       ],
       name: 'John',
+      geo: null,
       submitted: 1,
       user: null,
     });

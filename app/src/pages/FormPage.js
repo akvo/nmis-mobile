@@ -33,6 +33,8 @@ const FormPage = ({ navigation, route }) => {
   const [currentDataPoint, setCurrentDataPoint] = React.useState({});
   const [loading, setLoading] = React.useState(false);
 
+  console.log(currentDataPoint);
+
   React.useEffect(() => {
     const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
       const values = onSaveFormParams?.values;
@@ -97,6 +99,7 @@ const FormPage = ({ navigation, route }) => {
         form: currentFormId,
         user: userId,
         name: values?.name || 'Untitled',
+        geo: values?.geo || null,
         submitted: 0,
         duration: 0, // TODO:: set duration
         json: values?.answers || [],
@@ -139,6 +142,7 @@ const FormPage = ({ navigation, route }) => {
         form: currentFormId,
         user: userId,
         name: values.name,
+        geo: values.geo,
         submitted: 1,
         duration: 0, // TODO:: set duration
         json: values.answers,

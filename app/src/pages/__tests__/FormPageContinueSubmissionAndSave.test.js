@@ -339,6 +339,7 @@ describe('FormPage continue saved submision then save', () => {
         form: 1,
         json: [],
         name: 'Untitled',
+        geo: null,
         submitted: 0,
         user: null,
       });
