@@ -15,7 +15,8 @@ const createSqliteDir = async () => {
 };
 
 const download = (downloadUrl, fileUrl) => {
-  const pathSql = fileUrl.replace(/\/sqlite\//, `${DIR_NAME}/`);
+  const fileSql = fileUrl?.split('/')?.pop(); // get last segment as filename
+  const pathSql = `${DIR_NAME}/${fileSql}`;
   FileSystem.getInfoAsync(FileSystem.documentDirectory + pathSql).then(({ exists }) => {
     if (!exists) {
       FileSystem.downloadAsync(downloadUrl, FileSystem.documentDirectory + pathSql);
