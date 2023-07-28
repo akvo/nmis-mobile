@@ -146,7 +146,7 @@ describe('backgroundTask', () => {
         createdAt: '2023-07-28T07:53:40.210Z',
         submittedAt: '2023-07-28T07:53:40.210Z',
         syncedAt: null,
-        json: JSON.stringify([{ 101: 'Data point 1', 102: 1 }]),
+        json: JSON.stringify({ 101: 'Data point 1', 102: 1 }),
       },
     ];
     const mockUser = {
@@ -192,7 +192,7 @@ describe('backgroundTask', () => {
         expect(crudUsers.selectUserById).toHaveBeenCalled();
         expect(crudForms.selectFormById).toHaveBeenCalled();
         expect(api.post).toHaveBeenCalledWith('/sync', {
-          answers: [{ 101: 'Data point 1', 102: 1 }],
+          answers: { 101: 'Data point 1', 102: 1 },
           duration: 2.5,
           formId: 456,
           geo: [-8.676119, 115.4927994],
