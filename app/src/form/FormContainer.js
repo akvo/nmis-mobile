@@ -95,7 +95,6 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave }) => {
 
   const refreshForm = () => {
     FormState.update((s) => {
-      s.form = {};
       s.currentValues = {};
       s.questionGroupListCurrentValues = {};
       s.dataPointName = [];

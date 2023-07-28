@@ -10,10 +10,7 @@ const formsQuery = () => {
       if (!rows.length) {
         return [];
       }
-      return rows._array.map((x) => ({
-        ...x,
-        json: JSON.parse(x.json.replace(/''/g, "'")),
-      }));
+      return rows._array;
     },
     selectFormById: async ({ id }) => {
       const { rows } = await conn.tx(db, query.read('forms', { id }), [id]);

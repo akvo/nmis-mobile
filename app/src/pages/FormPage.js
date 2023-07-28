@@ -31,6 +31,7 @@ const FormPage = ({ navigation, route }) => {
   const isNewSubmission = route?.params?.newSubmission;
   const [initialValues, setInitialValues] = React.useState({});
   const [currentDataPoint, setCurrentDataPoint] = React.useState({});
+  const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
     const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
@@ -49,31 +50,25 @@ const FormPage = ({ navigation, route }) => {
 
   React.useEffect(() => {
     if (!isNewSubmission) {
-      fetchSavedSubmission();
+      fetchSavedSubmission().catch((e) => console.error('[Fetch Data Point Failed]: ', e));
     }
-    fetchForm();
-  }, []);
+  }, [isNewSubmission]);
 
-  const fetchForm = async () => {
-    const currentForm = await crudForms.selectFormById({ id: currentFormId });
-    FormState.update((s) => {
-      s.form = currentForm;
-    });
-  };
-
-  const fetchSavedSubmission = async () => {
+  const fetchSavedSubmission = React.useCallback(async () => {
+    setLoading(true);
     const dpValue = await crudDataPoints.selectDataPointById({ id: savedDataPointId });
     setCurrentDataPoint(dpValue);
     if (dpValue?.json?.length) {
       setInitialValues(dpValue.json[0]);
     }
-  };
+    setLoading(false);
+  }, [savedDataPointId]);
 
   const formJSON = React.useMemo(() => {
     if (!selectedForm?.json) {
       return {};
     }
-    return selectedForm.json;
+    return JSON.parse(selectedForm.json);
   }, [selectedForm]);
 
   const { dpName: subTitleText } = generateDataPointName(dataPointName);
@@ -192,7 +187,7 @@ const FormPage = ({ navigation, route }) => {
         />
       }
     >
-      {Object.keys(formJSON).length ? (
+      {!loading ? (
         <FormContainer
           forms={formJSON}
           initialValues={initialValues}

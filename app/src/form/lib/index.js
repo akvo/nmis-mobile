@@ -28,11 +28,11 @@ const getDependencyAncestors = (questions, current, dependencies) => {
 };
 
 export const transformForm = (forms, lang = 'en') => {
-  const nonEnglish = lang != 'en';
+  const nonEnglish = lang !== 'en';
   if (nonEnglish) {
     forms = i18n.transform(lang, forms);
   }
-  const questions = forms?.question_group
+  const questions = forms.question_group
     .map((x) => {
       return x.question;
     })
@@ -80,9 +80,9 @@ export const transformForm = (forms, lang = 'en') => {
 
   return {
     ...forms,
-    question_group: forms?.question_group
-      ?.sort((a, b) => a.order - b.order)
-      ?.map((qg, qgi) => {
+    question_group: forms.question_group
+      .sort((a, b) => a.order - b.order)
+      .map((qg, qgi) => {
         let repeat = {};
         let repeats = {};
         if (qg?.repeatable) {
