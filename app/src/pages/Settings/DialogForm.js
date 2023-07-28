@@ -2,9 +2,13 @@ import React from 'react';
 import { Dialog, Input, Slider } from '@rneui/themed';
 import { Dropdown } from 'react-native-element-dropdown';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { UIState } from '../../store';
+import { i18n } from '../../lib';
 
 const DialogForm = ({ onOk, onCancel, showDialog, edit }) => {
   const [value, setValue] = React.useState(0);
+  const activeLang = UIState.useState((s) => s.lang);
+  const trans = i18n.text(activeLang);
 
   const { type, label, slider, value: defaultValue, options } = edit || {};
   const isPassword = type === 'password' || false;
@@ -49,10 +53,10 @@ const DialogForm = ({ onOk, onCancel, showDialog, edit }) => {
       )}
       <Dialog.Actions>
         <Dialog.Button onPress={() => onOk(value)} testID="settings-form-dialog-ok">
-          OK
+          {trans.buttonOk}
         </Dialog.Button>
         <Dialog.Button onPress={onCancel} testID="settings-form-dialog-cancel">
-          Cancel
+          {trans.buttonCancel}
         </Dialog.Button>
       </Dialog.Actions>
     </Dialog>
