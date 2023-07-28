@@ -3,6 +3,8 @@ import { View, Text } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { FieldLabel } from '../support';
 import { styles } from '../styles';
+import { UIState } from '../../store';
+import { i18n } from '../../lib';
 
 const TypeCascade = ({
   onChange,
@@ -17,6 +19,8 @@ const TypeCascade = ({
   dataSource = [],
 }) => {
   const [dropdownItems, setDropdownItems] = useState([]);
+  const activeLang = UIState.useState((s) => s.lang);
+  const trans = i18n.text(activeLang);
 
   const groupBy = (array, property) => {
     const gd = array
@@ -100,6 +104,7 @@ const TypeCascade = ({
               onChange={({ id: selectedID }) => handleOnChange(index, selectedID)}
               value={item.value}
               style={[styles.dropdownField]}
+              placeholder={trans.selectItem}
             />
           );
         })}
