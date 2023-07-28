@@ -15,7 +15,6 @@ const mockNavigation = {
 };
 const mockValues = {
   name: 'John',
-  geo: null,
   answers: {
     1: 'John',
     2: new Date('01-01-1992'),
@@ -338,7 +337,6 @@ describe('FormPage handleOnSaveForm', () => {
         form: 1,
         json: {},
         name: 'Untitled',
-        geo: null,
         submitted: 0,
         user: null,
       });

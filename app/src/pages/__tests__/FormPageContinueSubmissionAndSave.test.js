@@ -16,7 +16,6 @@ const mockNavigation = {
 };
 const mockValues = {
   name: 'John Doe',
-  geo: null,
   answers: {
     1: 'John Doe',
     2: new Date('01-01-1992'),
@@ -34,7 +33,6 @@ const mockCurrentDataPoint = {
   form: 1,
   user: 1,
   name: 'John',
-  geo: null,
   submitted: 0,
   duration: 0,
   createdAt: null,
@@ -335,7 +333,6 @@ describe('FormPage continue saved submision then save', () => {
         form: 1,
         json: {},
         name: 'Untitled',
-        geo: null,
         submitted: 0,
         user: null,
       });
