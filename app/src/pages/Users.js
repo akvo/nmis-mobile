@@ -78,7 +78,7 @@ const Users = ({ navigation, route }) => {
 
   return (
     <BaseLayout
-      title="Users"
+      title={trans.usersPageTitle}
       leftComponent={
         <Button type="clear" onPress={goToHome} testID="arrow-back-button">
           <Icon name="arrow-back" size={18} />

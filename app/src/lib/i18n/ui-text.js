@@ -8,6 +8,7 @@ const uiText = {
     draftLabel: 'Draft: ',
     userLabel: 'User: ',
     versionLabel: 'Version: ',
+    submittedLabel: 'Submitted: ',
     createdLabel: 'Created: ',
     surveyDurationLabel: 'Survey duration: ',
     syncLabel: 'Synced: ',
@@ -74,6 +75,7 @@ const uiText = {
     confirmReset:
       "By resetting, you'll lose all saved data including users, forms and data-points. Are you sure?",
     offlineText: "You're offline...",
+    usersPageTitle: 'Users',
   },
   fr: {
     latitude: 'Latitude',
@@ -84,6 +86,7 @@ const uiText = {
     draftLabel: 'Brouillon: ',
     userLabel: 'Utilisateur: ',
     versionLabel: 'Version: ',
+    submittedLabel: 'Soumis: ',
     createdLabel: 'Créé: ',
     surveyDurationLabel: "Durée de l'enquête: ",
     syncLabel: 'Synchronisé: ',
@@ -150,6 +153,7 @@ const uiText = {
     confirmReset:
       'En réinitialisant, vous perdrez toutes les données enregistrées, y compris les utilisateurs, les formulaires et les points de données. Es-tu sûr?',
     offlineText: 'Tu es hors ligne...',
+    usersPageTitle: 'Utilisateurs',
   },
 };
 
