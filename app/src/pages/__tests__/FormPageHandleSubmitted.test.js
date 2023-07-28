@@ -267,35 +267,34 @@ describe('FormPage handleOnSubmitForm', () => {
 
     const wrapper = render(<FormPage navigation={mockNavigation} route={mockRoute} />);
 
-    const submitButton = wrapper.getByTestId('mock-submit-button');
-    fireEvent.press(submitButton);
-
     await waitFor(() => {
-      // save datapoint to database
-      expect(crudDataPoints.saveDataPoint).toHaveBeenCalledWith({
-        duration: 0,
-        form: 1,
-        json: [
-          {
-            1: 'John',
-            2: new Date('01-01-1992'),
-            3: '31',
-            4: ['Male'],
-            5: ['Bachelor'],
-            6: ['Traveling'],
-            7: ['Fried Rice'],
-          },
-        ],
-        name: 'John',
-        submitted: 1,
-        user: null,
-      });
-
-      expect(ToastAndroid.show).toHaveBeenCalledTimes(1);
-      // call refreshForm
-      expect(mockRefreshForm).toHaveBeenCalledTimes(1);
-      expect(mockNavigation.navigate).toHaveBeenCalledWith('ManageForm', mockRoute.params);
+      const submitButton = wrapper.getByTestId('mock-submit-button');
+      fireEvent.press(submitButton);
     });
+    // save datapoint to database
+    expect(crudDataPoints.saveDataPoint).toHaveBeenCalledWith({
+      duration: 0,
+      form: 1,
+      json: [
+        {
+          1: 'John',
+          2: new Date('01-01-1992'),
+          3: '31',
+          4: ['Male'],
+          5: ['Bachelor'],
+          6: ['Traveling'],
+          7: ['Fried Rice'],
+        },
+      ],
+      name: 'John',
+      submitted: 1,
+      user: null,
+    });
+
+    expect(ToastAndroid.show).toHaveBeenCalledTimes(1);
+    // call refreshForm
+    expect(mockRefreshForm).toHaveBeenCalledTimes(1);
+    expect(mockNavigation.navigate).toHaveBeenCalledWith('ManageForm', mockRoute.params);
   });
 
   test('should show ToastAndroid if handleOnSubmitForm throw an error', async () => {

@@ -1,13 +1,13 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import { render, waitFor } from '@testing-library/react-native';
+import { render, waitFor, act } from '@testing-library/react-native';
 jest.useFakeTimers();
 import FormPage from '../FormPage';
 import { FormState } from 'store';
 
 const mockFormContainer = jest.fn();
 const mockRoute = {
-  params: { id: 1, name: 'Form Name' },
+  params: { id: 1, name: 'Form Name', newSubmission: true },
 };
 const mockNavigation = {
   navigate: jest.fn(),
@@ -260,9 +260,9 @@ jest.mock('../../assets/administrations.db', () => {
 });
 
 describe('FormPage component', () => {
-  test('should render component correctly', () => {
-    const tree = renderer.create(<FormPage navigation={mockNavigation} />).toJSON();
-    expect(tree).toMatchSnapshot();
+  test('should render component correctly', async () => {
+    const tree = render(<FormPage navigation={mockNavigation} />);
+    await waitFor(() => expect(tree.toJSON()).toMatchSnapshot());
   });
 
   test('should render the FormPage with the correct form title', () => {

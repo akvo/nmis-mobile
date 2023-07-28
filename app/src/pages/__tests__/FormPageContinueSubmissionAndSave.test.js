@@ -1,9 +1,10 @@
 import React from 'react';
 import { Platform, ToastAndroid } from 'react-native';
-import { render, fireEvent, waitFor } from '@testing-library/react-native';
+import { render, fireEvent, waitFor, act } from '@testing-library/react-native';
 jest.useFakeTimers();
 import FormPage from '../FormPage';
 import crudDataPoints from '../../database/crud/crud-datapoints';
+import { UserState } from '../../store';
 
 const mockFormContainer = jest.fn();
 const mockRoute = {
@@ -14,11 +15,11 @@ const mockNavigation = {
   goBack: jest.fn(),
 };
 const mockValues = {
-  name: 'John',
+  name: 'John Doe',
   geo: null,
   answers: [
     {
-      1: 'John',
+      1: 'John Doe',
       2: new Date('01-01-1992'),
       3: '31',
       4: ['Male'],
@@ -30,6 +31,29 @@ const mockValues = {
 };
 const mockRefreshForm = jest.fn();
 const mockOnSave = jest.fn();
+const mockCurrentDataPoint = {
+  id: 1,
+  form: 1,
+  user: 1,
+  name: 'John',
+  geo: null,
+  submitted: 0,
+  duration: 0,
+  createdAt: null,
+  submittedAt: new Date().toISOString(),
+  syncedAt: null,
+  json: [
+    {
+      1: 'John',
+      2: new Date('01-01-1992'),
+      3: '31',
+      4: ['Male'],
+      5: ['Bachelor'],
+      6: ['Traveling'],
+      7: ['Fried Rice'],
+    },
+  ],
+};
 
 const exampleTestForm = {
   name: 'Testing Form',
@@ -274,6 +298,9 @@ describe('FormPage continue saved submision then save', () => {
     Platform.OS = 'android';
     ToastAndroid.show = jest.fn();
     jest.spyOn(React, 'useMemo').mockReturnValue(exampleTestForm);
+    crudDataPoints.selectDataPointById.mockImplementation(() =>
+      Promise.resolve(mockCurrentDataPoint),
+    );
 
     const mockSetOnSaveFormParams = jest.fn();
     const mockOnSaveFormParams = { values: mockValues, refreshForm: mockRefreshForm };
@@ -285,6 +312,12 @@ describe('FormPage continue saved submision then save', () => {
     jest.spyOn(React, 'useState').mockImplementation(() => [true, mockSetShowDialogMenu]);
 
     const wrapper = render(<FormPage navigation={mockNavigation} route={mockRoute} />);
+
+    act(() => {
+      UserState.update((s) => {
+        s.id = 1;
+      });
+    });
 
     const arrowBackButton = wrapper.queryByTestId('arrow-back-button');
     expect(arrowBackButton).toBeTruthy();
@@ -318,6 +351,9 @@ describe('FormPage continue saved submision then save', () => {
     Platform.OS = 'android';
     ToastAndroid.show = jest.fn();
     jest.spyOn(React, 'useMemo').mockReturnValue(exampleTestForm);
+    crudDataPoints.selectDataPointById.mockImplementation(() =>
+      Promise.resolve(mockCurrentDataPoint),
+    );
     const consoleErrorSpy = jest.spyOn(console, 'error');
     crudDataPoints.updateDataPoint.mockImplementation(() => Promise.reject('Error'));
 
@@ -331,6 +367,12 @@ describe('FormPage continue saved submision then save', () => {
     jest.spyOn(React, 'useState').mockImplementation(() => [true, mockSetShowDialogMenu]);
 
     const wrapper = render(<FormPage navigation={mockNavigation} route={mockRoute} />);
+
+    act(() => {
+      UserState.update((s) => {
+        s.id = 1;
+      });
+    });
 
     const arrowBackButton = wrapper.queryByTestId('arrow-back-button');
     expect(arrowBackButton).toBeTruthy();
