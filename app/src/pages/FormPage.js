@@ -7,8 +7,9 @@ import { SaveDialogMenu, SaveDropdownMenu } from '../form/support';
 import { BaseLayout } from '../components';
 import { FormState } from '../store';
 import { crudDataPoints } from '../database/crud';
-import { UserState } from '../store';
+import { UserState, UIState } from '../store';
 import { generateDataPointName } from '../form/lib';
+import { i18n } from '../lib';
 
 const FormPage = ({ navigation, route }) => {
   const { form: selectedForm, dataPointName } = FormState.useState((s) => s);
@@ -17,6 +18,8 @@ const FormPage = ({ navigation, route }) => {
   const [showDialogMenu, setShowDialogMenu] = React.useState(false);
   const [showDropdownMenu, setShowDropdownMenu] = React.useState(false);
   const [showExitConfirmationDialog, setShowExitConfirmationDialog] = React.useState(false);
+  const activeLang = UIState.useState((s) => s.lang);
+  const trans = i18n.text(activeLang);
 
   React.useEffect(() => {
     const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
@@ -65,14 +68,14 @@ const FormPage = ({ navigation, route }) => {
       const saveData = {
         form: selectedForm.id,
         user: userId,
-        name: values?.name || 'Untitled',
+        name: values?.name || trans.untitled,
         submitted: 0,
         duration: 0, // TODO:: set duration
         json: values?.answers || [],
       };
       await crudDataPoints.saveDataPoint(saveData);
       if (Platform.OS === 'android') {
-        ToastAndroid.show(`Data point ${values?.name} saved`, ToastAndroid.LONG);
+        ToastAndroid.show(trans.successSaveDatapoint, ToastAndroid.LONG);
       }
       if (refreshForm) {
         refreshForm();
@@ -81,7 +84,7 @@ const FormPage = ({ navigation, route }) => {
     } catch (err) {
       console.error(err);
       if (Platform.OS === 'android') {
-        ToastAndroid.show(`Error! Can't save data point ${values?.name}`, ToastAndroid.LONG);
+        ToastAndroid.show(trans.errorSaveDatapoint, ToastAndroid.LONG);
       }
     }
   };
@@ -111,14 +114,14 @@ const FormPage = ({ navigation, route }) => {
       };
       await crudDataPoints.saveDataPoint(submitData);
       if (Platform.OS === 'android') {
-        ToastAndroid.show(`Data point ${values.name} submitted`, ToastAndroid.LONG);
+        ToastAndroid.show(trans.successSubmitted, ToastAndroid.LONG);
       }
       refreshForm();
       navigation.navigate('ManageForm', { ...route?.params });
     } catch (err) {
       console.error(err);
       if (Platform.OS === 'android') {
-        ToastAndroid.show(`Error! Can't submit data point ${values.name}`, ToastAndroid.LONG);
+        ToastAndroid.show(trans.errorSubmitted, ToastAndroid.LONG);
       }
     }
   };
@@ -163,11 +166,15 @@ const FormPage = ({ navigation, route }) => {
         handleOnSaveAndExit={handleOnSaveAndExit}
       />
       <Dialog visible={showExitConfirmationDialog} testID="exit-confirmation-dialog">
-        <Text testID="exit-confirmation-text">Are you sure want to exit form submission?</Text>
+        <Text testID="exit-confirmation-text">{trans.confirmExit}</Text>
         <Dialog.Actions>
-          <Dialog.Button title="Exit" onPress={handleOnExit} testID="exit-confirmation-ok" />
           <Dialog.Button
-            title="Cancel"
+            title={trans.buttonExit}
+            onPress={handleOnExit}
+            testID="exit-confirmation-ok"
+          />
+          <Dialog.Button
+            title={trans.buttonCancel}
             onPress={() => setShowExitConfirmationDialog(false)}
             testID="exit-confirmation-cancel"
           />
