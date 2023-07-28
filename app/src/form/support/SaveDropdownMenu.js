@@ -5,6 +5,7 @@ import { StyleSheet } from 'react-native';
 import { config } from '../../pages/Settings/config';
 import DialogForm from '../../pages/Settings/DialogForm';
 import { UIState } from '../../store';
+import { i18n } from '../../lib';
 
 const userInterfaceConfigId = 2;
 
@@ -15,6 +16,9 @@ const SaveDropdownMenu = ({ anchor, visible, setVisible, handleOnSaveAndExit, ha
     const findFieldsConfig = config.find((x) => x.id === userInterfaceConfigId)?.fields || [];
     return findFieldsConfig.find((x) => x.name === 'lang') || {};
   }, []);
+
+  const activeLang = UIState.useState((s) => s.lang);
+  const trans = i18n.text(activeLang);
 
   const handleOnOk = (value) => {
     UIState.update((s) => {
@@ -38,7 +42,7 @@ const SaveDropdownMenu = ({ anchor, visible, setVisible, handleOnSaveAndExit, ha
                 }
               }}
             >
-              Show Menu
+              {trans.buttonShowMenu}
             </Button>
           )
         }
@@ -58,7 +62,7 @@ const SaveDropdownMenu = ({ anchor, visible, setVisible, handleOnSaveAndExit, ha
           }}
           testID="save-and-exit-menu-item"
         >
-          Save and Exit
+          {trans.buttonSaveNExit}
         </MenuItem>
         <MenuItem
           onPress={() => {
@@ -68,7 +72,7 @@ const SaveDropdownMenu = ({ anchor, visible, setVisible, handleOnSaveAndExit, ha
           }}
           testID="exit-without-saving-menu-item"
         >
-          Exit without Saving
+          {trans.buttonExitWoSaving}
         </MenuItem>
         <MenuDivider />
         <MenuItem
@@ -78,7 +82,7 @@ const SaveDropdownMenu = ({ anchor, visible, setVisible, handleOnSaveAndExit, ha
             setVisible(false);
           }}
         >
-          Language Selection
+          {trans.langSelection}
         </MenuItem>
       </Menu>
       <DialogForm
