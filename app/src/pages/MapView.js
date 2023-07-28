@@ -69,7 +69,11 @@ const MapView = ({ navigation, route }) => {
 
   useEffect(() => {
     const handleBackPress = () => {
-      navigation.navigate('FormPage', { id: selectedForm?.id, name: selectedForm?.name });
+      navigation.navigate('FormPage', {
+        id: selectedForm?.id,
+        name: selectedForm?.name,
+        newSubmission: route?.params?.newSubmission,
+      });
       return true;
     };
     const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackPress);

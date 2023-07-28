@@ -91,13 +91,18 @@ const syncFormSubmission = async () => {
     data.forEach(async (d) => {
       // get user
       const user = await crudUsers.selectUserById({ id: d.user });
+      const form = await crudForms.selectFormById({ id: d.form });
+      const geo = d.geo ? d.geo.split('|')?.map((x) => parseFloat(x)) : null;
       const syncData = {
+        formId: form.formId,
         name: d.name,
-        submitter: user.name,
         duration: d.duration,
         submittedAt: d.submittedAt,
+        submitter: user.name,
+        geo: geo,
         answers: JSON.parse(d.json.replace(/''/g, "'")),
       };
+      console.info('[syncFormSubmision] SyncData:', syncData);
       // sync data point
       const res = await api.post('/sync', syncData);
       console.info('[syncFormSubmision] post sync data point:', res.status, res.data);

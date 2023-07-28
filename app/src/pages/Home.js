@@ -12,13 +12,11 @@ const Home = ({ navigation }) => {
   const subTitleText = currentUserName ? `User: ${currentUserName}` : null;
 
   const goToManageForm = (id) => {
-    const findData = data.find((d) => d?.id === id);
+    const findForm = data.find((d) => d?.id === id);
     FormState.update((s) => {
-      s.form = findData;
+      s.form = findForm;
     });
-    setTimeout(() => {
-      navigation.navigate('ManageForm', { id: id, name: findData.name });
-    }, 100);
+    navigation.navigate('ManageForm', { id: id, name: findForm.name });
   };
 
   const goToUsers = () => {
@@ -26,6 +24,9 @@ const Home = ({ navigation }) => {
   };
 
   useEffect(() => {
+    FormState.update((s) => {
+      s.form = {};
+    });
     crudForms.selectLatestFormVersion().then((results) => {
       const forms = results.map((r) => ({
         ...r,

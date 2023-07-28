@@ -12,14 +12,18 @@ exports[`FormPage component should render component correctly 1`] = `
   }
   testID="stack-container"
 >
-  <mock-FormContainer>
-    <button
-      onPress={[Function]}
-      testID="mock-submit-button"
-    >
-      Submit
-    </button>
-  </mock-FormContainer>
+  <View
+    style={
+      {
+        "flex": 1,
+        "flexDirection": "column",
+        "justifyContent": "center",
+        "width": "100%",
+      }
+    }
+  >
+    <ActivityIndicator />
+  </View>
   <Modal
     hardwareAccelerated={false}
     onRequestClose={[Function]}

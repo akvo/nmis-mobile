@@ -39,6 +39,7 @@ export const tables = [
       form: 'INTEGER NOT NULL',
       user: 'INTEGER NOT NULL',
       name: 'VARCHAR(255)',
+      geo: 'VARCHAR(255)',
       submitted: 'TINYINT',
       duration: 'REAL',
       createdAt: 'DATETIME',

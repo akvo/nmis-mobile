@@ -69,7 +69,7 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave }) => {
         return onSave(null, refreshForm);
       }
       const { dpName, dpGeo } = generateDataPointName(dataPointName);
-      const values = { name: dpName, geo: dpGeo, answers: [results] };
+      const values = { name: dpName, geo: dpGeo, answers: results };
       return onSave(values, refreshForm);
     }
   }, [currentValues, onSave]);
@@ -90,8 +90,8 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave }) => {
       });
       return initialValues;
     }
-    return currentValues;
-  }, [initialValues, currentValues]);
+    return {};
+  }, [initialValues]);
 
   const refreshForm = () => {
     FormState.update((s) => {
@@ -99,14 +99,14 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave }) => {
       s.questionGroupListCurrentValues = {};
       s.dataPointName = [];
     });
-    formRef.current.resetForm();
+    formRef.current?.resetForm();
   };
 
   const handleOnSubmitForm = (values) => {
     const results = checkValuesBeforeCallback(values);
     if (onSubmit) {
       const { dpName, dpGeo } = generateDataPointName(dataPointName);
-      onSubmit({ name: dpName, geo: dpGeo, answers: [results] }, refreshForm);
+      onSubmit({ name: dpName, geo: dpGeo, answers: results }, refreshForm);
     }
   };
 

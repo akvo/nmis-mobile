@@ -28,11 +28,11 @@ const getDependencyAncestors = (questions, current, dependencies) => {
 };
 
 export const transformForm = (forms, lang = 'en') => {
-  const nonEnglish = lang != 'en';
+  const nonEnglish = lang !== 'en';
   if (nonEnglish) {
     forms = i18n.transform(lang, forms);
   }
-  const questions = forms?.question_group
+  const questions = forms.question_group
     .map((x) => {
       return x.question;
     })
@@ -80,9 +80,9 @@ export const transformForm = (forms, lang = 'en') => {
 
   return {
     ...forms,
-    question_group: forms?.question_group
-      ?.sort((a, b) => a.order - b.order)
-      ?.map((qg, qgi) => {
+    question_group: forms.question_group
+      .sort((a, b) => a.order - b.order)
+      .map((qg, qgi) => {
         let repeat = {};
         let repeats = {};
         if (qg?.repeatable) {
@@ -269,6 +269,9 @@ export const generateDataPointName = (dataPointNameValues) => {
     .filter((d) => d.type !== 'geo' && (d.value || d.value === 0))
     .map((x) => x.value)
     .join(' - ');
-  const dpGeo = dataPointNameValues.find((d) => d.type === 'geo')?.value || null;
+  let dpGeo = dataPointNameValues.find((d) => d.type === 'geo')?.value || null;
+  if (dpGeo?.lat && dpGeo?.lng) {
+    dpGeo = `${dpGeo.lat}|${dpGeo.lng}`;
+  }
   return { dpName, dpGeo };
 };

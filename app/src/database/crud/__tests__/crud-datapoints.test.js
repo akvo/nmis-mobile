@@ -11,6 +11,7 @@ const dataPoints = [
     form: 123,
     user: 1,
     name: 'Data point 1 name',
+    geo: '-8.676119|115.4927994',
     submitted: 1,
     duration: 2.5,
     createdAt: new Date().toISOString(),
@@ -23,6 +24,7 @@ const dataPoints = [
     form: 123,
     user: 1,
     name: 'Data point 2 name',
+    geo: '-8.676119|115.4927994',
     submitted: 0,
     duration: 2.0,
     createdAt: new Date().toISOString(),
@@ -33,8 +35,9 @@ const dataPoints = [
   {
     id: 3,
     form: 123,
-    user: 1,
+    user: 2,
     name: 'Data point 3 name',
+    geo: '-8.676119|115.4927994',
     submitted: 0,
     duration: 2.7,
     createdAt: new Date().toISOString(),
@@ -114,6 +117,24 @@ describe('crudDataPoints function', () => {
     const result = await crudDataPoints.selectDataPointsByFormAndSubmitted({
       form: 123,
       submitted: 0,
+    });
+    expect(result).toEqual(mockData);
+  });
+
+  test('selectDataPointsByFormAndSubmitted should return the correct list of saved data points filtered by user id', async () => {
+    const mockData = dataPoints.filter((d) => d.form === 123 && !d.submitted && d.user === 2);
+    const mockSelectSql = jest.fn((query, params, successCallback) => {
+      successCallback(null, { rows: { length: mockData.length, _array: mockData } });
+    });
+    db.transaction.mockImplementation((transactionFunction) => {
+      transactionFunction({
+        executeSql: mockSelectSql,
+      });
+    });
+    const result = await crudDataPoints.selectDataPointsByFormAndSubmitted({
+      form: 123,
+      submitted: 0,
+      user: 2,
     });
     expect(result).toEqual(mockData);
   });

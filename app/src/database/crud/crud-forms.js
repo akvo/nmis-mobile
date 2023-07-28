@@ -12,6 +12,13 @@ const formsQuery = () => {
       }
       return rows._array;
     },
+    selectFormById: async ({ id }) => {
+      const { rows } = await conn.tx(db, query.read('forms', { id }), [id]);
+      if (!rows.length) {
+        return {};
+      }
+      return rows._array[0];
+    },
     selectFormByIdAndVersion: async ({ id: formId, version }) => {
       const { rows } = await conn.tx(db, query.read('forms', { formId, version }), [
         formId,

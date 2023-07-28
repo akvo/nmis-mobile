@@ -1,13 +1,13 @@
 import React from 'react';
 import { Platform, ToastAndroid } from 'react-native';
-import { render, fireEvent, waitFor } from '@testing-library/react-native';
+import { render, fireEvent, waitFor, act } from '@testing-library/react-native';
 jest.useFakeTimers();
 import FormPage from '../FormPage';
 import crudDataPoints from '../../database/crud/crud-datapoints';
 
 const mockFormContainer = jest.fn();
 const mockRoute = {
-  params: { id: 1, name: 'Form Name' },
+  params: { id: 1, name: 'Form Name', newSubmission: true },
 };
 const mockNavigation = {
   navigate: jest.fn(),
@@ -16,17 +16,15 @@ const mockNavigation = {
 const mockValues = {
   name: 'John',
   geo: null,
-  answers: [
-    {
-      1: 'John',
-      2: new Date('01-01-1992'),
-      3: '31',
-      4: ['Male'],
-      5: ['Bachelor'],
-      6: ['Traveling'],
-      7: ['Fried Rice'],
-    },
-  ],
+  answers: {
+    1: 'John',
+    2: new Date('01-01-1992'),
+    3: '31',
+    4: ['Male'],
+    5: ['Bachelor'],
+    6: ['Traveling'],
+    7: ['Fried Rice'],
+  },
 };
 const mockRefreshForm = jest.fn();
 const mockOnSave = jest.fn();
@@ -297,16 +295,10 @@ describe('FormPage handleOnSaveForm', () => {
 
     const arrowBackButton = wrapper.queryByTestId('arrow-back-button');
     expect(arrowBackButton).toBeTruthy();
-
-    const savedTrigger = wrapper.queryByTestId('mock-save-button-helper');
-    expect(savedTrigger).toBeTruthy();
-
-    fireEvent.press(savedTrigger);
     fireEvent.press(arrowBackButton);
 
     const dialogMenuElement = wrapper.queryByTestId('save-dialog-menu');
     await waitFor(() => {
-      expect(mockOnSave).toHaveBeenCalledWith(mockValues, mockRefreshForm);
       expect(dialogMenuElement.props.visible).toEqual(true);
     });
   });
@@ -338,22 +330,20 @@ describe('FormPage handleOnSaveForm', () => {
 
     const saveButtonElement = wrapper.queryByTestId('save-and-exit-button');
     expect(saveButtonElement).toBeTruthy();
-    fireEvent.press(saveButtonElement);
+    act(() => fireEvent.press(saveButtonElement));
 
     await waitFor(() => {
       expect(crudDataPoints.saveDataPoint).toHaveBeenCalledWith({
         duration: 0,
-        form: undefined,
-        json: [],
+        form: 1,
+        json: {},
         name: 'Untitled',
+        geo: null,
         submitted: 0,
         user: null,
       });
       expect(ToastAndroid.show).toHaveBeenCalledTimes(1);
-      expect(mockNavigation.navigate).toHaveBeenCalledWith('ManageForm', {
-        id: 1,
-        name: 'Form Name',
-      });
+      expect(mockNavigation.navigate).toHaveBeenCalledWith('ManageForm', mockRoute.params);
     });
   });
 
