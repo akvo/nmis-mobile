@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Platform, ToastAndroid } from 'react-native';
 import { ListItem, Dialog, Text, Icon } from '@rneui/themed';
 import { useNavigation } from '@react-navigation/native';
-import { AuthState, UserState } from '../store';
+import { AuthState, UserState, FormState } from '../store';
 import { conn, query } from '../database';
 import { cascades } from '../lib';
 
@@ -32,6 +32,15 @@ const LogoutButton = () => {
     });
     setLoading(false);
     setVisible(false);
+
+    FormState.update((s) => {
+      s.form = {};
+      s.questionGroups = [];
+      s.question = [];
+      s.currentValues = {}; // answers
+      s.questionGroupListCurrentValues = {}; // answers for question group list component
+      s.dataPointName = [];
+    });
 
     /**
      * Remove sqlite files
