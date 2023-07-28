@@ -2,7 +2,7 @@ export const mockResultSet = { rowsAffected: 1 };
 
 export const mockExecuteSql = jest.fn((query, params, successCallback) => {
   if (query.startsWith('SELECT')) {
-    successCallback(null, { rows: [] });
+    successCallback(null, { rows: { length: 0, _array: [] } });
   } else {
     successCallback(null, mockResultSet);
   }

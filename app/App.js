@@ -7,6 +7,7 @@ import { conn, query, tables } from './src/database';
 import { UIState, AuthState, UserState, BuildParamsState } from './src/store';
 import { crudSessions, crudUsers, crudConfig } from './src/database/crud';
 import { api } from './src/lib';
+import { NetworkStatusBar } from './src/components';
 
 const db = conn.init;
 
@@ -100,6 +101,7 @@ const App = () => {
   return (
     <SafeAreaProvider>
       <Navigation testID="navigation-element" />
+      <NetworkStatusBar />
     </SafeAreaProvider>
   );
 };

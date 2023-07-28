@@ -359,4 +359,99 @@ describe('FormContainer component on submit', () => {
       expect.any(Function),
     );
   });
+
+  it.failing(
+    'should filter form values by valid value and respect required validation',
+    async () => {
+      const handleOnSubmit = jest.fn();
+      const modifiedInitialValues = {
+        1: '',
+        2: new Date('01-01-1992'),
+        3: 0,
+        4: ['Male'],
+        5: ['Bachelor'],
+        6: [undefined],
+        7: [],
+        8: ' ',
+        9: 0,
+      };
+
+      const { queryByTestId } = render(
+        <FormContainer
+          forms={exampleTestForm}
+          initialValues={modifiedInitialValues}
+          onSubmit={handleOnSubmit}
+        />,
+      );
+
+      const formSubmitBtn = queryByTestId('form-btn-submit');
+      expect(formSubmitBtn).toBeDefined();
+      fireEvent.press(formSubmitBtn);
+
+      await waitFor(() => expect(handleOnSubmit).toHaveBeenCalledTimes(1));
+      expect(handleOnSubmit).toHaveBeenCalledWith(
+        {
+          name: 'John',
+          geo: null,
+          answers: [
+            {
+              1: 'John',
+              2: new Date('01-01-1992'),
+              3: 0,
+              4: ['Male'],
+              5: ['Bachelor'],
+              9: 0,
+            },
+          ],
+        },
+        expect.any(Function),
+      );
+    },
+  );
+
+  it('should filter form values by valid value', async () => {
+    const handleOnSubmit = jest.fn();
+    const modifiedInitialValues = {
+      1: 'John',
+      2: new Date('01-01-1992'),
+      3: 0,
+      4: ['Male'],
+      5: ['Bachelor'],
+      6: [undefined],
+      7: [],
+      8: '',
+      9: 0,
+    };
+
+    const { queryByTestId } = render(
+      <FormContainer
+        forms={exampleTestForm}
+        initialValues={modifiedInitialValues}
+        onSubmit={handleOnSubmit}
+      />,
+    );
+
+    const formSubmitBtn = queryByTestId('form-btn-submit');
+    expect(formSubmitBtn).toBeDefined();
+    fireEvent.press(formSubmitBtn);
+
+    await waitFor(() => expect(handleOnSubmit).toHaveBeenCalledTimes(1));
+    expect(handleOnSubmit).toHaveBeenCalledWith(
+      {
+        name: 'John',
+        geo: null,
+        answers: [
+          {
+            1: 'John',
+            2: new Date('01-01-1992'),
+            3: 0,
+            4: ['Male'],
+            5: ['Bachelor'],
+            9: 0,
+          },
+        ],
+      },
+      expect.any(Function),
+    );
+  });
 });

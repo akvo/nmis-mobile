@@ -109,7 +109,12 @@ describe('conn.tx', () => {
     const expectedQuery = 'DELETE FROM users;';
     expect(truncateQueries).toEqual([expectedQuery]);
     expect(db.transaction).toHaveBeenCalled();
-    expect(mockExecuteSql).toHaveBeenCalledWith(expectedQuery, [], expect.any(Function));
+    expect(mockExecuteSql).toHaveBeenCalledWith(
+      expectedQuery,
+      [],
+      expect.any(Function),
+      expect.any(Function),
+    );
   });
 
   test('should execute the drop transaction successfully', async () => {
