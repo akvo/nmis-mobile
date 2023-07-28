@@ -253,11 +253,9 @@ describe('FormContainer component on save', () => {
         {
           name: 'John',
           geo: null,
-          answers: [
-            {
-              1: 'John',
-            },
-          ],
+          answers: {
+            1: 'John',
+          },
         },
         expect.any(Function),
       );
@@ -296,17 +294,15 @@ describe('FormContainer component on submit', () => {
       {
         name: 'John',
         geo: null,
-        answers: [
-          {
-            1: 'John',
-            2: new Date('01-01-1992'),
-            3: '31',
-            4: ['Male'],
-            5: ['Bachelor'],
-            6: ['Traveling'],
-            7: ['Fried Rice'],
-          },
-        ],
+        answers: {
+          1: 'John',
+          2: new Date('01-01-1992'),
+          3: '31',
+          4: ['Male'],
+          5: ['Bachelor'],
+          6: ['Traveling'],
+          7: ['Fried Rice'],
+        },
       },
       expect.any(Function),
     );
@@ -343,18 +339,16 @@ describe('FormContainer component on submit', () => {
       {
         name: 'John',
         geo: null,
-        answers: [
-          {
-            1: 'John',
-            2: new Date('01-01-1992'),
-            3: '31',
-            4: ['Male'],
-            5: ['Bachelor'],
-            6: ['Traveling'],
-            7: ['Rendang'],
-            9: '8.9',
-          },
-        ],
+        answers: {
+          1: 'John',
+          2: new Date('01-01-1992'),
+          3: '31',
+          4: ['Male'],
+          5: ['Bachelor'],
+          6: ['Traveling'],
+          7: ['Rendang'],
+          9: '8.9',
+        },
       },
       expect.any(Function),
     );
@@ -393,16 +387,14 @@ describe('FormContainer component on submit', () => {
         {
           name: 'John',
           geo: null,
-          answers: [
-            {
-              1: 'John',
-              2: new Date('01-01-1992'),
-              3: 0,
-              4: ['Male'],
-              5: ['Bachelor'],
-              9: 0,
-            },
-          ],
+          answers: {
+            1: 'John',
+            2: new Date('01-01-1992'),
+            3: 0,
+            4: ['Male'],
+            5: ['Bachelor'],
+            9: 0,
+          },
         },
         expect.any(Function),
       );
@@ -440,16 +432,14 @@ describe('FormContainer component on submit', () => {
       {
         name: 'John',
         geo: null,
-        answers: [
-          {
-            1: 'John',
-            2: new Date('01-01-1992'),
-            3: 0,
-            4: ['Male'],
-            5: ['Bachelor'],
-            9: 0,
-          },
-        ],
+        answers: {
+          1: 'John',
+          2: new Date('01-01-1992'),
+          3: 0,
+          4: ['Male'],
+          5: ['Bachelor'],
+          9: 0,
+        },
       },
       expect.any(Function),
     );

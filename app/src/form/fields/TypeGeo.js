@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { View } from 'react-native';
 import { Text, Button } from '@rneui/themed';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 import { MapState, UIState } from '../../store';
 import { FieldLabel } from '../support';
@@ -17,6 +17,7 @@ const TypeGeo = ({ onChange, values, keyform, id, name, tooltip, required, requi
   const trans = i18n.text(activeLang);
 
   const navigation = useNavigation();
+  const route = useRoute();
 
   const handleOpenMapPress = () => {
     const geoVal = values?.[id];
@@ -25,7 +26,7 @@ const TypeGeo = ({ onChange, values, keyform, id, name, tooltip, required, requi
         ? { latitude: geoVal.lat, longitude: geoVal.lng }
         : location?.coords;
 
-    navigation.navigate('MapView', params);
+    navigation.navigate('MapView', { ...route?.params, ...params });
   };
   useEffect(() => {
     if (location === null) {

@@ -17,11 +17,10 @@ const selectDataPointById = async ({ id }) => {
 const dataPointsQuery = () => {
   return {
     selectDataPointById,
-    selectDataPointsByFormAndSubmitted: async ({ form, submitted }) => {
-      const { rows } = await conn.tx(db, query.read('datapoints', { form, submitted }), [
-        form,
-        submitted,
-      ]);
+    selectDataPointsByFormAndSubmitted: async ({ form, submitted, user }) => {
+      const columns = user ? { form, submitted, user } : { form, submitted };
+      const params = user ? [form, submitted, user] : [form, submitted];
+      const { rows } = await conn.tx(db, query.read('datapoints', { ...columns }), [...params]);
       if (!rows.length) {
         return [];
       }
@@ -39,12 +38,13 @@ const dataPointsQuery = () => {
       }
       return rows._array;
     },
-    saveDataPoint: async ({ form, user, name, submitted, duration, json }) => {
+    saveDataPoint: async ({ form, user, name, geo, submitted, duration, json }) => {
       const submittedAt = submitted ? { submittedAt: new Date().toISOString() } : {};
       const insertQuery = query.insert('datapoints', {
         form,
         user,
         name,
+        geo,
         submitted,
         duration,
         createdAt: new Date().toISOString(),
@@ -53,12 +53,22 @@ const dataPointsQuery = () => {
       });
       return await conn.tx(db, insertQuery, []);
     },
-    updateDataPoint: async ({ id, name, submitted, duration, submittedAt, syncedAt, json }) => {
+    updateDataPoint: async ({
+      id,
+      name,
+      geo,
+      submitted,
+      duration,
+      submittedAt,
+      syncedAt,
+      json,
+    }) => {
       const updateQuery = query.update(
         'datapoints',
         { id },
         {
           name,
+          geo,
           submitted,
           duration,
           submittedAt,

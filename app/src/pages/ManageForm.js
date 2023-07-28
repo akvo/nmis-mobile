@@ -7,10 +7,6 @@ import { UIState } from '../store';
 import { i18n } from '../lib';
 
 const ManageForm = ({ navigation, route }) => {
-  const goTo = (page, showSubmitted) => {
-    navigation.navigate(page, { ...route?.params, showSubmitted: showSubmitted || false });
-  };
-
   const activeLang = UIState.useState((s) => s.lang);
   const trans = i18n.text(activeLang);
 
@@ -19,21 +15,19 @@ const ManageForm = ({ navigation, route }) => {
       id: 1,
       text: trans.manageNewBlank,
       icon: 'add',
-      navigation: 'FormPage',
+      goTo: () => navigation.navigate('FormPage', { ...route?.params, newSubmission: true }),
     },
     {
       id: 2,
       text: trans.manageEditSavedForm,
       icon: 'folder-open',
-      navigation: 'FormData',
-      showSubmitted: false,
+      goTo: () => navigation.navigate('FormData', { ...route?.params, showSubmitted: false }),
     },
     {
       id: 3,
       text: trans.manageViewSubmitted,
       icon: 'eye',
-      navigation: 'FormData',
-      showSubmitted: true,
+      goTo: () => navigation.navigate('FormData', { ...route?.params, showSubmitted: true }),
     },
   ];
   return (
@@ -47,11 +41,7 @@ const ManageForm = ({ navigation, route }) => {
           }}
         >
           {items.map((i, ix) => (
-            <ListItem
-              key={ix}
-              onPress={() => goTo(i.navigation, i?.showSubmitted)}
-              testID={`goto-item-${ix}`}
-            >
+            <ListItem key={ix} onPress={() => i.goTo()} testID={`goto-item-${ix}`}>
               <Icon name={i.icon} color="grey" size={18} />
               <ListItem.Content>
                 <ListItem.Title>{i.text}</ListItem.Title>

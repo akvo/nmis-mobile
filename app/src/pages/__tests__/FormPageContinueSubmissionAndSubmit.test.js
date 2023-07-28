@@ -1,24 +1,24 @@
 import React from 'react';
 import { Platform, ToastAndroid } from 'react-native';
-import { render, fireEvent, waitFor } from '@testing-library/react-native';
+import { render, fireEvent, waitFor, act } from '@testing-library/react-native';
 jest.useFakeTimers();
 import FormPage from '../FormPage';
 import crudDataPoints from '../../database/crud/crud-datapoints';
+import { UserState } from '../../store';
 
 const mockFormContainer = jest.fn();
 const mockRoute = {
-  params: { id: 1, name: 'Form Name', newSubmission: true },
+  params: { id: 1, name: 'Form Name', dataPointId: 1, newSubmission: false },
 };
 const mockNavigation = {
   navigate: jest.fn(),
-  canGoBack: jest.fn(() => Promise.resolve(true)),
   goBack: jest.fn(),
 };
 const mockValues = {
-  name: 'John',
+  name: 'John Doe',
   geo: null,
   answers: {
-    1: 'John',
+    1: 'John Doe',
     2: new Date('01-01-1992'),
     3: '31',
     4: ['Male'],
@@ -28,6 +28,27 @@ const mockValues = {
   },
 };
 const mockRefreshForm = jest.fn();
+const mockCurrentDataPoint = {
+  id: 1,
+  form: 1,
+  user: 1,
+  name: 'John',
+  geo: null,
+  submitted: 0,
+  duration: 0,
+  createdAt: null,
+  submittedAt: new Date().toISOString(),
+  syncedAt: null,
+  json: {
+    1: 'John',
+    2: new Date('01-01-1992'),
+    3: '31',
+    4: ['Male'],
+    5: ['Bachelor'],
+    6: ['Traveling'],
+    7: ['Fried Rice'],
+  },
+};
 
 const exampleTestForm = {
   name: 'Testing Form',
@@ -257,60 +278,74 @@ jest.mock('../../assets/administrations.db', () => {
   return 'data';
 });
 
-describe('FormPage handleOnSubmitForm', () => {
+describe('FormPage continue saved submision then submit', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   test('should call handleOnSubmitForm with the correct values when the form is submitted', async () => {
     Platform.OS = 'android';
     ToastAndroid.show = jest.fn();
     jest.spyOn(React, 'useMemo').mockReturnValue(exampleTestForm);
+    crudDataPoints.selectDataPointById.mockImplementation(() =>
+      Promise.resolve(mockCurrentDataPoint),
+    );
 
     const wrapper = render(<FormPage navigation={mockNavigation} route={mockRoute} />);
+
+    act(() => {
+      UserState.update((s) => {
+        s.id = 1;
+      });
+    });
 
     await waitFor(() => {
       const submitButton = wrapper.getByTestId('mock-submit-button');
       fireEvent.press(submitButton);
     });
 
-    // save datapoint to database
     await waitFor(() => {
-      expect(crudDataPoints.saveDataPoint).toHaveBeenCalledWith({
-        duration: 0,
-        form: 1,
-        json: {
-          1: 'John',
-          2: new Date('01-01-1992'),
-          3: '31',
-          4: ['Male'],
-          5: ['Bachelor'],
-          6: ['Traveling'],
-          7: ['Fried Rice'],
-        },
-        name: 'John',
-        geo: null,
+      // save datapoint to database
+      expect(crudDataPoints.saveDataPoint).not.toHaveBeenCalled();
+      expect(crudDataPoints.updateDataPoint).toHaveBeenCalledWith({
+        ...mockCurrentDataPoint,
+        name: mockValues.name,
         submitted: 1,
-        user: null,
+        json: mockValues.answers,
       });
+      expect(ToastAndroid.show).toHaveBeenCalledTimes(1);
+      // call refreshForm
+      expect(mockRefreshForm).toHaveBeenCalledTimes(1);
+      expect(mockNavigation.navigate).toHaveBeenCalledWith('ManageForm', mockRoute.params);
     });
-
-    expect(ToastAndroid.show).toHaveBeenCalledTimes(1);
-    // call refreshForm
-    expect(mockRefreshForm).toHaveBeenCalledTimes(1);
-    expect(mockNavigation.navigate).toHaveBeenCalledWith('ManageForm', mockRoute.params);
   });
 
   test('should show ToastAndroid if handleOnSubmitForm throw an error', async () => {
     Platform.OS = 'android';
     ToastAndroid.show = jest.fn();
     jest.spyOn(React, 'useMemo').mockReturnValue(exampleTestForm);
+    crudDataPoints.selectDataPointById.mockImplementation(() =>
+      Promise.resolve(mockCurrentDataPoint),
+    );
     const consoleErrorSpy = jest.spyOn(console, 'error');
-    crudDataPoints.saveDataPoint.mockImplementation(() => Promise.reject('Error'));
+    crudDataPoints.updateDataPoint.mockImplementation(() => Promise.reject('Error'));
 
     const wrapper = render(<FormPage navigation={mockNavigation} route={mockRoute} />);
 
-    const submitButton = wrapper.getByTestId('mock-submit-button');
-    fireEvent.press(submitButton);
+    act(() => {
+      UserState.update((s) => {
+        s.id = 1;
+      });
+    });
 
     await waitFor(() => {
-      expect(crudDataPoints.saveDataPoint).toHaveBeenCalledTimes(1);
+      const submitButton = wrapper.getByTestId('mock-submit-button');
+      fireEvent.press(submitButton);
+    });
+
+    await waitFor(() => {
+      expect(crudDataPoints.saveDataPoint).not.toHaveBeenCalled();
+      expect(crudDataPoints.updateDataPoint).toHaveBeenCalledTimes(1);
       expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
       expect(ToastAndroid.show).toHaveBeenCalledTimes(1);
       expect(mockRefreshForm).not.toHaveBeenCalled();

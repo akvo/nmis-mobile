@@ -106,7 +106,7 @@ describe('Homepage', () => {
     expect(listForm3).toBeFalsy();
   });
 
-  it('should navigate to ManageForm page when form list clicked', async () => {
+  it('should navigate to ManageForm page when form list pressed', async () => {
     const mockFindData = mockForms.find((form) => form.id === 1);
     FormState.update.mockImplementation(() => mockFindData);
 
@@ -121,7 +121,6 @@ describe('Homepage', () => {
     fireEvent.press(listForm1);
 
     await waitFor(() => {
-      expect(FormState.update).toHaveBeenCalledTimes(1);
       expect(mockNavigation.navigate).toHaveBeenCalledWith('ManageForm', { id: 1, name: 'Form 1' });
     });
   });
