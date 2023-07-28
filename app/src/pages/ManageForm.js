@@ -3,29 +3,34 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { View } from 'react-native';
 import { ListItem } from '@rneui/themed';
 import { BaseLayout } from '../components';
+import { UIState } from '../store';
+import { i18n } from '../lib';
 
 const ManageForm = ({ navigation, route }) => {
   const goTo = (page, showSubmitted) => {
     navigation.navigate(page, { ...route?.params, showSubmitted: showSubmitted || false });
   };
 
+  const activeLang = UIState.useState((s) => s.lang);
+  const trans = i18n.text(activeLang);
+
   const items = [
     {
       id: 1,
-      text: 'New Blank Form',
+      text: trans.manageNewBlank,
       icon: 'add',
       navigation: 'FormPage',
     },
     {
       id: 2,
-      text: 'Edit Saved Form',
+      text: trans.manageEditSavedForm,
       icon: 'folder-open',
       navigation: 'FormData',
       showSubmitted: false,
     },
     {
       id: 3,
-      text: 'View Submitted',
+      text: trans.manageViewSubmitted,
       icon: 'eye',
       navigation: 'FormData',
       showSubmitted: true,
