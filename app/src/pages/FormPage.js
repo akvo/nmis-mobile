@@ -6,7 +6,6 @@ import {
   ActivityIndicator,
   StyleSheet,
   View,
-  AppState,
 } from 'react-native';
 import { Button, Dialog, Text } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -16,10 +15,10 @@ import { BaseLayout } from '../components';
 import { FormState } from '../store';
 import { crudDataPoints } from '../database/crud';
 import { UserState } from '../store';
-import { generateDataPointName, timer } from '../form/lib';
+import { generateDataPointName } from '../form/lib';
 
 const FormPage = ({ navigation, route }) => {
-  const { form: selectedForm, dataPointName } = FormState.useState((s) => s);
+  const { form: selectedForm, dataPointName, surveyDuration } = FormState.useState((s) => s);
   const userId = UserState.useState((s) => s.id);
   const [onSaveFormParams, setOnSaveFormParams] = React.useState({});
   const [showDialogMenu, setShowDialogMenu] = React.useState(false);
@@ -33,6 +32,19 @@ const FormPage = ({ navigation, route }) => {
   const [initialValues, setInitialValues] = React.useState({});
   const [currentDataPoint, setCurrentDataPoint] = React.useState({});
   const [loading, setLoading] = React.useState(false);
+
+  React.useEffect(() => {
+    let counter = 0;
+    const timerInterval = setInterval(() => {
+      counter++;
+      FormState.update((s) => {
+        s.surveyDuration = counter;
+      });
+    }, 1000);
+    return () => {
+      clearInterval(timerInterval);
+    };
+  }, []);
 
   React.useEffect(() => {
     const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
@@ -100,13 +112,17 @@ const FormPage = ({ navigation, route }) => {
         name: values?.name || 'Untitled',
         geo: values?.geo || null,
         submitted: 0,
-        duration: 0, // TODO:: set duration
+        duration: surveyDuration,
         json: values?.answers || {},
       };
       const dbCall = isNewSubmission
         ? crudDataPoints.saveDataPoint
         : crudDataPoints.updateDataPoint;
-      await dbCall({ ...currentDataPoint, ...saveData });
+      await dbCall({
+        ...currentDataPoint,
+        ...saveData,
+        duration: (currentDataPoint.duration || 0) + saveData.duration,
+      });
       if (Platform.OS === 'android') {
         ToastAndroid.show(`Data point ${values?.name} saved`, ToastAndroid.LONG);
       }
@@ -161,14 +177,17 @@ const FormPage = ({ navigation, route }) => {
         name: values.name,
         geo: values.geo,
         submitted: 1,
-        duration: 0, // TODO:: set duration
+        duration: surveyDuration,
         json: answers,
       };
-
       const dbCall = isNewSubmission
         ? crudDataPoints.saveDataPoint
         : crudDataPoints.updateDataPoint;
-      await dbCall({ ...currentDataPoint, ...submitData });
+      await dbCall({
+        ...currentDataPoint,
+        ...submitData,
+        duration: (currentDataPoint.duration || 0) + submitData.duration,
+      });
       if (Platform.OS === 'android') {
         ToastAndroid.show(`Data point ${values.name} submitted`, ToastAndroid.LONG);
       }

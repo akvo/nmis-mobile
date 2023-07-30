@@ -40,11 +40,12 @@ const dataPointsQuery = () => {
     },
     saveDataPoint: async ({ form, user, name, geo, submitted, duration, json }) => {
       const submittedAt = submitted ? { submittedAt: new Date().toISOString() } : {};
+      const geoVal = geo ? { geo } : {};
       const insertQuery = query.insert('datapoints', {
         form,
         user,
         name,
-        geo,
+        ...geoVal,
         submitted,
         duration,
         createdAt: new Date().toISOString(),
@@ -71,7 +72,7 @@ const dataPointsQuery = () => {
           geo,
           submitted,
           duration,
-          submittedAt,
+          submittedAt: submitted && !submittedAt ? new Date().toISOString() : submittedAt,
           syncedAt,
           json: json ? JSON.stringify(json).replace(/'/g, "''") : null,
         },
