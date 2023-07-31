@@ -315,7 +315,7 @@ describe('FormPage continue saved submision then submit', () => {
         name: mockValues.name,
         submitted: 1,
         json: mockValues.answers,
-        duration: 9,
+        duration: 0.15, // in minutes
       });
       expect(ToastAndroid.show).toHaveBeenCalledTimes(1);
       // call refreshForm

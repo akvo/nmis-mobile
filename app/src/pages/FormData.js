@@ -5,6 +5,16 @@ import { UserState } from '../store';
 import { crudDataPoints } from '../database/crud';
 import Icon from 'react-native-vector-icons/Ionicons';
 
+const convertMinutesToHHMM = (minutes) => {
+  const hours = Math.floor(minutes / 60);
+  const remainingMinutes = minutes % 60;
+
+  const formattedHours = String(hours).padStart(2, '0');
+  const formattedMinutes = String(remainingMinutes).padStart(2, '0');
+
+  return `${formattedHours}h ${formattedMinutes}m`;
+};
+
 const FormData = ({ navigation, route }) => {
   const formId = route?.params?.id;
   const showSubmitted = route?.params?.showSubmitted || false;
@@ -26,7 +36,10 @@ const FormData = ({ navigation, route }) => {
     results = results.map((res) => {
       const createdAt = new Date(res.createdAt).toLocaleDateString('en-GB');
       const syncedAt = res.syncedAt ? new Date(res.syncedAt).toLocaleDateString('en-GB') : '-';
-      let subtitlesTemp = [`Created: ${createdAt}`, `Survey Duration: ${res.duration}`];
+      let subtitlesTemp = [
+        `Created: ${createdAt}`,
+        `Survey Duration: ${convertMinutesToHHMM(res.duration)}`,
+      ];
       if (showSubmitted) {
         subtitlesTemp = [...subtitlesTemp, `Sync: ${syncedAt}`];
       }

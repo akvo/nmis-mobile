@@ -283,7 +283,7 @@ describe('FormPage handleOnSubmitForm', () => {
     // save datapoint to database
     await waitFor(() => {
       expect(crudDataPoints.saveDataPoint).toHaveBeenCalledWith({
-        duration: 9,
+        duration: 0.15, // in minutes
         form: 1,
         json: {
           1: 'John',

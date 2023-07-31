@@ -17,6 +17,14 @@ import { crudDataPoints } from '../database/crud';
 import { UserState } from '../store';
 import { generateDataPointName } from '../form/lib';
 
+const convertDurationToMinutes = (currentDataPoint, newDataPoint) => {
+  const totalDuration = (currentDataPoint?.duration || 0) + newDataPoint.duration;
+  if (!totalDuration) {
+    return 0;
+  }
+  return totalDuration / 60;
+};
+
 const FormPage = ({ navigation, route }) => {
   const { form: selectedForm, dataPointName, surveyDuration } = FormState.useState((s) => s);
   const userId = UserState.useState((s) => s.id);
@@ -121,7 +129,7 @@ const FormPage = ({ navigation, route }) => {
       await dbCall({
         ...currentDataPoint,
         ...saveData,
-        duration: (currentDataPoint.duration || 0) + saveData.duration,
+        duration: convertDurationToMinutes(currentDataPoint, saveData),
       });
       if (Platform.OS === 'android') {
         ToastAndroid.show(`Data point ${values?.name} saved`, ToastAndroid.LONG);
@@ -186,7 +194,7 @@ const FormPage = ({ navigation, route }) => {
       await dbCall({
         ...currentDataPoint,
         ...submitData,
-        duration: (currentDataPoint.duration || 0) + submitData.duration,
+        duration: convertDurationToMinutes(currentDataPoint, submitData),
       });
       if (Platform.OS === 'android') {
         ToastAndroid.show(`Data point ${values.name} submitted`, ToastAndroid.LONG);

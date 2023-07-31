@@ -17,10 +17,11 @@ describe('FormDataPage', () => {
       {
         id: 1,
         createdAt: '2023-07-18T12:34:56.789Z',
-        duration: '30 minutes',
+        duration: 145,
         syncedAt: '2023-07-18T13:00:00.000Z',
       },
     ];
+
     crudDataPoints.selectDataPointsByFormAndSubmitted.mockResolvedValue(mockData);
     const tree = render(<FormDataPage />);
     await waitFor(() => expect(tree.toJSON()).toMatchSnapshot());
@@ -39,7 +40,7 @@ describe('FormDataPage', () => {
       {
         id: 1,
         createdAt: '2023-07-18T12:34:56.789Z',
-        duration: '30 minutes',
+        duration: 145,
         syncedAt: '2023-07-18T13:00:00.000Z',
         submitted: 1,
       },
@@ -51,9 +52,10 @@ describe('FormDataPage', () => {
 
     await waitFor(() => {
       expect(wrapper.getByText('Form Name')).toBeTruthy();
-      expect(wrapper.getByText('Created: 18/07/2023')).toBeTruthy();
-      expect(wrapper.getByText('Survey Duration: 30 minutes')).toBeTruthy();
-      expect(wrapper.getByText('Sync: 18/07/2023')).toBeTruthy();
+      const list0 = wrapper.getByTestId('card-touchable-0');
+      expect(list0.props.children[0].props.subTitles[0]).toEqual('Created: 18/07/2023');
+      expect(list0.props.children[0].props.subTitles[1]).toEqual('Survey Duration: 02h 25m');
+      expect(list0.props.children[0].props.subTitles[2]).toEqual('Sync: 18/07/2023');
     });
   });
 
@@ -70,7 +72,7 @@ describe('FormDataPage', () => {
       {
         id: 1,
         createdAt: '2023-07-18T12:34:56.789Z',
-        duration: '30 minutes',
+        duration: 145,
         syncedAt: null,
         submitted: 0,
       },
@@ -82,9 +84,10 @@ describe('FormDataPage', () => {
 
     await waitFor(() => {
       expect(wrapper.getByText('Form Name')).toBeTruthy();
-      expect(wrapper.getByText('Created: 18/07/2023')).toBeTruthy();
-      expect(wrapper.getByText('Survey Duration: 30 minutes')).toBeTruthy();
-      expect(wrapper.queryByText('Sync: -')).toBeFalsy();
+      const list0 = wrapper.getByTestId('card-touchable-0');
+      expect(list0.props.children[0].props.subTitles[0]).toEqual('Created: 18/07/2023');
+      expect(list0.props.children[0].props.subTitles[1]).toEqual('Survey Duration: 02h 25m');
+      expect(list0.props.children[0].props.subTitles[2]).toEqual(undefined);
     });
   });
 
@@ -93,7 +96,7 @@ describe('FormDataPage', () => {
       {
         id: 1,
         createdAt: '2023-07-18T12:34:56.789Z',
-        duration: '30 minutes',
+        duration: 145,
         syncedAt: '2023-07-18T13:00:00.000Z',
       },
     ];
@@ -118,7 +121,7 @@ describe('FormDataPage', () => {
       {
         id: 1,
         createdAt: '2023-07-18T12:34:56.789Z',
-        duration: '30 minutes',
+        duration: 145,
         syncedAt: null,
         submitted: 0,
       },
