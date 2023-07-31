@@ -3,9 +3,11 @@ import { render, waitFor, fireEvent } from '@testing-library/react-native';
 import FormDataPage from '../FormData';
 import crudDataPoints from '../../database/crud/crud-datapoints';
 import { useNavigation } from '@react-navigation/native';
+import { backgroundTask } from '../../lib';
 
 jest.mock('@react-navigation/native');
 jest.mock('../../database/crud/crud-datapoints');
+jest.mock('../../lib/background-task.js');
 
 describe('FormDataPage', () => {
   beforeEach(() => {
@@ -179,6 +181,209 @@ describe('FormDataPage', () => {
       ...mockRoute.params,
       dataPointId: 1,
       newSubmission: false,
+    });
+  });
+
+  it('should not render render sync button on Saved FormData page', async () => {
+    const mockRoute = {
+      params: {
+        id: 123,
+        name: 'Form Name',
+        showSubmitted: false,
+      },
+    };
+
+    const mockData = [
+      {
+        id: 1,
+        name: 'Datapoint 1',
+        createdAt: '2023-07-18T12:34:56.789Z',
+        duration: 145,
+        syncedAt: '2023-07-18T13:00:00.000Z',
+        submitted: 1,
+      },
+    ];
+
+    crudDataPoints.selectDataPointsByFormAndSubmitted.mockResolvedValue(mockData);
+
+    const wrapper = render(<FormDataPage route={mockRoute} />);
+
+    await waitFor(() => {
+      expect(wrapper.getByText('Form Name')).toBeTruthy();
+      // check sync button rendered
+      expect(wrapper.queryByTestId('button-to-trigger-sync')).toBeFalsy();
+      const list0 = wrapper.getByTestId('card-touchable-0');
+      expect(list0).toBeTruthy();
+    });
+  });
+
+  it('should render sync button on Submitted FormData page', async () => {
+    const mockRoute = {
+      params: {
+        id: 123,
+        name: 'Form Name',
+        showSubmitted: true,
+      },
+    };
+
+    const mockData = [
+      {
+        id: 1,
+        name: 'Datapoint 1',
+        createdAt: '2023-07-18T12:34:56.789Z',
+        duration: 145,
+        syncedAt: null,
+        submitted: 1,
+      },
+    ];
+
+    crudDataPoints.selectDataPointsByFormAndSubmitted.mockResolvedValue(mockData);
+
+    const wrapper = render(<FormDataPage route={mockRoute} />);
+
+    await waitFor(() => {
+      expect(wrapper.getByText('Form Name')).toBeTruthy();
+      // check sync button rendered
+      const syncButtonElement = wrapper.getByTestId('button-to-trigger-sync');
+      expect(syncButtonElement).toBeTruthy();
+      expect(syncButtonElement.props.accessibilityState.disabled).toEqual(false);
+      const list0 = wrapper.getByTestId('card-touchable-0');
+      expect(list0).toBeTruthy();
+    });
+  });
+
+  it('should disable sync button if no data on Submitted FormData page', async () => {
+    const mockRoute = {
+      params: {
+        id: 123,
+        name: 'Form Name',
+        showSubmitted: true,
+      },
+    };
+
+    const mockData = [
+      {
+        id: 1,
+        name: 'Datapoint 1',
+        createdAt: '2023-07-18T12:34:56.789Z',
+        duration: 145,
+        syncedAt: '2023-07-18T13:00:00.000Z',
+        submitted: 1,
+      },
+    ];
+
+    crudDataPoints.selectDataPointsByFormAndSubmitted.mockResolvedValue(mockData);
+
+    const wrapper = render(<FormDataPage route={mockRoute} />);
+
+    await waitFor(() => {
+      expect(wrapper.getByText('Form Name')).toBeTruthy();
+      // check sync button rendered
+      const syncButtonElement = wrapper.getByTestId('button-to-trigger-sync');
+      expect(syncButtonElement).toBeTruthy();
+      expect(syncButtonElement.props.accessibilityState.disabled).toEqual(true);
+      const list0 = wrapper.queryByTestId('card-touchable-0');
+      expect(list0).toBeFalsy();
+    });
+  });
+
+  it('should show sync confirmation dialog when sync button pressed and hide if confirmation denied', async () => {
+    const mockRoute = {
+      params: {
+        id: 123,
+        name: 'Form Name',
+        showSubmitted: true,
+      },
+    };
+
+    const mockData = [
+      {
+        id: 1,
+        name: 'Datapoint 1',
+        createdAt: '2023-07-18T12:34:56.789Z',
+        duration: 145,
+        syncedAt: null,
+        submitted: 1,
+      },
+    ];
+
+    crudDataPoints.selectDataPointsByFormAndSubmitted.mockResolvedValue(mockData);
+
+    const wrapper = render(<FormDataPage route={mockRoute} />);
+
+    await waitFor(() => expect(wrapper.getByText('Form Name')).toBeTruthy());
+
+    // check sync button rendered
+    const syncButtonElement = wrapper.getByTestId('button-to-trigger-sync');
+    expect(syncButtonElement).toBeTruthy();
+    fireEvent.press(syncButtonElement);
+
+    const dialogElement = wrapper.queryByTestId('sync-confirmation-dialog');
+    expect(dialogElement).toBeTruthy();
+
+    await waitFor(() => expect(dialogElement.props.visible).toEqual(true));
+
+    const textConfirmationElement = wrapper.queryByTestId('sync-confirmation-text');
+    expect(textConfirmationElement).toBeTruthy();
+    const okButtonElement = wrapper.queryByTestId('sync-confirmation-ok');
+    expect(okButtonElement).toBeTruthy();
+    const cancelButtonElement = wrapper.queryByTestId('sync-confirmation-cancel');
+    expect(cancelButtonElement).toBeTruthy();
+
+    fireEvent.press(cancelButtonElement);
+
+    await waitFor(() => expect(dialogElement.props.visible).toEqual(false));
+  });
+
+  it('should handle sync submission when sync confirmation granted', async () => {
+    const mockRoute = {
+      params: {
+        id: 123,
+        name: 'Form Name',
+        showSubmitted: true,
+      },
+    };
+
+    const mockData = [
+      {
+        id: 1,
+        name: 'Datapoint 1',
+        createdAt: '2023-07-18T12:34:56.789Z',
+        duration: 145,
+        syncedAt: null,
+        submitted: 1,
+      },
+    ];
+
+    crudDataPoints.selectDataPointsByFormAndSubmitted.mockResolvedValue(mockData);
+    backgroundTask.syncFormSubmission.mockResolvedValue(() => Promise.resolve(true));
+
+    const wrapper = render(<FormDataPage route={mockRoute} />);
+
+    await waitFor(() => expect(wrapper.getByText('Form Name')).toBeTruthy());
+
+    // check sync button rendered
+    const syncButtonElement = wrapper.getByTestId('button-to-trigger-sync');
+    expect(syncButtonElement).toBeTruthy();
+    fireEvent.press(syncButtonElement);
+
+    const dialogElement = wrapper.queryByTestId('sync-confirmation-dialog');
+    expect(dialogElement).toBeTruthy();
+
+    await waitFor(() => expect(dialogElement.props.visible).toEqual(true));
+
+    const okButtonElement = wrapper.queryByTestId('sync-confirmation-ok');
+    expect(okButtonElement).toBeTruthy();
+    fireEvent.press(okButtonElement);
+
+    const loadingElement = wrapper.queryByTestId('sync-loading');
+    const dataPointListElement = wrapper.queryByTestId('data-point-list');
+
+    await waitFor(() => {
+      expect(loadingElement).toBeTruthy();
+      expect(dataPointListElement).toBeFalsy();
+      expect(backgroundTask.syncFormSubmission).toHaveBeenCalledTimes(1);
+      expect(crudDataPoints.selectDataPointsByFormAndSubmitted).toHaveBeenCalledTimes(2);
     });
   });
 });

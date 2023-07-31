@@ -38,7 +38,7 @@ TaskManager.defineTask(SYNC_FORM_VERSION_TASK_NAME, async () => {
       sendPushNotification: notification.sendPushNotification,
       showNotificationOnly: true,
     });
-    return BackgroundFetch.BackgroundFetchResult.NewData;
+    return BackgroundFetch.BackgroundFetchResult.NoData;
   } catch (err) {
     console.error(`[${SYNC_FORM_VERSION_TASK_NAME}] Define task manager failed`, err);
     return BackgroundFetch.Result.Failed;
