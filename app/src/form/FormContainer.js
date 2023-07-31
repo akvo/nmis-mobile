@@ -90,7 +90,7 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave }) => {
       });
       return initialValues;
     }
-    return {};
+    return currentValues;
   }, [initialValues]);
 
   const refreshForm = () => {

@@ -288,7 +288,7 @@ describe('FormPage handleOnSubmitForm', () => {
         json: {
           1: 'John',
           2: new Date('01-01-1992'),
-          3: '31',
+          3: 31, // it was string in the result of Formik
           4: ['Male'],
           5: ['Bachelor'],
           6: ['Traveling'],

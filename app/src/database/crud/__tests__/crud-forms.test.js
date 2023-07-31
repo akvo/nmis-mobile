@@ -44,27 +44,57 @@ describe('crudForms function', () => {
     ];
 
     test('selectLatestFormVersion should return [] if the latest form version does not exist', async () => {
+      const mockSelectSql = jest.fn((query, params, successCallback) => {
+        successCallback(null, { rows: { length: 0, _array: [] } });
+      });
+      db.transaction.mockImplementation((transactionFunction) => {
+        transactionFunction({
+          executeSql: mockSelectSql,
+        });
+      });
       const result = await crudForms.selectLatestFormVersion();
       expect(result).toEqual([]);
     });
 
     test('selectFormByIdAndVersion should return false if the form does not exist', async () => {
+      const mockData = formData.filter((f) => f.id === 1 && f.version === '1.0.1');
+      const mockSelectSql = jest.fn((query, params, successCallback) => {
+        successCallback(null, { rows: { length: mockData.length, _array: mockData } });
+      });
+      db.transaction.mockImplementation((transactionFunction) => {
+        transactionFunction({
+          executeSql: mockSelectSql,
+        });
+      });
       const result = await crudForms.selectFormByIdAndVersion({ id: 1, version: '1.0.1' });
       expect(result).toBe(false);
     });
 
-    test('selectLatestFormVersion should return the forms if it exists', async () => {
-      const mockSelectLatestFormVersion = jest.fn(() => formData);
-      crudForms.selectLatestFormVersion = mockSelectLatestFormVersion;
+    test('selectLatestFormVersion should return the forms with stats if it exists', async () => {
+      const mockSelectSql = jest.fn((query, params, successCallback) => {
+        successCallback(null, { rows: { length: formData.length, _array: formData } });
+      });
+      db.transaction.mockImplementation((transactionFunction) => {
+        transactionFunction({
+          executeSql: mockSelectSql,
+        });
+      });
       const result = await crudForms.selectLatestFormVersion();
       expect(result).toEqual(formData);
     });
 
     test('selectFormByIdAndVersion should return the form if it exists', async () => {
-      const mockSelectFormByIdAndVersion = jest.fn(() => formData);
-      crudForms.selectFormByIdAndVersion = mockSelectFormByIdAndVersion;
-      const result = await crudForms.selectFormByIdAndVersion(formData[0]);
-      expect(result).toEqual(formData);
+      const mockData = formData.filter((f) => f.id === 1 && f.version === '1.0.0');
+      const mockSelectSql = jest.fn((query, params, successCallback) => {
+        successCallback(null, { rows: { length: mockData.length, _array: mockData } });
+      });
+      db.transaction.mockImplementation((transactionFunction) => {
+        transactionFunction({
+          executeSql: mockSelectSql,
+        });
+      });
+      const result = await crudForms.selectFormByIdAndVersion({ id: 1, version: '1.0.0' });
+      expect(result).toEqual(mockData[0]);
     });
 
     test('selectFormById should return the correct form value when given a valid ID', async () => {
