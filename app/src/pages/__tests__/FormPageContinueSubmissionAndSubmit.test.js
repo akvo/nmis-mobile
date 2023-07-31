@@ -4,7 +4,7 @@ import { render, fireEvent, waitFor, act } from '@testing-library/react-native';
 jest.useFakeTimers();
 import FormPage from '../FormPage';
 import crudDataPoints from '../../database/crud/crud-datapoints';
-import { UserState } from '../../store';
+import { UserState, FormState } from '../../store';
 
 const mockFormContainer = jest.fn();
 const mockRoute = {
@@ -297,6 +297,9 @@ describe('FormPage continue saved submision then submit', () => {
       UserState.update((s) => {
         s.id = 1;
       });
+      FormState.update((s) => {
+        s.surveyDuration = 9;
+      });
     });
 
     await waitFor(() => {
@@ -312,6 +315,7 @@ describe('FormPage continue saved submision then submit', () => {
         name: mockValues.name,
         submitted: 1,
         json: mockValues.answers,
+        duration: 9,
       });
       expect(ToastAndroid.show).toHaveBeenCalledTimes(1);
       // call refreshForm
