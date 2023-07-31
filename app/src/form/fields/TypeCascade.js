@@ -3,6 +3,7 @@ import { View, Text } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { FieldLabel } from '../support';
 import { styles } from '../styles';
+import { FormState } from '../../store';
 
 const TypeCascade = ({
   onChange,
@@ -50,10 +51,21 @@ const TypeCascade = ({
         value: null,
       });
     }
-    const dropdownValues = updatedItems.filter((dd) => dd.value).map((dd) => dd.value);
-    const finalValues = updatedItems.length !== dropdownValues.length ? null : dropdownValues;
+    const dropdownValues = updatedItems.filter((dd) => dd.value);
+    const finalValues =
+      updatedItems.length !== dropdownValues.length ? null : dropdownValues.map((dd) => dd.value);
     onChange(id, finalValues);
 
+    if (finalValues) {
+      const { options: selectedOptions, value: selectedValue } = dropdownValues.pop();
+      const findSelected = selectedOptions?.find((o) => o.id === selectedValue) || [];
+      const cascadeName = findSelected?.name || null;
+      FormState.update((s) => {
+        s.dataPointName = s.dataPointName.map((dn) =>
+          dn.type === 'cascade' ? { ...dn, value: cascadeName } : dn,
+        );
+      });
+    }
     setDropdownItems(updatedItems);
   };
 
@@ -61,10 +73,10 @@ const TypeCascade = ({
     const parentID = source?.parent_id || 0;
     const filterDs = dataSource.filter(
       (ds) =>
+        ds?.id === parentID ||
         ds?.parent === parentID ||
         (values[id] && (values[id].includes(ds?.id) || values[id].includes(ds?.parent))),
     );
-
     if (dropdownItems.length === 0 && dataSource.length && filterDs.length) {
       const groupedDs = groupBy(filterDs, 'parent');
       const initialDropdowns = Object.values(groupedDs).map((options, ox) => {

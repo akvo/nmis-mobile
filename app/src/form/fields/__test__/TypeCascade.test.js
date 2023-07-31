@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { render, fireEvent, act, waitFor, renderHook } from '@testing-library/react-native';
 import TypeCascade from '../TypeCascade';
+import { generateDataPointName } from '../../lib';
+import { FormState } from '../../../store';
 
 const dummyLocations = [
   { id: 106, name: 'DI YOGYAKARTA', parent: 0 },
@@ -408,5 +410,198 @@ describe('TypeCascade', () => {
     );
     const requiredIcon = wrapper.getByText('**');
     expect(requiredIcon).toBeTruthy();
+  });
+
+  it('should use id when parent id not found', () => {
+    const fieldID = 'location';
+    const fieldName = 'Location';
+    const initialValue = null;
+    const values = { [fieldID]: initialValue };
+
+    const mockedOnChange = jest.fn((fieldName, value) => {
+      values[fieldName] = value;
+    });
+
+    const questionSource = { file: 'file.sqlite', parent_id: 114 };
+    const { getByTestId, getByText } = render(
+      <TypeCascade
+        onChange={mockedOnChange}
+        id={fieldID}
+        name={fieldName}
+        values={values}
+        dataSource={dummyLocations}
+        source={questionSource}
+      />,
+    );
+
+    const parentDropdown = getByTestId('dropdown-cascade-0');
+    expect(parentDropdown).toBeDefined();
+
+    fireEvent.press(parentDropdown);
+
+    const validOption = getByText('Kembaran');
+    expect(validOption).toBeDefined();
+  });
+
+  it('Should get cascade name as datapoint name', async () => {
+    /**
+     * Set datapointName first
+     */
+
+    act(() => {
+      FormState.update((s) => {
+        s.dataPointName = [
+          { type: 'cascade', value: null },
+          { type: 'text', value: 'Example' },
+        ];
+      });
+    });
+    const fieldID = 'location';
+    const fieldName = 'Location';
+    const initialValue = null;
+    const values = { [fieldID]: initialValue };
+
+    const mockedOnChange = jest.fn((fieldName, value) => {
+      values[fieldName] = value;
+    });
+
+    const questionSource = { file: 'file.sqlite', parent_id: 107 };
+    const { getByTestId, getByText } = render(
+      <TypeCascade
+        onChange={mockedOnChange}
+        id={fieldID}
+        name={fieldName}
+        values={values}
+        dataSource={dummyLocations}
+        source={questionSource}
+      />,
+    );
+
+    const dropdown1 = getByTestId('dropdown-cascade-0');
+    expect(dropdown1).toBeDefined();
+
+    const dropdown2 = getByTestId('dropdown-cascade-1');
+    expect(dropdown2).toBeDefined();
+    fireEvent.press(dropdown2);
+
+    const selectedText = getByText('Sabdodadi');
+    fireEvent.press(selectedText);
+
+    act(() => {
+      mockedOnChange(fieldID, [107, 109]);
+      const cascadeName = 'Sabdodadi';
+      FormState.update((s) => {
+        s.dataPointName = s.dataPointName.map((dn) =>
+          dn.type === 'cascade' ? { ...dn, value: cascadeName } : dn,
+        );
+      });
+    });
+
+    await waitFor(() => {
+      const { result } = renderHook(() => FormState.useState((s) => s.dataPointName));
+      const { dpName } = generateDataPointName(result.current);
+      expect(dpName).toBe('Sabdodadi - Example');
+      expect(values[fieldID]).toEqual([107, 109]);
+    });
+  });
+
+  it('Should not get cascade name as datapoint name when FormState.dataPointName is empty or there is no cascade type', async () => {
+    /**
+     * Update datapointName first
+     */
+    act(() => {
+      FormState.update((s) => {
+        s.dataPointName = [];
+      });
+    });
+    const fieldID = 'location';
+    const fieldName = 'Location';
+    const initialValue = null;
+    const values = { [fieldID]: initialValue };
+
+    const mockedOnChange = jest.fn((fieldName, value) => {
+      values[fieldName] = value;
+    });
+
+    const questionSource = { file: 'file.sqlite', parent_id: 107 };
+    const { getByTestId, getByText, rerender } = render(
+      <TypeCascade
+        onChange={mockedOnChange}
+        id={fieldID}
+        name={fieldName}
+        values={values}
+        dataSource={dummyLocations}
+        source={questionSource}
+      />,
+    );
+
+    const dropdown1 = getByTestId('dropdown-cascade-0');
+    expect(dropdown1).toBeDefined();
+
+    const dropdown2 = getByTestId('dropdown-cascade-1');
+    expect(dropdown2).toBeDefined();
+    fireEvent.press(dropdown2);
+
+    const selectedText = getByText('Bantul');
+    fireEvent.press(selectedText);
+
+    act(() => {
+      mockedOnChange(fieldID, [107, 108]);
+      const cascadeName = 'Bantul';
+      FormState.update((s) => {
+        s.dataPointName = s.dataPointName.map((dn) =>
+          dn.type === 'cascade' ? { ...dn, value: cascadeName } : dn,
+        );
+      });
+    });
+
+    await waitFor(() => {
+      const { result } = renderHook(() => FormState.useState((s) => s.dataPointName));
+      const { dpName } = generateDataPointName(result.current);
+      expect(dpName).toBe('');
+      expect(values[fieldID]).toEqual([107, 108]);
+    });
+
+    act(() => {
+      FormState.update((s) => {
+        s.dataPointName = [
+          { type: 'text', value: 'Example' },
+          { types: 'geo', value: null },
+        ];
+      });
+    });
+
+    rerender(
+      <TypeCascade
+        onChange={mockedOnChange}
+        id={fieldID}
+        name={fieldName}
+        values={values}
+        dataSource={dummyLocations}
+        source={questionSource}
+      />,
+    );
+
+    fireEvent.press(dropdown2);
+
+    const selectedText2 = getByText('Sabdodadi');
+    fireEvent.press(selectedText2);
+
+    act(() => {
+      mockedOnChange(fieldID, [107, 109]);
+      const cascadeName = 'Sabdodadi';
+      FormState.update((s) => {
+        s.dataPointName = s.dataPointName.map((dn) =>
+          dn.type === 'cascade' ? { ...dn, value: cascadeName } : dn,
+        );
+      });
+    });
+
+    await waitFor(() => {
+      const { result } = renderHook(() => FormState.useState((s) => s.dataPointName));
+      const { dpName } = generateDataPointName(result.current);
+      expect(dpName).toBe('Example');
+      expect(values[fieldID]).toEqual([107, 109]);
+    });
   });
 });
