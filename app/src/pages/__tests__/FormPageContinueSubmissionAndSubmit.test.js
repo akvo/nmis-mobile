@@ -314,7 +314,15 @@ describe('FormPage continue saved submision then submit', () => {
         ...mockCurrentDataPoint,
         name: mockValues.name,
         submitted: 1,
-        json: mockValues.answers,
+        json: {
+          1: 'John Doe',
+          2: new Date('01-01-1992'),
+          3: 31, // it was string in the result of Formik
+          4: ['Male'],
+          5: ['Bachelor'],
+          6: ['Traveling'],
+          7: ['Fried Rice'],
+        },
         duration: 0.15, // in minutes
       });
       expect(ToastAndroid.show).toHaveBeenCalledTimes(1);

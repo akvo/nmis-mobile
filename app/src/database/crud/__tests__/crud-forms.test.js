@@ -80,7 +80,7 @@ describe('crudForms function', () => {
         });
       });
       const result = await crudForms.selectLatestFormVersion();
-      expect(result).toEqual();
+      expect(result).toEqual(formData);
     });
 
     test('selectFormByIdAndVersion should return the form if it exists', async () => {
