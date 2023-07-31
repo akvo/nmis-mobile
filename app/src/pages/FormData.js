@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Button } from '@rneui/themed';
+import { Button, Dialog, Text } from '@rneui/themed';
+import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 import { UserState } from '../store';
 import { BaseLayout } from '../components';
 import { crudDataPoints } from '../database/crud';
-import { i18n } from '../lib';
+import { i18n, backgroundTask } from '../lib';
 import { UIState } from '../store';
 
 const convertMinutesToHHMM = (minutes) => {
@@ -30,7 +31,7 @@ const syncButtonElement = ({ showSubmitted, handleSyncButtonOnPress, disabled })
         onPress={handleSyncButtonOnPress}
         testID="button-to-trigger-sync"
       >
-        <Icon name="arrow-back" size={18} />
+        <Icon name="sync" size={18} />
       </Button>
     ),
   };
@@ -43,8 +44,9 @@ const FormData = ({ navigation, route }) => {
   const trans = i18n.text(activeLang);
   const activeUserId = UserState.useState((s) => s.id);
   const [search, setSearch] = useState(null);
-
   const [data, setData] = useState([]);
+  const [showConfirmationSyncDialog, setShowConfirmationSyncDialog] = useState(false);
+  const [syncing, setSyncing] = useState(false);
 
   const goBack = () => {
     navigation.navigate('ManageForm', { ...route?.params });
@@ -96,8 +98,20 @@ const FormData = ({ navigation, route }) => {
     });
   };
 
+  const enableSyncButton = useMemo(() => {
+    return data.filter((d) => !d.syncedAt).length > 0;
+  }, [data]);
+
   const handleSyncButtonOnPress = () => {
-    console.log('aaaa');
+    setShowConfirmationSyncDialog(true);
+  };
+
+  const handleOnSync = async () => {
+    setData([]);
+    setSyncing(true);
+    await backgroundTask.syncFormSubmission();
+    await fetchData();
+    setSyncing(false);
   };
 
   return (
@@ -114,11 +128,50 @@ const FormData = ({ navigation, route }) => {
           <Icon name="arrow-back" size={18} />
         </Button>
       }
-      {...syncButtonElement({ showSubmitted, handleSyncButtonOnPress, disabled: !data.length })}
+      {...syncButtonElement({
+        showSubmitted,
+        handleSyncButtonOnPress,
+        disabled: !enableSyncButton,
+      })}
     >
-      <BaseLayout.Content data={filteredData} action={handleFormDataListAction} />
+      {syncing ? (
+        <View style={styles.loadingContainer} testID="sync-loading">
+          <ActivityIndicator />
+        </View>
+      ) : (
+        <BaseLayout.Content
+          data={filteredData}
+          action={handleFormDataListAction}
+          testID="data-point-list"
+        />
+      )}
+
+      {/* confirmation dialog to sync */}
+      <Dialog visible={showConfirmationSyncDialog} testID="sync-confirmation-dialog">
+        <Text testID="sync-confirmation-text">{trans.confirmSync}</Text>
+        <Dialog.Actions>
+          <Dialog.Button
+            title={trans.buttonOk}
+            onPress={handleOnSync}
+            testID="sync-confirmation-ok"
+          />
+          <Dialog.Button
+            title={trans.buttonCancel}
+            onPress={() => setShowConfirmationSyncDialog(false)}
+            testID="sync-confirmation-cancel"
+          />
+        </Dialog.Actions>
+      </Dialog>
     </BaseLayout>
   );
 };
+
+const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+  },
+});
 
 export default FormData;

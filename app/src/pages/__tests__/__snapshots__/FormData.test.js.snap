@@ -168,5 +168,17 @@ exports[`FormDataPage renders correctly 1`] = `
     }
     testID="stack-container"
   />
+  <Modal
+    hardwareAccelerated={false}
+    onRequestClose={[Function]}
+    style={
+      {
+        "width": "100%",
+      }
+    }
+    testID="sync-confirmation-dialog"
+    transparent={true}
+    visible={false}
+  />
 </View>
 `;
