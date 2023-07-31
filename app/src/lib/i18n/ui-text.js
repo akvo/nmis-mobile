@@ -78,6 +78,8 @@ const uiText = {
     usersPageTitle: 'Users',
     langTitle: 'Language',
     langDesc: 'Application language',
+    confirmSync:
+      'Are you sure to sync the submission to the server now? This might take some time.',
   },
   fr: {
     latitude: 'Latitude',
@@ -158,6 +160,8 @@ const uiText = {
     usersPageTitle: 'Utilisateurs',
     langTitle: 'Langue',
     langDesc: "Langue de l'application",
+    confirmSync:
+      'Êtes-vous sûr de synchroniser la soumission avec le serveur maintenant ? Cela peut prendre un certain temps.',
   },
 };
 
