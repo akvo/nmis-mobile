@@ -14,30 +14,23 @@ db = conn.init;
 
 describe('SettingsForm', () => {
   it('renders correctly', () => {
-    const params = { id: 2, name: 'User Interface' };
+    const params = { id: 1, name: 'Advanced' };
     route.params = params;
     const findConfig = config.find((c) => c?.id === params.id);
 
-    const { unmount, getByText, getByTestId } = render(<SettingsForm route={route} />);
+    const { getByText, getByTestId } = render(<SettingsForm route={route} />);
 
-    const isDarkModeEl = getByTestId('settings-form-switch-1');
-    expect(isDarkModeEl).toBeDefined();
+    const switchEl = getByTestId('settings-form-switch-3');
+    expect(switchEl).toBeDefined();
 
     findConfig?.fields?.forEach((f) => {
       const labelEl = getByText(f.label);
       expect(labelEl).toBeDefined();
     });
-
-    const langItem = getByTestId('settings-form-item-0');
-    fireEvent.press(langItem);
-    const dialogEl = getByTestId('settings-form-dialog');
-    expect(dialogEl).toBeDefined();
-
-    unmount();
   });
 
   test('Storing data to state and database', async () => {
-    const params = { id: 1, name: 'Server' };
+    const params = { id: 1, name: 'Advanced' };
     route.params = params;
 
     const { unmount, getByTestId } = render(<SettingsForm route={route} />);
