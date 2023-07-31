@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { BaseLayout } from '../components';
 import { Button } from '@rneui/themed';
 import { UserState } from '../store';
@@ -19,6 +19,7 @@ const FormData = ({ navigation, route }) => {
   const formId = route?.params?.id;
   const showSubmitted = route?.params?.showSubmitted || false;
   const activeUserId = UserState.useState((s) => s.id);
+  const [search, setSearch] = useState(null);
 
   const [data, setData] = useState([]);
 
@@ -55,6 +56,12 @@ const FormData = ({ navigation, route }) => {
     fetchData();
   }, []);
 
+  const filteredData = useMemo(() => {
+    return data.filter(
+      (d) => (search && d?.name?.toLowerCase().includes(search.toLowerCase())) || !search,
+    );
+  }, [data, search]);
+
   const handleFormDataListAction = (id) => {
     if (showSubmitted) {
       return null;
@@ -72,6 +79,8 @@ const FormData = ({ navigation, route }) => {
       search={{
         show: true,
         placeholder: 'Search datapoint',
+        value: search,
+        action: setSearch,
       }}
       leftComponent={
         <Button type="clear" onPress={goBack} testID="arrow-back-button">
@@ -79,7 +88,7 @@ const FormData = ({ navigation, route }) => {
         </Button>
       }
     >
-      <BaseLayout.Content data={data} action={handleFormDataListAction} />
+      <BaseLayout.Content data={filteredData} action={handleFormDataListAction} />
     </BaseLayout>
   );
 };
