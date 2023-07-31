@@ -76,8 +76,7 @@ const TypeCascade = ({
     const parentID = source?.parent_id || 0;
     let filterDs = dataSource.filter(
       (ds) =>
-        ds?.parent === parentID ||
-        (values[id] && (values[id].includes(ds?.id) || values[id].includes(ds?.parent))),
+        ds?.parent === parentID || values[id]?.includes(ds?.id) || values[id]?.includes(ds?.parent),
     );
     if (filterDs.length === 0) {
       filterDs = dataSource.filter((ds) => ds?.id === parentID);
