@@ -76,6 +76,8 @@ const uiText = {
       "By resetting, you'll lose all saved data including users, forms and data-points. Are you sure?",
     offlineText: "You're offline...",
     usersPageTitle: 'Users',
+    langTitle: 'Language',
+    langDesc: 'Application language',
   },
   fr: {
     latitude: 'Latitude',
@@ -154,6 +156,8 @@ const uiText = {
       'En réinitialisant, vous perdrez toutes les données enregistrées, y compris les utilisateurs, les formulaires et les points de données. Es-tu sûr?',
     offlineText: 'Tu es hors ligne...',
     usersPageTitle: 'Utilisateurs',
+    langTitle: 'Langue',
+    langDesc: "Langue de l'application",
   },
 };
 
