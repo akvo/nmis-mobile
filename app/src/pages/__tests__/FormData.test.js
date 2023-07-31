@@ -380,10 +380,11 @@ describe('FormDataPage', () => {
     const dataPointListElement = wrapper.queryByTestId('data-point-list');
 
     await waitFor(() => {
+      expect(dialogElement.props.visible).toEqual(false);
       expect(loadingElement).toBeTruthy();
       expect(dataPointListElement).toBeFalsy();
       expect(backgroundTask.syncFormSubmission).toHaveBeenCalledTimes(1);
-      expect(crudDataPoints.selectDataPointsByFormAndSubmitted).toHaveBeenCalledTimes(2);
+      expect(crudDataPoints.selectDataPointsByFormAndSubmitted).toHaveBeenCalledTimes(1);
     });
   });
 });
