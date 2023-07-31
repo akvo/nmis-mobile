@@ -90,6 +90,7 @@ const App = () => {
     const unsubscribe = NetInfo.addEventListener((state) => {
       UIState.update((s) => {
         s.online = state.isConnected;
+        s.networkType = state.type;
       });
     });
 

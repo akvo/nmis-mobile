@@ -6,6 +6,7 @@ const UIState = new Store({
   fontSize: 16,
   currentPage: 'GetStarted',
   online: false,
+  networkType: null,
 });
 
 export default UIState;
