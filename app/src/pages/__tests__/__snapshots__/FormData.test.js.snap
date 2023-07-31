@@ -121,7 +121,7 @@ exports[`FormDataPage renders correctly 1`] = `
           }
           testID="search-bar"
           underlineColorAndroid="transparent"
-          value=""
+          value={null}
         />
         <View
           style={

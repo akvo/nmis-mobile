@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Button } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -8,12 +8,23 @@ import { crudDataPoints } from '../database/crud';
 import { i18n } from '../lib';
 import { UIState } from '../store';
 
+const convertMinutesToHHMM = (minutes) => {
+  const hours = Math.floor(minutes / 60);
+  const remainingMinutes = minutes % 60;
+
+  const formattedHours = String(hours).padStart(2, '0');
+  const formattedMinutes = String(remainingMinutes).padStart(2, '0');
+
+  return `${formattedHours}h ${formattedMinutes}m`;
+};
+
 const FormData = ({ navigation, route }) => {
   const formId = route?.params?.id;
   const showSubmitted = route?.params?.showSubmitted || false;
   const activeLang = UIState.useState((s) => s.lang);
   const trans = i18n.text(activeLang);
   const activeUserId = UserState.useState((s) => s.id);
+  const [search, setSearch] = useState(null);
 
   const [data, setData] = useState([]);
 
@@ -33,7 +44,7 @@ const FormData = ({ navigation, route }) => {
       const syncedAt = res.syncedAt ? new Date(res.syncedAt).toLocaleDateString('en-GB') : '-';
       let subtitlesTemp = [
         `${trans.createdLabel}${createdAt}`,
-        `${trans.surveyDurationLabel}${res.duration}`,
+        `${trans.surveyDurationLabel}${convertMinutesToHHMM(res.duration)}`,
       ];
       if (showSubmitted) {
         subtitlesTemp = [...subtitlesTemp, `${trans.syncLabel}${syncedAt}`];
@@ -49,6 +60,12 @@ const FormData = ({ navigation, route }) => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  const filteredData = useMemo(() => {
+    return data.filter(
+      (d) => (search && d?.name?.toLowerCase().includes(search.toLowerCase())) || !search,
+    );
+  }, [data, search]);
 
   const handleFormDataListAction = (id) => {
     if (showSubmitted) {
@@ -67,6 +84,8 @@ const FormData = ({ navigation, route }) => {
       search={{
         show: true,
         placeholder: trans.formDataSearch,
+        value: search,
+        action: setSearch,
       }}
       leftComponent={
         <Button type="clear" onPress={goBack} testID="arrow-back-button">
@@ -74,7 +93,7 @@ const FormData = ({ navigation, route }) => {
         </Button>
       }
     >
-      <BaseLayout.Content data={data} action={handleFormDataListAction} />
+      <BaseLayout.Content data={filteredData} action={handleFormDataListAction} />
     </BaseLayout>
   );
 };

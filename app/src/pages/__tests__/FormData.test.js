@@ -16,11 +16,13 @@ describe('FormDataPage', () => {
     const mockData = [
       {
         id: 1,
+        name: 'Datapoint 1',
         createdAt: '2023-07-18T12:34:56.789Z',
-        duration: '30 minutes',
+        duration: 145,
         syncedAt: '2023-07-18T13:00:00.000Z',
       },
     ];
+
     crudDataPoints.selectDataPointsByFormAndSubmitted.mockResolvedValue(mockData);
     const tree = render(<FormDataPage />);
     await waitFor(() => expect(tree.toJSON()).toMatchSnapshot());
@@ -38,8 +40,9 @@ describe('FormDataPage', () => {
     const mockData = [
       {
         id: 1,
+        name: 'Datapoint 1',
         createdAt: '2023-07-18T12:34:56.789Z',
-        duration: '30 minutes',
+        duration: 145,
         syncedAt: '2023-07-18T13:00:00.000Z',
         submitted: 1,
       },
@@ -51,9 +54,11 @@ describe('FormDataPage', () => {
 
     await waitFor(() => {
       expect(wrapper.getByText('Form Name')).toBeTruthy();
-      expect(wrapper.getByText('Created: 18/07/2023')).toBeTruthy();
-      expect(wrapper.getByText('Survey duration: 30 minutes')).toBeTruthy();
-      expect(wrapper.getByText('Synced: 18/07/2023')).toBeTruthy();
+      const list0 = wrapper.getByTestId('card-touchable-0');
+      expect(list0.props.children[0].props.title).toEqual('Datapoint 1');
+      expect(list0.props.children[0].props.subTitles[0]).toEqual('Created: 18/07/2023');
+      expect(list0.props.children[0].props.subTitles[1]).toEqual('Survey duration: 02h 25m');
+      expect(list0.props.children[0].props.subTitles[2]).toEqual('Synced: 18/07/2023');
     });
   });
 
@@ -69,8 +74,9 @@ describe('FormDataPage', () => {
     const mockData = [
       {
         id: 1,
+        name: 'Datapoint 1',
         createdAt: '2023-07-18T12:34:56.789Z',
-        duration: '30 minutes',
+        duration: 145,
         syncedAt: null,
         submitted: 0,
       },
@@ -82,9 +88,11 @@ describe('FormDataPage', () => {
 
     await waitFor(() => {
       expect(wrapper.getByText('Form Name')).toBeTruthy();
-      expect(wrapper.getByText('Created: 18/07/2023')).toBeTruthy();
-      expect(wrapper.getByText('Survey duration: 30 minutes')).toBeTruthy();
-      expect(wrapper.queryByText('Sync: -')).toBeFalsy();
+      const list0 = wrapper.getByTestId('card-touchable-0');
+      expect(list0.props.children[0].props.title).toEqual('Datapoint 1');
+      expect(list0.props.children[0].props.subTitles[0]).toEqual('Created: 18/07/2023');
+      expect(list0.props.children[0].props.subTitles[1]).toEqual('Survey duration: 02h 25m');
+      expect(list0.props.children[0].props.subTitles[2]).toEqual(undefined);
     });
   });
 
@@ -92,8 +100,9 @@ describe('FormDataPage', () => {
     const mockData = [
       {
         id: 1,
+        name: 'Datapoint 1',
         createdAt: '2023-07-18T12:34:56.789Z',
-        duration: '30 minutes',
+        duration: 145,
         syncedAt: '2023-07-18T13:00:00.000Z',
       },
     ];
@@ -102,7 +111,40 @@ describe('FormDataPage', () => {
     expect(wrapper.queryByTestId('search-bar')).toBeTruthy();
   });
 
-  it.todo('should filter list of datapoint by search value');
+  it('should filter list of datapoint by search value', async () => {
+    const mockData = [
+      {
+        id: 1,
+        name: 'Datapoint 1',
+        createdAt: '2023-07-18T12:34:56.789Z',
+        duration: 145,
+        syncedAt: '2023-07-18T13:00:00.000Z',
+      },
+      {
+        id: 2,
+        name: 'Datapoint 2',
+        createdAt: '2023-07-18T12:34:56.789Z',
+        duration: 145,
+        syncedAt: '2023-07-18T13:00:00.000Z',
+      },
+    ];
+
+    crudDataPoints.selectDataPointsByFormAndSubmitted.mockResolvedValue(mockData);
+
+    const wrapper = render(<FormDataPage />);
+
+    const searchField = wrapper.getByTestId('search-bar');
+    expect(searchField).toBeDefined();
+    fireEvent.changeText(searchField, 'Datapoint 1');
+
+    await waitFor(() => {
+      const list0 = wrapper.queryByTestId('card-touchable-0');
+      expect(list0).toBeTruthy();
+
+      const list1 = wrapper.queryByTestId('card-touchable-1');
+      expect(list1).toBeFalsy();
+    });
+  });
 
   it('should navigate to FormPage with correct route params when datapoint list pressed', async () => {
     const mockNavigation = useNavigation();
@@ -117,8 +159,9 @@ describe('FormDataPage', () => {
     const mockData = [
       {
         id: 1,
+        name: 'Datapoint 1',
         createdAt: '2023-07-18T12:34:56.789Z',
-        duration: '30 minutes',
+        duration: 145,
         syncedAt: null,
         submitted: 0,
       },

@@ -42,6 +42,7 @@ const LogoutButton = () => {
       s.currentValues = {}; // answers
       s.questionGroupListCurrentValues = {}; // answers for question group list component
       s.dataPointName = [];
+      s.surveyDuration = 0;
     });
 
     /**
