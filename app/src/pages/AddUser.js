@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { View, ToastAndroid, Platform } from 'react-native';
 import { ListItem, Button, Input, Text } from '@rneui/themed';
 import { Formik, ErrorMessage } from 'formik';
@@ -15,9 +15,12 @@ db = conn.init;
 
 const AddUser = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
+  const [userCount, setUserCount] = useState(0);
+
   const formRef = useRef();
   const activeLang = UIState.useState((s) => s.lang);
   const trans = i18n.text(activeLang);
+  const rightComponent = userCount ? null : false;
 
   const goToUsers = () => {
     navigation.navigate('Users');
@@ -25,7 +28,7 @@ const AddUser = ({ navigation }) => {
 
   const getUsersCount = async () => {
     const { rows } = await conn.tx(db, query.count('users'));
-    return rows._array?.[0]?.count || 0;
+    setUserCount(rows._array?.[0]?.count);
   };
 
   const checkExistingUser = async (name) => {
@@ -67,8 +70,7 @@ const AddUser = ({ navigation }) => {
       Crypto.CryptoDigestAlgorithm.SHA1,
       password,
     );
-    const numOfRow = await getUsersCount();
-    const isActive = numOfRow === 0 ? 1 : 0;
+    const isActive = userCount === 0 ? 1 : 0;
     const exist = await checkExistingUser(name);
     if (exist) {
       formRef.current.setErrors({ name: trans.errorUserExist });
@@ -99,6 +101,10 @@ const AddUser = ({ navigation }) => {
     }),
   });
 
+  useEffect(() => {
+    getUsersCount();
+  }, []);
+
   return (
     <BaseLayout
       title={trans.addUserPageTitle}
@@ -107,6 +113,7 @@ const AddUser = ({ navigation }) => {
           <Icon name="arrow-back" size={18} />
         </Button>
       }
+      rightComponent={rightComponent}
     >
       <Formik
         initialValues={initialValues}
