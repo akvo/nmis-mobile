@@ -193,7 +193,7 @@ describe('backgroundTask', () => {
         expect(crudForms.selectFormById).toHaveBeenCalled();
         expect(api.post).toHaveBeenCalledWith('/sync', {
           answers: { 101: 'Data point 1', 102: 1 },
-          duration: 2.5,
+          duration: 3,
           formId: 456,
           geo: [-8.676119, 115.4927994],
           name: 'Data point 1 name',

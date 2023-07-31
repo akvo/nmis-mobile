@@ -81,6 +81,7 @@ const backgroundTaskStatus = async (TASK_NAME, minimumInterval = 86400) => {
 
 const syncFormSubmission = async () => {
   try {
+    console.info('[syncFormSubmision] SyncData started');
     // get token
     const session = await crudSessions.selectLastSession();
     // set token
@@ -96,7 +97,7 @@ const syncFormSubmission = async () => {
       const syncData = {
         formId: form.formId,
         name: d.name,
-        duration: d.duration,
+        duration: Math.round(d.duration),
         submittedAt: d.submittedAt,
         submitter: user.name,
         geo: geo,

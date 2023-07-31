@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { BaseLayout } from '../components';
 import { FormState, UserState, UIState } from '../store';
 import { crudForms } from '../database/crud';
-import { i18n } from '../lib';
+import { i18n, backgroundTask } from '../lib';
 
 const Home = ({ navigation }) => {
   const [search, setSearch] = useState(null);
@@ -28,6 +28,11 @@ const Home = ({ navigation }) => {
   };
 
   useEffect(() => {
+    // TODO:: move this as a button sync on datapoint
+    // 1. replace kebab with sync button,
+    // 2. show pop up confirmation to sync
+    // 3. when sync happen, add loading state & disable sync button
+    backgroundTask.syncFormSubmission();
     FormState.update((s) => {
       s.form = {};
     });
