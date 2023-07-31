@@ -18,6 +18,24 @@ const convertMinutesToHHMM = (minutes) => {
   return `${formattedHours}h ${formattedMinutes}m`;
 };
 
+const syncButtonElement = ({ showSubmitted, handleSyncButtonOnPress, disabled }) => {
+  if (!showSubmitted) {
+    return {};
+  }
+  return {
+    rightComponent: (
+      <Button
+        type="clear"
+        disabled={disabled}
+        onPress={handleSyncButtonOnPress}
+        testID="button-to-trigger-sync"
+      >
+        <Icon name="arrow-back" size={18} />
+      </Button>
+    ),
+  };
+};
+
 const FormData = ({ navigation, route }) => {
   const formId = route?.params?.id;
   const showSubmitted = route?.params?.showSubmitted || false;
@@ -78,6 +96,10 @@ const FormData = ({ navigation, route }) => {
     });
   };
 
+  const handleSyncButtonOnPress = () => {
+    console.log('aaaa');
+  };
+
   return (
     <BaseLayout
       title={route?.params?.name}
@@ -92,6 +114,7 @@ const FormData = ({ navigation, route }) => {
           <Icon name="arrow-back" size={18} />
         </Button>
       }
+      {...syncButtonElement({ showSubmitted, handleSyncButtonOnPress, disabled: !data.length })}
     >
       <BaseLayout.Content data={filteredData} action={handleFormDataListAction} />
     </BaseLayout>

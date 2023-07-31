@@ -54,7 +54,7 @@ const registerBackgroundTask = async (TASK_NAME, minimumInterval = 86400) => {
   try {
     await BackgroundFetch.registerTaskAsync(TASK_NAME, {
       minimumInterval: minimumInterval,
-      stopOnTerminate: true, // android only,
+      stopOnTerminate: false, // android only,
       startOnBoot: true, // android only
     });
   } catch (err) {

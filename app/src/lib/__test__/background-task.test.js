@@ -15,7 +15,7 @@ describe('backgroundTask', () => {
   const mockTaskOption = {
     minimumInterval: 86400,
     startOnBoot: true,
-    stopOnTerminate: true,
+    stopOnTerminate: false,
   };
 
   describe('syncFormVersion', () => {

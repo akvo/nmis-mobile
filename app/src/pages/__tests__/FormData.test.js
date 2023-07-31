@@ -181,4 +181,96 @@ describe('FormDataPage', () => {
       newSubmission: false,
     });
   });
+
+  it('should not render render sync button on Saved FormData page', async () => {
+    const mockRoute = {
+      params: {
+        id: 123,
+        name: 'Form Name',
+        showSubmitted: false,
+      },
+    };
+
+    const mockData = [
+      {
+        id: 1,
+        name: 'Datapoint 1',
+        createdAt: '2023-07-18T12:34:56.789Z',
+        duration: 145,
+        syncedAt: '2023-07-18T13:00:00.000Z',
+        submitted: 1,
+      },
+    ];
+
+    crudDataPoints.selectDataPointsByFormAndSubmitted.mockResolvedValue(mockData);
+
+    const wrapper = render(<FormDataPage route={mockRoute} />);
+
+    await waitFor(() => {
+      expect(wrapper.getByText('Form Name')).toBeTruthy();
+      // check sync button rendered
+      expect(wrapper.queryByTestId('button-to-trigger-sync')).toBeFalsy();
+      const list0 = wrapper.getByTestId('card-touchable-0');
+      expect(list0).toBeTruthy();
+    });
+  });
+
+  it('should render render sync button on Submitted FormData page', async () => {
+    const mockRoute = {
+      params: {
+        id: 123,
+        name: 'Form Name',
+        showSubmitted: true,
+      },
+    };
+
+    const mockData = [
+      {
+        id: 1,
+        name: 'Datapoint 1',
+        createdAt: '2023-07-18T12:34:56.789Z',
+        duration: 145,
+        syncedAt: '2023-07-18T13:00:00.000Z',
+        submitted: 1,
+      },
+    ];
+
+    crudDataPoints.selectDataPointsByFormAndSubmitted.mockResolvedValue(mockData);
+
+    const wrapper = render(<FormDataPage route={mockRoute} />);
+
+    await waitFor(() => {
+      expect(wrapper.getByText('Form Name')).toBeTruthy();
+      // check sync button rendered
+      expect(wrapper.getByTestId('button-to-trigger-sync')).toBeTruthy();
+      const list0 = wrapper.getByTestId('card-touchable-0');
+      expect(list0).toBeTruthy();
+    });
+  });
+
+  it('should disable sync button if no data on Submitted FormData page', async () => {
+    const mockRoute = {
+      params: {
+        id: 123,
+        name: 'Form Name',
+        showSubmitted: true,
+      },
+    };
+
+    crudDataPoints.selectDataPointsByFormAndSubmitted.mockResolvedValue([]);
+
+    const wrapper = render(<FormDataPage route={mockRoute} />);
+
+    await waitFor(() => {
+      expect(wrapper.getByText('Form Name')).toBeTruthy();
+      // check sync button rendered
+      const syncButtonElement = wrapper.getByTestId('button-to-trigger-sync');
+      expect(syncButtonElement).toBeTruthy();
+      expect(syncButtonElement.props.accessibilityState.disabled).toEqual(true);
+      const list0 = wrapper.queryByTestId('card-touchable-0');
+      expect(list0).toBeFalsy();
+    });
+  });
+
+  it.todo('should handle sync submission when sync button pressed');
 });
