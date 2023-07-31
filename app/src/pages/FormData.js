@@ -55,8 +55,7 @@ const FormData = ({ navigation, route }) => {
   const [showConfirmationSyncDialog, setShowConfirmationSyncDialog] = useState(false);
   const [syncing, setSyncing] = useState(false);
 
-  const syncSettings =
-    (networkType === 'wifi' && syncWifiOnly) || (networkType !== 'wifi' && !syncWifiOnly);
+  const syncSettings = (networkType === 'wifi' && syncWifiOnly) || !syncWifiOnly;
 
   const goBack = () => {
     navigation.navigate('ManageForm', { ...route?.params });
