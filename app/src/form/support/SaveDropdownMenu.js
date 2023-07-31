@@ -1,22 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@rneui/themed';
 import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
 import { StyleSheet } from 'react-native';
-import { config } from '../../pages/Settings/config';
+import { langConfig } from '../../pages/Settings/config';
 import DialogForm from '../../pages/Settings/DialogForm';
 import { UIState } from '../../store';
 import { i18n } from '../../lib';
 
-const userInterfaceConfigId = 2;
-
 const SaveDropdownMenu = ({ anchor, visible, setVisible, handleOnSaveAndExit, handleOnExit }) => {
-  const [showLanguageSelectionDialog, setShowLanguageSelectionDialog] = React.useState(false);
-
-  const languageSelectionDialogConfig = React.useMemo(() => {
-    const findFieldsConfig = config.find((x) => x.id === userInterfaceConfigId)?.fields || [];
-    return findFieldsConfig.find((x) => x.name === 'lang') || {};
-  }, []);
-
+  const [showLanguageSelectionDialog, setShowLanguageSelectionDialog] = useState(false);
   const activeLang = UIState.useState((s) => s.lang);
   const trans = i18n.text(activeLang);
 
@@ -89,7 +81,7 @@ const SaveDropdownMenu = ({ anchor, visible, setVisible, handleOnSaveAndExit, ha
         onOk={handleOnOk}
         onCancel={() => setShowLanguageSelectionDialog(false)}
         showDialog={showLanguageSelectionDialog}
-        edit={languageSelectionDialogConfig}
+        edit={langConfig}
       />
     </>
   );
