@@ -107,6 +107,7 @@ const FormData = ({ navigation, route }) => {
   };
 
   const handleOnSync = async () => {
+    setShowConfirmationSyncDialog(false);
     setData([]);
     setSyncing(true);
     await backgroundTask.syncFormSubmission();
