@@ -106,6 +106,7 @@ const syncFormSubmission = async () => {
       console.info('[syncFormSubmision] SyncData:', syncData);
       // sync data point
       const res = await api.post('/sync', syncData);
+      console.log('=====', res);
       console.info('[syncFormSubmision] post sync data point:', res.status, res.data);
       if (res.status === 200) {
         // update data point

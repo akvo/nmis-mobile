@@ -178,6 +178,9 @@ const FormPage = ({ navigation, route }) => {
           if (q.type === 'geo') {
             val = [val.lat, val.lng];
           }
+          if (q.type === 'number') {
+            val = parseFloat(val);
+          }
           answers[q.id] = val;
         });
       // TODO:: submittedAt still null

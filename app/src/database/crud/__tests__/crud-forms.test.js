@@ -57,7 +57,7 @@ describe('crudForms function', () => {
     });
 
     test('selectFormByIdAndVersion should return false if the form does not exist', async () => {
-      const mockData = formData.filter(f => f.id === 1 && f.version === '1.0.1')
+      const mockData = formData.filter((f) => f.id === 1 && f.version === '1.0.1');
       const mockSelectSql = jest.fn((query, params, successCallback) => {
         successCallback(null, { rows: { length: mockData.length, _array: mockData } });
       });
@@ -84,7 +84,7 @@ describe('crudForms function', () => {
     });
 
     test('selectFormByIdAndVersion should return the form if it exists', async () => {
-      const mockData = formData.filter(f => f.id === 1 && f.version === '1.0.0')
+      const mockData = formData.filter((f) => f.id === 1 && f.version === '1.0.0');
       const mockSelectSql = jest.fn((query, params, successCallback) => {
         successCallback(null, { rows: { length: mockData.length, _array: mockData } });
       });
