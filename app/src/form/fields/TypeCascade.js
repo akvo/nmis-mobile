@@ -58,11 +58,11 @@ const TypeCascade = ({
     const finalValues =
       updatedItems.length !== dropdownValues.length ? null : dropdownValues.map((dd) => dd.value);
     onChange(id, finalValues);
-
     if (finalValues) {
       const { options: selectedOptions, value: selectedValue } = dropdownValues.pop();
       const findSelected = selectedOptions?.find((o) => o.id === selectedValue) || [];
       const cascadeName = findSelected?.name || null;
+
       FormState.update((s) => {
         s.dataPointName = s.dataPointName.map((dn) =>
           dn.type === 'cascade' ? { ...dn, value: cascadeName } : dn,
@@ -74,12 +74,14 @@ const TypeCascade = ({
 
   useEffect(() => {
     const parentID = source?.parent_id || 0;
-    const filterDs = dataSource.filter(
+    let filterDs = dataSource.filter(
       (ds) =>
-        ds?.id === parentID ||
         ds?.parent === parentID ||
         (values[id] && (values[id].includes(ds?.id) || values[id].includes(ds?.parent))),
     );
+    if (filterDs.length === 0) {
+      filterDs = dataSource.filter((ds) => ds?.id === parentID);
+    }
     if (dropdownItems.length === 0 && dataSource.length && filterDs.length) {
       const groupedDs = groupBy(filterDs, 'parent');
       const initialDropdowns = Object.values(groupedDs).map((options, ox) => {
