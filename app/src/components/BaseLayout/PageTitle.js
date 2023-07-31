@@ -60,7 +60,7 @@ const PageTitle = ({
           {text}
         </Text>
       )}
-      {!rightComponent && (
+      {rightComponent === null && (
         <Button type="clear" testID="more-options-button" onPress={handleSettingsPress}>
           <Icon name="ellipsis-vertical" size={18} />
         </Button>
