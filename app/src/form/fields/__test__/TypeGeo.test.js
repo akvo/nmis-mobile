@@ -38,9 +38,9 @@ describe('TypeGeo', () => {
       const { latitude, longitude } = result.current;
 
       const latText = getByTestId('text-lat');
-      expect(latText.props.children).toEqual(['Latitude: ', `${latitude}`]);
+      expect(latText.props.children).toEqual(['Latitude', ': ', `${latitude}`]);
       const lngText = getByTestId('text-lng');
-      expect(lngText.props.children).toEqual(['Longitude: ', `${longitude}`]);
+      expect(lngText.props.children).toEqual(['Longitude', ': ', `${longitude}`]);
     });
 
     const { result: navigationReff } = renderHook(() => useNavigation());

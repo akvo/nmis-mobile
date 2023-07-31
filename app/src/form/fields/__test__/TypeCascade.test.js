@@ -480,9 +480,7 @@ describe('TypeCascade', () => {
     const dropdown1 = getByTestId('dropdown-cascade-0');
     expect(dropdown1).toBeDefined();
 
-    const dropdown2 = getByTestId('dropdown-cascade-1');
-    expect(dropdown2).toBeDefined();
-    fireEvent.press(dropdown2);
+    fireEvent.press(dropdown1);
 
     const selectedText = getByText('Sabdodadi');
     fireEvent.press(selectedText);
@@ -537,10 +535,7 @@ describe('TypeCascade', () => {
 
     const dropdown1 = getByTestId('dropdown-cascade-0');
     expect(dropdown1).toBeDefined();
-
-    const dropdown2 = getByTestId('dropdown-cascade-1');
-    expect(dropdown2).toBeDefined();
-    fireEvent.press(dropdown2);
+    fireEvent.press(dropdown1);
 
     const selectedText = getByText('Bantul');
     fireEvent.press(selectedText);
@@ -561,17 +556,26 @@ describe('TypeCascade', () => {
       expect(dpName).toBe('');
       expect(values[fieldID]).toEqual([107, 108]);
     });
+  });
 
+  it('Should not get cascade name as datapoint name when there is no cascade type', async () => {
     act(() => {
       FormState.update((s) => {
-        s.dataPointName = [
-          { type: 'text', value: 'Example' },
-          { types: 'geo', value: null },
-        ];
+        s.dataPointName = [{ type: 'text', value: 'Example' }, { value: 'Data' }];
       });
     });
 
-    rerender(
+    const fieldID = 'location';
+    const fieldName = 'Location';
+    const initialValue = null;
+    const values = { [fieldID]: initialValue };
+
+    const mockedOnChange = jest.fn((fieldName, value) => {
+      values[fieldName] = value;
+    });
+
+    const questionSource = { file: 'file.sqlite', parent_id: 107 };
+    const { getByTestId, getByText, rerender } = render(
       <TypeCascade
         onChange={mockedOnChange}
         id={fieldID}
@@ -582,7 +586,9 @@ describe('TypeCascade', () => {
       />,
     );
 
-    fireEvent.press(dropdown2);
+    const dropdown1 = getByTestId('dropdown-cascade-0');
+    expect(dropdown1).toBeDefined();
+    fireEvent.press(dropdown1);
 
     const selectedText2 = getByText('Sabdodadi');
     fireEvent.press(selectedText2);
@@ -600,7 +606,7 @@ describe('TypeCascade', () => {
     await waitFor(() => {
       const { result } = renderHook(() => FormState.useState((s) => s.dataPointName));
       const { dpName } = generateDataPointName(result.current);
-      expect(dpName).toBe('Example');
+      expect(dpName).toBe('Example - Data');
       expect(values[fieldID]).toEqual([107, 109]);
     });
   });

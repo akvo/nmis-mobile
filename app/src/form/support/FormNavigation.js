@@ -2,6 +2,8 @@ import React from 'react';
 import { Platform, ToastAndroid } from 'react-native';
 import { Tab } from '@rneui/themed';
 import { styles } from '../styles';
+import { UIState } from '../../store';
+import { i18n } from '../../lib';
 
 const FormNavigation = ({
   currentGroup,
@@ -13,6 +15,9 @@ const FormNavigation = ({
   showQuestionGroupList,
   setShowQuestionGroupList,
 }) => {
+  const activeLang = UIState.useState((s) => s.lang);
+  const trans = i18n.text(activeLang);
+
   const validateOnFormNavigation = async () => {
     let errors = false;
     if (formRef?.current) {
@@ -38,10 +43,7 @@ const FormNavigation = ({
     validateOnFormNavigation()
       .then((errors) => {
         if (errors && Platform.OS === 'android') {
-          ToastAndroid.show(
-            'Please respond to all mandatory question before proceeding',
-            ToastAndroid.SHORT,
-          );
+          ToastAndroid.show(trans.formMandatoryAlert, ToastAndroid.SHORT);
           return;
         }
         if (!errors && index === 2 && activeGroup === totalGroup - 1) {
@@ -63,7 +65,7 @@ const FormNavigation = ({
       value={activeGroup}
     >
       <Tab.Item
-        title="Back"
+        title={trans.buttonBack}
         icon={{ name: 'chevron-back-outline', type: 'ionicon', color: 'grey', size: 20 }}
         iconPosition="left"
         iconContainerStyle={styles.formNavigationIcon}
@@ -79,7 +81,7 @@ const FormNavigation = ({
       />
       {activeGroup < totalGroup - 1 ? (
         <Tab.Item
-          title="Next"
+          title={trans.buttonNext}
           icon={{ name: 'chevron-forward-outline', type: 'ionicon', color: 'grey', size: 20 }}
           iconPosition="right"
           iconContainerStyle={styles.formNavigationIcon}
@@ -90,7 +92,7 @@ const FormNavigation = ({
         />
       ) : (
         <Tab.Item
-          title="Submit"
+          title={trans.buttonSubmit}
           icon={{ name: 'paper-plane-outline', type: 'ionicon', color: 'grey', size: 20 }}
           iconPosition="right"
           iconContainerStyle={styles.formNavigationIcon}

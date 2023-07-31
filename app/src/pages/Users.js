@@ -5,7 +5,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 import { BaseLayout } from '../components';
 import { conn, query } from '../database';
-import { UserState } from '../store';
+import { UserState, UIState } from '../store';
+import { i18n } from '../lib';
 
 const db = conn.init;
 
@@ -13,6 +14,8 @@ const Users = ({ navigation, route }) => {
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState([]);
   const currUserID = UserState.useState((s) => s.id);
+  const activeLang = UIState.useState((s) => s.lang);
+  const trans = i18n.text(activeLang);
 
   const goToCreate = () => {
     navigation.navigate('AddUser');
@@ -43,7 +46,7 @@ const Users = ({ navigation, route }) => {
     await loadUsers();
 
     if (Platform.OS === 'android') {
-      ToastAndroid.show(`Switch to ${name}`, ToastAndroid.SHORT);
+      ToastAndroid.show(`${trans.usersSwitchTo}${name}`, ToastAndroid.SHORT);
     }
   };
 
@@ -75,7 +78,7 @@ const Users = ({ navigation, route }) => {
 
   return (
     <BaseLayout
-      title="Users"
+      title={trans.usersPageTitle}
       leftComponent={
         <Button type="clear" onPress={goToHome} testID="arrow-back-button">
           <Icon name="arrow-back" size={18} />
@@ -96,7 +99,7 @@ const Users = ({ navigation, route }) => {
               onPress={async () => await handleSelectUser(user.id, user.name)}
               rightContent={(reset) => (
                 <Button
-                  title="Delete"
+                  title={trans.buttonDelete}
                   onPress={() => reset()}
                   icon={{ name: 'delete', color: 'white' }}
                   buttonStyle={{ minHeight: '100%', backgroundColor: 'red' }}

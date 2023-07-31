@@ -130,7 +130,7 @@ describe('TypeImage component', () => {
       buttonNegative: 'Cancel',
       buttonNeutral: 'Ask Me Later',
       buttonPositive: 'OK',
-      message: 'App needs access to your camera ',
+      message: 'App needs access to your camera',
       title: 'You need to give storage permission to download and save the file',
     };
 

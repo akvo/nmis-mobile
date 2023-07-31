@@ -8,13 +8,16 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 import { BaseLayout } from '../components';
 import { conn, query } from '../database';
-import { UserState } from '../store';
+import { UserState, UIState } from '../store';
+import { i18n } from '../lib';
 
 db = conn.init;
 
 const AddUser = ({ navigation }) => {
   const [loading, setLoading] = useState(false);
   const formRef = useRef();
+  const activeLang = UIState.useState((s) => s.lang);
+  const trans = i18n.text(activeLang);
 
   const goToUsers = () => {
     navigation.navigate('Users');
@@ -43,7 +46,7 @@ const AddUser = ({ navigation }) => {
           });
         }
         if (Platform.OS === 'android') {
-          ToastAndroid.show('Success!', ToastAndroid.SHORT);
+          ToastAndroid.show(trans.success, ToastAndroid.SHORT);
         }
         setLoading(false);
         data.active
@@ -52,7 +55,7 @@ const AddUser = ({ navigation }) => {
       })
       .catch(() => {
         if (Platform.OS === 'android') {
-          ToastAndroid.show('Unable to save the data to the database', ToastAndroid.LONG);
+          ToastAndroid.show(trans.errorSaveToDB, ToastAndroid.LONG);
         }
         setLoading(false);
       });
@@ -68,7 +71,7 @@ const AddUser = ({ navigation }) => {
     const isActive = numOfRow === 0 ? 1 : 0;
     const exist = await checkExistingUser(name);
     if (exist) {
-      formRef.current.setErrors({ name: 'User already exists' });
+      formRef.current.setErrors({ name: trans.errorUserExist });
       setLoading(false);
     } else {
       const data = {
@@ -87,7 +90,7 @@ const AddUser = ({ navigation }) => {
     confirmPassword: null,
   };
   const addSchema = Yup.object().shape({
-    name: Yup.string().required('Username is required'),
+    name: Yup.string().required(trans.errorUserNameRequired),
     password: Yup.string().nullable(),
     confirmPassword: Yup.string().when('password', {
       is: (password) => password && password.length > 0,
@@ -98,7 +101,7 @@ const AddUser = ({ navigation }) => {
 
   return (
     <BaseLayout
-      title="Create New Profile"
+      title={trans.addUserPageTitle}
       leftComponent={
         <Button type="clear" onPress={goToUsers} testID="arrow-back-button">
           <Icon name="arrow-back" size={18} />
@@ -124,10 +127,11 @@ const AddUser = ({ navigation }) => {
             <ListItem>
               <ListItem.Content>
                 <ListItem.Title>
-                  Username <Text color="#ff0000">*</Text>
+                  {`${trans.addUserInputName} `}
+                  <Text color="#ff0000">*</Text>
                 </ListItem.Title>
                 <Input
-                  placeholder={'Username'}
+                  placeholder={trans.addUserInputName}
                   onChangeText={(value) => setFieldValue('name', value)}
                   errorMessage={<ErrorMessage name="name" />}
                   value={values.name}
@@ -172,7 +176,7 @@ const AddUser = ({ navigation }) => {
                 disabled={isSubmitting}
                 testID="button-save"
               >
-                {loading ? 'Saving...' : 'Save'}
+                {loading ? trans.buttonSaving : trans.buttonSave}
               </Button>
             </View>
           </BaseLayout.Content>

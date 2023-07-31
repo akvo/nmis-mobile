@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import LogoutButton from '../LogoutButton';
 import { AuthState, UserState } from '../../store';
 import { conn, query } from '../../database';
-import { cascades } from '../../lib';
+import { cascades, i18n } from '../../lib';
 
 jest.mock('@react-navigation/native');
 jest.mock('expo-sqlite');
@@ -13,11 +13,18 @@ jest.mock('../../lib', () => ({
   cascades: {
     dropFiles: jest.fn(async () => ['file.sqlite', 'file.sqlite-journal']),
   },
+  i18n: {
+    text: jest.fn(),
+  },
 }));
 
 const db = conn.init;
 
 describe('LogoutButton', () => {
+  beforeAll(() => {
+    i18n.text.mockReturnValue({ buttonReset: 'Reset' });
+  });
+
   test('render correctly', () => {
     const { getByText, getByTestId } = render(<LogoutButton />);
 

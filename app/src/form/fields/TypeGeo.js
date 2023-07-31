@@ -6,13 +6,15 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { MapState, UIState } from '../../store';
 import { FieldLabel } from '../support';
 import { styles } from '../styles';
-import { loc } from '../../lib';
+import { loc, i18n } from '../../lib';
 
 const TypeGeo = ({ onChange, values, keyform, id, name, tooltip, required, requiredSign }) => {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const { latitude, longitude } = MapState.useState((s) => s);
-  const isOnline = UIState.useState((s) => s.online);
+  const { online: isOnline, lang: activeLang } = UIState.useState((s) => s);
+
+  const trans = i18n.text(activeLang);
 
   const navigation = useNavigation();
   const route = useRoute();
@@ -94,8 +96,12 @@ const TypeGeo = ({ onChange, values, keyform, id, name, tooltip, required, requi
       <View style={styles.inputGeoContainer}>
         {latText && lngText ? (
           <View>
-            <Text testID="text-lat">Latitude: {latText}</Text>
-            <Text testID="text-lng">Longitude: {lngText}</Text>
+            <Text testID="text-lat">
+              {trans.latitude}: {latText}
+            </Text>
+            <Text testID="text-lng">
+              {trans.longitude}: {lngText}
+            </Text>
           </View>
         ) : (
           <Text style={styles.inputFieldContainer} testID="text-waiting">
@@ -104,7 +110,7 @@ const TypeGeo = ({ onChange, values, keyform, id, name, tooltip, required, requi
         )}
         {isOnline && (
           <Button type="outline" onPress={handleOpenMapPress} testID="button-open-map">
-            Open Map
+            {trans.buttonOpenMap}
           </Button>
         )}
       </View>

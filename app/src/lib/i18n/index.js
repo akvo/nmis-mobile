@@ -1,3 +1,7 @@
+import uiText from './ui-text';
+
+const DEFAULT_LANG = 'en';
+
 const transform = (lang, data) => {
   const {
     translations: transOption,
@@ -36,8 +40,11 @@ const transform = (lang, data) => {
   return data;
 };
 
+const text = (lang) => uiText?.[lang] || uiText[DEFAULT_LANG];
+
 const i18n = {
   transform,
+  text,
 };
 
 export default i18n;

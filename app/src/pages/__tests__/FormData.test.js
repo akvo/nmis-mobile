@@ -57,8 +57,8 @@ describe('FormDataPage', () => {
       const list0 = wrapper.getByTestId('card-touchable-0');
       expect(list0.props.children[0].props.title).toEqual('Datapoint 1');
       expect(list0.props.children[0].props.subTitles[0]).toEqual('Created: 18/07/2023');
-      expect(list0.props.children[0].props.subTitles[1]).toEqual('Survey Duration: 02h 25m');
-      expect(list0.props.children[0].props.subTitles[2]).toEqual('Sync: 18/07/2023');
+      expect(list0.props.children[0].props.subTitles[1]).toEqual('Survey duration: 02h 25m');
+      expect(list0.props.children[0].props.subTitles[2]).toEqual('Synced: 18/07/2023');
     });
   });
 
@@ -91,7 +91,7 @@ describe('FormDataPage', () => {
       const list0 = wrapper.getByTestId('card-touchable-0');
       expect(list0.props.children[0].props.title).toEqual('Datapoint 1');
       expect(list0.props.children[0].props.subTitles[0]).toEqual('Created: 18/07/2023');
-      expect(list0.props.children[0].props.subTitles[1]).toEqual('Survey Duration: 02h 25m');
+      expect(list0.props.children[0].props.subTitles[1]).toEqual('Survey duration: 02h 25m');
       expect(list0.props.children[0].props.subTitles[2]).toEqual(undefined);
     });
   });
