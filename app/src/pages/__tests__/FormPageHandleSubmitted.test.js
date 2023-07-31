@@ -1,9 +1,10 @@
 import React from 'react';
 import { Platform, ToastAndroid } from 'react-native';
-import { render, fireEvent, waitFor } from '@testing-library/react-native';
+import { render, fireEvent, waitFor, act } from '@testing-library/react-native';
 jest.useFakeTimers();
 import FormPage from '../FormPage';
 import crudDataPoints from '../../database/crud/crud-datapoints';
+import { UserState, FormState } from '../../store';
 
 const mockFormContainer = jest.fn();
 const mockRoute = {
@@ -265,6 +266,15 @@ describe('FormPage handleOnSubmitForm', () => {
 
     const wrapper = render(<FormPage navigation={mockNavigation} route={mockRoute} />);
 
+    act(() => {
+      UserState.update((s) => {
+        s.id = 1;
+      });
+      FormState.update((s) => {
+        s.surveyDuration = 9;
+      });
+    });
+
     await waitFor(() => {
       const submitButton = wrapper.getByTestId('mock-submit-button');
       fireEvent.press(submitButton);
@@ -273,7 +283,7 @@ describe('FormPage handleOnSubmitForm', () => {
     // save datapoint to database
     await waitFor(() => {
       expect(crudDataPoints.saveDataPoint).toHaveBeenCalledWith({
-        duration: 0,
+        duration: 0.15, // in minutes
         form: 1,
         json: {
           1: 'John',
@@ -287,7 +297,7 @@ describe('FormPage handleOnSubmitForm', () => {
         name: 'John',
         geo: null,
         submitted: 1,
-        user: null,
+        user: 1,
       });
     });
 

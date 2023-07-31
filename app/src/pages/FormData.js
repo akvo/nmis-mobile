@@ -1,14 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { BaseLayout } from '../components';
 import { Button } from '@rneui/themed';
 import { UserState } from '../store';
 import { crudDataPoints } from '../database/crud';
 import Icon from 'react-native-vector-icons/Ionicons';
 
+const convertMinutesToHHMM = (minutes) => {
+  const hours = Math.floor(minutes / 60);
+  const remainingMinutes = minutes % 60;
+
+  const formattedHours = String(hours).padStart(2, '0');
+  const formattedMinutes = String(remainingMinutes).padStart(2, '0');
+
+  return `${formattedHours}h ${formattedMinutes}m`;
+};
+
 const FormData = ({ navigation, route }) => {
   const formId = route?.params?.id;
   const showSubmitted = route?.params?.showSubmitted || false;
   const activeUserId = UserState.useState((s) => s.id);
+  const [search, setSearch] = useState(null);
 
   const [data, setData] = useState([]);
 
@@ -26,7 +37,10 @@ const FormData = ({ navigation, route }) => {
     results = results.map((res) => {
       const createdAt = new Date(res.createdAt).toLocaleDateString('en-GB');
       const syncedAt = res.syncedAt ? new Date(res.syncedAt).toLocaleDateString('en-GB') : '-';
-      let subtitlesTemp = [`Created: ${createdAt}`, `Survey Duration: ${res.duration}`];
+      let subtitlesTemp = [
+        `Created: ${createdAt}`,
+        `Survey Duration: ${convertMinutesToHHMM(res.duration)}`,
+      ];
       if (showSubmitted) {
         subtitlesTemp = [...subtitlesTemp, `Sync: ${syncedAt}`];
       }
@@ -41,6 +55,12 @@ const FormData = ({ navigation, route }) => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  const filteredData = useMemo(() => {
+    return data.filter(
+      (d) => (search && d?.name?.toLowerCase().includes(search.toLowerCase())) || !search,
+    );
+  }, [data, search]);
 
   const handleFormDataListAction = (id) => {
     if (showSubmitted) {
@@ -59,6 +79,8 @@ const FormData = ({ navigation, route }) => {
       search={{
         show: true,
         placeholder: 'Search datapoint',
+        value: search,
+        action: setSearch,
       }}
       leftComponent={
         <Button type="clear" onPress={goBack} testID="arrow-back-button">
@@ -66,7 +88,7 @@ const FormData = ({ navigation, route }) => {
         </Button>
       }
     >
-      <BaseLayout.Content data={data} action={handleFormDataListAction} />
+      <BaseLayout.Content data={filteredData} action={handleFormDataListAction} />
     </BaseLayout>
   );
 };

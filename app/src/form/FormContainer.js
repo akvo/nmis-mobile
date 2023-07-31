@@ -98,6 +98,7 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave }) => {
       s.currentValues = {};
       s.questionGroupListCurrentValues = {};
       s.dataPointName = [];
+      s.surveyDuration = 0;
     });
     formRef.current?.resetForm();
   };

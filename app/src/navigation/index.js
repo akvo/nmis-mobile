@@ -132,6 +132,7 @@ const Navigation = (props) => {
         s.currentValues = {};
         s.questionGroupListCurrentValues = {};
         s.dataPointName = [];
+        s.surveyDuration = 0;
       });
     }
     UIState.update((s) => {

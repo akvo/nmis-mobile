@@ -10,6 +10,7 @@ const FormState = new Store({
   currentValues: {}, // answers
   questionGroupListCurrentValues: {}, // answers for question group list component
   dataPointName: [],
+  surveyDuration: 0,
 });
 
 export default FormState;
