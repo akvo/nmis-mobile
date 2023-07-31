@@ -33,7 +33,7 @@ const Settings = ({ navigation }) => {
           <ListItem onPress={() => setShowLang(true)} testID="settings-lang" bottomDivider>
             <ListItem.Content>
               <ListItem.Title>{trans.langTitle}</ListItem.Title>
-              <ListItem.Subtitle>{trans.langDesc}</ListItem.Subtitle>
+              <ListItem.Subtitle>{activeLang}</ListItem.Subtitle>
             </ListItem.Content>
             <ListItem.Chevron />
           </ListItem>
@@ -44,7 +44,12 @@ const Settings = ({ navigation }) => {
               ? i18n.transform(activeLang, c?.description)?.name
               : c?.description?.name;
             return (
-              <ListItem key={i} onPress={() => goToForm(c.id)} bottomDivider>
+              <ListItem
+                key={i}
+                onPress={() => goToForm(c.id)}
+                testID={`goto-settings-form-${i}`}
+                bottomDivider
+              >
                 <ListItem.Content>
                   <ListItem.Title>{itemTitle}</ListItem.Title>
                   <ListItem.Subtitle>{itemDesc}</ListItem.Subtitle>

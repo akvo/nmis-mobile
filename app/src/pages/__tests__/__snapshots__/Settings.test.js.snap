@@ -260,7 +260,7 @@ exports[`SettingsPage renders correctly 1`] = `
               }
               testID="listItemTitle"
             >
-              Application language
+              en
             </Text>
           </View>
           <View
@@ -415,6 +415,7 @@ exports[`SettingsPage renders correctly 1`] = `
         onResponderTerminate={[Function]}
         onResponderTerminationRequest={[Function]}
         onStartShouldSetResponder={[Function]}
+        testID="goto-settings-form-0"
       >
         <View
           style={
