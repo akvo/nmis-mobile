@@ -95,7 +95,7 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave }) => {
       return initialValues;
     }
     return currentValues;
-  }, [initialValues]);
+  }, [initialValues, currentValues]);
 
   const refreshForm = () => {
     FormState.update((s) => {
