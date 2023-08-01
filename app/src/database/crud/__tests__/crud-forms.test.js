@@ -52,7 +52,7 @@ describe('crudForms function', () => {
           executeSql: mockSelectSql,
         });
       });
-      const result = await crudForms.selectLatestFormVersion();
+      const result = await crudForms.selectLatestFormVersion({ user: 2 });
       expect(result).toEqual([]);
     });
 
@@ -71,6 +71,19 @@ describe('crudForms function', () => {
     });
 
     test('selectLatestFormVersion should return the forms with stats if it exists', async () => {
+      const formData = [
+        {
+          id: 1,
+          formId: 123,
+          name: 'Form Test',
+          latest: 1,
+          version: '1.0.0',
+          json: { id: 1, version: 1, name: 'Form 1' },
+          submitted: 2,
+          draft: 3,
+          synced: 1,
+        },
+      ];
       const mockSelectSql = jest.fn((query, params, successCallback) => {
         successCallback(null, { rows: { length: formData.length, _array: formData } });
       });
@@ -79,7 +92,7 @@ describe('crudForms function', () => {
           executeSql: mockSelectSql,
         });
       });
-      const result = await crudForms.selectLatestFormVersion();
+      const result = await crudForms.selectLatestFormVersion({ user: 1 });
       expect(result).toEqual(formData);
     });
 
