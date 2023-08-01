@@ -1,21 +1,28 @@
 import React, { useState } from 'react';
 import renderer from 'react-test-renderer';
-import { renderHook, act } from '@testing-library/react-native';
+import { act } from '@testing-library/react-native';
 import GetStartedPage from '../GetStarted';
+import { BuildParamsState } from '../../store';
 
 describe('GetStartedPage', () => {
-  beforeAll(() => {
-    const { result } = renderHook(() => useState({}));
-    const [currentConfig, setCurrentConfig] = result.current;
-
+  test('renders correctly with IP Address input', () => {
     act(() => {
-      setCurrentConfig({
-        serverURL: null,
-      });
+      BuildParamsState.update(s => {
+        s.serverURL = null;
+      })
     });
+
+    const tree = renderer.create(<GetStartedPage />).toJSON();
+    expect(tree).toMatchSnapshot();
   });
 
-  test('renders correctly', () => {
+  test('renders correctly without IP Address input', () => {
+    act(() => {
+      BuildParamsState.update(s => {
+        s.serverURL = 'https://www.example.com/api';
+      })
+    });
+
     const tree = renderer.create(<GetStartedPage />).toJSON();
     expect(tree).toMatchSnapshot();
   });
