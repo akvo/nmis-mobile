@@ -89,7 +89,7 @@ const syncFormSubmission = async () => {
     // get all datapoints to sync
     const data = await crudDataPoints.selectSubmissionToSync();
     console.info('[syncFormSubmision] data point to sync:', data.length);
-    data.forEach(async (d) => {
+    const syncProcess = data.map(async (d) => {
       // get user
       const user = await crudUsers.selectUserById({ id: d.user });
       const form = await crudForms.selectFormById({ id: d.form });
@@ -115,6 +115,13 @@ const syncFormSubmission = async () => {
         });
         console.info('[syncFormSubmision] updated data point syncedAt:', d.id);
       }
+      return {
+        datapoint: d.id,
+        status: res.status,
+      };
+    });
+    return Promise.all(syncProcess).then(async (res) => {
+      return res;
     });
   } catch (err) {
     console.error('[syncFormSubmission] Error: ', err);
