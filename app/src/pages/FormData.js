@@ -19,9 +19,16 @@ const convertMinutesToHHMM = (minutes) => {
   return `${formattedHours}h ${formattedMinutes}m`;
 };
 
-const syncButtonElement = ({ showSubmitted, handleSyncButtonOnPress, disabled }) => {
-  if (!showSubmitted) {
-    return {};
+const syncButtonElement = ({
+  showSubmitted,
+  handleSyncButtonOnPress,
+  disabled,
+  syncSettings = true,
+}) => {
+  if (!showSubmitted || !syncSettings) {
+    return {
+      rightComponent: false,
+    };
   }
   return {
     rightComponent: (
@@ -40,13 +47,15 @@ const syncButtonElement = ({ showSubmitted, handleSyncButtonOnPress, disabled })
 const FormData = ({ navigation, route }) => {
   const formId = route?.params?.id;
   const showSubmitted = route?.params?.showSubmitted || false;
-  const activeLang = UIState.useState((s) => s.lang);
+  const { lang: activeLang, networkType } = UIState.useState((s) => s);
   const trans = i18n.text(activeLang);
-  const activeUserId = UserState.useState((s) => s.id);
+  const { id: activeUserId, syncWifiOnly } = UserState.useState((s) => s);
   const [search, setSearch] = useState(null);
   const [data, setData] = useState([]);
   const [showConfirmationSyncDialog, setShowConfirmationSyncDialog] = useState(false);
   const [syncing, setSyncing] = useState(false);
+
+  const syncSettings = (networkType === 'wifi' && syncWifiOnly) || !syncWifiOnly;
 
   const goBack = () => {
     navigation.navigate('ManageForm', { ...route?.params });
@@ -133,6 +142,7 @@ const FormData = ({ navigation, route }) => {
         showSubmitted,
         handleSyncButtonOnPress,
         disabled: !enableSyncButton,
+        syncSettings,
       })}
     >
       {syncing ? (

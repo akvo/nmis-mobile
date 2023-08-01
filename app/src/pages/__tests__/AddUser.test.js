@@ -59,6 +59,18 @@ describe('AddUserPage', () => {
   }); */
 
   test('create username correctly', async () => {
+    /**
+     * Mock users count: 0
+     */
+    const mockCountSql = jest.fn((query, params, successCallback) => {
+      successCallback(null, { rows: { length: 0, _array: [{ count: 0 }] } });
+    });
+    db.transaction.mockImplementation((transactionFunction) => {
+      transactionFunction({
+        executeSql: mockCountSql,
+      });
+    });
+
     const { result: navigationRef } = renderHook(() => useNavigation());
     const navigation = navigationRef.current;
     const { getByTestId } = render(<AddUser navigation={navigation} />);
