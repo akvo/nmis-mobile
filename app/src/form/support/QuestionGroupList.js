@@ -4,6 +4,7 @@ import { Text, Divider } from '@rneui/themed';
 import QuestionGroupListItem from './QuestionGroupListItem';
 import { validateDependency, modifyDependency } from '../lib';
 import { styles } from '../styles';
+import { FormState } from '../../store';
 
 export const checkCompleteQuestionGroup = (form, values) => {
   return form.question_group.map((questionGroup) => {
@@ -41,6 +42,8 @@ const QuestionGroupList = ({
   setActiveQuestionGroup,
   setShowQuestionGroupList,
 }) => {
+  const visitedQuestionGroup = FormState.useState((s) => s.visitedQuestionGroup);
+
   const completedQuestionGroup = useMemo(() => {
     return checkCompleteQuestionGroup(form, values);
   });
@@ -69,7 +72,9 @@ const QuestionGroupList = ({
           key={questionGroup.id}
           name={questionGroup.name}
           active={activeQuestionGroup === questionGroup.id}
-          completedQuestionGroup={completedQuestionGroup[qx]}
+          completedQuestionGroup={
+            completedQuestionGroup[qx] && visitedQuestionGroup.includes(questionGroup.id)
+          }
           onPress={() => handleOnPress(questionGroup.id)}
         />
       ))}

@@ -150,7 +150,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   questionGroupListItemActive: {
-    backgroundColor: '#F3F3F3',
+    backgroundColor: '#E9E9E9',
   },
   questionGroupListItemIcon: {
     paddingHorizontal: 10,
@@ -158,6 +158,9 @@ export const styles = StyleSheet.create({
   },
   questionGroupListItemName: {
     marginLeft: 10,
+  },
+  questionGroupListItemNameActive: {
+    fontWeight: 'bold',
   },
   cascadeContainer: {
     display: 'flex',

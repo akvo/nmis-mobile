@@ -41,6 +41,7 @@ const LogoutButton = () => {
       s.question = [];
       s.currentValues = {}; // answers
       s.questionGroupListCurrentValues = {}; // answers for question group list component
+      s.visitedQuestionGroup = [];
       s.dataPointName = [];
       s.surveyDuration = 0;
     });

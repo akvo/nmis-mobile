@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Platform, ToastAndroid } from 'react-native';
 import { Tab } from '@rneui/themed';
 import { styles } from '../styles';
-import { UIState } from '../../store';
+import { UIState, FormState } from '../../store';
 import { i18n } from '../../lib';
 
 const FormNavigation = ({
@@ -15,8 +15,16 @@ const FormNavigation = ({
   showQuestionGroupList,
   setShowQuestionGroupList,
 }) => {
+  const visitedQuestionGroup = FormState.useState((s) => s.visitedQuestionGroup);
   const activeLang = UIState.useState((s) => s.lang);
   const trans = i18n.text(activeLang);
+
+  useEffect(() => {
+    const updateVisitedQuestionGroup = [...visitedQuestionGroup, ...[activeGroup]];
+    FormState.update((s) => {
+      s.visitedQuestionGroup = [...new Set(updateVisitedQuestionGroup)];
+    });
+  }, [activeGroup]);
 
   const validateOnFormNavigation = async () => {
     let errors = false;

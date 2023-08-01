@@ -75,7 +75,11 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave }) => {
   }, [currentValues, onSave]);
 
   const formDefinition = useMemo(() => {
-    return transformForm(forms, activeLang);
+    const transformedForm = transformForm(forms, activeLang);
+    FormState.update((s) => {
+      s.visitedQuestionGroup = [transformedForm.question_group[0].id];
+    });
+    return transformedForm;
   }, [forms, activeLang]);
 
   const currentGroup = useMemo(() => {
@@ -91,12 +95,13 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave }) => {
       return initialValues;
     }
     return currentValues;
-  }, [initialValues]);
+  }, [initialValues, currentValues]);
 
   const refreshForm = () => {
     FormState.update((s) => {
       s.currentValues = {};
       s.questionGroupListCurrentValues = {};
+      s.visitedQuestionGroup = [];
       s.dataPointName = [];
       s.surveyDuration = 0;
     });

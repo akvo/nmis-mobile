@@ -1,5 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react-native';
+import { render, act, waitFor } from '@testing-library/react-native';
 jest.useFakeTimers();
 import QuestionGroupList, { checkCompleteQuestionGroup } from '../QuestionGroupList';
 import QuestionGroupListItem from '../QuestionGroupListItem';
@@ -214,6 +214,11 @@ const example = {
 
 describe('QuestionGroup & QuestionGroupListItem without mock', () => {
   describe('checkCompleteQuestionGroup function', () => {
+    it('Should return boolean if completed/not', () => {
+      const completed = checkCompleteQuestionGroup(example, { 1: 'Galih' });
+      expect(completed).toEqual([true, false, false, true]);
+    });
+
     it.failing(
       'Should failing when only one question answered from two required questions in a question group',
       () => {
@@ -290,11 +295,6 @@ describe('QuestionGroup & QuestionGroupListItem without mock', () => {
     expect(dataPointElement).toBeFalsy();
   });
 
-  it('Should return boolean if completed/not', () => {
-    const completed = checkCompleteQuestionGroup(example, { 1: 'Galih' });
-    expect(completed).toEqual([true, false, false, true]);
-  });
-
   it('Should render question group name', () => {
     const wrapper = render(
       <QuestionGroupListItem name="Group 1" active={true} completedQuestionGroup={false} />,
@@ -312,7 +312,8 @@ describe('QuestionGroup & QuestionGroupListItem without mock', () => {
     const iconEl = wrapper.getByTestId('icon-mark');
     const iconElProps = iconEl.props.children.props.children.props;
     expect(iconElProps.color).toBe('#2884bd');
-    expect(iconElProps.name).toBe('check-circle');
+    // Drop the check mark (this can be implemented later after discussion with the design team )
+    expect(iconElProps.name).toBe('circle'); // check-circle
   });
 
   it('Should have disabled mark if not completed', () => {
@@ -348,7 +349,7 @@ describe('QuestionGroup & QuestionGroupListItem without mock', () => {
       <QuestionGroupListItem name="Group 1" active={true} completedQuestionGroup={false} />,
     );
     const itemEl = wrapper.getByTestId('question-group-list-item-wrapper');
-    expect(itemEl.props.style.backgroundColor).toBe('#F3F3F3');
+    expect(itemEl.props.style.backgroundColor).toBe('#E9E9E9');
   });
 
   it.failing('Should highlight question group if not active', () => {
