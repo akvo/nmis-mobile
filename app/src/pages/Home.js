@@ -8,11 +8,12 @@ import { i18n } from '../lib';
 
 const Home = ({ navigation }) => {
   const { id: currentUserId, name: currentUserName } = UserState.useState((s) => s);
-  const subTitleText = currentUserName ? `${trans.userLabel} ${currentUserName}` : null;
   const [search, setSearch] = useState(null);
   const allForms = FormState.useState((s) => s.allForms);
   const activeLang = UIState.useState((s) => s.lang);
+
   const trans = i18n.text(activeLang);
+  const subTitleText = currentUserName ? `${trans.userLabel} ${currentUserName}` : null;
 
   const goToManageForm = (id) => {
     const findForm = allForms.find((d) => d?.id === id);
