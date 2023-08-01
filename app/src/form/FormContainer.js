@@ -54,15 +54,6 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave }) => {
   }, [forms, dataPointName]);
 
   useEffect(() => {
-    const checkDataPointName = dataPointName.filter((x) => !x.value);
-    if (Object.keys(initialValues).length && checkDataPointName.length) {
-      FormState.update((s) => {
-        s.dataPointName = dataPointName.map((x) => ({ ...x, value: initialValues?.[x.id] }));
-      });
-    }
-  }, [initialValues, dataPointName]);
-
-  useEffect(() => {
     if (onSave) {
       const results = checkValuesBeforeCallback(currentValues);
       if (!Object.keys(results).length) {
