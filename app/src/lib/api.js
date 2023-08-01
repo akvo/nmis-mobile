@@ -36,6 +36,7 @@ const API = () => {
     setServerURL: (serverURL) => {
       api.baseURL = serverURL;
     },
+    getConfig,
   };
 };
 

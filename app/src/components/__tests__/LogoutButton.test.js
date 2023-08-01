@@ -5,13 +5,26 @@ import { useNavigation } from '@react-navigation/native';
 import LogoutButton from '../LogoutButton';
 import { AuthState, UserState } from '../../store';
 import { conn, query } from '../../database';
+import { cascades, i18n } from '../../lib';
 
 jest.mock('@react-navigation/native');
 jest.mock('expo-sqlite');
+jest.mock('../../lib', () => ({
+  cascades: {
+    dropFiles: jest.fn(async () => ['file.sqlite', 'file.sqlite-journal']),
+  },
+  i18n: {
+    text: jest.fn(),
+  },
+}));
 
 const db = conn.init;
 
 describe('LogoutButton', () => {
+  beforeAll(() => {
+    i18n.text.mockReturnValue({ buttonReset: 'Reset' });
+  });
+
   test('render correctly', () => {
     const { getByText, getByTestId } = render(<LogoutButton />);
 
@@ -95,13 +108,14 @@ describe('LogoutButton', () => {
     expect(yesEl).toBeDefined();
     fireEvent.press(yesEl);
 
-    act(() => {
+    act(async () => {
+      await cascades.dropFiles();
       AuthState.update((s) => {
         s.token = null;
       });
     });
 
-    await waitFor(async () => {
+    await waitFor(() => {
       const { result } = renderHook(() => AuthState.useState());
       const { token } = result.current;
       expect(token).toBe(null);

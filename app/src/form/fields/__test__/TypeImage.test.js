@@ -93,6 +93,36 @@ describe('TypeImage component', () => {
       fireEvent.press(getByTestId('btn-remove'));
       expect(setSelectedImage).toHaveBeenCalledTimes(1);
     });
+
+    it('should not show required sign if required param is false and requiredSign is not defined', () => {
+      const wrapper = render(<TypeImage id="imageField" name="Image" required={false} />);
+      const requiredIcon = wrapper.queryByTestId('field-required-icon');
+      expect(requiredIcon).toBeFalsy();
+    });
+
+    it('should not show required sign if required param is false but requiredSign is defined', () => {
+      const wrapper = render(
+        <TypeImage id="imageField" name="Image" required={false} requiredSign="*" />,
+      );
+      const requiredIcon = wrapper.queryByTestId('field-required-icon');
+      expect(requiredIcon).toBeFalsy();
+    });
+
+    it('should not show required sign if required param is true and requiredSign defined', () => {
+      const wrapper = render(
+        <TypeImage id="imageField" name="Image" required={true} requiredSign="*" />,
+      );
+      const requiredIcon = wrapper.queryByTestId('field-required-icon');
+      expect(requiredIcon).toBeTruthy();
+    });
+
+    it('should show required sign with custom requiredSign', () => {
+      const wrapper = render(
+        <TypeImage id="imageField" name="Image" required={true} requiredSign="**" />,
+      );
+      const requiredIcon = wrapper.getByText('**');
+      expect(requiredIcon).toBeTruthy();
+    });
   });
 
   describe('Request access external storage', () => {
@@ -100,7 +130,7 @@ describe('TypeImage component', () => {
       buttonNegative: 'Cancel',
       buttonNeutral: 'Ask Me Later',
       buttonPositive: 'OK',
-      message: 'App needs access to your camera ',
+      message: 'App needs access to your camera',
       title: 'You need to give storage permission to download and save the file',
     };
 

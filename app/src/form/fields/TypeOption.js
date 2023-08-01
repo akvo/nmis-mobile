@@ -4,15 +4,34 @@ import { FieldLabel } from '../support';
 import { styles } from '../styles';
 import { CheckBox } from '@rneui/themed';
 import { Dropdown } from 'react-native-element-dropdown';
+import { UIState } from '../../store';
+import { i18n } from '../../lib';
 
-const TypeOption = ({ onChange, values, keyform, id, name, option = [] }) => {
+const TypeOption = ({
+  onChange,
+  values,
+  keyform,
+  id,
+  name,
+  option = [],
+  tooltip,
+  required,
+  requiredSign,
+}) => {
   const isRadioGroup = React.useMemo(() => {
     return option.length <= 3;
   }, [option]);
+  const activeLang = UIState.useState((s) => s.lang);
+  const trans = i18n.text(activeLang);
 
   return (
     <View style={styles.optionContainer}>
-      <FieldLabel keyform={keyform} name={name} />
+      <FieldLabel
+        keyform={keyform}
+        name={name}
+        tooltip={tooltip}
+        requiredSign={required ? requiredSign : null}
+      />
       {isRadioGroup ? (
         option.map((opt, opti) => (
           <CheckBox
@@ -28,24 +47,26 @@ const TypeOption = ({ onChange, values, keyform, id, name, option = [] }) => {
             title={opt.label}
             checkedIcon="dot-circle-o"
             uncheckedIcon="circle-o"
+            testID={`type-option-radio-${opti}`}
           />
         ))
       ) : (
         <Dropdown
           style={[styles.dropdownField]}
-          data={option.map((opt) => ({ label: opt.label, value: opt.name }))}
+          data={option}
           search
           maxHeight={300}
           labelField="label"
-          valueField="value"
-          searchPlaceholder="Search..."
+          valueField="name"
+          searchPlaceholder={trans.searchPlaceholder}
           value={values?.[id]?.[0] || []}
-          onChange={({ value }) => {
+          onChange={({ name: value }) => {
             if (onChange) {
               onChange(id, [value]);
             }
           }}
           testID="type-option-dropdown"
+          placeholder={trans.selectItem}
         />
       )}
     </View>

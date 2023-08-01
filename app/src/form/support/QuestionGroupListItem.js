@@ -7,6 +7,7 @@ const QuestionGroupListItem = ({ name, active, completedQuestionGroup = false, o
   const icon = completedQuestionGroup ? 'check-circle' : 'circle';
   const bgColor = completedQuestionGroup ? '#2884bd' : '#d4d4d4';
   const activeOpacity = active ? styles.questionGroupListItemActive : {};
+  const activeName = active ? styles.questionGroupListItemNameActive : {};
   return (
     <TouchableOpacity
       style={{ ...styles.questionGroupListItemWrapper, ...activeOpacity }}
@@ -16,12 +17,12 @@ const QuestionGroupListItem = ({ name, active, completedQuestionGroup = false, o
     >
       <Icon
         testID="icon-mark"
-        name={icon}
+        name="circle"
         type="font-awesome"
         color={bgColor}
         style={styles.questionGroupListItemIcon}
       />
-      <Text style={styles.questionGroupListItemName}>{name}</Text>
+      <Text style={{ ...styles.questionGroupListItemName, ...activeName }}>{name}</Text>
     </TouchableOpacity>
   );
 };

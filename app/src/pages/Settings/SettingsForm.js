@@ -7,6 +7,7 @@ import { config } from './config';
 import { BuildParamsState, UIState, AuthState, UserState } from '../../store';
 import { conn, query } from '../../database';
 import DialogForm from './DialogForm';
+import { i18n } from '../../lib';
 
 const db = conn.init;
 
@@ -37,6 +38,10 @@ const SettingsForm = ({ route }) => {
     syncInterval,
     syncWifiOnly,
   });
+
+  const nonEnglish = lang !== 'en';
+  const curConfig = config.find((c) => c.id === route?.params?.id);
+  const pageTitle = nonEnglish ? i18n.transform(lang, curConfig)?.name : route?.params.name;
 
   const editState = useMemo(() => {
     if (edit && edit?.key) {
@@ -118,7 +123,8 @@ const SettingsForm = ({ route }) => {
       ...settingsState,
       [stateKey]: value,
     });
-    handleUpdateOnDB(stateKey, value);
+    const tinyIntVal = value ? 1 : 0;
+    handleUpdateOnDB(stateKey, tinyIntVal);
   };
 
   const handleCreateNewConfig = () => {
@@ -159,7 +165,7 @@ const SettingsForm = ({ route }) => {
     });
   }, []);
   return (
-    <BaseLayout title={route?.params?.name}>
+    <BaseLayout title={pageTitle} rightComponent={false}>
       <BaseLayout.Content>
         <View>
           {list.map((l, i) => {
@@ -167,14 +173,19 @@ const SettingsForm = ({ route }) => {
               l.type === 'switch' && (settingsState[l.name] || false) ? true : false;
             const listProps =
               l.editable && l.type !== 'switch' ? { onPress: () => handleEditPress(l.id) } : {};
-            let subtitle =
+
+            const itemTitle = nonEnglish ? i18n.transform(lang, l)?.label : l.label;
+            const itemDesc = nonEnglish
+              ? i18n.transform(lang, l?.description)?.name
+              : l?.description?.name;
+            const subtitle =
               l.type === 'switch' || l.type === 'password'
-                ? l.description
-                : settingsState[l.name] || l.description;
+                ? itemDesc
+                : settingsState[l.name] || itemDesc;
             return (
               <ListItem key={i} {...listProps} testID={`settings-form-item-${i}`} bottomDivider>
                 <ListItem.Content>
-                  <ListItem.Title>{l.label}</ListItem.Title>
+                  <ListItem.Title>{itemTitle}</ListItem.Title>
                   <ListItem.Subtitle>{subtitle}</ListItem.Subtitle>
                 </ListItem.Content>
                 {l.type === 'switch' && (

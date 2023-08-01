@@ -2,7 +2,7 @@ import api from '../api';
 import backgroundTask from '../background-task';
 import * as BackgroundFetch from 'expo-background-fetch';
 import * as TaskManager from 'expo-task-manager';
-import { crudForms, crudSessions } from '../../database/crud';
+import { crudForms, crudSessions, crudUsers, crudDataPoints } from '../../database/crud';
 import { waitFor } from '@testing-library/react-native';
 
 jest.mock('../api');
@@ -13,7 +13,7 @@ jest.mock('expo-task-manager');
 describe('backgroundTask', () => {
   const mockTaskName = 'taskName';
   const mockTaskOption = {
-    minimumInterval: 60,
+    minimumInterval: 86400,
     startOnBoot: true,
     stopOnTerminate: false,
   };
@@ -115,6 +115,93 @@ describe('backgroundTask', () => {
           mockTaskOption,
         ),
       );
+    });
+  });
+
+  describe('syncFormSubmission', () => {
+    const mockSession = { token: 'eyjtoken', passcode: '12345' };
+    const mockForm = {
+      id: 123,
+      formId: 456,
+      name: 'Form Name',
+      version: '1.0.0',
+      latest: 1,
+      json: JSON.stringify({
+        formId: 456,
+        name: 'Form Name',
+        version: '1.0.0',
+        question_group: [],
+      }),
+      createdAt: '2023-07-28T07:53:40.210Z',
+    };
+    const dataPoints = [
+      {
+        id: 1,
+        form: 123,
+        user: 1,
+        name: 'Data point 1 name',
+        geo: '-8.676119|115.4927994',
+        submitted: 1,
+        duration: 2.5,
+        createdAt: '2023-07-28T07:53:40.210Z',
+        submittedAt: '2023-07-28T07:53:40.210Z',
+        syncedAt: null,
+        json: JSON.stringify({ 101: 'Data point 1', 102: 1 }),
+      },
+    ];
+    const mockUser = {
+      id: 1,
+      name: 'John Doe',
+      password: 'password',
+      active: 1,
+    };
+
+    beforeEach(() => {
+      jest.clearAllMocks();
+    });
+
+    // it('should log an error if check connection rejected', async () => {
+    //   const consoleSpy = jest.spyOn(console, 'error');
+    //   api.get.mockImplementation(() => Promise.reject('No connection'));
+
+    //   await backgroundTask.syncFormSubmission();
+    //   expect(consoleSpy).toHaveBeenCalledWith('[syncFormSubmission] Error: ', 'No connection');
+    // });
+
+    it('should sync submission if any', async () => {
+      const consoleSpy = jest.spyOn(console, 'error');
+      // api.get.mockImplementation(() => Promise.resolve(true));
+      crudSessions.selectLastSession.mockImplementation(() => Promise.resolve(mockSession));
+      crudDataPoints.selectSubmissionToSync.mockImplementation(() => Promise.resolve(dataPoints));
+      crudUsers.selectUserById.mockImplementation(() => Promise.resolve(mockUser));
+      crudForms.selectFormById.mockImplementation(() => Promise.resolve(mockForm));
+      crudDataPoints.updateDataPoint.mockImplementation(() => Promise.resolve({ rowsAffected: 1 }));
+
+      api.setToken.mockReturnValue({ token: mockSession.token });
+      api.post.mockImplementation(() =>
+        Promise.resolve({ status: 200, data: { id: 123, message: 'Success' } }),
+      );
+
+      await backgroundTask.syncFormSubmission();
+      expect(consoleSpy).not.toHaveBeenCalled();
+
+      await waitFor(() => {
+        expect(crudSessions.selectLastSession).toHaveBeenCalled();
+        expect(api.setToken).toHaveBeenCalled();
+        expect(crudDataPoints.selectSubmissionToSync).toHaveBeenCalled();
+        expect(crudUsers.selectUserById).toHaveBeenCalled();
+        expect(crudForms.selectFormById).toHaveBeenCalled();
+        expect(api.post).toHaveBeenCalledWith('/sync', {
+          answers: { 101: 'Data point 1', 102: 1 },
+          duration: 3,
+          formId: 456,
+          geo: [-8.676119, 115.4927994],
+          name: 'Data point 1 name',
+          submittedAt: '2023-07-28T07:53:40.210Z',
+          submitter: 'John Doe',
+        });
+        expect(crudDataPoints.updateDataPoint).toHaveBeenCalled();
+      });
     });
   });
 });

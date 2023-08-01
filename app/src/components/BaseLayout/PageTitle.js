@@ -1,5 +1,6 @@
 import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { View, StyleSheet } from 'react-native';
 import { Header, Text, Button } from '@rneui/themed';
 import { useNavigation } from '@react-navigation/native';
 
@@ -8,15 +9,7 @@ const BackButton = ({ navigation }) => {
     navigation.goBack();
   };
 
-  const hasPreviousScreen = () => {
-    try {
-      return navigation.canGoBack();
-    } catch {
-      return false;
-    }
-  };
-
-  return hasPreviousScreen ? (
+  return navigation.canGoBack() ? (
     <Button type="clear" onPress={handleGoBackPress} testID="arrow-back-button">
       <Icon name="arrow-back" size={18} />
     </Button>
@@ -27,6 +20,7 @@ const BackButton = ({ navigation }) => {
 
 const PageTitle = ({
   text,
+  subTitle = null,
   leftComponent = null,
   leftContainerStyle = {},
   rightComponent = null,
@@ -48,16 +42,25 @@ const PageTitle = ({
       statusBarProps={{
         backgroundColor: '#171717',
       }}
-      containerStyle={{
-        height: 80,
-      }}
+      containerStyle={styles.container}
       testID="base-layout-page-title"
     >
       {!leftComponent && <BackButton navigation={navigation} />}
-      <Text h4Style={{ fontSize: 18 }} h4>
-        {text}
-      </Text>
-      {!rightComponent && (
+      {subTitle ? (
+        <View>
+          <Text h4Style={styles.title} testID="page-title" h4>
+            {text}
+          </Text>
+          <Text testID="page-subtitle" style={styles.subTitle}>
+            {subTitle}
+          </Text>
+        </View>
+      ) : (
+        <Text h4Style={styles.onlyTitle} testID="page-title" h4>
+          {text}
+        </Text>
+      )}
+      {rightComponent === null && (
         <Button type="clear" testID="more-options-button" onPress={handleSettingsPress}>
           <Icon name="ellipsis-vertical" size={18} />
         </Button>
@@ -65,5 +68,23 @@ const PageTitle = ({
     </Header>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    minheight: 78,
+  },
+  title: {
+    fontSize: 18,
+  },
+  onlyTitle: {
+    paddingTop: 4,
+    fontSize: 18,
+  },
+  subTitle: {
+    fontWeight: 400,
+    fontStyle: 'italic',
+    textAlign: 'center',
+  },
+});
 
 export default PageTitle;

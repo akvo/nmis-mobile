@@ -1,142 +1,292 @@
 {
-  "id": 603050002,
-  "name": "Urban Sanitation",
-  "version": "1.0.0",
-  "question_group": [
-    {
-      "name": "Introduction",
-      "question": [
-        {
-          "id": 583740003,
-          "name": "Location",
-          "order": 1,
-          "type": "cascade",
-          "required": true,
-          "meta": true
-        },
-        {
-          "id": 589590005,
-          "name": "Name of the Estate / Village?",
-          "order": 2,
-          "type": "text",
-          "required": true,
-          "meta": true
-        },
-        {
-          "id": 605040004,
-          "name": "Name of the respondent",
-          "order": 3,
-          "type": "text",
-          "required": true,
-          "meta": true
-        },
-        {
-          "id": 6030500021,
-          "name": "Organisation",
-          "order": 4,
-          "type": "cascade",
-          "required": true,
-          "meta": false
-        }
-      ]
-    },
-    {
-      "name": "Fecal sludge management",
-      "question": [
-        {
-          "id": 603080002,
-          "name": "What is the main type of sanitation/faecal sludge management exists in the town/city",
-          "order": 1,
-          "type": "option",
-          "required": true,
-          "option": [
-            {
-              "id": 14340,
-              "name": "Sewarage system",
-              "order": 1
-            },
-            {
-              "id": 14341,
-              "name": "pit latrines",
-              "order": 2
-            },
-            {
-              "id": 14342,
-              "name": "Septic tanks",
-              "order": 3
-            },
-            {
-              "id": 14343,
-              "name": "I don't know",
-              "order": 4
-            }
-          ],
-          "meta": false
-        },
-        {
-          "id": 587530063,
-          "name": "How is feacal matter/sludge transported to the treatment plant?",
-          "order": 2,
-          "type": "option",
-          "required": true,
-          "dependency": [
-            {
-              "id": 603080002,
-              "options": [
-                "Sewarage system",
-                "Septic tanks"
-              ]
-            }
-          ],
-          "option": [
-            {
-              "id": 14344,
-              "name": "through the sewer system",
-              "order": 1
-            },
-            {
-              "id": 14345,
-              "name": "Using tracks",
-              "order": 2
-            },
-            {
-              "id": 14346,
-              "name": "Its not transported to the treatment plant",
-              "order": 3
-            },
-            {
-              "id": 14347,
-              "name": "I don't know",
-              "order": 4
-            }
-          ],
-          "meta": false
-        },
-        {
-          "id": 601660002,
-          "name": "What is the proportion of Feacal Sludge reaching treatment plants which is treated to standard?",
-          "order": 3,
-          "type": "number",
-          "required": true,
-          "meta": false
-        },
-        {
-          "id": 544720002,
-          "name": "What is the proportion of improved piped to sewers which Reach treatment plants ?",
-          "order": 4,
-          "type": "number",
-          "required": true,
-          "meta": false
-        },
-        {
-          "id": 611500068,
-          "name": "What is the proportion of waste water reaching treatment plants which is treated to standards",
-          "order": 5,
-          "type": "number",
-          "required": true,
-          "meta": false
-        }
-      ]
-    }
-  ]
+	"id": 603050002,
+	"name": "Urban Sanitation",
+	"version": "1.0.0",
+	"cascades": [
+		"/sqlite/cascade-296940912-v2.sqlite",
+		"/sqlite/kenya_organizations.sqlite"
+	],
+	"translations": [
+		{
+			"language": "fr",
+			"name": "Assainissement urbain"
+		}
+	],
+	"question_group": [
+		{
+			"name": "Introduction",
+			"translations": [
+				{
+					"language": "fr",
+					"name": "Présentation"
+				}
+			],
+			"question": [
+				{
+					"id": 583740003,
+					"name": "Location",
+					"order": 1,
+					"type": "cascade",
+					"required": true,
+					"meta": true,
+					"source": {
+						"file": "cascade-296940912-v2.sqlite",
+						"parent_id": 273
+					},
+					"translations": [
+						{
+							"language": "fr",
+							"name": "Emplacement"
+						}
+					],
+					"tooltip": {
+						"text": "Actual location",
+						"translations": [
+							{
+								"language": "fr",
+								"name": "emplacement réel"
+							}
+						]
+					}
+				},
+				{
+					"id": 589590005,
+					"name": "Name of the Estate / Village?",
+					"order": 2,
+					"type": "text",
+					"required": true,
+					"meta": true,
+					"translations": [
+						{
+							"language": "fr",
+							"name": "Nom du Domaine/Village?"
+						}
+					]
+				},
+				{
+					"id": 605040004,
+					"name": "Name of the respondent",
+					"order": 3,
+					"type": "text",
+					"required": true,
+					"meta": true,
+					"translations": [
+						{
+							"language": "fr",
+							"name": "Nom du répondant"
+						}
+					]
+				},
+				{
+					"id": 6030500021,
+					"name": "Organisation",
+					"order": 4,
+					"type": "cascade",
+					"required": true,
+					"meta": true,
+					"source": {
+						"file": "kenya_organizations.sqlite",
+						"parent_id": 0
+					},
+					"translations": [
+						{
+							"language": "fr",
+							"name": "Organisation"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Fecal sludge management",
+			"translations": [
+				{
+					"language": "fr",
+					"name": "Gestion des boues fécales"
+				}
+			],
+			"question": [
+				{
+					"id": 603080002,
+					"name": "What is the main type of sanitation/faecal sludge management exists in the town/city",
+					"order": 1,
+					"type": "option",
+					"required": true,
+					"option": [
+						{
+							"id": 14340,
+							"name": "Sewarage system",
+							"order": 1,
+							"translations": [
+								{
+									"language": "fr",
+									"name": "Système d'égouts"
+								}
+							]
+						},
+						{
+							"id": 14341,
+							"name": "pit latrines",
+							"order": 2,
+							"translations": [
+								{
+									"language": "fr",
+									"name": "latrines à fosse"
+								}
+							]
+						},
+						{
+							"id": 14342,
+							"name": "Septic tanks",
+							"order": 3,
+							"translations": [
+								{
+									"language": "fr",
+									"name": "Fosses septiques"
+								}
+							]
+						},
+						{
+							"id": 14343,
+							"name": "I don't know",
+							"order": 4,
+							"translations": [
+								{
+									"language": "fr",
+									"name": "Je ne sais pas"
+								}
+							]
+						}
+					],
+					"meta": false,
+					"translations": [
+						{
+							"language": "fr",
+							"name": "Quel est le principal type d'assainissement/de gestion des boues fécales existant dans la ville/ville"
+						}
+					]
+				},
+				{
+					"id": 587530063,
+					"name": "How is feacal matter/sludge transported to the treatment plant?",
+					"order": 2,
+					"type": "option",
+					"required": true,
+					"dependency": [
+						{
+							"id": 603080002,
+							"options": [
+								"Sewarage system",
+								"Septic tanks"
+							]
+						}
+					],
+					"option": [
+						{
+							"id": 14344,
+							"name": "through the sewer system",
+							"order": 1,
+							"translations": [
+								{
+									"language": "fr",
+									"name": "par le réseau d'égouts"
+								}
+							]
+						},
+						{
+							"id": 14345,
+							"name": "Using tracks",
+							"order": 2,
+							"translations": [
+								{
+									"language": "fr",
+									"name": "Utiliser des pistes"
+								}
+							]
+						},
+						{
+							"id": 14346,
+							"name": "Its not transported to the treatment plant",
+							"order": 3,
+							"translations": [
+								{
+									"language": "fr",
+									"name": "Il n'est pas transporté vers la station d'épuration"
+								}
+							]
+						},
+						{
+							"id": 14347,
+							"name": "I don't know",
+							"order": 4,
+							"translations": [
+								{
+									"language": "fr",
+									"name": "Je ne sais pas"
+								}
+							]
+						}
+					],
+					"meta": false,
+					"translations": [
+						{
+							"language": "fr",
+							"name": "Comment les matières fécales/boues sont-elles transportées vers la station d'épuration?"
+						}
+					]
+				},
+				{
+					"id": 601660002,
+					"name": "What is the proportion of Feacal Sludge reaching treatment plants which is treated to standard?",
+					"order": 3,
+					"type": "number",
+					"required": true,
+					"meta": false,
+					"translations": [
+						{
+							"language": "fr",
+							"name": "Quelle est la proportion de boues fécales atteignant les stations d'épuration qui est traitée conformément aux normes?"
+						}
+					]
+				},
+				{
+					"id": 544720002,
+					"name": "What is the proportion of improved piped to sewers which Reach treatment plants ?",
+					"order": 4,
+					"type": "number",
+					"required": true,
+					"meta": false,
+					"translations": [
+						{
+							"language": "fr",
+							"name": "Quelle est la proportion de canalisations améliorées vers les égouts qui atteignent les stations d'épuration?"
+						}
+					],
+					"tooltip": {
+						"text": "Actual proportion",
+						"translations": [
+							{
+								"language": "fr",
+								"name": "Proportion réelle"
+							}
+						]
+					}
+				},
+				{
+					"id": 611500068,
+					"name": "What is the proportion of waste water reaching treatment plants which is treated to standards",
+					"order": 5,
+					"type": "number",
+					"required": true,
+					"meta": false,
+					"translations": [
+						{
+							"language": "fr",
+							"name": "Quelle est la proportion d'eaux usées arrivant dans les stations d'épuration qui sont traitées aux normes"
+						}
+					]
+				}
+			]
+		}
+	]
 }

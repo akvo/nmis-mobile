@@ -36,7 +36,18 @@ export const styles = StyleSheet.create({
     color: 'red',
     fontStyle: 'italic',
   },
+  fieldLabelContainer: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  fieldRequiredIcon: {
+    color: 'red',
+    paddingLeft: 10,
+  },
   fieldLabel: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 4,
     paddingHorizontal: 10,
     marginBottom: 8,
     fontWeight: 600,
@@ -108,6 +119,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'column',
     gap: 8,
+    marginBottom: 18,
   },
   questionGroupListContainer: {
     paddingVertical: 24,
@@ -138,7 +150,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   questionGroupListItemActive: {
-    backgroundColor: '#F3F3F3',
+    backgroundColor: '#E9E9E9',
   },
   questionGroupListItemIcon: {
     paddingHorizontal: 10,
@@ -146,5 +158,18 @@ export const styles = StyleSheet.create({
   },
   questionGroupListItemName: {
     marginLeft: 10,
+  },
+  questionGroupListItemNameActive: {
+    fontWeight: 'bold',
+  },
+  cascadeContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 6,
+    marginBottom: 25,
+  },
+  cascadeValues: {
+    opacity: 0,
+    marginBottom: -16,
   },
 });

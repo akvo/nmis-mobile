@@ -4,15 +4,34 @@ import { FieldLabel } from '../support';
 import { styles } from '../styles';
 import { CheckBox } from '@rneui/themed';
 import { MultiSelect } from 'react-native-element-dropdown';
+import { UIState } from '../../store';
+import { i18n } from '../../lib';
 
-const TypeMultipleOption = ({ onChange, values, keyform, id, name, option = [] }) => {
+const TypeMultipleOption = ({
+  onChange,
+  values,
+  keyform,
+  id,
+  name,
+  option = [],
+  tooltip,
+  required,
+  requiredSign,
+}) => {
   const isCheckBox = React.useMemo(() => {
     return option.length <= 3;
   }, [option]);
+  const activeLang = UIState.useState((s) => s.lang);
+  const trans = i18n.text(activeLang);
 
   return (
     <View style={styles.multipleOptionContainer}>
-      <FieldLabel keyform={keyform} name={name} />
+      <FieldLabel
+        keyform={keyform}
+        name={name}
+        tooltip={tooltip}
+        requiredSign={required ? requiredSign : null}
+      />
       {isCheckBox ? (
         option.map((opt, opti) => (
           <CheckBox
@@ -34,12 +53,13 @@ const TypeMultipleOption = ({ onChange, values, keyform, id, name, option = [] }
         <MultiSelect
           style={[styles.dropdownField]}
           selectedStyle={styles.dropdownSelectedList}
-          data={option.map((opt) => ({ label: opt.label, value: opt.name }))}
+          data={option}
           search
           maxHeight={300}
           labelField="label"
-          valueField="value"
-          searchPlaceholder="Search..."
+          valueField="name"
+          searchPlaceholder={trans.searchPlaceholder}
+          placeholder={trans.selectItem}
           value={values?.[id] || []}
           onChange={(value) => {
             if (onChange) {

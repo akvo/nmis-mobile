@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import { i18n } from '../../lib';
 
 const intersection = (array1, array2) => {
   const set1 = new Set(array1);
@@ -26,46 +27,71 @@ const getDependencyAncestors = (questions, current, dependencies) => {
   return current;
 };
 
-export const transformForm = (forms) => {
-  const questions = forms?.question_group
+export const transformForm = (forms, lang = 'en') => {
+  const nonEnglish = lang !== 'en';
+  if (nonEnglish) {
+    forms = i18n.transform(lang, forms);
+  }
+  const questions = forms.question_group
     .map((x) => {
       return x.question;
     })
-    .flatMap((x) => x)
-    .map((x) => {
-      if (x.type === 'option' || x.type === 'multiple_option') {
-        const options = x.option.map((o) => ({ ...o, label: o.name }));
+    .flatMap((q) => q)
+    .map((q) => (nonEnglish ? i18n.transform(lang, q) : q))
+    .map((q) => {
+      if (q.type === 'option' || q.type === 'multiple_option') {
+        const options = q.option
+          .map((o) => ({ ...o, label: o.name }))
+          .map((o) => {
+            return nonEnglish ? i18n.transform(lang, o) : o;
+          });
         return {
-          ...x,
+          ...q,
           option: options.sort((a, b) => a.order - b.order),
         };
       }
-      return x;
+      if (q?.tooltip) {
+        const transTooltip = nonEnglish ? i18n.transform(lang, q.tooltip) : q.tooltip;
+        return {
+          ...q,
+          tooltip: transTooltip,
+        };
+      }
+      return q;
     });
 
   const transformed = questions.map((x) => {
+    let requiredSignTemp = x?.requiredSign || null;
+    if (x?.required && !x?.requiredSign) {
+      requiredSignTemp = '*';
+    }
     if (x?.dependency) {
       return {
         ...x,
+        requiredSign: requiredSignTemp,
         dependency: getDependencyAncestors(questions, x.dependency, x.dependency),
       };
     }
-    return x;
+    return {
+      ...x,
+      requiredSign: requiredSignTemp,
+    };
   });
 
   return {
     ...forms,
-    question_group: forms?.question_group
-      ?.sort((a, b) => a.order - b.order)
-      ?.map((qg, qgi) => {
+    question_group: forms.question_group
+      .sort((a, b) => a.order - b.order)
+      .map((qg, qgi) => {
         let repeat = {};
         let repeats = {};
         if (qg?.repeatable) {
           repeat = { repeat: 1 };
           repeats = { repeats: [0] };
         }
+        const translatedQg = nonEnglish ? i18n.transform(lang, qg) : qg;
         return {
-          ...qg,
+          ...translatedQg,
           ...repeat,
           ...repeats,
           id: qg?.id || qgi,
@@ -186,7 +212,6 @@ export const generateValidationSchema = (forms) => {
 */
 }
 
-// TODO:: Check for chaining dependency
 export const generateValidationSchemaFieldLevel = (currentValue, field) => {
   const { name, type, required, rule } = field;
   let yupType;
@@ -215,6 +240,15 @@ export const generateValidationSchemaFieldLevel = (currentValue, field) => {
     case 'multiple_option':
       yupType = Yup.array();
       break;
+    case 'cascade':
+      yupType = Yup.array();
+      break;
+    case 'geo':
+      yupType = Yup.object().shape({
+        lat: Yup.string().nullable(),
+        lng: Yup.string().nullable(),
+      });
+      break;
     default:
       yupType = Yup.string();
       break;
@@ -228,4 +262,16 @@ export const generateValidationSchemaFieldLevel = (currentValue, field) => {
   } catch (error) {
     return error.message;
   }
+};
+
+export const generateDataPointName = (dataPointNameValues) => {
+  const dpName = dataPointNameValues
+    .filter((d) => d.type !== 'geo' && (d.value || d.value === 0))
+    .map((x) => x.value)
+    .join(' - ');
+  let dpGeo = dataPointNameValues.find((d) => d.type === 'geo')?.value || null;
+  if (dpGeo?.lat && dpGeo?.lng) {
+    dpGeo = `${dpGeo.lat}|${dpGeo.lng}`;
+  }
+  return { dpName, dpGeo };
 };

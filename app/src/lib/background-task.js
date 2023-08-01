@@ -1,4 +1,4 @@
-import { crudForms, crudSessions } from '../database/crud';
+import { crudForms, crudSessions, crudDataPoints, crudUsers } from '../database/crud';
 import api from './api';
 import * as BackgroundFetch from 'expo-background-fetch';
 import * as TaskManager from 'expo-task-manager';
@@ -10,7 +10,6 @@ const syncFormVersion = async ({
   try {
     // find last session
     const session = await crudSessions.selectLastSession();
-    console.log('[bgTask]Session:', session);
     if (!session) {
       return;
     }
@@ -20,12 +19,10 @@ const syncFormVersion = async ({
     api
       .post('/auth', data, { headers: { 'Content-Type': 'multipart/form-data' } })
       .then(async (res) => {
-        console.log('[bgTask]Fetch Auth Success');
         const { data } = res;
         const promises = data.formsUrl.map(async (form) => {
           const formExist = await crudForms.selectFormByIdAndVersion({ ...form });
           if (formExist) {
-            console.info('[bgTask]Form exist:', form.id, form.version);
             return false;
           }
           if (showNotificationOnly) {
@@ -34,10 +31,10 @@ const syncFormVersion = async ({
           }
           const formRes = await api.get(form.url);
           // update previous form latest value to 0
-          const updatedForm = await crudForms.updateForm({ ...form });
-          console.info('[syncForm]Updated Forms...', form.id, updatedForm);
+          await crudForms.updateForm({ ...form });
+          console.info('[syncForm]Updated Forms...', form.id);
           const savedForm = await crudForms.addForm({ ...form, formJSON: formRes?.data });
-          console.info('[syncForm]Saved Forms...', form.id, savedForm);
+          console.info('[syncForm]Saved Forms...', form.id);
           return savedForm;
         });
         Promise.all(promises).then(async (res) => {
@@ -53,10 +50,10 @@ const syncFormVersion = async ({
   }
 };
 
-const registerBackgroundTask = async (TASK_NAME) => {
+const registerBackgroundTask = async (TASK_NAME, minimumInterval = 86400) => {
   try {
     await BackgroundFetch.registerTaskAsync(TASK_NAME, {
-      minimumInterval: 1 * 60,
+      minimumInterval: minimumInterval,
       stopOnTerminate: false, // android only,
       startOnBoot: true, // android only
     });
@@ -73,13 +70,55 @@ const unregisterBackgroundTask = async (TASK_NAME) => {
   }
 };
 
-const backgroundTaskStatus = async (TASK_NAME) => {
+const backgroundTaskStatus = async (TASK_NAME, minimumInterval = 86400) => {
   const status = await BackgroundFetch.getStatusAsync();
   const isRegistered = await TaskManager.isTaskRegisteredAsync(TASK_NAME);
   if (BackgroundFetch.BackgroundFetchStatus?.[status] === 'Available' && !isRegistered) {
-    await registerBackgroundTask(TASK_NAME);
+    await registerBackgroundTask(TASK_NAME, minimumInterval);
   }
-  console.log('[bgTask]Status', status, isRegistered);
+  console.log(`[${TASK_NAME}] Status`, status, isRegistered, minimumInterval);
+};
+
+const syncFormSubmission = async () => {
+  try {
+    console.info('[syncFormSubmision] SyncData started');
+    // get token
+    const session = await crudSessions.selectLastSession();
+    // set token
+    api.setToken(session.token);
+    // get all datapoints to sync
+    const data = await crudDataPoints.selectSubmissionToSync();
+    console.info('[syncFormSubmision] data point to sync:', data.length);
+    data.forEach(async (d) => {
+      // get user
+      const user = await crudUsers.selectUserById({ id: d.user });
+      const form = await crudForms.selectFormById({ id: d.form });
+      const geo = d.geo ? d.geo.split('|')?.map((x) => parseFloat(x)) : null;
+      const syncData = {
+        formId: form.formId,
+        name: d.name,
+        duration: Math.round(d.duration),
+        submittedAt: d.submittedAt,
+        submitter: user.name,
+        geo: geo,
+        answers: JSON.parse(d.json.replace(/''/g, "'")),
+      };
+      console.info('[syncFormSubmision] SyncData:', syncData);
+      // sync data point
+      const res = await api.post('/sync', syncData);
+      console.info('[syncFormSubmision] post sync data point:', res.status, res.data);
+      if (res.status === 200) {
+        // update data point
+        await crudDataPoints.updateDataPoint({
+          ...d,
+          syncedAt: new Date().toISOString(),
+        });
+        console.info('[syncFormSubmision] updated data point syncedAt:', d.id);
+      }
+    });
+  } catch (err) {
+    console.error('[syncFormSubmission] Error: ', err);
+  }
 };
 
 const backgroundTaskHandler = () => {
@@ -88,6 +127,7 @@ const backgroundTaskHandler = () => {
     registerBackgroundTask,
     unregisterBackgroundTask,
     backgroundTaskStatus,
+    syncFormSubmission,
   };
 };
 

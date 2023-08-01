@@ -45,7 +45,7 @@ exports[`AuthFormPage renders correctly 1`] = `
         }
       }
     >
-      Use the Enumerator ID
+      Use the enumerator passcode
     </Text>
     <Text
       accessibilityRole="text"
@@ -56,7 +56,7 @@ exports[`AuthFormPage renders correctly 1`] = `
         }
       }
     >
-      provided to you by your
+      provided to you
     </Text>
     <Text
       accessibilityRole="text"
@@ -67,7 +67,7 @@ exports[`AuthFormPage renders correctly 1`] = `
         }
       }
     >
-      project admin
+      by your project admin
     </Text>
   </View>
   <View
@@ -107,7 +107,7 @@ exports[`AuthFormPage renders correctly 1`] = `
           autoFocus={true}
           editable={true}
           onChangeText={[Function]}
-          placeholder="Enumerator ID"
+          placeholder="Enumerator passcode"
           placeholderTextColor="#86939e"
           secureTextEntry={true}
           style={

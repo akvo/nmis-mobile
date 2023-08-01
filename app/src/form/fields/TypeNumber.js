@@ -5,10 +5,26 @@ import { styles } from '../styles';
 import { Input } from '@rneui/themed';
 import { addPreffix, addSuffix } from './TypeInput';
 
-const TypeNumber = ({ onChange, values, keyform, id, name, addonAfter, addonBefore }) => {
+const TypeNumber = ({
+  onChange,
+  values,
+  keyform,
+  id,
+  name,
+  addonAfter,
+  addonBefore,
+  tooltip,
+  required,
+  requiredSign,
+}) => {
   return (
     <View>
-      <FieldLabel keyform={keyform} name={name} />
+      <FieldLabel
+        keyform={keyform}
+        name={name}
+        tooltip={tooltip}
+        requiredSign={required ? requiredSign : null}
+      />
       <Input
         inputContainerStyle={styles.inputFieldContainer}
         keyboardType="numeric"

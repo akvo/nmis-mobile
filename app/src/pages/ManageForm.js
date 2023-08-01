@@ -3,30 +3,31 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { View } from 'react-native';
 import { ListItem } from '@rneui/themed';
 import { BaseLayout } from '../components';
+import { UIState } from '../store';
+import { i18n } from '../lib';
 
 const ManageForm = ({ navigation, route }) => {
-  const goTo = (page) => {
-    navigation.navigate(page, { ...route?.params });
-  };
+  const activeLang = UIState.useState((s) => s.lang);
+  const trans = i18n.text(activeLang);
 
   const items = [
     {
       id: 1,
-      text: 'New Blank Form',
+      text: trans.manageNewBlank,
       icon: 'add',
-      navigation: 'FormPage',
+      goTo: () => navigation.navigate('FormPage', { ...route?.params, newSubmission: true }),
     },
     {
       id: 2,
-      text: 'Edit Saved Form',
+      text: trans.manageEditSavedForm,
       icon: 'folder-open',
-      navigation: 'FormData',
+      goTo: () => navigation.navigate('FormData', { ...route?.params, showSubmitted: false }),
     },
     {
       id: 3,
-      text: 'View Submitted',
+      text: trans.manageViewSubmitted,
       icon: 'eye',
-      navigation: 'FormData',
+      goTo: () => navigation.navigate('FormData', { ...route?.params, showSubmitted: true }),
     },
   ];
   return (
@@ -40,7 +41,7 @@ const ManageForm = ({ navigation, route }) => {
           }}
         >
           {items.map((i, ix) => (
-            <ListItem key={ix} onPress={() => goTo(i.navigation)} testID={`goto-item-${ix}`}>
+            <ListItem key={ix} onPress={() => i.goTo()} testID={`goto-item-${ix}`}>
               <Icon name={i.icon} color="grey" size={18} />
               <ListItem.Content>
                 <ListItem.Title>{i.text}</ListItem.Title>

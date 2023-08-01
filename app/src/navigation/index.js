@@ -14,7 +14,7 @@ import {
   MapViewPage,
   UsersPage,
 } from '../pages';
-import { UIState, AuthState, UserState, FormState } from '../store';
+import { UIState, AuthState, UserState, FormState, BuildParamsState } from '../store';
 import { BackHandler } from 'react-native';
 import * as TaskManager from 'expo-task-manager';
 import * as BackgroundFetch from 'expo-background-fetch';
@@ -23,7 +23,8 @@ import { backgroundTask, notification } from '../lib';
 import { LoadingDialog } from '../components';
 import { crudForms } from '../database/crud';
 
-const TASK_NAME = 'sync-form-version';
+const SYNC_FORM_VERSION_TASK_NAME = 'sync-form-version';
+const SYNC_FORM_SUBMISSION_TASK_NAME = 'sync-form-submission';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -33,16 +34,25 @@ Notifications.setNotificationHandler({
   }),
 });
 
-TaskManager.defineTask(TASK_NAME, async () => {
+TaskManager.defineTask(SYNC_FORM_VERSION_TASK_NAME, async () => {
   try {
-    console.log('[bgTask]Function here');
     await backgroundTask.syncFormVersion({
       sendPushNotification: notification.sendPushNotification,
       showNotificationOnly: true,
     });
+    return BackgroundFetch.BackgroundFetchResult.NoData;
+  } catch (err) {
+    console.error(`[${SYNC_FORM_VERSION_TASK_NAME}] Define task manager failed`, err);
+    return BackgroundFetch.Result.Failed;
+  }
+});
+
+TaskManager.defineTask(SYNC_FORM_SUBMISSION_TASK_NAME, async () => {
+  try {
+    await backgroundTask.syncFormSubmission();
     return BackgroundFetch.BackgroundFetchResult.NewData;
   } catch (err) {
-    console.error('define task manager failed:', err);
+    console.error(`[${SYNC_FORM_SUBMISSION_TASK_NAME}] Define task manager failed`, err);
     return BackgroundFetch.Result.Failed;
   }
 });
@@ -54,6 +64,7 @@ const RootNavigator = ({ setIsSyncForm }) => {
   const currentPage = UIState.useState((s) => s.currentPage);
   const token = AuthState.useState((s) => s.token); // user already has session
   const userDefined = UserState.useState((s) => s.id);
+  const syncInterval = BuildParamsState.useState((s) => s.dataSyncInterval);
 
   React.useEffect(() => {
     const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
@@ -68,7 +79,9 @@ const RootNavigator = ({ setIsSyncForm }) => {
   }, [token, currentPage]);
 
   React.useEffect(() => {
-    backgroundTask.backgroundTaskStatus(TASK_NAME);
+    backgroundTask.backgroundTaskStatus(SYNC_FORM_VERSION_TASK_NAME);
+    backgroundTask.backgroundTaskStatus(SYNC_FORM_SUBMISSION_TASK_NAME, syncInterval);
+
     notification.registerForPushNotificationsAsync();
     const notificationListener = Notifications.addNotificationReceivedListener(() => {
       console.log('[Notification]Received Listener');
@@ -129,8 +142,13 @@ const Navigation = (props) => {
     // listen to route change
     const currentRoute = state.routes[state.routes.length - 1].name;
     if (['Home', 'ManageForm'].includes(currentRoute)) {
+      // reset form values
       FormState.update((s) => {
         s.currentValues = {};
+        s.questionGroupListCurrentValues = {};
+        s.visitedQuestionGroup = [];
+        s.dataPointName = [];
+        s.surveyDuration = 0;
       });
     }
     UIState.update((s) => {

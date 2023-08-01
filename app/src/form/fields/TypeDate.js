@@ -5,13 +5,18 @@ import { styles } from '../styles';
 import { Input } from '@rneui/themed';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-const TypeDate = ({ onChange, values, keyform, id, name }) => {
+const TypeDate = ({ onChange, values, keyform, id, name, tooltip, required, requiredSign }) => {
   const now = new Date();
   const [showDatepicker, setShowDatePicker] = React.useState(false);
 
   return (
     <View>
-      <FieldLabel keyform={keyform} name={name} />
+      <FieldLabel
+        keyform={keyform}
+        name={name}
+        tooltip={tooltip}
+        requiredSign={required ? requiredSign : null}
+      />
       <Input
         inputContainerStyle={styles.inputFieldContainer}
         onPressIn={() => setShowDatePicker(true)}

@@ -4,13 +4,42 @@ const db = conn.init;
 
 const formsQuery = () => {
   return {
-    selectLatestFormVersion: async () => {
+    selectLatestFormVersion: async ({ user }) => {
       const latest = 1;
-      const { rows } = await conn.tx(db, query.read('forms', { latest }), [latest]);
+      const selectJoin = `SELECT
+          f.id,
+          f.formId,
+          f.version,
+          f.name,
+          f.json,
+          COUNT(
+            DISTINCT CASE WHEN dp.submitted = 1
+            THEN dp.id END
+          ) AS submitted,
+          COUNT(
+            DISTINCT CASE WHEN dp.submitted = 0
+            AND dp.syncedAt IS NULL THEN dp.id END
+          ) AS draft,
+          COUNT(
+            DISTINCT CASE WHEN dp.submitted = 1
+            AND dp.syncedAt IS NOT NULL THEN dp.id END
+          ) AS synced
+        FROM forms f
+        LEFT JOIN datapoints dp ON f.id = dp.form AND dp.user = ?
+        WHERE f.latest = ?
+        GROUP BY f.id, f.formId, f.version, f.name, f.json;`;
+      const { rows } = await conn.tx(db, selectJoin, [user, latest]);
       if (!rows.length) {
         return [];
       }
       return rows._array;
+    },
+    selectFormById: async ({ id }) => {
+      const { rows } = await conn.tx(db, query.read('forms', { id }), [id]);
+      if (!rows.length) {
+        return {};
+      }
+      return rows._array[0];
     },
     selectFormByIdAndVersion: async ({ id: formId, version }) => {
       const { rows } = await conn.tx(db, query.read('forms', { formId, version }), [

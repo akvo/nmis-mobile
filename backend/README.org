@@ -45,7 +45,7 @@ curl -X POST -d "code=testing123" -s http://localhost:8080/auth | jq
       "version": "1.0.0"
     }
   ],
-  "syncToken": "Bearer eyjtoken"
+  "syncToken": "eyjtoken"
 }
 #+end_example
 
@@ -2804,6 +2804,29 @@ curl --verbose -s -X POST \
 { [36 bytes data]
 ,* Connection #0 to host localhost left intact
 {"error":"Invalid token"}
+#+end_example
+
+* Cascade Files
+** Cascade Endpoint Example
+
+#+name: Cascade Example
+#+begin_src bash
+curl -s -I \
+     http://localhost:8080/sqlite/cascade-296940912-v2.sqlite
+#+end_src
+
+#+RESULTS: Cascade Example
+#+begin_example
+HTTP/1.1 200 OK
+Server: nginx/1.25.1
+Date: Thu, 20 Jul 2023 10:51:54 GMT
+Content-Type: text/plain
+Content-Length: 44032
+Last-Modified: Thu, 20 Jul 2023 10:31:03 GMT
+Connection: keep-alive
+ETag: "64b90ce7-ac00"
+Accept-Ranges: bytes
+
 #+end_example
 
 * Update Form Version

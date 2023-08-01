@@ -2,7 +2,6 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import { render, fireEvent } from '@testing-library/react-native';
 import { useNavigation } from '@react-navigation/native';
-
 import ManageFormPage from '../ManageForm';
 
 jest.mock('@react-navigation/native');
@@ -13,20 +12,63 @@ describe('ManageFormPage', () => {
     expect(tree).toMatchSnapshot();
   });
 
-  test('should navigate to page successfully', () => {
-    const navigation = useNavigation();
+  it('should navigate to FormPage with correct route params', () => {
+    const mockNavigation = useNavigation();
     const mockParams = {
       params: {
         id: 1,
         name: 'Health Facilities',
+        newSubmission: true,
       },
     };
-    const { getByTestId } = render(<ManageFormPage navigation={navigation} route={mockParams} />);
+    const { getByTestId } = render(
+      <ManageFormPage navigation={mockNavigation} route={mockParams} />,
+    );
 
     const listItemEl = getByTestId('goto-item-0');
     expect(listItemEl).toBeDefined();
     fireEvent.press(listItemEl);
 
-    expect(navigation.navigate).toHaveBeenCalledWith('FormPage', mockParams.params);
+    expect(mockNavigation.navigate).toHaveBeenCalledWith('FormPage', mockParams.params);
+  });
+
+  it('should navigate to FormPage with (Edit Saved Form) correct route params', () => {
+    const mockNavigation = useNavigation();
+    const mockParams = {
+      params: {
+        id: 1,
+        name: 'Health Facilities',
+        showSubmitted: false,
+      },
+    };
+    const { getByTestId } = render(
+      <ManageFormPage navigation={mockNavigation} route={mockParams} />,
+    );
+
+    const listItemEl = getByTestId('goto-item-1');
+    expect(listItemEl).toBeDefined();
+    fireEvent.press(listItemEl);
+
+    expect(mockNavigation.navigate).toHaveBeenCalledWith('FormData', mockParams.params);
+  });
+
+  it('should navigate to FormData (View Submitted) with correct route params', () => {
+    const mockNavigation = useNavigation();
+    const mockParams = {
+      params: {
+        id: 1,
+        name: 'Health Facilities',
+        showSubmitted: true,
+      },
+    };
+    const { getByTestId } = render(
+      <ManageFormPage navigation={mockNavigation} route={mockParams} />,
+    );
+
+    const listItemEl = getByTestId('goto-item-2');
+    expect(listItemEl).toBeDefined();
+    fireEvent.press(listItemEl);
+
+    expect(mockNavigation.navigate).toHaveBeenCalledWith('FormData', mockParams.params);
   });
 });

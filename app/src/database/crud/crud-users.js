@@ -17,6 +17,13 @@ const usersQuery = () => {
         return false;
       }
     },
+    selectUserById: async ({ id }) => {
+      const { rows } = await conn.tx(db, query.read('users', { id }), [id]);
+      if (!rows.length) {
+        return {};
+      }
+      return rows._array[0];
+    },
   };
 };
 

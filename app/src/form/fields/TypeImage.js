@@ -4,13 +4,17 @@ import { Image, Button, Dialog } from '@rneui/themed';
 import * as ImagePicker from 'expo-image-picker';
 import { Stack } from '../../components';
 import { FieldLabel } from '../support';
+import { UIState } from '../../store';
+import { i18n } from '../../lib';
 
 // TODO: getImageBase64 (ARF)
 // TODO: convertImageToBase64 (ARF)
 
-const TypeImage = ({ onChange, keyform, id, name }) => {
+const TypeImage = ({ onChange, keyform, id, name, tooltip, required, requiredSign }) => {
   const [showDialog, setShowDialog] = React.useState(false);
   const [selectedImage, setSelectedImage] = React.useState(null);
+  const activeLang = UIState.useState((s) => s.lang);
+  const trans = i18n.text(activeLang);
 
   React.useEffect(() => {
     if (onChange) {
@@ -33,11 +37,11 @@ const TypeImage = ({ onChange, keyform, id, name }) => {
       const granted = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
         {
-          title: 'You need to give storage permission to download and save the file',
-          message: 'App needs access to your camera ',
-          buttonNeutral: 'Ask Me Later',
-          buttonNegative: 'Cancel',
-          buttonPositive: 'OK',
+          title: trans.imageStoragePerm,
+          message: trans.imageCameraPerm,
+          buttonNeutral: trans.imageAskLater,
+          buttonNegative: trans.buttonCancel,
+          buttonPositive: trans.buttonOk,
         },
       );
 
@@ -101,7 +105,12 @@ const TypeImage = ({ onChange, keyform, id, name }) => {
 
   return (
     <View>
-      <FieldLabel keyform={keyform} name={name} />
+      <FieldLabel
+        keyform={keyform}
+        name={name}
+        tooltip={tooltip}
+        requiredSign={required ? requiredSign : null}
+      />
       <View style={styles.fieldImageContainer}>
         {selectedImage != null ? (
           <Image
@@ -115,7 +124,7 @@ const TypeImage = ({ onChange, keyform, id, name }) => {
           <Button title="Select File" onPress={handleShowDialog} testID="btn-select-file" />
           <Button
             containerStyle={styles.buttonRemoveFile}
-            title="Remove"
+            title={trans.buttonRemove}
             color="secondary"
             onPress={() => setSelectedImage(null)}
             disabled={!selectedImage}
@@ -128,14 +137,14 @@ const TypeImage = ({ onChange, keyform, id, name }) => {
           testID="popup-dialog"
         >
           <Button
-            title="Use Camera"
+            title={trans.buttonUseCamera}
             type="outline"
             onPress={handleCamera}
             testID="btn-use-camera"
           />
           <Button
             containerStyle={styles.buttonFromGallery}
-            title="From Gallery"
+            title={trans.buttonFromGallery}
             type="outline"
             onPress={selectFile}
             testID="btn-from-gallery"

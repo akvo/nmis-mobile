@@ -10,7 +10,7 @@ describe('TypeInput component', () => {
 
     const fieldLabel = getByTestId('field-label');
     expect(fieldLabel).toBeDefined();
-    expect(getByText('Field Name')).toBeDefined();
+    expect(getByText('1. Field Name')).toBeDefined();
 
     const inputElement = getByTestId('type-input');
     expect(inputElement).toBeDefined();
@@ -42,6 +42,36 @@ describe('TypeInput component', () => {
 
     const inputElement = getByTestId('type-input');
     expect(inputElement.props.value).toBe(initialValue);
+  });
+
+  it('should not show required sign if required param is false and requiredSign is not defined', () => {
+    const wrapper = render(<TypeInput id="inputField" name="Field Name" required={false} />);
+    const requiredIcon = wrapper.queryByTestId('field-required-icon');
+    expect(requiredIcon).toBeFalsy();
+  });
+
+  it('should not show required sign if required param is false but requiredSign is defined', () => {
+    const wrapper = render(
+      <TypeInput id="inputField" name="Field Name" required={false} requiredSign="*" />,
+    );
+    const requiredIcon = wrapper.queryByTestId('field-required-icon');
+    expect(requiredIcon).toBeFalsy();
+  });
+
+  it('should not show required sign if required param is true and requiredSign defined', () => {
+    const wrapper = render(
+      <TypeInput id="inputField" name="Field Name" required={true} requiredSign="*" />,
+    );
+    const requiredIcon = wrapper.queryByTestId('field-required-icon');
+    expect(requiredIcon).toBeTruthy();
+  });
+
+  it('should show required sign with custom requiredSign', () => {
+    const wrapper = render(
+      <TypeInput id="inputField" name="Field Name" required={true} requiredSign="**" />,
+    );
+    const requiredIcon = wrapper.getByText('**');
+    expect(requiredIcon).toBeTruthy();
   });
 
   test.failing('should not show input preffix if addonBefore not defined', () => {

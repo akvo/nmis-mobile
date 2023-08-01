@@ -1,8 +1,22 @@
 export const config = [
   {
     id: 1,
-    name: 'Server',
-    description: 'URL, Username, Password',
+    name: 'Advanced',
+    translations: [
+      {
+        language: 'fr',
+        name: 'Avancée',
+      },
+    ],
+    description: {
+      name: 'Server URL, Auth Code, Sync Interval, Sync Wifi',
+      translations: [
+        {
+          language: 'fr',
+          name: "URL du serveur, code d'authentification, intervalle de synchronisation, synchronisation Wifi",
+        },
+      ],
+    },
     fields: [
       {
         id: 11,
@@ -12,83 +26,91 @@ export const config = [
         description: null,
         key: 'BuildParamsState.serverURL',
         editable: false,
+        translations: [
+          {
+            language: 'fr',
+            name: 'URL du serveur',
+          },
+        ],
       },
       {
         id: 14,
         type: 'text',
         name: 'authenticationCode',
-        label: 'Auth Code',
+        label: 'Passcode',
         description: null,
         key: 'AuthState.authenticationCode',
         editable: false,
+        translations: [
+          {
+            language: 'fr',
+            name: "Code d'accès",
+          },
+        ],
       },
       {
         id: 31,
         type: 'number',
         name: 'syncInterval',
         label: 'Sync interval',
-        description: 'Sync interval in minutes',
+        description: {
+          name: 'Sync interval in seconds',
+          translations: [
+            {
+              language: 'fr',
+              name: 'Intervalle de synchronisation en secondes',
+            },
+          ],
+        },
         key: 'UserState.syncInterval',
         editable: true,
+        translations: [
+          {
+            language: 'fr',
+            name: 'Intervalle de synchronisation',
+          },
+        ],
       },
       {
         id: 32,
         type: 'switch',
         label: 'Sync Wifi',
         name: 'syncWifiOnly',
-        description: 'Sync Wifi only',
+        description: {
+          name: 'Sync Wifi only',
+          translations: [
+            {
+              language: 'fr',
+              name: 'Synchroniser le Wi-Fi uniquement',
+            },
+          ],
+        },
         key: 'UserState.syncWifiOnly',
         editable: true,
-      },
-    ],
-  },
-  {
-    id: 2,
-    name: 'User Interface',
-    description: 'App Language, Theme, Font-size',
-    fields: [
-      {
-        id: 21,
-        type: 'dropdown',
-        name: 'lang',
-        label: 'Language',
-        description: 'Application language',
-        key: 'UIState.lang',
-        editable: true,
-        options: [
+        translations: [
           {
-            label: 'English',
-            value: 'en',
-          },
-          {
-            label: 'French',
-            value: 'fr',
+            language: 'fr',
+            name: 'Synchroniser le Wi-Fi uniquement',
           },
         ],
-      },
-      {
-        id: 22,
-        type: 'switch',
-        name: 'isDarkMode',
-        label: 'Dark mode',
-        description: 'Switch theme to dark mode',
-        key: 'UIState.isDarkMode',
-        editable: true,
-      },
-      {
-        id: 23,
-        type: 'slider',
-        name: 'fontSize',
-        label: 'Font size',
-        description: null,
-        key: 'UIState.fontSize',
-        editable: true,
-        slider: {
-          minimumValue: 12,
-          maximumValue: 24,
-          step: 4,
-        },
       },
     ],
   },
 ];
+
+export const langConfig = {
+  type: 'dropdown',
+  name: 'lang',
+  label: 'Language',
+  description: 'Application language',
+  options: [
+    {
+      label: 'English',
+      value: 'en',
+    },
+    {
+      label: 'French',
+      value: 'fr',
+    },
+  ],
+};

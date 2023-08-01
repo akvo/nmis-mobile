@@ -37,4 +37,16 @@ describe('PageTitle component', () => {
     expect(navigation.navigate).toHaveBeenCalledTimes(1);
     expect(navigation.navigate).toHaveBeenCalledWith('Settings');
   });
+
+  it('should show subtitle when it defined', () => {
+    const title = 'Example Title';
+    const subTitle = 'Jhon Doe';
+    const { getByText, getByTestId } = render(<PageTitle text={title} subTitle={subTitle} />);
+
+    const titleElement = getByText(title);
+    expect(titleElement).toBeDefined();
+    const subTitleEl = getByTestId('page-subtitle');
+    expect(subTitleEl).toBeDefined();
+    expect(subTitleEl.props.children).toBe(subTitle);
+  });
 });

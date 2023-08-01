@@ -15,7 +15,7 @@ describe('TypeText component', () => {
       <TypeText onChange={onChangeMock} values={values} id={id} name={name} />,
     );
 
-    const textAreaFieldLabel = getByText(name);
+    const textAreaFieldLabel = getByText(`1. ${name}`);
     expect(textAreaFieldLabel).toBeDefined();
 
     const textAreaField = getByTestId('type-text');
@@ -24,5 +24,35 @@ describe('TypeText component', () => {
 
     fireEvent.changeText(textAreaField, 'New value');
     expect(onChangeMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('should not show required sign if required param is false and requiredSign is not defined', () => {
+    const wrapper = render(<TypeText id="textValue" name="Text Field" required={false} />);
+    const requiredIcon = wrapper.queryByTestId('field-required-icon');
+    expect(requiredIcon).toBeFalsy();
+  });
+
+  it('should not show required sign if required param is false but requiredSign is defined', () => {
+    const wrapper = render(
+      <TypeText id="textValue" name="Text Field" required={false} requiredSign="*" />,
+    );
+    const requiredIcon = wrapper.queryByTestId('field-required-icon');
+    expect(requiredIcon).toBeFalsy();
+  });
+
+  it('should not show required sign if required param is true and requiredSign defined', () => {
+    const wrapper = render(
+      <TypeText id="textValue" name="Text Field" required={true} requiredSign="*" />,
+    );
+    const requiredIcon = wrapper.queryByTestId('field-required-icon');
+    expect(requiredIcon).toBeTruthy();
+  });
+
+  it('should show required sign with custom requiredSign', () => {
+    const wrapper = render(
+      <TypeText id="textValue" name="Text Field" required={true} requiredSign="**" />,
+    );
+    const requiredIcon = wrapper.getByText('**');
+    expect(requiredIcon).toBeTruthy();
   });
 });

@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Button } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { BaseLayout } from '../components';
-import { FormState } from '../store';
+import { FormState, UserState, UIState } from '../store';
 import { crudForms } from '../database/crud';
+import { i18n } from '../lib';
 
 const Home = ({ navigation }) => {
-  const [search, setSearch] = React.useState(null);
+  const { id: currentUserId, name: currentUserName } = UserState.useState((s) => s);
+  const subTitleText = currentUserName ? `${trans.userLabel} ${currentUserName}` : null;
+  const [search, setSearch] = useState(null);
   const allForms = FormState.useState((s) => s.allForms);
+  const activeLang = UIState.useState((s) => s.lang);
+  const trans = i18n.text(activeLang);
 
   const goToManageForm = (id) => {
     const findForm = allForms.find((d) => d?.id === id);
@@ -23,30 +28,39 @@ const Home = ({ navigation }) => {
     navigation.navigate('Users');
   };
 
-  React.useState(() => {
-    crudForms.selectLatestFormVersion().then((results) => {
+  useEffect(() => {
+    FormState.update((s) => {
+      s.form = {};
+    });
+    crudForms.selectLatestFormVersion({ user: currentUserId }).then((results) => {
       const forms = results.map((r) => ({
         ...r,
-        subtitles: [`Version: ${r.version}`, 'Submitted: 20', 'Draft: 1', 'Synced: 11'],
+        subtitles: [
+          `${trans.versionLabel}${r.version}`,
+          `${trans.submittedLabel}${r.submitted}`,
+          `${trans.draftLabel}${r.draft}`,
+          `${trans.syncLabel}${r.synced}`,
+        ],
       }));
       FormState.update((s) => {
         s.allForms = forms;
       });
     });
-  }, []);
+  }, [currentUserId]);
 
-  const filteredForms = React.useMemo(() => {
+  const filteredForms = useMemo(() => {
     return allForms.filter(
       (d) => (search && d?.name?.toLowerCase().includes(search.toLowerCase())) || !search,
     );
-  }, [allForms]);
+  }, [allForms, search]);
 
   return (
     <BaseLayout
-      title="Form Lists"
+      title={trans.homePageTitle}
+      subTitle={subTitleText}
       search={{
         show: true,
-        placeholder: 'Search form',
+        placeholder: trans.homeSearch,
         value: search,
         action: setSearch,
       }}

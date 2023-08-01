@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Text, Button, Input } from '@rneui/themed';
 import { CenterLayout, Image } from '../components';
-import { BuildParamsState } from '../store';
-import { api } from '../lib';
+import { BuildParamsState, UIState } from '../store';
+import { api, i18n } from '../lib';
 import { crudConfig } from '../database/crud';
 
 const GetStarted = ({ navigation }) => {
   const [currentConfig, setCurrentConfig] = useState({});
   const [IPAddr, setIPAddr] = useState(null);
   const serverURLState = BuildParamsState.useState((s) => s.serverURL);
+  const activeLang = UIState.useState((s) => s.lang);
+  const trans = i18n.text(activeLang);
 
   const getConfig = async () => {
     const config = await crudConfig.getConfig();
@@ -39,15 +41,17 @@ const GetStarted = ({ navigation }) => {
     }, 100);
   };
 
-  const titles = ['Get Started', 'collecting data the', 'smart way'];
+  const titles = [trans.getStartedTitle1, trans.getStartedTitle2, trans.getStartedTitle3];
   return (
     <CenterLayout title={titles}>
       <Image />
       <CenterLayout.Titles items={titles} />
-      <Text>Lorem Ipsum dolor sit amet dolor random</Text>
-      {!isServerURLDefined && <Input placeholder="Input Server URL" onChangeText={setIPAddr} />}
+      <Text>{trans.getStartedSubTitle}</Text>
+      {!isServerURLDefined && (
+        <Input placeholder={trans.getStartedInputServer} onChangeText={setIPAddr} />
+      )}
       <Button title="primary" onPress={goToLogin}>
-        Get Started
+        {trans.buttonGetStarted}
       </Button>
     </CenterLayout>
   );

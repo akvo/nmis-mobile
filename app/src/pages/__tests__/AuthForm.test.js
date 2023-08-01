@@ -46,7 +46,7 @@ describe('AuthFormPage', () => {
   it('should show error message for wrong passcode', async () => {
     const { result: navigationRef } = renderHook(() => useNavigation());
     const navigation = navigationRef.current;
-    api.post.mockImplementation(() => Promise.reject({ message: 'Failed' }));
+    api.post.mockImplementation(() => Promise.reject({ response: { status: 401 } }));
 
     const { getByText, getByTestId } = render(<AuthFormPage navigation={navigation} />);
 
@@ -64,7 +64,7 @@ describe('AuthFormPage', () => {
     expect(api.post).toHaveBeenCalledWith('/auth', expect.any(FormData), {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
-    await waitFor(() => expect(getByText('Failed')).toBeDefined());
+    await waitFor(() => expect(getByText('Invalid enumerator passcode')).toBeDefined());
   });
 
   it('should navigate to add user if no user defined after auth process', async () => {
@@ -81,7 +81,17 @@ describe('AuthFormPage', () => {
       ],
       syncToken: 'Bearer eyjtoken',
     };
+
+    const mockFormResponse = {
+      id: 1,
+      name: 'Household',
+      version: '1.0.0',
+      cascades: ['/sqlite/file.sqlite'],
+    };
+
+    api.getConfig.mockImplementation(() => ({ baseURL: 'http://example.com' }));
     api.post.mockImplementation(() => Promise.resolve({ data: mockAuthPostData }));
+    api.get.mockImplementation(() => Promise.resolve({ data: mockFormResponse }));
 
     const { getByTestId } = render(<AuthFormPage navigation={navigation} />);
 
