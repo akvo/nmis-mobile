@@ -39,6 +39,16 @@ describe('SaveDialogMenu component', () => {
     expect(exitWithoutSavingButtonElement).toBeTruthy();
   });
 
+  it('should show Cancel button on dialog', () => {
+    const wrapper = render(<SaveDialogMenu visible={true} setVisible={jest.fn()} />);
+
+    const dialogElement = wrapper.queryByTestId('save-dialog-menu');
+    expect(dialogElement).toBeTruthy();
+
+    const cancelButtonElement = wrapper.queryByTestId('cancel-button');
+    expect(cancelButtonElement).toBeTruthy();
+  });
+
   it('should call handleOnSaveAndExit function onPress Save and Exit button', () => {
     const mockHandleOnSaveAndExit = jest.fn();
 
@@ -79,5 +89,20 @@ describe('SaveDialogMenu component', () => {
     fireEvent.press(exitWithoutSavingButtonElement);
 
     expect(mockHandleExitWithoutSaving).toBeCalledTimes(1);
+  });
+
+  it('should hide dialog menu when Cancel button pressed', () => {
+    const mockSetIsVisible = jest.fn();
+
+    const wrapper = render(<SaveDialogMenu visible={true} setVisible={mockSetIsVisible} />);
+
+    const dialogElement = wrapper.queryByTestId('save-dialog-menu');
+    expect(dialogElement).toBeTruthy();
+
+    const cancelButtonElement = wrapper.queryByTestId('cancel-button');
+    expect(cancelButtonElement).toBeTruthy();
+    fireEvent.press(cancelButtonElement);
+
+    expect(mockSetIsVisible).toBeCalledWith(false);
   });
 });

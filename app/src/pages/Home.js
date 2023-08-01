@@ -12,7 +12,7 @@ const Home = ({ navigation }) => {
   const activeLang = UIState.useState((s) => s.lang);
   const trans = i18n.text(activeLang);
 
-  const currentUserName = UserState.useState((s) => s.name);
+  const { id: currentUserId, name: currentUserName } = UserState.useState((s) => s);
   const subTitleText = currentUserName ? `${trans.userLabel} ${currentUserName}` : null;
 
   const goToManageForm = (id) => {
@@ -31,19 +31,19 @@ const Home = ({ navigation }) => {
     FormState.update((s) => {
       s.form = {};
     });
-    crudForms.selectLatestFormVersion().then((results) => {
+    crudForms.selectLatestFormVersion({ user: currentUserId }).then((results) => {
       const forms = results.map((r) => ({
         ...r,
         subtitles: [
           `${trans.versionLabel}${r.version}`,
-          `${trans.submittedLabel} 20`,
-          `${trans.draftLabel}1`,
-          `${trans.syncLabel}11`,
+          `${trans.submittedLabel}${r.submitted}`,
+          `${trans.draftLabel}${r.draft}`,
+          `${trans.syncLabel}${r.synced}`,
         ],
       }));
       setData(forms);
     });
-  }, []);
+  }, [currentUserId]);
 
   const filteredData = useMemo(() => {
     return data.filter(

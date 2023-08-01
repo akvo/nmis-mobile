@@ -14,6 +14,9 @@ const mockForms = [
     name: 'Form 1',
     json: JSON.stringify({ id: 9001, name: 'Form 1', question_group: [] }),
     createdAt: mockDateNow,
+    submitted: 2,
+    draft: 0,
+    synced: 2,
   },
   {
     id: 2,
@@ -23,6 +26,9 @@ const mockForms = [
     name: 'Form 2',
     json: JSON.stringify({ id: 9002, name: 'Form 2', question_group: [] }),
     createdAt: mockDateNow,
+    submitted: 1,
+    draft: 3,
+    synced: 0,
   },
   {
     id: 3,
@@ -32,6 +38,9 @@ const mockForms = [
     name: 'Form 2',
     json: JSON.stringify({ id: 9002, name: 'Form 2', question_group: [] }),
     createdAt: mockDateNow,
+    submitted: 2,
+    draft: 1,
+    synced: 1,
   },
 ];
 
@@ -68,7 +77,7 @@ describe('Homepage', () => {
     });
   });
 
-  it('should load last form version data from database', async () => {
+  it('should load last form version data from DB with form stats', async () => {
     const wrapper = render(<HomePage navigation={mockNavigation} />);
 
     await waitFor(() => {
@@ -77,9 +86,23 @@ describe('Homepage', () => {
 
     const listForm1 = wrapper.queryByTestId('card-touchable-0');
     expect(listForm1).toBeTruthy();
+    expect(listForm1.props.children[0].props.title).toEqual('Form 1');
+    expect(listForm1.props.children[0].props.subTitles).toEqual([
+      'Version: 1.0.0',
+      'Submitted: 2',
+      'Draft: 0',
+      'Synced: 2',
+    ]);
 
     const listForm2 = wrapper.queryByTestId('card-touchable-1');
     expect(listForm2).toBeTruthy();
+    expect(listForm2.props.children[0].props.title).toEqual('Form 2');
+    expect(listForm2.props.children[0].props.subTitles).toEqual([
+      'Version: 1.0.1',
+      'Submitted: 1',
+      'Draft: 3',
+      'Synced: 0',
+    ]);
 
     const listForm3 = wrapper.queryByTestId('card-touchable-2');
     expect(listForm3).toBeFalsy();

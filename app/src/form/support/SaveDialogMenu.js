@@ -9,18 +9,9 @@ const SaveDialogMenu = ({ visible, setVisible, handleOnSaveAndExit, handleOnExit
   const trans = i18n.text(activeLang);
 
   return (
-    <Dialog
-      visible={visible}
-      testID="save-dialog-menu"
-      overlayStyle={styles.dialogMenuContainer}
-      onBackdropPress={() => {
-        if (setVisible) {
-          return setVisible(false);
-        }
-      }}
-    >
+    <Dialog visible={visible} testID="save-dialog-menu" overlayStyle={styles.dialogMenuContainer}>
       <Dialog.Button
-        type="outline"
+        type="solid"
         title={trans.buttonSaveNExit}
         testID="save-and-exit-button"
         onPress={() => {
@@ -41,12 +32,22 @@ const SaveDialogMenu = ({ visible, setVisible, handleOnSaveAndExit, handleOnExit
           }
         }}
       />
+      <Dialog.Button
+        type="outline"
+        title={trans.buttonCancel}
+        testID="cancel-button"
+        onPress={() => {
+          if (setVisible) {
+            return setVisible(false);
+          }
+        }}
+      />
     </Dialog>
   );
 };
 
 const styles = StyleSheet.create({
-  dialogMenuContainer: { flex: 0.13, flexDirection: 'column', justifyContent: 'space-between' },
+  dialogMenuContainer: { flex: 0.2, flexDirection: 'column', justifyContent: 'space-around' },
   buttonDanger: {
     borderColor: '#D63D39',
   },
