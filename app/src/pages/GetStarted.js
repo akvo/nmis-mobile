@@ -11,7 +11,7 @@ const GetStarted = ({ navigation }) => {
   const serverURLState = BuildParamsState.useState((s) => s.serverURL);
   const activeLang = UIState.useState((s) => s.lang);
   const trans = i18n.text(activeLang);
-  console.log(serverURLState, '=======')
+  console.log(serverURLState, '=======');
 
   const getConfig = async () => {
     const config = await crudConfig.getConfig();
