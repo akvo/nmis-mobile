@@ -9,6 +9,7 @@ const FormState = new Store({
   submitted: false,
   currentValues: {}, // answers
   questionGroupListCurrentValues: {}, // answers for question group list component
+  visitedQuestionGroup: [], // to store visited question group id
   dataPointName: [],
   surveyDuration: 0,
 });
