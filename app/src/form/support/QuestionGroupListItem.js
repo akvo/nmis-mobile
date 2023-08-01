@@ -19,7 +19,7 @@ const QuestionGroupListItem = ({ name, active, completedQuestionGroup = false, o
         testID="icon-mark"
         name="circle"
         type="font-awesome"
-        color="#d4d4d4"
+        color={bgColor}
         style={styles.questionGroupListItemIcon}
       />
       <Text style={{ ...styles.questionGroupListItemName, ...activeName }}>{name}</Text>

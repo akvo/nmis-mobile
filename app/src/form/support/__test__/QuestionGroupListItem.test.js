@@ -311,8 +311,8 @@ describe('QuestionGroup & QuestionGroupListItem without mock', () => {
     );
     const iconEl = wrapper.getByTestId('icon-mark');
     const iconElProps = iconEl.props.children.props.children.props;
+    expect(iconElProps.color).toBe('#2884bd');
     // Drop the check mark (this can be implemented later after discussion with the design team )
-    expect(iconElProps.color).toBe('#d4d4d4'); // #2884bd
     expect(iconElProps.name).toBe('circle'); // check-circle
   });
 
