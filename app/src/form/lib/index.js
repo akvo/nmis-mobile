@@ -266,10 +266,8 @@ export const generateDataPointName = (dataPointNameValues) => {
     .filter((d) => d.type !== 'geo' && (d.value || d.value === 0))
     .map((x) => x.value)
     .join(' - ');
-  let dpGeo = dataPointNameValues.find((d) => d.type === 'geo')?.value || null;
-  if (dpGeo?.lat && dpGeo?.lng) {
-    dpGeo = `${dpGeo.lat}|${dpGeo.lng}`;
-  }
+  const [lat, lng] = dataPointNameValues.find((d) => d.type === 'geo')?.value || [];
+  const dpGeo = lat && lng ? `${lat}|${lng}` : null;
   return { dpName, dpGeo };
 };
 
