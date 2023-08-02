@@ -64,7 +64,7 @@ const TypeCascade = ({
       const cascadeName = findSelected?.name || null;
       FormState.update((s) => {
         s.dataPointName = s.dataPointName.map((dn) =>
-          dn.type === 'cascade' ? { ...dn, value: cascadeName } : dn,
+          dn.type === 'cascade' && dn.id === id ? { ...dn, value: cascadeName } : dn,
         );
       });
     }
