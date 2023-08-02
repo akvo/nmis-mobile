@@ -172,4 +172,9 @@ export const styles = StyleSheet.create({
     opacity: 0,
     marginBottom: -16,
   },
+  geoButtonGroup: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 8,
+  },
 });
