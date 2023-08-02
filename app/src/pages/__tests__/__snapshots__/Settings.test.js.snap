@@ -75,6 +75,7 @@ exports[`SettingsPage renders correctly 1`] = `
               "color": "#242424",
               "fontSize": 18,
               "paddingTop": 4,
+              "textAlign": "center",
             }
           }
           testID="page-title"
