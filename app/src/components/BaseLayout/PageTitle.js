@@ -48,10 +48,10 @@ const PageTitle = ({
       {!leftComponent && <BackButton navigation={navigation} />}
       {subTitle ? (
         <View>
-          <Text h4Style={styles.title} testID="page-title" h4>
+          <Text h4Style={styles.title} testID="page-title" numberOfLines={1} h4>
             {text}
           </Text>
-          <Text testID="page-subtitle" style={styles.subTitle}>
+          <Text testID="page-subtitle" style={styles.subTitle} numberOfLines={1}>
             {subTitle}
           </Text>
         </View>
@@ -84,6 +84,7 @@ const styles = StyleSheet.create({
     fontWeight: 400,
     fontStyle: 'italic',
     textAlign: 'center',
+    maxWidth: 200,
   },
 });
 
