@@ -7,7 +7,8 @@ import { UserState } from '../store';
 import { BaseLayout } from '../components';
 import { crudDataPoints } from '../database/crud';
 import { i18n, backgroundTask } from '../lib';
-import { UIState } from '../store';
+import { UIState, FormState } from '../store';
+import { getCurrentTimestamp } from '../form/lib';
 
 const convertMinutesToHHMM = (minutes) => {
   const hours = Math.floor(minutes / 60);
@@ -100,6 +101,9 @@ const FormData = ({ navigation, route }) => {
     if (showSubmitted) {
       return null;
     }
+    FormState.update((s) => {
+      s.surveyStart = getCurrentTimestamp();
+    });
     return navigation.navigate('FormPage', {
       ...route?.params,
       dataPointId: id,
