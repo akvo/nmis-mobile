@@ -15,6 +15,11 @@ jest.mock('@react-navigation/native');
 describe('TypeGeo', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    act(() => {
+      UIState.update((s) => {
+        s.online = true;
+      });
+    });
   });
   test('render and get current location successfully', async () => {
     const { getByTestId, getByText } = render(
@@ -38,9 +43,9 @@ describe('TypeGeo', () => {
       const { latitude, longitude } = result.current;
 
       const latText = getByTestId('text-lat');
-      expect(latText.props.children).toEqual(['Latitude', ': ', `${latitude}`]);
+      expect(latText.props.children).toEqual(['Latitude', ': ', latitude]);
       const lngText = getByTestId('text-lng');
-      expect(lngText.props.children).toEqual(['Longitude', ': ', `${longitude}`]);
+      expect(lngText.props.children).toEqual(['Longitude', ': ', longitude]);
     });
 
     const { result: navigationReff } = renderHook(() => useNavigation());
@@ -59,7 +64,7 @@ describe('TypeGeo', () => {
   });
 
   it('should not show required sign if required param is false and requiredSign is not defined', async () => {
-    const values = { geoField: {} };
+    const values = { geoField: [] };
     const mockedOnChange = jest.fn((fieldName, value) => {
       values[fieldName] = value;
     });
@@ -79,7 +84,7 @@ describe('TypeGeo', () => {
   });
 
   it('should not show required sign if required param is false but requiredSign is defined', async () => {
-    const values = { geoField: {} };
+    const values = { geoField: [] };
     const mockedOnChange = jest.fn((fieldName, value) => {
       values[fieldName] = value;
     });
@@ -101,7 +106,7 @@ describe('TypeGeo', () => {
   });
 
   it('should not show required sign if required param is true and requiredSign defined', async () => {
-    const values = { geoField: {} };
+    const values = { geoField: [] };
     const mockedOnChange = jest.fn((fieldName, value) => {
       values[fieldName] = value;
     });
@@ -123,7 +128,7 @@ describe('TypeGeo', () => {
   });
 
   it('should show required sign with custom requiredSign', async () => {
-    const values = { geoField: {} };
+    const values = { geoField: [] };
     const mockedOnChange = jest.fn((fieldName, value) => {
       values[fieldName] = value;
     });
@@ -145,7 +150,7 @@ describe('TypeGeo', () => {
   });
 
   it('should set empty object when getting current location failed', async () => {
-    const values = { geoField: { lat: 11, lng: 12 } };
+    const values = { geoField: [11, 12] };
     const mockedOnChange = jest.fn((fieldName, value) => {
       values[fieldName] = value;
     });
@@ -160,22 +165,30 @@ describe('TypeGeo', () => {
 
     Location.getCurrentPositionAsync.mockRejectedValue({ message: errorMessage });
 
-    render(<TypeGeo id="geoField" name="Geolocation" onChange={mockedOnChange} values={values} />);
+    const { getByTestId, getByText } = render(
+      <TypeGeo id="geoField" name="Geolocation" onChange={mockedOnChange} values={values} />,
+    );
     const { result } = renderHook(() => useState());
     const [errorMsg, setErrorMsg] = result.current;
 
+    const buttonCurLocationEl = getByTestId('button-curr-location');
+    expect(buttonCurLocationEl).toBeDefined();
+    fireEvent.press(buttonCurLocationEl);
+
     act(() => {
-      mockedOnChange('geoField', {});
+      mockedOnChange('geoField', []);
       setErrorMsg(errorMessage);
     });
 
     await waitFor(() => {
       expect(result.current[0]).toBe(errorMessage);
+      const errorText = getByText(errorMessage);
+      expect(errorText).toBeDefined();
     });
   });
 
   it('should not showing button open map when network is offline', async () => {
-    const values = { geoField: { lat: 11, lng: 12 } };
+    const values = { geoField: [11, 12] };
     const mockedOnChange = jest.fn((fieldName, value) => {
       values[fieldName] = value;
     });
@@ -195,6 +208,37 @@ describe('TypeGeo', () => {
       const openButton = queryByTestId('button-open-map');
       expect(openButton).toBeNull();
       expect(result.current.online).toBe(false);
+    });
+  });
+
+  it('should get current location by clicking the button', async () => {
+    Location.requestForegroundPermissionsAsync.mockImplementation(() => {
+      return Promise.resolve({ status: 'granted' });
+    });
+    Location.getCurrentPositionAsync.mockImplementation(() => {
+      return Promise.resolve({
+        coords: {
+          latitude: 35677,
+          longitude: -7811,
+        },
+      });
+    });
+
+    const values = { geoField: [] };
+    const mockedOnChange = jest.fn((fieldName, value) => {
+      values[fieldName] = value;
+    });
+
+    const { getByTestId } = render(
+      <TypeGeo id="geoField" name="Geolocation" onChange={mockedOnChange} values={values} />,
+    );
+
+    const buttonCurLocationEl = getByTestId('button-curr-location');
+    expect(buttonCurLocationEl).toBeDefined();
+    fireEvent.press(buttonCurLocationEl);
+
+    await waitFor(() => {
+      expect(values.geoField).toEqual([35677, -7811]);
     });
   });
 });
