@@ -75,16 +75,17 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
+    textAlign: 'center',
   },
   onlyTitle: {
     paddingTop: 4,
     fontSize: 18,
+    textAlign: 'center',
   },
   subTitle: {
     fontWeight: 400,
     fontStyle: 'italic',
     textAlign: 'center',
-    maxWidth: 200,
   },
 });
 
