@@ -1,21 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import renderer from 'react-test-renderer';
-import { renderHook, act } from '@testing-library/react-native';
+import { act } from '@testing-library/react-native';
 import GetStartedPage from '../GetStarted';
+import { BuildParamsState } from '../../store';
 
 describe('GetStartedPage', () => {
-  beforeAll(() => {
-    const { result } = renderHook(() => useState({}));
-    const [currentConfig, setCurrentConfig] = result.current;
-
+  test('renders correctly', () => {
     act(() => {
-      setCurrentConfig({
-        serverURL: null,
+      BuildParamsState.update((s) => {
+        s.serverURL = null;
       });
     });
-  });
 
-  test('renders correctly', () => {
     const tree = renderer.create(<GetStartedPage />).toJSON();
     expect(tree).toMatchSnapshot();
   });

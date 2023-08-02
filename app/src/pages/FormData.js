@@ -115,13 +115,21 @@ const FormData = ({ navigation, route }) => {
     setShowConfirmationSyncDialog(true);
   };
 
-  const handleOnSync = async () => {
+  const handleOnSync = () => {
     setShowConfirmationSyncDialog(false);
     setData([]);
     setSyncing(true);
-    await backgroundTask.syncFormSubmission();
-    await fetchData();
-    setSyncing(false);
+    backgroundTask
+      .syncFormSubmission()
+      .then(async () => {
+        await fetchData();
+      })
+      .catch((e) => {
+        console.error('[Manual SyncFormSubmission]: ', e);
+      })
+      .finally(() => {
+        setSyncing(false);
+      });
   };
 
   return (
