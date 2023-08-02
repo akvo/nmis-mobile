@@ -7,6 +7,7 @@ const FormState = new Store({
   visitedQuestionGroup: [], // to store visited question group id
   dataPointName: [],
   surveyDuration: 0,
+  surveyStart: null,
 });
 
 export default FormState;
