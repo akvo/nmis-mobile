@@ -12,19 +12,13 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { FormContainer } from '../form';
 import { SaveDialogMenu, SaveDropdownMenu } from '../form/support';
 import { BaseLayout } from '../components';
-import { FormState } from '../store';
 import { crudDataPoints } from '../database/crud';
-import { UserState, UIState } from '../store';
-import { generateDataPointName, getDurationInMinutes } from '../form/lib';
+import { UserState, UIState, FormState } from '../store';
+import { getDurationInMinutes } from '../form/lib';
 import { i18n } from '../lib';
 
 const FormPage = ({ navigation, route }) => {
-  const {
-    form: selectedForm,
-    dataPointName,
-    surveyDuration,
-    surveyStart,
-  } = FormState.useState((s) => s);
+  const { form: selectedForm, surveyDuration, surveyStart } = FormState.useState((s) => s);
   const userId = UserState.useState((s) => s.id);
   const [onSaveFormParams, setOnSaveFormParams] = useState({});
   const [showDialogMenu, setShowDialogMenu] = useState(false);
@@ -78,8 +72,6 @@ const FormPage = ({ navigation, route }) => {
     }
     return JSON.parse(selectedForm.json);
   }, [selectedForm]);
-
-  const { dpName: subTitleText } = generateDataPointName(dataPointName);
 
   const onSaveCallback = useCallback((values, refreshForm) => {
     const state = { values, refreshForm };
@@ -148,7 +140,6 @@ const FormPage = ({ navigation, route }) => {
 
   const handleOnSubmitForm = async (values, refreshForm) => {
     try {
-      // TODO:: Remove this, need to handle in Type Question component (geo)
       const answers = {};
       formJSON.question_group
         .flatMap((qg) => qg.question)
@@ -200,7 +191,7 @@ const FormPage = ({ navigation, route }) => {
   return (
     <BaseLayout
       title={route?.params?.name}
-      subTitle={subTitleText}
+      subTitle="formPage"
       leftComponent={
         <Button type="clear" onPress={handleOnPressArrowBackButton} testID="arrow-back-button">
           <Icon name="arrow-back" size={18} />
