@@ -5,9 +5,9 @@ const FormState = new Store({
   currentValues: {}, // answers
   questionGroupListCurrentValues: {}, // answers for question group list component
   visitedQuestionGroup: [], // to store visited question group id
-  dataPointName: [],
   surveyDuration: 0,
   surveyStart: null,
+  cascades: {},
 });
 
 export default FormState;
