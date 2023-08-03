@@ -261,7 +261,18 @@ export const generateValidationSchemaFieldLevel = (currentValue, field) => {
   }
 };
 
-export const generateDataPointName = (dataPointNameValues) => {
+export const generateDataPointName = (forms, currentValues, cascades = {}) => {
+  const dataPointNameValues = forms?.question_group?.length
+    ? forms.question_group
+        .filter((qg) => !qg?.repeatable)
+        .flatMap((qg) => qg.question.filter((q) => q?.meta))
+        .map((q) => {
+          const defaultValue = currentValues?.[q.id] || null;
+          const value = q.type === 'cascade' ? cascades?.[q.id] || defaultValue : defaultValue;
+          return { id: q.id, type: q.type, value };
+        })
+    : [];
+
   const dpName = dataPointNameValues
     .filter((d) => d.type !== 'geo' && (d.value || d.value === 0))
     .map((x) => x.value)
