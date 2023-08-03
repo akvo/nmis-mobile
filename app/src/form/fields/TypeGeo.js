@@ -74,7 +74,7 @@ const TypeGeo = ({ onChange, values, keyform, id, name, tooltip, required, requi
         )}
         {isOnline && (
           <View style={styles.geoButtonGroup}>
-            <Button onPress={handleGetCurrLocation} testID="button-curr-location">
+            <Button onPress={() => handleGetCurrLocation(false)} testID="button-curr-location">
               {loading.current ? trans.loadingText : trans.buttonCurrLocation}
             </Button>
             <Button
