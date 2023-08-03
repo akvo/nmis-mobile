@@ -3,6 +3,7 @@ import { render, waitFor, fireEvent } from '@testing-library/react-native';
 import HomePage from '../Home';
 import crudForms from '../../database/crud/crud-forms';
 import FormState from '../../store/forms';
+import { UserState } from '../../store';
 
 const mockDateNow = new Date().toISOString();
 const mockForms = [
@@ -48,6 +49,11 @@ jest.mock('../../database/crud/crud-forms');
 jest.mock('../../store/forms');
 
 describe('Homepage', () => {
+  beforeAll(() => {
+    UserState.update((s) => {
+      s.id = 1;
+    });
+  });
   const mockNavigation = {
     navigate: jest.fn(),
   };

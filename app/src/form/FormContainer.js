@@ -32,7 +32,7 @@ const checkValuesBeforeCallback = (values) =>
     .filter((v) => v)
     .reduce((res, current) => ({ ...res, ...current }), {});
 
-const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave }) => {
+const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave, setShowDialogMenu }) => {
   const formRef = useRef();
   const [activeGroup, setActiveGroup] = useState(0);
   const [showQuestionGroupList, setShowQuestionGroupList] = useState(false);
@@ -153,6 +153,7 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave }) => {
           totalGroup={formDefinition?.question_group?.length || 0}
           showQuestionGroupList={showQuestionGroupList}
           setShowQuestionGroupList={setShowQuestionGroupList}
+          setShowDialogMenu={setShowDialogMenu}
         />
       </View>
     </>

@@ -136,6 +136,7 @@ const uiText = {
     manageViewSubmitted: 'Vue soumise',
     homeSearch: 'Formulaire de recherche',
     homePageTitle: 'Listes de formulaires',
+    settingsPageTitle: 'Paramètres',
     searchPlaceholder: 'Recherche...',
     formDataSearch: 'Rechercher le point de données',
     untitled: 'Sans titre',

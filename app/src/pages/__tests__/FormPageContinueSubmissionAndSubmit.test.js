@@ -331,12 +331,12 @@ describe('FormPage continue saved submision then submit', () => {
           6: ['Traveling'],
           7: ['Fried Rice'],
         },
-        duration: 0, // in minutes
+        duration: 1, // in minutes
       });
       expect(ToastAndroid.show).toHaveBeenCalledTimes(1);
       // call refreshForm
       expect(mockRefreshForm).toHaveBeenCalledTimes(1);
-      expect(mockNavigation.navigate).toHaveBeenCalledWith('ManageForm', mockRoute.params);
+      expect(mockNavigation.navigate).toHaveBeenCalledWith('Home', mockRoute.params);
     });
   });
 

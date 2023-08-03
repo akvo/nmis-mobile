@@ -355,7 +355,7 @@ describe('FormPage handleOnSaveForm', () => {
 
     await waitFor(() => {
       expect(crudDataPoints.saveDataPoint).toHaveBeenCalledWith({
-        duration: 0,
+        duration: 1,
         form: 1,
         json: {},
         name: 'Untitled',
@@ -363,7 +363,7 @@ describe('FormPage handleOnSaveForm', () => {
         user: null,
       });
       expect(ToastAndroid.show).toHaveBeenCalledTimes(1);
-      expect(mockNavigation.navigate).toHaveBeenCalledWith('ManageForm', mockRoute.params);
+      expect(mockNavigation.navigate).toHaveBeenCalledWith('Home', mockRoute.params);
     });
   });
 
