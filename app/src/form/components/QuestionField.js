@@ -40,19 +40,6 @@ const QuestionField = ({ keyform, field: questionField, setFieldValue, values, v
     FormState.update((s) => {
       s.currentValues = { ...s.currentValues, [id]: value };
     });
-
-    if (questionField?.meta) {
-      FormState.update((s) => {
-        s.dataPointName = s.dataPointName.map((dp) =>
-          dp.id.toString() === id.toString()
-            ? {
-                ...dp,
-                value: value,
-              }
-            : dp,
-        );
-      });
-    }
     setFieldValue(id, value);
   };
 
