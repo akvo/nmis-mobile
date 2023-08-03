@@ -3,6 +3,7 @@ import { render, act, waitFor } from '@testing-library/react-native';
 jest.useFakeTimers();
 import QuestionGroupList, { checkCompleteQuestionGroup } from '../QuestionGroupList';
 import QuestionGroupListItem from '../QuestionGroupListItem';
+import { FormState } from '../../../store';
 
 const example = {
   name: 'Testing Form',
@@ -276,13 +277,18 @@ describe('QuestionGroup & QuestionGroupListItem without mock', () => {
   });
 
   it('Should render datapoint name if defined', () => {
+    act(() => {
+      FormState.update((s) => {
+        s.form = {
+          json: JSON.stringify(example).replace(/'/g, "''"),
+        };
+        s.currentValues = {
+          [1]: 'John Doe',
+        };
+      });
+    });
     const wrapper = render(
-      <QuestionGroupList
-        form={example}
-        activeQuestionGroup={1}
-        values={{ 1: 'John Doe' }}
-        dataPointNameText="John Doe"
-      />,
+      <QuestionGroupList form={example} activeQuestionGroup={1} values={{ 1: 'John Doe' }} />,
     );
     const dataPointElement = wrapper.getByTestId('datapoint-name');
     expect(dataPointElement).toBeDefined();
@@ -290,6 +296,12 @@ describe('QuestionGroup & QuestionGroupListItem without mock', () => {
   });
 
   it('Should not render datapoint name if not defined', () => {
+    act(() => {
+      FormState.update((s) => {
+        s.form = {};
+        s.currentValues = {};
+      });
+    });
     const wrapper = render(<QuestionGroupList form={example} />);
     const dataPointElement = wrapper.queryByTestId('datapoint-name');
     expect(dataPointElement).toBeFalsy();
