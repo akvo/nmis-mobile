@@ -66,16 +66,16 @@ const TypeGeo = ({ onChange, values, keyform, id, name, tooltip, required, requi
             </Text>
           </View>
         )}
-        {isOnline && (
-          <View style={styles.geoButtonGroup}>
-            <Button onPress={handleGetCurrLocation} testID="button-curr-location">
-              {loading ? trans.loadingText : trans.buttonCurrLocation}
-            </Button>
+        <View style={styles.geoButtonGroup}>
+          <Button onPress={handleGetCurrLocation} testID="button-curr-location">
+            {loading ? trans.loadingText : trans.buttonCurrLocation}
+          </Button>
+          {isOnline && (
             <Button type="outline" onPress={handleOpenMapPress} testID="button-open-map">
               {trans.buttonOpenMap}
             </Button>
-          </View>
-        )}
+          )}
+        </View>
       </View>
     </View>
   );
