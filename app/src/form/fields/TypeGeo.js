@@ -9,8 +9,8 @@ import { styles } from '../styles';
 import { loc, i18n } from '../../lib';
 
 const TypeGeo = ({ onChange, values, keyform, id, name, tooltip, required, requiredSign }) => {
-  const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
+  const [loading, setLoading] = useState(false);
   const { latitude, longitude } = MapState.useState((s) => s);
   const { online: isOnline, lang: activeLang } = UIState.useState((s) => s);
 
@@ -20,71 +20,31 @@ const TypeGeo = ({ onChange, values, keyform, id, name, tooltip, required, requi
   const route = useRoute();
 
   const handleOpenMapPress = () => {
-    const geoVal = values?.[id];
-    const params =
-      geoVal?.lat && geoVal?.lng
-        ? { latitude: geoVal.lat, longitude: geoVal.lng }
-        : location?.coords;
-
+    const params = { latitude, longitude };
     navigation.navigate('MapView', { ...route?.params, ...params });
   };
-  useEffect(() => {
-    if (location === null) {
-      loc.getCurrentLocation(
-        (res) => {
-          setLocation(res);
-          const { latitude: lat, longitude: lng } = res?.coords || {};
-          onChange(id, { lat, lng });
-        },
-        (err) => {
-          setLocation({});
-          onChange(id, {});
-          setErrorMsg(err.message);
-        },
-      );
-    }
-  }, [location]);
 
-  useEffect(() => {
-    /**
-     * Update from leaflet
-     */
-    if (
-      latitude &&
-      longitude &&
-      values?.[id]?.lat !== latitude &&
-      values?.[id]?.lng !== longitude
-    ) {
-      onChange(id, { lat: latitude, lng: longitude });
-    }
-    /**
-     * Update from current location
-     */
-    if (
-      !latitude &&
-      !longitude &&
-      location?.coords &&
-      values?.[id]?.lat !== location?.coords?.latitude &&
-      values?.[id]?.lng !== location?.coords?.longitude
-    ) {
-      onChange(id, { lat: location.coords.latitude, lng: location.coords.longitude });
-    }
-  }, [latitude, longitude, values, id, location]);
+  const handleGetCurrLocation = async () => {
+    setLoading(true);
+    await loc.getCurrentLocation(
+      ({ coords }) => {
+        if (coords) {
+          const { latitude, longitude } = coords;
+          onChange(id, [latitude, longitude]);
+          MapState.update((s) => {
+            s.latitude = latitude;
+            s.longitude = longitude;
+          });
+        }
+        setLoading(false);
+      },
+      ({ message }) => {
+        setLoading(false);
+        setErrorMsg(message);
+      },
+    );
+  };
 
-  const text = useMemo(() => {
-    if (errorMsg) {
-      return errorMsg;
-    }
-    if (location?.coords) {
-      const { latitude: lat, longitude: lng } = location?.coords;
-      const coordsMap = `${latitude}|${longitude}`;
-      const coordsLoc = `${lat}|${lng}`;
-      return latitude && longitude ? coordsMap : coordsLoc;
-    }
-    return 'Waiting..';
-  }, [errorMsg, location, latitude, longitude]);
-
-  const [latText, lngText] = text?.split('|');
   return (
     <View>
       <FieldLabel
@@ -94,25 +54,28 @@ const TypeGeo = ({ onChange, values, keyform, id, name, tooltip, required, requi
         requiredSign={required ? requiredSign : null}
       />
       <View style={styles.inputGeoContainer}>
-        {latText && lngText ? (
+        {errorMsg ? (
+          <Text testID="text-error">{errorMsg}</Text>
+        ) : (
           <View>
             <Text testID="text-lat">
-              {trans.latitude}: {latText}
+              {trans.latitude}: {latitude}
             </Text>
             <Text testID="text-lng">
-              {trans.longitude}: {lngText}
+              {trans.longitude}: {longitude}
             </Text>
           </View>
-        ) : (
-          <Text style={styles.inputFieldContainer} testID="text-waiting">
-            {text}
-          </Text>
         )}
-        {isOnline && (
-          <Button type="outline" onPress={handleOpenMapPress} testID="button-open-map">
-            {trans.buttonOpenMap}
+        <View style={styles.geoButtonGroup}>
+          <Button onPress={handleGetCurrLocation} testID="button-curr-location">
+            {loading ? trans.loadingText : trans.buttonCurrLocation}
           </Button>
-        )}
+          {isOnline && (
+            <Button type="outline" onPress={handleOpenMapPress} testID="button-open-map">
+              {trans.buttonOpenMap}
+            </Button>
+          )}
+        </View>
       </View>
     </View>
   );

@@ -80,6 +80,8 @@ const uiText = {
     langDesc: 'Application language',
     confirmSync:
       'Are you sure to sync the submission to the server now? This might take some time.',
+    buttonCurrLocation: 'Get current location',
+    loadingText: 'Loading...',
   },
   fr: {
     latitude: 'Latitude',
@@ -162,6 +164,8 @@ const uiText = {
     langDesc: "Langue de l'application",
     confirmSync:
       'Êtes-vous sûr de synchroniser la soumission avec le serveur maintenant ? Cela peut prendre un certain temps.',
+    buttonCurrLocation: "Obtenir l'emplacement actuel",
+    loadingText: 'Chargement...',
   },
 };
 

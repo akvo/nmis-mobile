@@ -244,10 +244,7 @@ export const generateValidationSchemaFieldLevel = (currentValue, field) => {
       yupType = Yup.array();
       break;
     case 'geo':
-      yupType = Yup.object().shape({
-        lat: Yup.string().nullable(),
-        lng: Yup.string().nullable(),
-      });
+      yupType = Yup.array();
       break;
     default:
       yupType = Yup.string();
@@ -264,14 +261,34 @@ export const generateValidationSchemaFieldLevel = (currentValue, field) => {
   }
 };
 
-export const generateDataPointName = (dataPointNameValues) => {
+export const generateDataPointName = (forms, currentValues, cascades = {}) => {
+  const dataPointNameValues = forms?.question_group?.length
+    ? forms.question_group
+        .filter((qg) => !qg?.repeatable)
+        .flatMap((qg) => qg.question.filter((q) => q?.meta))
+        .map((q) => {
+          const defaultValue = currentValues?.[q.id] || null;
+          const value = q.type === 'cascade' ? cascades?.[q.id] || defaultValue : defaultValue;
+          return { id: q.id, type: q.type, value };
+        })
+    : [];
+
   const dpName = dataPointNameValues
     .filter((d) => d.type !== 'geo' && (d.value || d.value === 0))
     .map((x) => x.value)
     .join(' - ');
-  let dpGeo = dataPointNameValues.find((d) => d.type === 'geo')?.value || null;
-  if (dpGeo?.lat && dpGeo?.lng) {
-    dpGeo = `${dpGeo.lat}|${dpGeo.lng}`;
-  }
+  const [lat, lng] = dataPointNameValues.find((d) => d.type === 'geo')?.value || [];
+  const dpGeo = lat && lng ? `${lat}|${lng}` : null;
   return { dpName, dpGeo };
+};
+
+export const getCurrentTimestamp = () => Math.floor(Date.now() / 1000);
+
+export const getDurationInMinutes = (startTime) => {
+  // Get the current timestamp in seconds
+  const endTime = getCurrentTimestamp();
+  // Calculate the duration in seconds
+  const durationInSeconds = endTime - startTime;
+
+  return Math.floor(durationInSeconds / 60);
 };

@@ -241,7 +241,6 @@ const exampleTestForm = {
   ],
 };
 
-jest.mock('../../database/crud/crud-datapoints');
 jest.mock('../../form/FormContainer', () => ({ forms, initialValues, onSubmit }) => {
   mockFormContainer(forms, initialValues, onSubmit);
   return (
@@ -253,9 +252,10 @@ jest.mock('../../form/FormContainer', () => ({ forms, initialValues, onSubmit })
   );
 });
 
-jest.mock('../../assets/administrations.db', () => {
-  return 'data';
-});
+jest.mock('react', () => ({
+  ...jest.requireActual('react'),
+  useMemo: jest.fn(),
+}));
 
 describe('FormPage component', () => {
   test('should render component correctly', async () => {
@@ -269,10 +269,10 @@ describe('FormPage component', () => {
   });
 
   test('should show the correct form content based on formJSON', async () => {
-    jest.spyOn(React, 'useMemo').mockReturnValue(exampleTestForm);
     FormState.useState.mockReturnValue({
       form: exampleTestForm,
     });
+    jest.spyOn(React, 'useMemo').mockReturnValue(exampleTestForm);
 
     const wrapper = render(<FormPage navigation={mockNavigation} route={mockRoute} />);
     const { form: mockStateForm } = FormState.useState((s) => s);

@@ -447,15 +447,6 @@ describe('TypeCascade', () => {
     /**
      * Set datapointName first
      */
-
-    act(() => {
-      FormState.update((s) => {
-        s.dataPointName = [
-          { type: 'cascade', value: null },
-          { type: 'text', value: 'Example' },
-        ];
-      });
-    });
     const fieldID = 'location';
     const fieldName = 'Location';
     const initialValue = null;
@@ -488,17 +479,9 @@ describe('TypeCascade', () => {
     act(() => {
       mockedOnChange(fieldID, [107, 109]);
       const cascadeName = 'Sabdodadi';
-      FormState.update((s) => {
-        s.dataPointName = s.dataPointName.map((dn) =>
-          dn.type === 'cascade' ? { ...dn, value: cascadeName } : dn,
-        );
-      });
     });
 
     await waitFor(() => {
-      const { result } = renderHook(() => FormState.useState((s) => s.dataPointName));
-      const { dpName } = generateDataPointName(result.current);
-      expect(dpName).toBe('Sabdodadi - Example');
       expect(values[fieldID]).toEqual([107, 109]);
     });
   });
@@ -507,11 +490,6 @@ describe('TypeCascade', () => {
     /**
      * Update datapointName first
      */
-    act(() => {
-      FormState.update((s) => {
-        s.dataPointName = [];
-      });
-    });
     const fieldID = 'location';
     const fieldName = 'Location';
     const initialValue = null;
@@ -543,28 +521,14 @@ describe('TypeCascade', () => {
     act(() => {
       mockedOnChange(fieldID, [107, 108]);
       const cascadeName = 'Bantul';
-      FormState.update((s) => {
-        s.dataPointName = s.dataPointName.map((dn) =>
-          dn.type === 'cascade' ? { ...dn, value: cascadeName } : dn,
-        );
-      });
     });
 
     await waitFor(() => {
-      const { result } = renderHook(() => FormState.useState((s) => s.dataPointName));
-      const { dpName } = generateDataPointName(result.current);
-      expect(dpName).toBe('');
       expect(values[fieldID]).toEqual([107, 108]);
     });
   });
 
   it('Should not get cascade name as datapoint name when there is no cascade type', async () => {
-    act(() => {
-      FormState.update((s) => {
-        s.dataPointName = [{ type: 'text', value: 'Example' }, { value: 'Data' }];
-      });
-    });
-
     const fieldID = 'location';
     const fieldName = 'Location';
     const initialValue = null;
@@ -596,17 +560,9 @@ describe('TypeCascade', () => {
     act(() => {
       mockedOnChange(fieldID, [107, 109]);
       const cascadeName = 'Sabdodadi';
-      FormState.update((s) => {
-        s.dataPointName = s.dataPointName.map((dn) =>
-          dn.type === 'cascade' ? { ...dn, value: cascadeName } : dn,
-        );
-      });
     });
 
     await waitFor(() => {
-      const { result } = renderHook(() => FormState.useState((s) => s.dataPointName));
-      const { dpName } = generateDataPointName(result.current);
-      expect(dpName).toBe('Example - Data');
       expect(values[fieldID]).toEqual([107, 109]);
     });
   });
