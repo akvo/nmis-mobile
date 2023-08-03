@@ -3,6 +3,8 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { View, StyleSheet } from 'react-native';
 import { Header, Text, Button } from '@rneui/themed';
 import { useNavigation } from '@react-navigation/native';
+import { FormState } from '../../store';
+import { generateDataPointName } from '../../form/lib';
 
 const BackButton = ({ navigation }) => {
   const handleGoBackPress = () => {
@@ -27,10 +29,19 @@ const PageTitle = ({
   rightContainerStyle = {},
 }) => {
   const navigation = useNavigation();
+  const selectedForm = FormState.useState((s) => s.form);
+  const currentValues = FormState.useState((s) => s.currentValues);
+  const cascades = FormState.useState((s) => s.cascades);
+  const forms = selectedForm?.json ? JSON.parse(selectedForm.json) : {};
 
   const handleSettingsPress = () => {
     navigation.navigate('Settings');
   };
+
+  subTitle =
+    subTitle === 'formPage'
+      ? generateDataPointName(forms, currentValues, cascades)?.dpName
+      : subTitle;
 
   return (
     <Header
