@@ -72,11 +72,12 @@ const TypeGeo = ({ onChange, values, keyform, id, name, tooltip, required, requi
             </Text>
           </View>
         )}
-        {isOnline && (
-          <View style={styles.geoButtonGroup}>
-            <Button onPress={() => handleGetCurrLocation(false)} testID="button-curr-location">
-              {loading.current ? trans.loadingText : trans.buttonCurrLocation}
-            </Button>
+
+        <View style={styles.geoButtonGroup}>
+          <Button onPress={() => handleGetCurrLocation(false)} testID="button-curr-location">
+            {loading.current ? trans.loadingText : trans.buttonCurrLocation}
+          </Button>
+          {isOnline && (
             <Button
               type="outline"
               onPress={() => handleGetCurrLocation(true)}
@@ -84,8 +85,8 @@ const TypeGeo = ({ onChange, values, keyform, id, name, tooltip, required, requi
             >
               {loading.map ? trans.loadingText : trans.buttonOpenMap}
             </Button>
-          </View>
-        )}
+          )}
+        </View>
       </View>
     </View>
   );
