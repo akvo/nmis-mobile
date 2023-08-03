@@ -4,11 +4,10 @@ import FormState from '../forms';
 describe('FormState', () => {
   it('should initialize with the correct default state', () => {
     const { result } = renderHook(() => FormState.useState());
-    const { form, currentValues, questionGroupListCurrentValues, dataPointName } = result.current;
+    const { form, currentValues, questionGroupListCurrentValues } = result.current;
     expect(form).toEqual({});
     expect(currentValues).toEqual({});
     expect(questionGroupListCurrentValues).toEqual({});
-    expect(dataPointName).toEqual([]);
   });
 
   it('should updating the state correctly', () => {
@@ -41,13 +40,11 @@ describe('FormState', () => {
         s.form = selectedForm;
         s.currentValues = { 1: 'John Doe', 2: 12 };
         s.questionGroupListCurrentValues = { 1: 'John Doe' };
-        s.dataPointName = [{ id: 1, type: 'number', value: 12 }];
       });
     });
-    const { form, currentValues, questionGroupListCurrentValues, dataPointName } = result.current;
+    const { form, currentValues, questionGroupListCurrentValues } = result.current;
     expect(form).toBe(selectedForm);
     expect(currentValues).toEqual({ 1: 'John Doe', 2: 12 });
     expect(questionGroupListCurrentValues).toEqual({ 1: 'John Doe' });
-    expect(dataPointName).toEqual([{ id: 1, type: 'number', value: 12 }]);
   });
 });
