@@ -251,7 +251,7 @@ describe('FormContainer component on save', () => {
       expect(handleOnSave).toHaveBeenCalledWith(null, expect.any(Function));
       expect(handleOnSave).toHaveBeenCalledWith(
         {
-          name: '',
+          name: 'John',
           geo: null,
           answers: {
             1: 'John',
@@ -292,7 +292,7 @@ describe('FormContainer component on submit', () => {
     await waitFor(() => expect(handleOnSubmit).toHaveBeenCalledTimes(1));
     expect(handleOnSubmit).toHaveBeenCalledWith(
       {
-        name: '',
+        name: 'John',
         geo: null,
         answers: {
           1: 'John',
@@ -337,7 +337,7 @@ describe('FormContainer component on submit', () => {
     await waitFor(() => expect(handleOnSubmit).toHaveBeenCalledTimes(1));
     expect(handleOnSubmit).toHaveBeenCalledWith(
       {
-        name: '',
+        name: 'John',
         geo: null,
         answers: {
           1: 'John',
@@ -385,7 +385,7 @@ describe('FormContainer component on submit', () => {
       await waitFor(() => expect(handleOnSubmit).toHaveBeenCalledTimes(1));
       expect(handleOnSubmit).toHaveBeenCalledWith(
         {
-          name: '',
+          name: 'John',
           geo: null,
           answers: {
             1: 'John',
@@ -430,7 +430,7 @@ describe('FormContainer component on submit', () => {
     await waitFor(() => expect(handleOnSubmit).toHaveBeenCalledTimes(1));
     expect(handleOnSubmit).toHaveBeenCalledWith(
       {
-        name: '',
+        name: 'John',
         geo: null,
         answers: {
           1: 'John',
