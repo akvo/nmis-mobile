@@ -144,7 +144,11 @@ jest.mock(
   () =>
     ({ form, values = {}, activeQuestionGroup, dataPointNameText }) => {
       mockQuestionGroupList(form, values, activeQuestionGroup, dataPointNameText);
-      return <mock-QuestionGroupList />;
+      return (
+        <mock-QuestionGroupList>
+          <mock-Text testID="datapoint-name">{dataPointNameText}</mock-Text>
+        </mock-QuestionGroupList>
+      );
     },
 );
 
