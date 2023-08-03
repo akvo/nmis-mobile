@@ -36,22 +36,8 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave }) => {
   const formRef = useRef();
   const [activeGroup, setActiveGroup] = useState(0);
   const [showQuestionGroupList, setShowQuestionGroupList] = useState(false);
-  const { currentValues, questionGroupListCurrentValues, dataPointName } = FormState.useState(
-    (s) => s,
-  );
+  const { currentValues, questionGroupListCurrentValues, cascades } = FormState.useState((s) => s);
   const activeLang = UIState.useState((s) => s.lang);
-
-  useEffect(() => {
-    if (!dataPointName?.length && forms?.question_group?.length) {
-      const meta = forms.question_group
-        .filter((qg) => !qg?.repeatable)
-        .flatMap((qg) => qg.question.filter((q) => q?.meta))
-        .map((q) => ({ id: q.id, type: q.type, value: null }));
-      FormState.update((s) => {
-        s.dataPointName = meta;
-      });
-    }
-  }, [forms, dataPointName]);
 
   useEffect(() => {
     if (onSave) {
@@ -59,7 +45,7 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave }) => {
       if (!Object.keys(results).length) {
         return onSave(null, refreshForm);
       }
-      const { dpName, dpGeo } = generateDataPointName(dataPointName);
+      const { dpName, dpGeo } = generateDataPointName(forms, currentValues, cascades);
       const values = { name: dpName, geo: dpGeo, answers: results };
       return onSave(values, refreshForm);
     }
@@ -93,7 +79,7 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave }) => {
       s.currentValues = {};
       s.questionGroupListCurrentValues = {};
       s.visitedQuestionGroup = [];
-      s.dataPointName = [];
+      s.cascades = {};
       s.surveyDuration = 0;
     });
     formRef.current?.resetForm();
@@ -102,7 +88,7 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave }) => {
   const handleOnSubmitForm = (values) => {
     const results = checkValuesBeforeCallback(values);
     if (onSubmit) {
-      const { dpName, dpGeo } = generateDataPointName(dataPointName);
+      const { dpName, dpGeo } = generateDataPointName(forms, currentValues, cascades);
       onSubmit({ name: dpName, geo: dpGeo, answers: results }, refreshForm);
     }
   };
@@ -142,7 +128,6 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave }) => {
             <QuestionGroupList
               form={formDefinition}
               values={questionGroupListCurrentValues}
-              dataPointNameText={generateDataPointName(dataPointName)?.dpName}
               activeQuestionGroup={activeGroup}
               setActiveQuestionGroup={setActiveGroup}
               setShowQuestionGroupList={setShowQuestionGroupList}
