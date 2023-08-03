@@ -63,9 +63,7 @@ const TypeCascade = ({
       const findSelected = selectedOptions?.find((o) => o.id === selectedValue) || [];
       const cascadeName = findSelected?.name || null;
       FormState.update((s) => {
-        s.dataPointName = s.dataPointName.map((dn) =>
-          dn.type === 'cascade' && dn.id === id ? { ...dn, value: cascadeName } : dn,
-        );
+        s.cascades = { ...s.cascades, [id]: cascadeName };
       });
     }
     setDropdownItems(updatedItems);
