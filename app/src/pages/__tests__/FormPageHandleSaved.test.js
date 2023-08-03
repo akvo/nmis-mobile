@@ -5,6 +5,7 @@ jest.useFakeTimers();
 import FormPage from '../FormPage';
 import crudDataPoints from '../../database/crud/crud-datapoints';
 import { FormState } from '../../store';
+import { getCurrentTimestamp } from '../../form/lib';
 
 const mockFormContainer = jest.fn();
 const mockRoute = {
@@ -329,6 +330,11 @@ describe('FormPage handleOnSaveForm', () => {
     jest.spyOn(React, 'useState').mockImplementation(() => [true, mockSetShowDialogMenu]);
 
     jest.spyOn(Date, 'now').mockReturnValue(1634123456789);
+    act(() => {
+      FormState.update((s) => {
+        s.surveyStart = getCurrentTimestamp();
+      });
+    });
 
     const wrapper = render(<FormPage navigation={mockNavigation} route={mockRoute} />);
 
@@ -344,15 +350,12 @@ describe('FormPage handleOnSaveForm', () => {
     const saveButtonElement = wrapper.queryByTestId('save-and-exit-button');
     expect(saveButtonElement).toBeTruthy();
     act(() => {
-      FormState.update((s) => {
-        s.surveyStart = 1634123456789;
-      });
       fireEvent.press(saveButtonElement);
     });
 
     await waitFor(() => {
       expect(crudDataPoints.saveDataPoint).toHaveBeenCalledWith({
-        duration: 27235390,
+        duration: 0,
         form: 1,
         json: {},
         name: 'Untitled',

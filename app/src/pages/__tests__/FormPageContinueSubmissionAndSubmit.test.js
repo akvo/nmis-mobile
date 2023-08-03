@@ -5,6 +5,7 @@ jest.useFakeTimers();
 import FormPage from '../FormPage';
 import crudDataPoints from '../../database/crud/crud-datapoints';
 import { UserState, FormState } from '../../store';
+import { getCurrentTimestamp } from '../../form/lib';
 
 const mockFormContainer = jest.fn();
 const mockRoute = {
@@ -292,6 +293,11 @@ describe('FormPage continue saved submision then submit', () => {
       Promise.resolve(mockCurrentDataPoint),
     );
     jest.spyOn(Date, 'now').mockReturnValue(1634123456789);
+    act(() => {
+      FormState.update((s) => {
+        s.surveyStart = getCurrentTimestamp();
+      });
+    });
 
     const wrapper = render(<FormPage navigation={mockNavigation} route={mockRoute} />);
 
@@ -325,7 +331,7 @@ describe('FormPage continue saved submision then submit', () => {
           6: ['Traveling'],
           7: ['Fried Rice'],
         },
-        duration: 27235390, // in seconds
+        duration: 0, // in minutes
       });
       expect(ToastAndroid.show).toHaveBeenCalledTimes(1);
       // call refreshForm
