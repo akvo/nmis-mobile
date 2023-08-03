@@ -132,7 +132,6 @@ const Navigation = (props) => {
         s.currentValues = {};
         s.questionGroupListCurrentValues = {};
         s.visitedQuestionGroup = [];
-        s.dataPointName = [];
         s.surveyDuration = 0;
       });
     }
