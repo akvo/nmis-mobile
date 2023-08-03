@@ -18,7 +18,9 @@ import { getDurationInMinutes } from '../form/lib';
 import { i18n } from '../lib';
 
 const FormPage = ({ navigation, route }) => {
-  const { form: selectedForm, surveyDuration, surveyStart } = FormState.useState((s) => s);
+  const selectedForm = FormState.useState((s) => s.form);
+  const surveyDuration = FormState.useState((s) => s.surveyDuration);
+  const surveyStart = FormState.useState((s) => s.surveyStart);
   const userId = UserState.useState((s) => s.id);
   const [onSaveFormParams, setOnSaveFormParams] = useState({});
   const [showDialogMenu, setShowDialogMenu] = useState(false);

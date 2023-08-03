@@ -36,7 +36,11 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave }) => {
   const formRef = useRef();
   const [activeGroup, setActiveGroup] = useState(0);
   const [showQuestionGroupList, setShowQuestionGroupList] = useState(false);
-  const { currentValues, questionGroupListCurrentValues, cascades } = FormState.useState((s) => s);
+  const currentValues = FormState.useState((s) => s.currentValues);
+  const questionGroupListCurrentValues = FormState.useState(
+    (s) => s.questionGroupListCurrentValues,
+  );
+  const cascades = FormState.useState((s) => s.cascades);
   const activeLang = UIState.useState((s) => s.lang);
 
   useEffect(() => {
@@ -71,8 +75,8 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave }) => {
       });
       return initialValues;
     }
-    return currentValues;
-  }, [initialValues, currentValues]);
+    return {};
+  }, [initialValues]);
 
   const refreshForm = () => {
     FormState.update((s) => {
