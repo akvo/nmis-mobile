@@ -11,8 +11,8 @@ import { WebView } from 'react-native-webview';
 import { Asset } from 'expo-asset';
 import * as FileSystem from 'expo-file-system';
 import { Button } from '@rneui/themed';
-import { FormState } from '../store';
-import { loc } from '../lib';
+import { FormState, UIState } from '../store';
+import { loc, i18n } from '../lib';
 
 const MapView = ({ navigation, route, radius = 20 }) => {
   const [htmlContent, setHtmlContent] = useState(null);
@@ -24,6 +24,8 @@ const MapView = ({ navigation, route, radius = 20 }) => {
   });
   const webViewRef = useRef(null);
   const selectedForm = FormState.useState((s) => s.form);
+  const activeLang = UIState.useState((s) => s.lang);
+  const trans = i18n.text(activeLang);
 
   const goBack = () => {
     navigation.navigate('FormPage', {
@@ -115,7 +117,7 @@ const MapView = ({ navigation, route, radius = 20 }) => {
       />
       <View style={styles.buttonContainer}>
         <Button onPress={handleCurrentLocation} testID="button-get-current-loc">
-          Use current location
+          {trans.buttonCurrLocation}
         </Button>
         <Button
           onPress={handleUseSelectedLocation}
@@ -123,10 +125,10 @@ const MapView = ({ navigation, route, radius = 20 }) => {
           testID="button-selected-loc"
           disabled={disabledButton}
         >
-          Use selected location
+          {trans.buttonSelectedLoc}
         </Button>
         <Button onPress={goBack} type="clear" testID="button-back">
-          Cancel
+          {trans.buttonCancel}
         </Button>
       </View>
     </View>
