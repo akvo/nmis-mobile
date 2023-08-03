@@ -110,7 +110,7 @@ const FormPage = ({ navigation, route }) => {
       await dbCall({
         ...currentDataPoint,
         ...saveData,
-        duration,
+        duration: duration === 0 ? 1 : duration,
       });
       if (Platform.OS === 'android') {
         ToastAndroid.show(trans.successSaveDatapoint, ToastAndroid.LONG);
@@ -118,7 +118,7 @@ const FormPage = ({ navigation, route }) => {
       if (refreshForm) {
         refreshForm();
       }
-      navigation.navigate('ManageForm', { ...route?.params });
+      navigation.navigate('Home', { ...route?.params });
     } catch (err) {
       console.error(err);
       if (Platform.OS === 'android') {
@@ -175,13 +175,13 @@ const FormPage = ({ navigation, route }) => {
       await dbCall({
         ...currentDataPoint,
         ...submitData,
-        duration,
+        duration: duration === 0 ? 1 : duration,
       });
       if (Platform.OS === 'android') {
         ToastAndroid.show(trans.successSubmitted, ToastAndroid.LONG);
       }
       refreshForm();
-      navigation.navigate('ManageForm', { ...route?.params });
+      navigation.navigate('Home', { ...route?.params });
     } catch (err) {
       console.error(err);
       if (Platform.OS === 'android') {
@@ -223,6 +223,7 @@ const FormPage = ({ navigation, route }) => {
           initialValues={initialValues}
           onSubmit={handleOnSubmitForm}
           onSave={onSaveCallback}
+          setShowDialogMenu={setShowDialogMenu}
         />
       ) : (
         <View style={styles.loadingContainer}>

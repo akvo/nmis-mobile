@@ -14,6 +14,7 @@ const FormNavigation = ({
   totalGroup,
   showQuestionGroupList,
   setShowQuestionGroupList,
+  setShowDialogMenu,
 }) => {
   const visitedQuestionGroup = FormState.useState((s) => s.visitedQuestionGroup);
   const activeLang = UIState.useState((s) => s.lang);
@@ -44,6 +45,14 @@ const FormNavigation = ({
     // index 0 = prev group
     // index 1 = show question group list
     // index 2 = next group
+    if (index === 0) {
+      if (!activeGroup) {
+        setShowDialogMenu(true);
+      } else {
+        setActiveGroup(activeGroup - 1);
+      }
+      return;
+    }
     if (index === 1) {
       setShowQuestionGroupList(!showQuestionGroupList);
       return;
