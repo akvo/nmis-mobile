@@ -36,6 +36,15 @@ jobs:
           npm install
 
       - name: 🚀 Release to Expo Dev
+        id: eas_release
         working-directory: ./app
         run: |
-          npm run eas:release
+          npm run eas:release > output.txt
+          apk_url=$(tail -n 1 output.txt)
+          echo "::set-output name=apk_url::$apk_url"
+          cat output.txt   # Display the full output in the log
+
+      - name: Get APK URL
+        run: |
+          apk_url=${{ steps.eas_release.outputs.apk_url }}
+          echo "APK Download URL: $apk_url"
