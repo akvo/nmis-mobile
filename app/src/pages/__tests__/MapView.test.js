@@ -34,7 +34,20 @@ jest.mock('expo-file-system', () => {
 
 jest.mock('react-native/Libraries/Utilities/BackHandler', () => mockBackHandler);
 
+const mockSelectedForm = {
+  id: 1,
+  name: 'Health Facilities',
+};
+
 describe('MapView', () => {
+  beforeAll(() => {
+    // update FormState to store selectedForm
+    act(() => {
+      FormState.update((s) => {
+        s.form = mockSelectedForm;
+      });
+    });
+  });
   it('should render html on webview correctly', async () => {
     const route = {
       params: {
@@ -71,7 +84,8 @@ describe('MapView', () => {
       },
     };
 
-    const { getByTestId } = render(<MapView route={route} />);
+    const mockNavigation = useNavigation();
+    const { getByTestId } = render(<MapView route={route} navigation={mockNavigation} />);
     const { result: resMapState } = renderHook(() => FormState.useState((s) => s.currentValues));
     const { result: resLoadingState } = renderHook(() => useState(false));
 
@@ -116,18 +130,6 @@ describe('MapView', () => {
     navigation.canGoBack.mockReturnValue(true);
     expect(navigation.canGoBack()).toEqual(true);
 
-    const mockSelectedForm = {
-      id: 1,
-      name: 'Health Facilities',
-    };
-
-    // update FormState to store selectedForm
-    act(() => {
-      FormState.update((s) => {
-        s.form = mockSelectedForm;
-      });
-    });
-
     render(<MapView route={route} navigation={navigation} />);
 
     act(() => {
@@ -150,6 +152,43 @@ describe('MapView', () => {
       const { form: formSelected } = result.current;
       expect(formSelected).toBe(mockSelectedForm);
       expect(navigation.navigate).toHaveBeenCalledWith('FormPage', mockSelectedForm);
+    });
+  });
+
+  it('should get values from selected location', async () => {
+    const route = {
+      params: {
+        lat: 37.12345,
+        lng: -122.6789,
+        id: 12,
+      },
+    };
+    const mockNavigation = useNavigation();
+
+    const { getByTestId } = render(<MapView route={route} navigation={mockNavigation} />);
+    const { result } = renderHook(() => useState({ lat: null, lng: null, distance: 0 }));
+
+    const [markerData, setMarkerData] = result.current;
+
+    const buttonEl = getByTestId('button-selected-loc');
+    expect(buttonEl).toBeDefined();
+    fireEvent.press(buttonEl);
+
+    act(() => {
+      setMarkerData({
+        lat: 36.12345,
+        lng: -122.6789,
+        distance: 5,
+      });
+    });
+
+    await waitFor(() => {
+      expect(result.current[0]).toEqual({
+        lat: 36.12345,
+        lng: -122.6789,
+        distance: 5,
+      });
+      expect(mockNavigation.navigate).toHaveBeenCalledWith('FormPage', mockSelectedForm);
     });
   });
 });
