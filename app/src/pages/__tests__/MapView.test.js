@@ -63,43 +63,47 @@ describe('MapView', () => {
     });
   });
 
-  // it('should use current location when the button clicked', async () => {
-  //   const route = {
-  //     params: {
-  //       lat: 37.12345,
-  //       lng: -122.6789,
-  //     },
-  //   };
+  it('should use current location when the button clicked', async () => {
+    const route = {
+      params: {
+        lat: 37.12345,
+        lng: -122.6789,
+      },
+    };
 
-  //   const { getByTestId } = render(<MapView route={route} />);
-  //   const { result: resMapState } = renderHook(() => MapState.useState());
-  //   const { result: resLoadingState } = renderHook(() => useState(false));
+    const { getByTestId } = render(<MapView route={route} />);
+    const { result: resMapState } = renderHook(() => FormState.useState((s) => s.currentValues));
+    const { result: resLoadingState } = renderHook(() => useState(false));
 
-  //   const [loading, setLoading] = resLoadingState.current;
+    const [loading, setLoading] = resLoadingState.current;
 
-  //   const buttonEl = getByTestId('button-get-current-loc');
-  //   expect(buttonEl).toBeDefined();
-  //   fireEvent.press(buttonEl);
+    const buttonEl = getByTestId('button-get-current-loc');
+    expect(buttonEl).toBeDefined();
+    fireEvent.press(buttonEl);
 
-  //   act(() => {
-  //     setLoading(true);
-  //     loc.getCurrentLocation((res) => {
-  //       MapState.update((s) => {
-  //         s.latitude = res.coords.latitude;
-  //         s.longitude = res.coords.longitude;
-  //       });
-  //       setLoading(false);
-  //     });
-  //   });
+    act(() => {
+      setLoading(true);
+      loc.getCurrentLocation(({ coords }) => {
+        FormState.update((s) => {
+          s.currentValues = {
+            ...s.currentValues,
+            geoField: [coords.latitude, coords.longitude],
+          };
+        });
+        setLoading(false);
+      });
+    });
 
-  //   await waitFor(() => {
-  //     const { latitude, longitude } = resMapState.current;
-  //     expect(latitude).toBe(route.params.lat);
-  //     expect(longitude).toBe(route.params.lng);
+    await waitFor(() => {
+      const { geoField } = resMapState.current;
+      const [latitude, longitude] = geoField || {};
 
-  //     expect(resLoadingState.current[0]).toBeFalsy();
-  //   });
-  // });
+      expect(latitude).toBe(route.params.lat);
+      expect(longitude).toBe(route.params.lng);
+
+      expect(resLoadingState.current[0]).toBeFalsy();
+    });
+  });
 
   it('should back to the FormPage screen along with params when back hardware pressed', async () => {
     const route = {
