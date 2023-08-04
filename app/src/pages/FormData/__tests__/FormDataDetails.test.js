@@ -4,7 +4,7 @@ import { render, renderHook, fireEvent, act, waitFor } from '@testing-library/re
 import { FormState } from '../../../store';
 import FormDataNavigation from '../FormDataNavigation';
 import FormDataDetails from '../FormDataDetails';
-import { washInSchool, washInSchoolForm } from './data.json';
+import { washInSchool, washInSchoolForm } from '../dummy-for-test-purpose';
 
 const mockFormDataDetails = jest.fn();
 
