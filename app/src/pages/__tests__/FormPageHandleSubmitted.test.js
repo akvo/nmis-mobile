@@ -312,7 +312,7 @@ describe('FormPage handleOnSubmitForm', () => {
     expect(ToastAndroid.show).toHaveBeenCalledTimes(1);
     // call refreshForm
     expect(mockRefreshForm).toHaveBeenCalledTimes(1);
-    expect(mockNavigation.navigate).toHaveBeenCalledWith('ManageForm', mockRoute.params);
+    expect(mockNavigation.navigate).toHaveBeenCalledWith('Home', mockRoute.params);
   });
 
   test('should show ToastAndroid if handleOnSubmitForm throw an error', async () => {

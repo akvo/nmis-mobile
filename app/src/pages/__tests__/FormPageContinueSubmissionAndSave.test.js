@@ -338,7 +338,7 @@ describe('FormPage continue saved submision then save', () => {
     await waitFor(() => {
       expect(crudDataPoints.saveDataPoint).not.toHaveBeenCalled();
       expect(crudDataPoints.updateDataPoint).toHaveBeenCalledWith({
-        duration: 0,
+        duration: 1,
         form: 1,
         json: {},
         name: 'Untitled',
@@ -346,7 +346,7 @@ describe('FormPage continue saved submision then save', () => {
         user: null,
       });
       expect(ToastAndroid.show).toHaveBeenCalledTimes(1);
-      expect(mockNavigation.navigate).toHaveBeenCalledWith('ManageForm', mockRoute.params);
+      expect(mockNavigation.navigate).toHaveBeenCalledWith('Home', mockRoute.params);
     });
   });
 

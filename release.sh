@@ -51,7 +51,7 @@ if [[ "$response" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     git push
     git tag -a "${NEW_VERSION}" -m "Release ${NEW_VERSION}"
     git push --tags
-    gh release create "v${NEW_VERSION}" -t "${NEW_VERSION}"
+    gh release create "${NEW_VERSION}" -t "${NEW_VERSION}"
     # send message to slack
     curl -X POST \
         -H 'Content-type: application/json' \

@@ -6,9 +6,11 @@ import { FormState, UserState, UIState } from '../store';
 import { crudForms } from '../database/crud';
 import { i18n } from '../lib';
 
-const Home = ({ navigation }) => {
+const Home = ({ navigation, route }) => {
+  const params = route?.params || null;
   const [search, setSearch] = useState(null);
   const [data, setData] = useState([]);
+
   const activeLang = UIState.useState((s) => s.lang);
   const trans = i18n.text(activeLang);
 
@@ -28,22 +30,24 @@ const Home = ({ navigation }) => {
   };
 
   useEffect(() => {
-    FormState.update((s) => {
-      s.form = {};
-    });
-    crudForms.selectLatestFormVersion({ user: currentUserId }).then((results) => {
-      const forms = results.map((r) => ({
-        ...r,
-        subtitles: [
-          `${trans.versionLabel}${r.version}`,
-          `${trans.submittedLabel}${r.submitted}`,
-          `${trans.draftLabel}${r.draft}`,
-          `${trans.syncLabel}${r.synced}`,
-        ],
-      }));
-      setData(forms);
-    });
-  }, [currentUserId]);
+    if (params || currentUserId) {
+      FormState.update((s) => {
+        s.form = {};
+      });
+      crudForms.selectLatestFormVersion({ user: currentUserId }).then((results) => {
+        const forms = results.map((r) => ({
+          ...r,
+          subtitles: [
+            `${trans.versionLabel}${r.version}`,
+            `${trans.submittedLabel}${r.submitted}`,
+            `${trans.draftLabel}${r.draft}`,
+            `${trans.syncLabel}${r.synced}`,
+          ],
+        }));
+        setData(forms);
+      });
+    }
+  }, [currentUserId, params]);
 
   const filteredData = useMemo(() => {
     return data.filter(
