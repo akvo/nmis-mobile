@@ -48,3 +48,25 @@ jobs:
         run: |
           apk_url=${{ steps.eas_release.outputs.apk_url }}
           echo "APK Download URL: $apk_url"
+
+      - name: Extract APK_VERSION from Tag
+        id: extract_version
+        run: |
+          version=$(echo "${{ github.ref }}" | sed -n 's/refs\/tags\/v\([0-9]\+\.[0-9]\+\.[0-9]\+\)/\1/p')
+          echo "::set-output name=apk_version::$version"
+
+      - name: Send APK URL to API
+        env:
+          APK_URL: ${{ steps.eas_release.outputs.apk_url }}
+          APK_VERSION: ${{ steps.extract_version.outputs.apk_version }}
+          SECRET: ${{ secrets.NWMIS_APK_UPLOAD_SECRET }}
+        run: |
+          curl -X 'POST' \
+            'https://washmis-burkina.akvotest.org/api/v1/device/apk/upload' \
+            -H 'accept: */*' \
+            -H 'Content-Type: application/json' \
+            -d '{
+              "apk_url": "'"$APK_URL"'",
+              "apk_version": "'"$APK_VERSION"'",
+              "secret": "'"$SECRET"'"
+            }'
