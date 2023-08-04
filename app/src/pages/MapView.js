@@ -49,6 +49,7 @@ const MapView = ({ navigation, route, radius = 20 }) => {
         const eventData = JSON.stringify({ type: 'changeMarker', data: { lat, lng } });
         webViewRef.current.postMessage(eventData);
         setLoading(false);
+        goBack();
       },
       (err) => {
         setLoading(false);
@@ -126,9 +127,6 @@ const MapView = ({ navigation, route, radius = 20 }) => {
           disabled={disabledButton}
         >
           {trans.buttonSelectedLoc}
-        </Button>
-        <Button onPress={goBack} type="clear" testID="button-back">
-          {trans.buttonCancel}
         </Button>
       </View>
     </View>
