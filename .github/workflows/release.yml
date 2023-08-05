@@ -34,7 +34,7 @@ jobs:
         run: |
           npm run eas:release > output.txt
           cat output.txt
-          echo "{APK_URL}=$(tail -n 1 output.txt)" >> $GITHUB_ENV
+          echo "APK_URL=$(tail -n 1 output.txt)" >> $GITHUB_ENV
 
       - name: 🌟 Send APK
         env:
