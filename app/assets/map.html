@@ -57,9 +57,11 @@
       // add radius
       L.circle([lat, lng], { radius }).addTo(map);
 
-      L.control.zoom({
-       position: 'bottomleft'
-      }).addTo(map);
+      L.control
+        .zoom({
+          position: 'bottomleft',
+        })
+        .addTo(map);
 
       map.on('click', (e) => {
         if (marker) {
