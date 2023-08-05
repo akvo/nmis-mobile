@@ -61,6 +61,6 @@ jobs:
             -H 'Content-Type: application/json' \
             -d '{
               "apk_url": "'"$APK_URL"'",
-              "apk_version": "'"$GITHUB_REF_NAME"'",
+              "apk_version": "'"$APK_VERSION"'",
               "secret": "'"$SECRET"'"
             }'
