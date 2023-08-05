@@ -200,7 +200,7 @@ exports[`GetStartedPage renders correctly 1`] = `
       }
     }
   >
-    Lorem Ipsum dolor sit amet dolor random
+    Gather Information Anywhere, Anytime
   </Text>
   <View
     style={
