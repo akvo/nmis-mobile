@@ -41,7 +41,7 @@ jobs:
         run: |
           npm run eas:release > output.txt
           apk_url=$(tail -n 1 output.txt)
-          echo "::set-output name=apk_url::$apk_url"
+          echo "{apk_url}={$apk_url}" >> $GITHUB_OUTPUT
           cat output.txt   # Display the full output in the log
 
       - name: Get APK URL
