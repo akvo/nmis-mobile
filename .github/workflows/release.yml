@@ -9,17 +9,10 @@ jobs:
     name: apk build
     runs-on: ubuntu-latest
     steps:
-      - name: 🏗  Environment Check
-        run: |
-          if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
-            echo "Expo token is not configured"
-            exit 1
-          fi
-
-      - name: 🏗  Checkout repository
+      - name: 🗄️  Checkout repository
         uses: actions/checkout@v3
 
-      - name: 🏗  Setup node
+      - name: 🧰 Setup node
         uses: actions/setup-node@v3
         with:
           node-version: 18.x
@@ -40,18 +33,11 @@ jobs:
         working-directory: ./app
         run: |
           npm run eas:release > output.txt
-          apk_url=$(tail -n 1 output.txt)
-          echo "{apk_url}={$apk_url}" >> $GITHUB_OUTPUT
-          cat output.txt   # Display the full output in the log
+          cat output.txt
+          echo "{APK_URL}=$(tail -n 1 output.txt)" >> $GITHUB_ENV
 
-      - name: Get APK URL
-        run: |
-          apk_url=${{ steps.eas_release.outputs.apk_url }}
-          echo "APK Download URL: $apk_url"
-
-      - name: Send APK URL to API
+      - name: 🌟 Send APK
         env:
-          APK_URL: ${{ steps.eas_release.outputs.apk_url }}
           APK_VERSION: ${{ github.ref_name }}
           SECRET: ${{ secrets.NWMIS_APK_UPLOAD_SECRET }}
         run: |
