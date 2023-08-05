@@ -37,7 +37,7 @@
     </script>
     <script>
       const selector = document.getElementById('map');
-      const map = L.map('map').fitWorld();
+      const map = L.map('map', { zoomControl: false }).fitWorld();
 
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         minZoom: 8,
@@ -56,6 +56,10 @@
 
       // add radius
       L.circle([lat, lng], { radius }).addTo(map);
+
+      L.control.zoom({
+       position: 'bottomleft'
+      }).addTo(map);
 
       map.on('click', (e) => {
         if (marker) {

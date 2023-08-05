@@ -83,6 +83,8 @@ const uiText = {
     buttonCurrLocation: 'Use current location',
     loadingText: 'Loading...',
     buttonSelectedLoc: 'Use selected location',
+    outOfRangeText:
+      'Please select a geolocation within the circle boundary as it is currently out of range.',
   },
   fr: {
     latitude: 'Latitude',
@@ -169,6 +171,8 @@ const uiText = {
     buttonCurrLocation: "Utiliser l'emplacement actuel",
     loadingText: 'Chargement...',
     buttonSelectedLoc: "Utiliser l'emplacement sélectionné",
+    outOfRangeText:
+      'Veuillez sélectionner une géolocalisation dans les limites du cercle car elle est actuellement hors de portée.',
   },
 };
 

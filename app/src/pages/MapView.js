@@ -10,7 +10,7 @@ import {
 import { WebView } from 'react-native-webview';
 import { Asset } from 'expo-asset';
 import * as FileSystem from 'expo-file-system';
-import { Button } from '@rneui/themed';
+import { Button, Dialog, Text } from '@rneui/themed';
 import { FormState, UIState } from '../store';
 import { loc, i18n } from '../lib';
 
@@ -22,6 +22,7 @@ const MapView = ({ navigation, route, radius = 20 }) => {
     lng: null,
     distance: 0,
   });
+  const [visibleDialog, setVisibleDialog] = useState(false);
   const webViewRef = useRef(null);
   const selectedForm = FormState.useState((s) => s.form);
   const activeLang = UIState.useState((s) => s.lang);
@@ -77,6 +78,11 @@ const MapView = ({ navigation, route, radius = 20 }) => {
   const handleUseSelectedLocation = () => {
     const { lat, lng, distance } = markerData;
     const { id: questionID } = route?.params;
+
+    if (distance > radius) {
+      setVisibleDialog(true);
+      return;
+    }
     if (questionID) {
       FormState.update((s) => {
         s.currentValues = {
@@ -87,8 +93,6 @@ const MapView = ({ navigation, route, radius = 20 }) => {
       goBack();
     }
   };
-
-  const disabledButton = markerData.distance > radius;
 
   useEffect(() => {
     loadHtml();
@@ -120,15 +124,19 @@ const MapView = ({ navigation, route, radius = 20 }) => {
         <Button onPress={handleCurrentLocation} testID="button-get-current-loc">
           {trans.buttonCurrLocation}
         </Button>
-        <Button
-          onPress={handleUseSelectedLocation}
-          type="outline"
-          testID="button-selected-loc"
-          disabled={disabledButton}
-        >
+        <Button onPress={handleUseSelectedLocation} type="outline" testID="button-selected-loc">
           {trans.buttonSelectedLoc}
         </Button>
       </View>
+      <Dialog visible={visibleDialog}>
+        <Text>{trans.outOfRangeText}</Text>
+        <Dialog.Actions>
+          <Dialog.Button
+            title={trans.buttonOk}
+            onPress={() => setVisibleDialog(false)}
+          ></Dialog.Button>
+        </Dialog.Actions>
+      </Dialog>
     </View>
   );
 };
