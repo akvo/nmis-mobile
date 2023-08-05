@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import * as Location from 'expo-location';
 
 import TypeGeo from '../TypeGeo';
-import { MapState, UIState } from '../../../store';
+import { UIState, FormState } from '../../../store';
 import { loc } from '../../../lib';
 
 jest.mock('expo-location');
@@ -22,44 +22,34 @@ describe('TypeGeo', () => {
     });
   });
   test('render and get current location successfully', async () => {
-    const { getByTestId, getByText } = render(
+    const { getByTestId, getByText, debug } = render(
       <TypeGeo onChange={() => jest.fn()} values={{}} id="geoField" name="Geolocation" />,
     );
 
+    const buttonCurrLoc = getByTestId('button-curr-location');
+    expect(buttonCurrLoc).toBeDefined();
+    fireEvent.press(buttonCurrLoc);
+
     act(() => {
-      UIState.update((s) => {
-        s.online = true;
-      });
-      loc.getCurrentLocation((res) => {
-        MapState.update((s) => {
-          s.latitude = res.coords.latitude;
-          s.longitude = res.coords.longitude;
+      loc.getCurrentLocation(({ coords }) => {
+        FormState.update((s) => {
+          s.currentValues = {
+            ...s.currentValues,
+            geoField: [coords.latitude, coords.longitude],
+          };
         });
       });
     });
 
     await waitFor(() => {
-      const { result } = renderHook(() => MapState.useState());
-      const { latitude, longitude } = result.current;
+      const { result } = renderHook(() => FormState.useState((s) => s.currentValues));
+      const { geoField } = result.current;
+      const [latitude, longitude] = geoField || {};
 
       const latText = getByTestId('text-lat');
       expect(latText.props.children).toEqual(['Latitude', ': ', latitude]);
       const lngText = getByTestId('text-lng');
       expect(lngText.props.children).toEqual(['Longitude', ': ', longitude]);
-    });
-
-    const { result: navigationReff } = renderHook(() => useNavigation());
-    const navigation = navigationReff.current;
-
-    const openMapButton = getByTestId('button-open-map');
-    expect(openMapButton).toBeDefined();
-    fireEvent.press(openMapButton);
-
-    await waitFor(() => {
-      const { result } = renderHook(() => MapState.useState());
-      const { latitude, longitude } = result.current;
-
-      expect(navigation.navigate).toHaveBeenCalledWith('MapView', { latitude, longitude });
     });
   });
 
@@ -239,6 +229,45 @@ describe('TypeGeo', () => {
 
     await waitFor(() => {
       expect(values.geoField).toEqual([35677, -7811]);
+    });
+  });
+
+  it('should get current location and redirect to MapView when open map clicked', async () => {
+    const mockNavigation = useNavigation();
+    const { getByTestId, getByText, debug } = render(
+      <TypeGeo
+        onChange={() => jest.fn()}
+        values={{}}
+        id="geoField"
+        name="Geolocation"
+        navigation={mockNavigation}
+      />,
+    );
+
+    const buttonCurrLoc = getByTestId('button-open-map');
+    expect(buttonCurrLoc).toBeDefined();
+    fireEvent.press(buttonCurrLoc);
+
+    act(() => {
+      loc.getCurrentLocation(({ coords }) => {
+        FormState.update((s) => {
+          s.currentValues = {
+            ...s.currentValues,
+            geoField: [coords.latitude, coords.longitude],
+          };
+        });
+      });
+    });
+    await waitFor(() => {
+      const { result } = renderHook(() => FormState.useState((s) => s.currentValues));
+      const { geoField } = result.current;
+      const [latitude, longitude] = geoField || {};
+
+      expect(mockNavigation.navigate).toHaveBeenCalledWith('MapView', {
+        id: 'geoField',
+        latitude,
+        longitude,
+      });
     });
   });
 });
