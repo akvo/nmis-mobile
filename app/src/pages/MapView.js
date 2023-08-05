@@ -78,7 +78,6 @@ const MapView = ({ navigation, route, radius = 20 }) => {
   const handleUseSelectedLocation = () => {
     const { lat, lng, distance } = markerData;
     const { id: questionID } = route?.params;
-
     if (distance > radius) {
       setVisibleDialog(true);
       return;
@@ -128,8 +127,8 @@ const MapView = ({ navigation, route, radius = 20 }) => {
           {trans.buttonSelectedLoc}
         </Button>
       </View>
-      <Dialog visible={visibleDialog}>
-        <Text>{trans.outOfRangeText}</Text>
+      <Dialog testID="dialog-out-of-range" visible={visibleDialog}>
+        <Text testID="text-out-of-range">{trans.outOfRangeText}</Text>
         <Dialog.Actions>
           <Dialog.Button
             title={trans.buttonOk}
