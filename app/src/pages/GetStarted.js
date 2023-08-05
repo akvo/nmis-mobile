@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { Asset } from 'expo-asset';
 import { Text, Button, Input } from '@rneui/themed';
 import { CenterLayout, Image } from '../components';
 import { BuildParamsState, UIState } from '../store';
-import { api, i18n, logo } from '../lib';
+import { api, i18n } from '../lib';
 import { crudConfig } from '../database/crud';
 
 const GetStarted = ({ navigation }) => {
+  const logo = Asset.fromModule(require('../assets/icon.png')).uri;
   const [currentConfig, setCurrentConfig] = useState({});
   const [IPAddr, setIPAddr] = useState(null);
   const serverURLState = BuildParamsState.useState((s) => s.serverURL);
@@ -44,7 +46,7 @@ const GetStarted = ({ navigation }) => {
   const titles = [trans.getStartedTitle1, trans.getStartedTitle2, trans.getStartedTitle3];
   return (
     <CenterLayout title={titles}>
-      <Image src={logo} />
+      <Image src={logo ? logo : null} />
       <CenterLayout.Titles items={titles} />
       <Text>{trans.getStartedSubTitle}</Text>
       {!isServerURLDefined && (

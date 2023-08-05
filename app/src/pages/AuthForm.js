@@ -1,9 +1,10 @@
 import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { Asset } from 'expo-asset';
 import { View, StyleSheet, Platform, ToastAndroid } from 'react-native';
 import { Input, Button, Text, Dialog } from '@rneui/themed';
 import { CenterLayout, Image } from '../components';
-import { api, cascades, i18n, logo } from '../lib';
+import { api, cascades, i18n } from '../lib';
 import { AuthState, UserState, UIState } from '../store';
 import { crudSessions, crudForms, crudUsers, crudConfig } from '../database/crud';
 
@@ -17,6 +18,7 @@ const ToggleEye = ({ hidden, onPress }) => {
 };
 
 const AuthForm = ({ navigation }) => {
+  const logo = Asset.fromModule(require('../assets/icon.png')).uri;
   const { online: isNetworkAvailable, lang: activeLang } = UIState.useState((s) => s);
   const [passcode, setPasscode] = React.useState(null);
   const [hidden, setHidden] = React.useState(true);
@@ -110,7 +112,7 @@ const AuthForm = ({ navigation }) => {
   const titles = [trans.authTitle1, trans.authTitle2, trans.authTitle3];
   return (
     <CenterLayout>
-      <Image src={logo} />
+      <Image src={logo ? logo : null} />
       <CenterLayout.Titles items={titles} />
       <View style={styles.container}>
         <Input
