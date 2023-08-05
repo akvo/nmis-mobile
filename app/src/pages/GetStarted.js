@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Text, Button, Input } from '@rneui/themed';
 import { CenterLayout, Image } from '../components';
 import { BuildParamsState, UIState } from '../store';
-import { api, i18n } from '../lib';
+import { api, i18n, logo } from '../lib';
 import { crudConfig } from '../database/crud';
 
 const GetStarted = ({ navigation }) => {
@@ -44,7 +44,7 @@ const GetStarted = ({ navigation }) => {
   const titles = [trans.getStartedTitle1, trans.getStartedTitle2, trans.getStartedTitle3];
   return (
     <CenterLayout title={titles}>
-      <Image />
+      <Image src={logo} />
       <CenterLayout.Titles items={titles} />
       <Text>{trans.getStartedSubTitle}</Text>
       {!isServerURLDefined && (

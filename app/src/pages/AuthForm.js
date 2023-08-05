@@ -3,7 +3,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { View, StyleSheet, Platform, ToastAndroid } from 'react-native';
 import { Input, Button, Text, Dialog } from '@rneui/themed';
 import { CenterLayout, Image } from '../components';
-import { api, cascades, i18n } from '../lib';
+import { api, cascades, i18n, logo } from '../lib';
 import { AuthState, UserState, UIState } from '../store';
 import { crudSessions, crudForms, crudUsers, crudConfig } from '../database/crud';
 
@@ -110,7 +110,7 @@ const AuthForm = ({ navigation }) => {
   const titles = [trans.authTitle1, trans.authTitle2, trans.authTitle3];
   return (
     <CenterLayout>
-      <Image />
+      <Image src={logo} />
       <CenterLayout.Titles items={titles} />
       <View style={styles.container}>
         <Input
