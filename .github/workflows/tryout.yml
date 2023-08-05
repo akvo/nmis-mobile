@@ -1,0 +1,17 @@
+name: Tryout
+on:
+  push:
+    brances:
+      - test*
+jobs:
+  tryout:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+    - name: Run a script
+      run: echo "0.0.1" > output.txt
+    - name: Set Output
+      run: echo "apk_version=$(cat output.txt)" >> $GITHUB_ENV
+    - name: Use GITHUB_OUTPUT
+      run: echo "the version was $apk_version"
