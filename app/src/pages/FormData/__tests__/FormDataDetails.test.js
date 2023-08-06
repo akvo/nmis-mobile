@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { render, renderHook, fireEvent, act, waitFor } from '@testing-library/react-native';
+import { useNavigation } from '@react-navigation/native';
 
 import { FormState } from '../../../store';
 import FormDataNavigation from '../FormDataNavigation';
@@ -7,7 +8,6 @@ import FormDataDetails from '../FormDataDetails';
 import { washInSchool, washInSchoolForm } from '../dummy-for-test-purpose';
 
 const mockFormDataDetails = jest.fn();
-
 jest.mock('../FormDataDetails', () => ({ formJSON, values, currentPage, setCurrentPage }) => {
   mockFormDataDetails(formJSON, values, currentPage, setCurrentPage);
 
@@ -15,7 +15,7 @@ jest.mock('../FormDataDetails', () => ({ formJSON, values, currentPage, setCurre
   const currentGroup = form?.question_groups?.[currentPage] || [];
   const totalPage = form?.question_groups?.length || 0;
   const questions = currentGroup?.questions || [];
-  const answers = typeof values === 'string' ? JSON.parse(values) : values;
+  const answers = values;
 
   return (
     <mock-View>
@@ -54,7 +54,7 @@ describe('FormDataDetails', () => {
         s.form = {
           json: JSON.stringify(washInSchoolForm).replace(/'/g, "''"),
         };
-        s.currentValues = JSON.parse(valuesJSON);
+        s.currentValues = JSON.parse(JSON.parse(valuesJSON));
       });
     });
   });
@@ -118,5 +118,17 @@ describe('FormDataDetails', () => {
     const paginationText = getByTestId('text-pagination');
     expect(paginationText).toBeDefined();
     expect(paginationText.props.children).toEqual([2, '/', 2]);
+  });
+
+  it('should match with snapshot', async () => {
+    const mockNavigation = useNavigation();
+    const mockRoute = {
+      params: {
+        name: 'Datapoint name',
+      },
+    };
+
+    const tree = render(<FormDataDetails navigation={mockNavigation} route={mockRoute} />);
+    await waitFor(() => expect(tree.toJSON()).toMatchSnapshot());
   });
 });
