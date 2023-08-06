@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FormDataDetails should match with snapshot 1`] = `
+<mock-View>
+  <mock-FormDataNavigation>
+    <mock-Text
+      testID="text-pagination"
+    >
+      NaN
+      /
+      0
+    </mock-Text>
+  </mock-FormDataNavigation>
+</mock-View>
+`;
