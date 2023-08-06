@@ -33,7 +33,7 @@ if [[ "$response" =~ ^([yY][eE][sS]|[yY])+$ ]]; then
     if [[ "$response" == "major" ]]; then
         NEW_VERSION=$(echo "${CURRENT_TAG}" | awk -F. '{$1 = $1 + 1; $2=0; $3=0;} 1' OFS=.)
     elif [[ "$response" == "minor" ]]; then
-        NEW_VERSION="${MAJOR}.$((MINOR + 1)).${PATCH}"
+        NEW_VERSION="${MAJOR}.$((MINOR + 1)).0"
     elif [[ "$response" == "patch" ]]; then
         NEW_VERSION="${MAJOR}.${MINOR}.$((PATCH + 1))"
     else

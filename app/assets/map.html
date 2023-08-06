@@ -21,35 +21,58 @@
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
   </head>
   <body>
-    <div id="map" style="height: 100vh" data-lat="{{latitude}}" data-lng="{{longitude}}"></div>
+    <div
+      id="map"
+      style="height: 100vh"
+      data-lat="{{latitude}}"
+      data-lng="{{longitude}}"
+      data-radius="{{radius}}"
+    ></div>
     <script>
-      function handleMapClick(event) {
-        const markerData = { lat: event.latlng.lat, lng: event.latlng.lng };
+      function handleMapClick(event, distance) {
+        const markerData = { lat: event.latlng.lat, lng: event.latlng.lng, distance };
         const eventData = { type: 'markerClicked', data: markerData };
         window.ReactNativeWebView.postMessage(JSON.stringify(eventData));
       }
     </script>
     <script>
       const selector = document.getElementById('map');
-      const map = L.map('map').fitWorld();
+      const map = L.map('map', { zoomControl: false }).fitWorld();
 
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        minZoom: 8,
         maxZoom: 19,
+        zoom: 13,
         attribution: '© OpenStreetMap',
       }).addTo(map);
 
       //map.locate({setView: true, maxZoom: 19});
       const lat = selector.getAttribute('data-lat');
       const lng = selector.getAttribute('data-lng');
+      const radius = parseInt(selector.getAttribute('data-radius'), 10);
 
-      map.setView([lat, lng], 13);
+      map.setView([lat, lng], 19);
       let marker = L.marker([lat, lng]).addTo(map);
+
+      // add radius
+      L.circle([lat, lng], { radius }).addTo(map);
+
+      L.control
+        .zoom({
+          position: 'bottomleft',
+        })
+        .addTo(map);
 
       map.on('click', (e) => {
         if (marker) {
           map.removeLayer(marker);
         }
-        handleMapClick(e);
+
+        const origin = L.latLng(lat, lng);
+        const destination = L.latLng(e.latlng.lat, e.latlng.lng);
+        const distance = Math.ceil(origin.distanceTo(destination));
+
+        handleMapClick(e, distance);
         map.invalidateSize();
 
         marker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);

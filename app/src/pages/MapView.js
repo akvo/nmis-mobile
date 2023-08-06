@@ -3,7 +3,6 @@ import {
   View,
   StyleSheet,
   ActivityIndicator,
-  Button,
   Platform,
   ToastAndroid,
   BackHandler,
@@ -11,20 +10,29 @@ import {
 import { WebView } from 'react-native-webview';
 import { Asset } from 'expo-asset';
 import * as FileSystem from 'expo-file-system';
-import { MapState, FormState } from '../store';
-import { loc } from '../lib';
+import { Button, Dialog, Text } from '@rneui/themed';
+import { FormState, UIState } from '../store';
+import { loc, i18n } from '../lib';
 
-const MapView = ({ navigation, route }) => {
+const MapView = ({ navigation, route, radius = 20 }) => {
   const [htmlContent, setHtmlContent] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [markerData, setMarkerData] = useState({
+    lat: null,
+    lng: null,
+    distance: 0,
+  });
+  const [visibleDialog, setVisibleDialog] = useState(false);
   const webViewRef = useRef(null);
   const selectedForm = FormState.useState((s) => s.form);
+  const activeLang = UIState.useState((s) => s.lang);
+  const trans = i18n.text(activeLang);
 
-  const updateMapState = (markerData) => {
-    const { lat, lng } = markerData;
-    MapState.update((s) => {
-      s.latitude = lat;
-      s.longitude = lng;
+  const goBack = () => {
+    navigation.navigate('FormPage', {
+      id: selectedForm?.id,
+      name: selectedForm?.name,
+      newSubmission: route?.params?.newSubmission,
     });
   };
 
@@ -33,11 +41,16 @@ const MapView = ({ navigation, route }) => {
     loc.getCurrentLocation(
       (res) => {
         const { latitude: lat, longitude: lng } = res?.coords;
-        updateMapState({ lat, lng });
+        setMarkerData({
+          ...markerData,
+          lat,
+          lng,
+        });
 
         const eventData = JSON.stringify({ type: 'changeMarker', data: { lat, lng } });
         webViewRef.current.postMessage(eventData);
         setLoading(false);
+        goBack();
       },
       (err) => {
         setLoading(false);
@@ -52,9 +65,32 @@ const MapView = ({ navigation, route }) => {
   const loadHtml = async () => {
     const [{ localUri }] = await Asset.loadAsync(require('../../assets/map.html'));
     let fileContents = await FileSystem.readAsStringAsync(localUri);
-    const { latitude: lat, longitude: lng } = route?.params;
-    fileContents = fileContents.replace(/{{latitude}}/g, lat).replace(/{{longitude}}/g, lng);
+    let { latitude: lat, longitude: lng } = route?.params;
+    lat = lat || 0;
+    lng = lng || 0;
+    fileContents = fileContents
+      .replace(/{{latitude}}/g, lat)
+      .replace(/{{longitude}}/g, lng)
+      .replace(/{{radius}}/g, radius);
     setHtmlContent(fileContents);
+  };
+
+  const handleUseSelectedLocation = () => {
+    const { lat, lng, distance } = markerData;
+    const { id: questionID } = route?.params;
+    if (distance > radius) {
+      setVisibleDialog(true);
+      return;
+    }
+    if (questionID) {
+      FormState.update((s) => {
+        s.currentValues = {
+          ...s.currentValues,
+          [questionID]: [lat, lng],
+        };
+      });
+      goBack();
+    }
   };
 
   useEffect(() => {
@@ -67,21 +103,6 @@ const MapView = ({ navigation, route }) => {
     }
   }, [loading, htmlContent]);
 
-  useEffect(() => {
-    const handleBackPress = () => {
-      navigation.navigate('FormPage', {
-        id: selectedForm?.id,
-        name: selectedForm?.name,
-        newSubmission: route?.params?.newSubmission,
-      });
-      return true;
-    };
-    const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
-    return () => {
-      backHandler.remove();
-    };
-  }, []);
-
   return (
     <View style={styles.container}>
       {loading && <ActivityIndicator />}
@@ -93,18 +114,28 @@ const MapView = ({ navigation, route }) => {
         onMessage={(event) => {
           const messageData = JSON.parse(event.nativeEvent.data);
           if (messageData.type === 'markerClicked') {
-            updateMapState(messageData.data);
+            setMarkerData(messageData.data);
           }
         }}
         testID="webview-map"
       />
       <View style={styles.buttonContainer}>
-        <Button
-          title="Use current location"
-          onPress={handleCurrentLocation}
-          testID="button-get-current-loc"
-        />
+        <Button onPress={handleCurrentLocation} testID="button-get-current-loc">
+          {trans.buttonCurrLocation}
+        </Button>
+        <Button onPress={handleUseSelectedLocation} type="outline" testID="button-selected-loc">
+          {trans.buttonSelectedLoc}
+        </Button>
       </View>
+      <Dialog testID="dialog-out-of-range" visible={visibleDialog}>
+        <Text testID="text-out-of-range">{trans.outOfRangeText}</Text>
+        <Dialog.Actions>
+          <Dialog.Button
+            title={trans.buttonOk}
+            onPress={() => setVisibleDialog(false)}
+          ></Dialog.Button>
+        </Dialog.Actions>
+      </Dialog>
     </View>
   );
 };
@@ -118,7 +149,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   buttonContainer: {
-    padding: 10,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 8,
+    padding: 8,
   },
 });
 

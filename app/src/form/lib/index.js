@@ -266,7 +266,7 @@ export const generateDataPointName = (forms, currentValues, cascades = {}) => {
     ? forms.question_group
         .filter((qg) => !qg?.repeatable)
         .flatMap((qg) => qg.question.filter((q) => q?.meta))
-        .map((q) => {
+        ?.map((q) => {
           const defaultValue = currentValues?.[q.id] || null;
           const value = q.type === 'cascade' ? cascades?.[q.id] || defaultValue : defaultValue;
           return { id: q.id, type: q.type, value };
