@@ -289,6 +289,10 @@ jest.mock('react', () => ({
 describe('FormPage continue saved submision then save', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    jest.spyOn(Date, 'now').mockReturnValue(1634123456789);
+    FormState.update((s) => {
+      s.surveyDuration = 0;
+    });
   });
 
   test('should call handleOnSaveAndExit with the correct values when Save & Exit button pressed', async () => {
@@ -307,7 +311,6 @@ describe('FormPage continue saved submision then save', () => {
 
     const mockSetShowDialogMenu = jest.fn();
     jest.spyOn(React, 'useState').mockImplementation(() => [true, mockSetShowDialogMenu]);
-    jest.spyOn(Date, 'now').mockReturnValue(1634123456789);
     act(() => {
       FormState.update((s) => {
         s.surveyStart = getCurrentTimestamp();
@@ -394,7 +397,7 @@ describe('FormPage continue saved submision then save', () => {
       expect(crudDataPoints.saveDataPoint).not.toHaveBeenCalled();
       expect(crudDataPoints.updateDataPoint).toHaveBeenCalledTimes(1);
       expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
-      //  expect(ToastAndroid.show).toHaveBeenCalledTimes(1);
+      expect(ToastAndroid.show).toHaveBeenCalledTimes(1);
       expect(mockRefreshForm).not.toHaveBeenCalled();
       expect(mockNavigation.navigate).not.toHaveBeenCalled();
     });

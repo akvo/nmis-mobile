@@ -269,6 +269,10 @@ jest.mock('react', () => ({
 describe('FormPage handleOnSaveForm', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    jest.spyOn(Date, 'now').mockReturnValue(1634123456789);
+    FormState.update((s) => {
+      s.surveyDuration = 0;
+    });
   });
 
   test('should render kebab menu and show dialog when kebab menu clicked', async () => {
@@ -329,7 +333,6 @@ describe('FormPage handleOnSaveForm', () => {
     const mockSetShowDialogMenu = jest.fn();
     jest.spyOn(React, 'useState').mockImplementation(() => [true, mockSetShowDialogMenu]);
 
-    jest.spyOn(Date, 'now').mockReturnValue(1634123456789);
     act(() => {
       FormState.update((s) => {
         s.surveyStart = getCurrentTimestamp();

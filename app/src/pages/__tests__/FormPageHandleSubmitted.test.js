@@ -261,11 +261,17 @@ jest.mock('react', () => ({
 }));
 
 describe('FormPage handleOnSubmitForm', () => {
+  beforeEach(() => {
+    jest.spyOn(Date, 'now').mockReturnValue(1634123456789);
+    FormState.update((s) => {
+      s.surveyDuration = 0;
+    });
+  });
+
   test('should call handleOnSubmitForm with the correct values when the form is submitted', async () => {
     Platform.OS = 'android';
     ToastAndroid.show = jest.fn();
     jest.spyOn(React, 'useMemo').mockReturnValue(exampleTestForm);
-    jest.spyOn(Date, 'now').mockReturnValue(1634123456789);
     act(() => {
       FormState.update((s) => {
         s.surveyStart = getCurrentTimestamp() - 90;
@@ -291,7 +297,7 @@ describe('FormPage handleOnSubmitForm', () => {
     // save datapoint to database
     await waitFor(() => {
       expect(crudDataPoints.saveDataPoint).toHaveBeenCalledWith({
-        duration: 1,
+        duration: 10,
         form: 1,
         json: {
           1: 'John',
