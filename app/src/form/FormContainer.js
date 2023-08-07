@@ -43,6 +43,18 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave, setShowDia
   const cascades = FormState.useState((s) => s.cascades);
   const activeLang = UIState.useState((s) => s.lang);
 
+  useEffect(() => {
+    if (onSave) {
+      const results = checkValuesBeforeCallback(currentValues);
+      if (!Object.keys(results).length) {
+        return onSave(null, refreshForm);
+      }
+      const { dpName, dpGeo } = generateDataPointName(forms, currentValues, cascades);
+      const values = { name: dpName, geo: dpGeo, answers: results };
+      return onSave(values, refreshForm);
+    }
+  }, [currentValues, onSave]);
+
   const formDefinition = useMemo(() => {
     const transformedForm = transformForm(forms, activeLang);
     FormState.update((s) => {
@@ -74,25 +86,6 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave, setShowDia
     }
   };
 
-  useEffect(() => {
-    FormState.update((s) => {
-      s.currentValues = initialValues;
-      s.questionGroupListCurrentValues = initialValues;
-    });
-  }, []);
-
-  useEffect(() => {
-    if (onSave) {
-      const results = checkValuesBeforeCallback(currentValues);
-      if (!Object.keys(results).length) {
-        return onSave(null, refreshForm);
-      }
-      const { dpName, dpGeo } = generateDataPointName(forms, currentValues, cascades);
-      const values = { name: dpName, geo: dpGeo, answers: results };
-      return onSave(values, refreshForm);
-    }
-  }, [currentValues, onSave]);
-
   return (
     <>
       <ScrollView>
@@ -100,7 +93,7 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave, setShowDia
           {!showQuestionGroupList ? (
             <Formik
               innerRef={formRef}
-              initialValues={currentValues}
+              initialValues={initialValues}
               onSubmit={handleOnSubmitForm}
               validateOnBlur={true}
               validateOnChange={true}
