@@ -224,7 +224,7 @@ describe('FormContainer component on save', () => {
 
     await waitFor(() => {
       expect(handleOnSave).toHaveBeenCalledTimes(1);
-      expect(handleOnSave).toHaveBeenCalledWith(null, expect.any(Function));
+      expect(handleOnSave).toHaveBeenCalledWith(null);
     });
   });
 
@@ -251,24 +251,18 @@ describe('FormContainer component on save', () => {
 
     await waitFor(() => {
       expect(handleOnSave).toHaveBeenCalledTimes(1);
-      expect(handleOnSave).toHaveBeenCalledWith(
-        {
-          answers: { 1: 'John' },
-          geo: null,
-          name: 'John',
+      expect(handleOnSave).toHaveBeenCalledWith({
+        answers: { 1: 'John' },
+        geo: null,
+        name: 'John',
+      });
+      expect(handleOnSave).toHaveBeenCalledWith({
+        name: 'John',
+        geo: null,
+        answers: {
+          1: 'John',
         },
-        expect.any(Function),
-      );
-      expect(handleOnSave).toHaveBeenCalledWith(
-        {
-          name: 'John',
-          geo: null,
-          answers: {
-            1: 'John',
-          },
-        },
-        expect.any(Function),
-      );
+      });
     });
   });
 });
@@ -316,22 +310,19 @@ describe('FormContainer component on submit', () => {
 
     await waitFor(() => {
       expect(handleOnSubmit).toHaveBeenCalledTimes(1);
-      expect(handleOnSubmit).toHaveBeenCalledWith(
-        {
-          name: 'John',
-          geo: null,
-          answers: {
-            1: 'John',
-            2: new Date('01-01-1992'),
-            3: '31',
-            4: ['Male'],
-            5: ['Bachelor'],
-            6: ['Traveling'],
-            7: ['Fried Rice'],
-          },
+      expect(handleOnSubmit).toHaveBeenCalledWith({
+        name: 'John',
+        geo: null,
+        answers: {
+          1: 'John',
+          2: new Date('01-01-1992'),
+          3: '31',
+          4: ['Male'],
+          5: ['Bachelor'],
+          6: ['Traveling'],
+          7: ['Fried Rice'],
         },
-        expect.any(Function),
-      );
+      });
     });
   });
 
@@ -367,23 +358,20 @@ describe('FormContainer component on submit', () => {
     fireEvent.press(formSubmitBtn);
 
     await waitFor(() => expect(handleOnSubmit).toHaveBeenCalledTimes(1));
-    expect(handleOnSubmit).toHaveBeenCalledWith(
-      {
-        name: 'John',
-        geo: null,
-        answers: {
-          1: 'John',
-          2: new Date('01-01-1992'),
-          3: '31',
-          4: ['Male'],
-          5: ['Bachelor'],
-          6: ['Traveling'],
-          7: ['Rendang'],
-          9: '8.9',
-        },
+    expect(handleOnSubmit).toHaveBeenCalledWith({
+      name: 'John',
+      geo: null,
+      answers: {
+        1: 'John',
+        2: new Date('01-01-1992'),
+        3: '31',
+        4: ['Male'],
+        5: ['Bachelor'],
+        6: ['Traveling'],
+        7: ['Rendang'],
+        9: '8.9',
       },
-      expect.any(Function),
-    );
+    });
   });
 
   it.failing(
@@ -421,21 +409,18 @@ describe('FormContainer component on submit', () => {
       fireEvent.press(formSubmitBtn);
 
       await waitFor(() => expect(handleOnSubmit).toHaveBeenCalledTimes(1));
-      expect(handleOnSubmit).toHaveBeenCalledWith(
-        {
-          name: 'John',
-          geo: null,
-          answers: {
-            1: 'John',
-            2: new Date('01-01-1992'),
-            3: 0,
-            4: ['Male'],
-            5: ['Bachelor'],
-            9: 0,
-          },
+      expect(handleOnSubmit).toHaveBeenCalledWith({
+        name: 'John',
+        geo: null,
+        answers: {
+          1: 'John',
+          2: new Date('01-01-1992'),
+          3: 0,
+          4: ['Male'],
+          5: ['Bachelor'],
+          9: 0,
         },
-        expect.any(Function),
-      );
+      });
     },
   );
 
@@ -472,20 +457,17 @@ describe('FormContainer component on submit', () => {
     fireEvent.press(formSubmitBtn);
 
     await waitFor(() => expect(handleOnSubmit).toHaveBeenCalledTimes(1));
-    expect(handleOnSubmit).toHaveBeenCalledWith(
-      {
-        name: 'John',
-        geo: null,
-        answers: {
-          1: 'John',
-          2: new Date('01-01-1992'),
-          3: 0,
-          4: ['Male'],
-          5: ['Bachelor'],
-          9: 0,
-        },
+    expect(handleOnSubmit).toHaveBeenCalledWith({
+      name: 'John',
+      geo: null,
+      answers: {
+        1: 'John',
+        2: new Date('01-01-1992'),
+        3: 0,
+        4: ['Male'],
+        5: ['Bachelor'],
+        9: 0,
       },
-      expect.any(Function),
-    );
+    });
   });
 });
