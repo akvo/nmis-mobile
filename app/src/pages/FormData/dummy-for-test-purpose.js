@@ -24,19 +24,23 @@ export const washInSchoolForm = {
       name: 'Questionnaire Ecoles',
     },
   ],
-  question_groups: [
+  question_group: [
     {
       id: 1681103820974,
       question_group: 'Localisation',
       order: 1,
       repeatable: false,
-      questions: [
+      question: [
         {
           id: 1681103820975,
           order: 1,
           questionGroupId: 1681103820974,
           question: 'Locality',
-          type: 'administration',
+          type: 'cascade',
+          source: {
+            file: 'administration.sqlite',
+            parent_id: 0,
+          },
           required: true,
           meta: true,
           translations: [
@@ -89,7 +93,7 @@ export const washInSchoolForm = {
       question_group: 'Consent',
       order: 2,
       repeatable: false,
-      questions: [
+      question: [
         {
           id: 1681178759979,
           order: 1,
