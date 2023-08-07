@@ -27,7 +27,6 @@ const mockValues = {
     7: ['Fried Rice'],
   },
 };
-const mockRefreshForm = jest.fn();
 const mockOnSave = jest.fn();
 
 const exampleTestForm = {
@@ -247,13 +246,10 @@ jest.mock('../../form/FormContainer', () => ({ forms, initialValues, onSubmit, o
   mockFormContainer(forms, initialValues, onSubmit, onSave);
   return (
     <mock-FormContainer>
-      <button
-        onPress={() => mockOnSave(mockValues, mockRefreshForm)}
-        testID="mock-save-button-helper"
-      >
+      <button onPress={() => mockOnSave(mockValues)} testID="mock-save-button-helper">
         Save Trigger helper
       </button>
-      <button onPress={() => onSubmit(mockValues, mockRefreshForm)} testID="mock-submit-button">
+      <button onPress={() => onSubmit(mockValues)} testID="mock-submit-button">
         Submit
       </button>
     </mock-FormContainer>
@@ -277,7 +273,7 @@ describe('FormPage handleOnSaveForm', () => {
 
   test('should render kebab menu and show dialog when kebab menu clicked', async () => {
     const mockSetOnSaveFormParams = jest.fn();
-    const mockOnSaveFormParams = { values: mockValues, refreshForm: mockRefreshForm };
+    const mockOnSaveFormParams = { values: mockValues };
     jest
       .spyOn(React, 'useState')
       .mockImplementation(() => [mockOnSaveFormParams, mockSetOnSaveFormParams]);
@@ -299,7 +295,7 @@ describe('FormPage handleOnSaveForm', () => {
 
   test('should show saved dialog menu when back button pressed', async () => {
     const mockSetOnSaveFormParams = jest.fn();
-    const mockOnSaveFormParams = { values: mockValues, refreshForm: mockRefreshForm };
+    const mockOnSaveFormParams = { values: mockValues };
     jest
       .spyOn(React, 'useState')
       .mockImplementation(() => [mockOnSaveFormParams, mockSetOnSaveFormParams]);
@@ -325,7 +321,7 @@ describe('FormPage handleOnSaveForm', () => {
     jest.spyOn(React, 'useMemo').mockReturnValue(exampleTestForm);
 
     const mockSetOnSaveFormParams = jest.fn();
-    const mockOnSaveFormParams = { values: mockValues, refreshForm: mockRefreshForm };
+    const mockOnSaveFormParams = { values: mockValues };
     jest
       .spyOn(React, 'useState')
       .mockImplementation(() => [mockOnSaveFormParams, mockSetOnSaveFormParams]);
@@ -378,7 +374,7 @@ describe('FormPage handleOnSaveForm', () => {
     crudDataPoints.saveDataPoint.mockImplementation(() => Promise.reject('Error'));
 
     const mockSetOnSaveFormParams = jest.fn();
-    const mockOnSaveFormParams = { values: mockValues, refreshForm: mockRefreshForm };
+    const mockOnSaveFormParams = { values: mockValues };
     jest
       .spyOn(React, 'useState')
       .mockImplementation(() => [mockOnSaveFormParams, mockSetOnSaveFormParams]);
@@ -405,14 +401,13 @@ describe('FormPage handleOnSaveForm', () => {
       expect(crudDataPoints.saveDataPoint).toHaveBeenCalledTimes(1);
       expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
       expect(ToastAndroid.show).toHaveBeenCalledTimes(1);
-      expect(mockRefreshForm).not.toHaveBeenCalled();
       expect(mockNavigation.navigate).not.toHaveBeenCalled();
     });
   });
 
   test('should call handleOnExit and navigate to Home page when Exit without Saving button pressed', async () => {
     const mockSetOnSaveFormParams = jest.fn();
-    const mockOnSaveFormParams = { values: mockValues, refreshForm: mockRefreshForm };
+    const mockOnSaveFormParams = { values: mockValues };
     jest
       .spyOn(React, 'useState')
       .mockImplementation(() => [mockOnSaveFormParams, mockSetOnSaveFormParams]);

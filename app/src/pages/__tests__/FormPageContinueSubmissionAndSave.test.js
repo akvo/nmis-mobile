@@ -27,7 +27,6 @@ const mockValues = {
     7: ['Fried Rice'],
   },
 };
-const mockRefreshForm = jest.fn();
 const mockOnSave = jest.fn();
 const mockCurrentDataPoint = {
   id: 1,
@@ -55,13 +54,10 @@ jest.mock('../../form/FormContainer', () => ({ forms, initialValues, onSubmit, o
   mockFormContainer(forms, initialValues, onSubmit, onSave);
   return (
     <mock-FormContainer>
-      <button
-        onPress={() => mockOnSave(mockValues, mockRefreshForm)}
-        testID="mock-save-button-helper"
-      >
+      <button onPress={() => mockOnSave(mockValues)} testID="mock-save-button-helper">
         Save Trigger helper
       </button>
-      <button onPress={() => onSubmit(mockValues, mockRefreshForm)} testID="mock-submit-button">
+      <button onPress={() => onSubmit(mockValues)} testID="mock-submit-button">
         Submit
       </button>
     </mock-FormContainer>
@@ -91,7 +87,7 @@ describe('FormPage continue saved submision then save', () => {
     );
 
     const mockSetOnSaveFormParams = jest.fn();
-    const mockOnSaveFormParams = { values: mockValues, refreshForm: mockRefreshForm };
+    const mockOnSaveFormParams = { values: mockValues };
     jest
       .spyOn(React, 'useState')
       .mockImplementation(() => [mockOnSaveFormParams, mockSetOnSaveFormParams]);
@@ -150,7 +146,7 @@ describe('FormPage continue saved submision then save', () => {
     crudDataPoints.updateDataPoint.mockImplementation(() => Promise.reject('Error'));
 
     const mockSetOnSaveFormParams = jest.fn();
-    const mockOnSaveFormParams = { values: mockValues, refreshForm: mockRefreshForm };
+    const mockOnSaveFormParams = { values: mockValues };
     jest
       .spyOn(React, 'useState')
       .mockImplementation(() => [mockOnSaveFormParams, mockSetOnSaveFormParams]);
@@ -184,7 +180,6 @@ describe('FormPage continue saved submision then save', () => {
       expect(crudDataPoints.updateDataPoint).toHaveBeenCalled();
       expect(consoleErrorSpy).toHaveBeenCalled();
       expect(ToastAndroid.show).toHaveBeenCalled();
-      expect(mockRefreshForm).not.toHaveBeenCalled();
       expect(mockNavigation.navigate).not.toHaveBeenCalled();
     });
   });

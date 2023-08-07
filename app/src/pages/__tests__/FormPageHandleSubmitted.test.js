@@ -29,7 +29,6 @@ const mockValues = {
     7: ['Fried Rice'],
   },
 };
-const mockRefreshForm = jest.fn();
 
 const exampleTestForm = {
   name: 'Testing Form',
@@ -248,7 +247,7 @@ jest.mock('../../form/FormContainer', () => ({ forms, initialValues, onSubmit })
   mockFormContainer(forms, initialValues, onSubmit);
   return (
     <mock-FormContainer>
-      <button onPress={() => onSubmit(mockValues, mockRefreshForm)} testID="mock-submit-button">
+      <button onPress={() => onSubmit(mockValues)} testID="mock-submit-button">
         Submit
       </button>
     </mock-FormContainer>
@@ -316,8 +315,6 @@ describe('FormPage handleOnSubmitForm', () => {
     });
 
     expect(ToastAndroid.show).toHaveBeenCalledTimes(1);
-    // call refreshForm
-    expect(mockRefreshForm).toHaveBeenCalledTimes(1);
     expect(mockNavigation.navigate).toHaveBeenCalledWith('Home', mockRoute.params);
   });
 
@@ -337,7 +334,6 @@ describe('FormPage handleOnSubmitForm', () => {
       expect(crudDataPoints.saveDataPoint).toHaveBeenCalledTimes(1);
       expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
       expect(ToastAndroid.show).toHaveBeenCalledTimes(1);
-      expect(mockRefreshForm).not.toHaveBeenCalled();
       expect(mockNavigation.navigate).not.toHaveBeenCalled();
     });
   });
