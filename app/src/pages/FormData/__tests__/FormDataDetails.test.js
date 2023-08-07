@@ -1,55 +1,46 @@
 import React, { useState } from 'react';
 import { render, renderHook, fireEvent, act, waitFor } from '@testing-library/react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, triggerBeforeRemoveEvent } from '@react-navigation/native';
 
-import { FormState } from '../../../store';
-import FormDataNavigation from '../FormDataNavigation';
+jest.mock('@react-navigation/native');
+
+import { FormState, UIState } from '../../../store';
 import FormDataDetails from '../FormDataDetails';
 import { washInSchool, washInSchoolForm } from '../dummy-for-test-purpose';
+import { cascades } from '../../../lib';
 
-const mockFormDataDetails = jest.fn();
-jest.mock('../FormDataDetails', () => ({ formJSON, values, currentPage, setCurrentPage }) => {
-  mockFormDataDetails(formJSON, values, currentPage, setCurrentPage);
-
-  const form = formJSON ? JSON.parse(formJSON) : {};
-  const currentGroup = form?.question_groups?.[currentPage] || [];
-  const totalPage = form?.question_groups?.length || 0;
-  const questions = currentGroup?.questions || [];
-  const answers = values;
-
-  return (
-    <mock-View>
-      {questions?.map((q, i) => (
-        <mock-ListItem key={i} bottomDivider>
-          <mock-ListItemContent>
-            <mock-ListItemTitle testID={`text-question-${i}`}>{q.question}</mock-ListItemTitle>
-            <mock-ListItemSubtitle>
-              {q.type === 'geo' ? (
-                <mock-View testID={`text-type-geo-${i}`}>
-                  <mock-Text>Latitude: {answers?.[q.id]?.[0]}</mock-Text>
-                  <mock-Text>Longitude: {answers?.[q.id]?.[1]}</mock-Text>
-                </mock-View>
-              ) : (
-                <mock-Text testID={`text-answer-${i}`}>{answers?.[q.id] || q.id}</mock-Text>
-              )}
-            </mock-ListItemSubtitle>
-          </mock-ListItemContent>
-        </mock-ListItem>
-      ))}
-
-      <mock-FormDataNavigation>
-        <mock-Text testID="text-pagination">
-          {currentPage + 1}/{totalPage}
-        </mock-Text>
-      </mock-FormDataNavigation>
-    </mock-View>
-  );
-});
+jest.mock('expo-sqlite');
+jest.mock('../../../lib', () => ({
+  cascades: {
+    loadDataSource: jest.fn(async (source, id) => {
+      return id
+        ? { rows: { length: 1, _array: [{ id: 65, name: 'Administration 65', parent: 0 }] } }
+        : {
+            rows: {
+              length: 2,
+              _array: [
+                { id: 65, name: 'Administration 65', parent: 0 },
+                { id: 66, name: 'Administration 66', parent: 0 },
+              ],
+            },
+          };
+    }),
+  },
+  i18n: {
+    text: jest.fn(() => ({
+      latitude: 'Latitude',
+      longitude: 'Longitude',
+    })),
+  },
+}));
 
 describe('FormDataDetails', () => {
   beforeAll(() => {
     const { json: valuesJSON } = washInSchool;
     act(() => {
+      UIState.update((s) => {
+        s.lang = 'en';
+      });
       FormState.update((s) => {
         s.form = {
           json: JSON.stringify(washInSchoolForm).replace(/'/g, "''"),
@@ -59,7 +50,8 @@ describe('FormDataDetails', () => {
     });
   });
 
-  it('should render correctly', () => {
+  it('should render correctly', async () => {
+    const mockNavigation = useNavigation();
     const { result: resultState } = renderHook(() => useState(0));
     const { result: resultForm } = renderHook(() => FormState.useState((s) => s.form));
     const { result: resultValues } = renderHook(() => FormState.useState((s) => s.currentValues));
@@ -69,6 +61,7 @@ describe('FormDataDetails', () => {
 
     const { getByTestId, debug } = render(
       <FormDataDetails
+        navigation={mockNavigation}
         formJSON={formJSON}
         values={values}
         currentPage={currentPage}
@@ -76,48 +69,23 @@ describe('FormDataDetails', () => {
       />,
     );
 
-    const questionText = getByTestId('text-question-0');
-    expect(questionText).toBeDefined();
-    const answerText = getByTestId('text-answer-0');
-    expect(answerText).toBeDefined();
-  });
-  it('should list changed when navigation clicked', () => {
-    const { result: resultState } = renderHook(() => useState(0));
-    const { result: resultForm } = renderHook(() => FormState.useState((s) => s.form));
-    const { result: resultValues } = renderHook(() => FormState.useState((s) => s.currentValues));
-    const [currentPage, setCurrentPage] = resultState.current;
-    const { json: formJSON } = resultForm.current;
-    const values = resultValues.current;
-
-    const { getByTestId, rerender, debug } = render(
-      <FormDataDetails
-        formJSON={formJSON}
-        values={values}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-      />,
-    );
+    const { result: resultCascade } = renderHook(() => useState(null));
+    const [cascadeValue, setCascadeValue] = resultCascade.current;
 
     act(() => {
-      setCurrentPage(1);
+      setCascadeValue({ id: 65, name: 'Administration 65', parent: 0 });
     });
 
-    rerender(
-      <FormDataDetails
-        formJSON={resultForm.current.json}
-        values={resultValues.current}
-        currentPage={resultState.current[0]}
-        setCurrentPage={setCurrentPage}
-      />,
-    );
+    // Wait for the fetchCascade to complete its asynchronous behavior
+    await waitFor(() => expect(cascades.loadDataSource).toHaveBeenCalledTimes(1));
 
-    const questionText = getByTestId('text-question-0');
-    expect(questionText).toBeDefined();
-    const answerText = getByTestId('text-answer-0');
-    expect(answerText).toBeDefined();
-    const paginationText = getByTestId('text-pagination');
-    expect(paginationText).toBeDefined();
-    expect(paginationText.props.children).toEqual([2, '/', 2]);
+    await waitFor(() => {
+      expect(resultCascade.current[0]).toEqual({ id: 65, name: 'Administration 65', parent: 0 });
+      const questionText = getByTestId('text-question-0');
+      expect(questionText).toBeDefined();
+      const answerText = getByTestId('text-answer-0');
+      expect(answerText).toBeDefined();
+    });
   });
 
   it('should match with snapshot', async () => {
@@ -130,5 +98,74 @@ describe('FormDataDetails', () => {
 
     const tree = render(<FormDataDetails navigation={mockNavigation} route={mockRoute} />);
     await waitFor(() => expect(tree.toJSON()).toMatchSnapshot());
+  });
+
+  it('should list changed when navigation clicked', async () => {
+    const mockNavigation = useNavigation();
+    const { result: resultState } = renderHook(() => useState(0));
+    const { result: resultForm } = renderHook(() => FormState.useState((s) => s.form));
+    const { result: resultValues } = renderHook(() => FormState.useState((s) => s.currentValues));
+    const [currentPage, setCurrentPage] = resultState.current;
+    const { json: formJSON } = resultForm.current;
+    const values = resultValues.current;
+
+    const { getByTestId, rerender, debug } = render(
+      <FormDataDetails
+        navigation={mockNavigation}
+        formJSON={formJSON}
+        values={values}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+      />,
+    );
+
+    const buttonNext = getByTestId('button-next');
+    expect(buttonNext).toBeDefined();
+    fireEvent.press(buttonNext);
+
+    act(() => {
+      setCurrentPage(1);
+    });
+
+    await waitFor(() => {
+      const questionText = getByTestId('text-question-0');
+      expect(questionText).toBeDefined();
+      const answerText = getByTestId('text-answer-0');
+      expect(answerText).toBeDefined();
+      const paginationText = getByTestId('text-pagination');
+      expect(paginationText).toBeDefined();
+      expect(paginationText.props.children).toEqual([2, '/', 2]);
+    });
+  });
+
+  it('should clear currentValues when back button clicked', async () => {
+    const mockNavigation = useNavigation();
+    const { result: resultState } = renderHook(() => useState(0));
+    const { result: resultForm } = renderHook(() => FormState.useState((s) => s.form));
+    const { result: resultValues } = renderHook(() => FormState.useState((s) => s.currentValues));
+    const [currentPage, setCurrentPage] = resultState.current;
+    const { json: formJSON } = resultForm.current;
+    const values = resultValues.current;
+
+    render(
+      <FormDataDetails
+        navigation={mockNavigation}
+        formJSON={formJSON}
+        values={values}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+      />,
+    );
+
+    act(() => {
+      triggerBeforeRemoveEvent({ data: { action: { type: 'FormData' } } });
+      FormState.update((s) => {
+        s.currentValues = {};
+      });
+    });
+
+    await waitFor(() => {
+      expect(resultValues.current).toEqual({});
+    });
   });
 });
