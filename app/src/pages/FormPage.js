@@ -143,7 +143,7 @@ const FormPage = ({ navigation, route }) => {
     return navigation.navigate('Home');
   };
 
-  const handleOnSubmitForm = async (values, refreshForm) => {
+  const handleOnSubmitForm = async (values) => {
     try {
       const answers = {};
       formJSON.question_group
@@ -183,7 +183,15 @@ const FormPage = ({ navigation, route }) => {
       if (Platform.OS === 'android') {
         ToastAndroid.show(trans.successSubmitted, ToastAndroid.LONG);
       }
-      refreshForm();
+
+      FormState.update((s) => {
+        s.currentValues = {};
+        s.questionGroupListCurrentValues = {};
+        s.visitedQuestionGroup = [];
+        s.cascades = {};
+        s.surveyDuration = 0;
+      });
+
       navigation.navigate('Home', { ...route?.params });
     } catch (err) {
       console.error(err);
