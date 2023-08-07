@@ -162,7 +162,7 @@ const FormPage = ({ navigation, route }) => {
       const submitData = {
         form: currentFormId,
         user: userId,
-        name: values.name,
+        name: values?.name || trans.untitled,
         geo: values.geo,
         submitted: 1,
         duration: surveyDuration,
