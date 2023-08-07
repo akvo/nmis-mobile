@@ -97,14 +97,23 @@ const FormData = ({ navigation, route }) => {
     );
   }, [data, search]);
 
-  const handleFormDataListAction = (id) => {
-    if (showSubmitted) {
-      return null;
-    }
+  const goToDetails = (id) => {
+    const findData = filteredData.find((d) => d.id === id);
+    const { json: valuesJSON, name: dataPointName } = findData || {};
+
+    FormState.update((s) => {
+      const valuesParsed = JSON.parse(valuesJSON);
+      s.currentValues = typeof valuesParsed === 'string' ? JSON.parse(valuesParsed) : valuesParsed;
+    });
+
+    navigation.navigate('FormDataDetails', { name: dataPointName });
+  };
+
+  const goToEditForm = (id) => {
     FormState.update((s) => {
       s.surveyStart = getCurrentTimestamp();
     });
-    return navigation.navigate('FormPage', {
+    navigation.navigate('FormPage', {
       ...route?.params,
       dataPointId: id,
       newSubmission: false,
@@ -136,6 +145,8 @@ const FormData = ({ navigation, route }) => {
       });
   };
 
+  const handleOnAction = showSubmitted ? goToDetails : goToEditForm;
+
   return (
     <BaseLayout
       title={route?.params?.name}
@@ -162,11 +173,7 @@ const FormData = ({ navigation, route }) => {
           <ActivityIndicator />
         </View>
       ) : (
-        <BaseLayout.Content
-          data={filteredData}
-          action={handleFormDataListAction}
-          testID="data-point-list"
-        />
+        <BaseLayout.Content data={filteredData} action={handleOnAction} testID="data-point-list" />
       )}
 
       {/* confirmation dialog to sync */}

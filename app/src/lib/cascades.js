@@ -24,11 +24,12 @@ const download = (downloadUrl, fileUrl) => {
   });
 };
 
-const loadDataSource = async (source) => {
+const loadDataSource = async (source, id = null) => {
   const { file: cascadeName } = source;
   const db = SQLite.openDatabase(cascadeName);
-  const readQuery = query.read('nodes');
-  const result = await conn.tx(db, readQuery);
+  const readQuery = id ? query.read('nodes', { id }) : query.read('nodes');
+  const readParam = id ? [id] : [];
+  const result = await conn.tx(db, readQuery, readParam);
   return result;
 };
 
