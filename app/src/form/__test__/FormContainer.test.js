@@ -1,7 +1,8 @@
 import React from 'react';
-import { render, fireEvent, waitFor } from '@testing-library/react-native';
+import { render, fireEvent, waitFor, act } from '@testing-library/react-native';
 jest.useFakeTimers();
 import FormContainer from '../FormContainer';
+import { FormState } from '../../store';
 
 const exampleTestForm = {
   name: 'Testing Form',
@@ -215,10 +216,6 @@ const exampleTestForm = {
   ],
 };
 
-jest.mock('../../assets/administrations.db', () => {
-  return 'data';
-});
-
 describe('FormContainer component on save', () => {
   test('should return values as null onSave callback if currentValues not defined', async () => {
     const handleOnSave = jest.fn();
@@ -227,7 +224,7 @@ describe('FormContainer component on save', () => {
 
     await waitFor(() => {
       expect(handleOnSave).toHaveBeenCalledTimes(1);
-      expect(handleOnSave).toHaveBeenCalledWith(null, expect.any(Function));
+      expect(handleOnSave).toHaveBeenCalledWith(null);
     });
   });
 
@@ -238,6 +235,12 @@ describe('FormContainer component on save', () => {
       1: 'John',
     };
 
+    act(() => {
+      FormState.update((s) => {
+        s.currentValues = modifiedInitialValues;
+      });
+    });
+
     render(
       <FormContainer
         forms={exampleTestForm}
@@ -247,18 +250,19 @@ describe('FormContainer component on save', () => {
     );
 
     await waitFor(() => {
-      expect(handleOnSave).toHaveBeenCalledTimes(2);
-      expect(handleOnSave).toHaveBeenCalledWith(null, expect.any(Function));
-      expect(handleOnSave).toHaveBeenCalledWith(
-        {
-          name: 'John',
-          geo: null,
-          answers: {
-            1: 'John',
-          },
+      expect(handleOnSave).toHaveBeenCalledTimes(1);
+      expect(handleOnSave).toHaveBeenCalledWith({
+        answers: { 1: 'John' },
+        geo: null,
+        name: 'John',
+      });
+      expect(handleOnSave).toHaveBeenCalledWith({
+        name: 'John',
+        geo: null,
+        answers: {
+          1: 'John',
         },
-        expect.any(Function),
-      );
+      });
     });
   });
 });
@@ -276,8 +280,27 @@ describe('FormContainer component on submit', () => {
       7: ['Fried Rice'],
       8: ' ',
     };
+    act(() => {
+      FormState.update((s) => {
+        s.currentValues = modifiedInitialValues;
+      });
+    });
 
-    const { queryByTestId } = render(
+    const { queryByTestId, rerender } = render(
+      <FormContainer
+        forms={exampleTestForm}
+        initialValues={modifiedInitialValues}
+        onSubmit={handleOnSubmit}
+      />,
+    );
+    const formSubmitBtn = queryByTestId('form-btn-submit');
+    expect(formSubmitBtn).toBeDefined();
+
+    act(() => {
+      fireEvent.press(formSubmitBtn);
+    });
+
+    rerender(
       <FormContainer
         forms={exampleTestForm}
         initialValues={modifiedInitialValues}
@@ -285,13 +308,9 @@ describe('FormContainer component on submit', () => {
       />,
     );
 
-    const formSubmitBtn = queryByTestId('form-btn-submit');
-    expect(formSubmitBtn).toBeDefined();
-    fireEvent.press(formSubmitBtn);
-
-    await waitFor(() => expect(handleOnSubmit).toHaveBeenCalledTimes(1));
-    expect(handleOnSubmit).toHaveBeenCalledWith(
-      {
+    await waitFor(() => {
+      expect(handleOnSubmit).toHaveBeenCalledTimes(1);
+      expect(handleOnSubmit).toHaveBeenCalledWith({
         name: 'John',
         geo: null,
         answers: {
@@ -303,9 +322,8 @@ describe('FormContainer component on submit', () => {
           6: ['Traveling'],
           7: ['Fried Rice'],
         },
-      },
-      expect.any(Function),
-    );
+      });
+    });
   });
 
   test('submits form data correctly with dependency', async () => {
@@ -318,9 +336,14 @@ describe('FormContainer component on submit', () => {
       5: ['Bachelor'],
       6: [undefined, 'Traveling'],
       7: ['Rendang'],
-      8: ' ',
       9: '8.9',
     };
+
+    act(() => {
+      FormState.update((s) => {
+        s.currentValues = modifiedInitialValues;
+      });
+    });
 
     const { queryByTestId } = render(
       <FormContainer
@@ -335,23 +358,20 @@ describe('FormContainer component on submit', () => {
     fireEvent.press(formSubmitBtn);
 
     await waitFor(() => expect(handleOnSubmit).toHaveBeenCalledTimes(1));
-    expect(handleOnSubmit).toHaveBeenCalledWith(
-      {
-        name: 'John',
-        geo: null,
-        answers: {
-          1: 'John',
-          2: new Date('01-01-1992'),
-          3: '31',
-          4: ['Male'],
-          5: ['Bachelor'],
-          6: ['Traveling'],
-          7: ['Rendang'],
-          9: '8.9',
-        },
+    expect(handleOnSubmit).toHaveBeenCalledWith({
+      name: 'John',
+      geo: null,
+      answers: {
+        1: 'John',
+        2: new Date('01-01-1992'),
+        3: '31',
+        4: ['Male'],
+        5: ['Bachelor'],
+        6: ['Traveling'],
+        7: ['Rendang'],
+        9: '8.9',
       },
-      expect.any(Function),
-    );
+    });
   });
 
   it.failing(
@@ -370,6 +390,12 @@ describe('FormContainer component on submit', () => {
         9: 0,
       };
 
+      act(() => {
+        FormState.update((s) => {
+          s.currentValues = modifiedInitialValues;
+        });
+      });
+
       const { queryByTestId } = render(
         <FormContainer
           forms={exampleTestForm}
@@ -383,21 +409,18 @@ describe('FormContainer component on submit', () => {
       fireEvent.press(formSubmitBtn);
 
       await waitFor(() => expect(handleOnSubmit).toHaveBeenCalledTimes(1));
-      expect(handleOnSubmit).toHaveBeenCalledWith(
-        {
-          name: 'John',
-          geo: null,
-          answers: {
-            1: 'John',
-            2: new Date('01-01-1992'),
-            3: 0,
-            4: ['Male'],
-            5: ['Bachelor'],
-            9: 0,
-          },
+      expect(handleOnSubmit).toHaveBeenCalledWith({
+        name: 'John',
+        geo: null,
+        answers: {
+          1: 'John',
+          2: new Date('01-01-1992'),
+          3: 0,
+          4: ['Male'],
+          5: ['Bachelor'],
+          9: 0,
         },
-        expect.any(Function),
-      );
+      });
     },
   );
 
@@ -415,6 +438,12 @@ describe('FormContainer component on submit', () => {
       9: 0,
     };
 
+    act(() => {
+      FormState.update((s) => {
+        s.currentValues = modifiedInitialValues;
+      });
+    });
+
     const { queryByTestId } = render(
       <FormContainer
         forms={exampleTestForm}
@@ -428,20 +457,17 @@ describe('FormContainer component on submit', () => {
     fireEvent.press(formSubmitBtn);
 
     await waitFor(() => expect(handleOnSubmit).toHaveBeenCalledTimes(1));
-    expect(handleOnSubmit).toHaveBeenCalledWith(
-      {
-        name: 'John',
-        geo: null,
-        answers: {
-          1: 'John',
-          2: new Date('01-01-1992'),
-          3: 0,
-          4: ['Male'],
-          5: ['Bachelor'],
-          9: 0,
-        },
+    expect(handleOnSubmit).toHaveBeenCalledWith({
+      name: 'John',
+      geo: null,
+      answers: {
+        1: 'John',
+        2: new Date('01-01-1992'),
+        3: 0,
+        4: ['Male'],
+        5: ['Bachelor'],
+        9: 0,
       },
-      expect.any(Function),
-    );
+    });
   });
 });

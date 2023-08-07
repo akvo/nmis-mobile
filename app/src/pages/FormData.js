@@ -110,8 +110,10 @@ const FormData = ({ navigation, route }) => {
   };
 
   const goToEditForm = (id) => {
+    const selectedData = filteredData.find((d) => d.id === id);
     FormState.update((s) => {
       s.surveyStart = getCurrentTimestamp();
+      s.surveyDuration = selectedData?.duration;
     });
     navigation.navigate('FormPage', {
       ...route?.params,

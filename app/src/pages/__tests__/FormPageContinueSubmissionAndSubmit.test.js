@@ -28,7 +28,6 @@ const mockValues = {
     7: ['Fried Rice'],
   },
 };
-const mockRefreshForm = jest.fn();
 const mockCurrentDataPoint = {
   id: 1,
   form: 1,
@@ -268,7 +267,7 @@ jest.mock('../../form/FormContainer', () => ({ forms, initialValues, onSubmit })
   mockFormContainer(forms, initialValues, onSubmit);
   return (
     <mock-FormContainer>
-      <button onPress={() => onSubmit(mockValues, mockRefreshForm)} testID="mock-submit-button">
+      <button onPress={() => onSubmit(mockValues)} testID="mock-submit-button">
         Submit
       </button>
     </mock-FormContainer>
@@ -283,6 +282,10 @@ jest.mock('react', () => ({
 describe('FormPage continue saved submision then submit', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    jest.spyOn(Date, 'now').mockReturnValue(1634123456789);
+    FormState.update((s) => {
+      s.surveyDuration = 0;
+    });
   });
 
   test('should call handleOnSubmitForm with the correct values when the form is submitted', async () => {
@@ -331,11 +334,9 @@ describe('FormPage continue saved submision then submit', () => {
           6: ['Traveling'],
           7: ['Fried Rice'],
         },
-        duration: 1, // in minutes
+        duration: 9, // in minutes
       });
       expect(ToastAndroid.show).toHaveBeenCalledTimes(1);
-      // call refreshForm
-      expect(mockRefreshForm).toHaveBeenCalledTimes(1);
       expect(mockNavigation.navigate).toHaveBeenCalledWith('Home', mockRoute.params);
     });
   });
@@ -368,7 +369,6 @@ describe('FormPage continue saved submision then submit', () => {
       expect(crudDataPoints.updateDataPoint).toHaveBeenCalledTimes(1);
       expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
       expect(ToastAndroid.show).toHaveBeenCalledTimes(1);
-      expect(mockRefreshForm).not.toHaveBeenCalled();
       expect(mockNavigation.navigate).not.toHaveBeenCalled();
     });
   });

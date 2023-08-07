@@ -21,6 +21,7 @@ const FormPage = ({ navigation, route }) => {
   const selectedForm = FormState.useState((s) => s.form);
   const surveyDuration = FormState.useState((s) => s.surveyDuration);
   const surveyStart = FormState.useState((s) => s.surveyStart);
+  const currentValues = FormState.useState((s) => s.currentValues);
   const userId = UserState.useState((s) => s.id);
   const [onSaveFormParams, setOnSaveFormParams] = useState({});
   const [showDialogMenu, setShowDialogMenu] = useState(false);
@@ -33,7 +34,6 @@ const FormPage = ({ navigation, route }) => {
   // continue saved submission
   const savedDataPointId = route?.params?.dataPointId;
   const isNewSubmission = route?.params?.newSubmission;
-  const [initialValues, setInitialValues] = useState({});
   const [currentDataPoint, setCurrentDataPoint] = useState({});
   const [loading, setLoading] = useState(false);
 
@@ -63,7 +63,10 @@ const FormPage = ({ navigation, route }) => {
     const dpValue = await crudDataPoints.selectDataPointById({ id: savedDataPointId });
     setCurrentDataPoint(dpValue);
     if (dpValue?.json && Object.keys(dpValue.json)?.length) {
-      setInitialValues(dpValue.json);
+      FormState.update((s) => {
+        s.currentValues = dpValue.json;
+        s.questionGroupListCurrentValues = dpValue.json;
+      });
     }
     setLoading(false);
   }, [savedDataPointId]);
@@ -106,7 +109,7 @@ const FormPage = ({ navigation, route }) => {
       const dbCall = isNewSubmission
         ? crudDataPoints.saveDataPoint
         : crudDataPoints.updateDataPoint;
-      const duration = getDurationInMinutes(surveyStart);
+      const duration = getDurationInMinutes(surveyStart) + surveyDuration;
       await dbCall({
         ...currentDataPoint,
         ...saveData,
@@ -140,7 +143,7 @@ const FormPage = ({ navigation, route }) => {
     return navigation.navigate('Home');
   };
 
-  const handleOnSubmitForm = async (values, refreshForm) => {
+  const handleOnSubmitForm = async (values) => {
     try {
       const answers = {};
       formJSON.question_group
@@ -162,7 +165,7 @@ const FormPage = ({ navigation, route }) => {
       const submitData = {
         form: currentFormId,
         user: userId,
-        name: values.name,
+        name: values?.name || trans.untitled,
         geo: values.geo,
         submitted: 1,
         duration: surveyDuration,
@@ -171,7 +174,7 @@ const FormPage = ({ navigation, route }) => {
       const dbCall = isNewSubmission
         ? crudDataPoints.saveDataPoint
         : crudDataPoints.updateDataPoint;
-      const duration = getDurationInMinutes(surveyStart);
+      const duration = getDurationInMinutes(surveyStart) + surveyDuration;
       await dbCall({
         ...currentDataPoint,
         ...submitData,
@@ -180,7 +183,15 @@ const FormPage = ({ navigation, route }) => {
       if (Platform.OS === 'android') {
         ToastAndroid.show(trans.successSubmitted, ToastAndroid.LONG);
       }
-      refreshForm();
+
+      FormState.update((s) => {
+        s.currentValues = {};
+        s.questionGroupListCurrentValues = {};
+        s.visitedQuestionGroup = [];
+        s.cascades = {};
+        s.surveyDuration = 0;
+      });
+
       navigation.navigate('Home', { ...route?.params });
     } catch (err) {
       console.error(err);
@@ -220,7 +231,7 @@ const FormPage = ({ navigation, route }) => {
       {!loading ? (
         <FormContainer
           forms={formJSON}
-          initialValues={initialValues}
+          initialValues={currentValues}
           onSubmit={handleOnSubmitForm}
           onSave={onSaveCallback}
           setShowDialogMenu={setShowDialogMenu}
