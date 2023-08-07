@@ -235,6 +235,12 @@ describe('FormContainer component on save', () => {
       1: 'John',
     };
 
+    act(() => {
+      FormState.update((s) => {
+        s.currentValues = modifiedInitialValues;
+      });
+    });
+
     render(
       <FormContainer
         forms={exampleTestForm}
@@ -244,8 +250,15 @@ describe('FormContainer component on save', () => {
     );
 
     await waitFor(() => {
-      expect(handleOnSave).toHaveBeenCalledTimes(2);
-      expect(handleOnSave).toHaveBeenCalledWith(null, expect.any(Function));
+      expect(handleOnSave).toHaveBeenCalledTimes(1);
+      expect(handleOnSave).toHaveBeenCalledWith(
+        {
+          answers: { 1: 'John' },
+          geo: null,
+          name: 'John',
+        },
+        expect.any(Function),
+      );
       expect(handleOnSave).toHaveBeenCalledWith(
         {
           name: 'John',
