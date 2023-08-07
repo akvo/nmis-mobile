@@ -283,6 +283,10 @@ jest.mock('react', () => ({
 describe('FormPage continue saved submision then submit', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    jest.spyOn(Date, 'now').mockReturnValue(1634123456789);
+    FormState.update((s) => {
+      s.surveyDuration = 0;
+    });
   });
 
   test('should call handleOnSubmitForm with the correct values when the form is submitted', async () => {
@@ -331,7 +335,7 @@ describe('FormPage continue saved submision then submit', () => {
           6: ['Traveling'],
           7: ['Fried Rice'],
         },
-        duration: 1, // in minutes
+        duration: 9, // in minutes
       });
       expect(ToastAndroid.show).toHaveBeenCalledTimes(1);
       // call refreshForm

@@ -109,7 +109,7 @@ const FormPage = ({ navigation, route }) => {
       const dbCall = isNewSubmission
         ? crudDataPoints.saveDataPoint
         : crudDataPoints.updateDataPoint;
-      const duration = getDurationInMinutes(surveyStart);
+      const duration = getDurationInMinutes(surveyStart) + surveyDuration;
       await dbCall({
         ...currentDataPoint,
         ...saveData,
@@ -174,7 +174,7 @@ const FormPage = ({ navigation, route }) => {
       const dbCall = isNewSubmission
         ? crudDataPoints.saveDataPoint
         : crudDataPoints.updateDataPoint;
-      const duration = getDurationInMinutes(surveyStart);
+      const duration = getDurationInMinutes(surveyStart) + surveyDuration;
       await dbCall({
         ...currentDataPoint,
         ...submitData,
