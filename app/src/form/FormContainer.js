@@ -47,11 +47,11 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave, setShowDia
     if (onSave) {
       const results = checkValuesBeforeCallback(currentValues);
       if (!Object.keys(results).length) {
-        return onSave(null, refreshForm);
+        return onSave(null);
       }
       const { dpName, dpGeo } = generateDataPointName(forms, currentValues, cascades);
       const values = { name: dpName, geo: dpGeo, answers: results };
-      return onSave(values, refreshForm);
+      return onSave(values);
     }
   }, [currentValues, onSave]);
 
@@ -67,22 +67,11 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave, setShowDia
     return formDefinition.question_group.find((qg) => qg.id === activeGroup);
   }, [formDefinition, activeGroup]);
 
-  const refreshForm = () => {
-    FormState.update((s) => {
-      s.currentValues = {};
-      s.questionGroupListCurrentValues = {};
-      s.visitedQuestionGroup = [];
-      s.cascades = {};
-      s.surveyDuration = 0;
-    });
-    formRef.current?.resetForm();
-  };
-
   const handleOnSubmitForm = (values) => {
     const results = checkValuesBeforeCallback(values);
     if (onSubmit) {
       const { dpName, dpGeo } = generateDataPointName(forms, currentValues, cascades);
-      onSubmit({ name: dpName, geo: dpGeo, answers: results }, refreshForm);
+      onSubmit({ name: dpName, geo: dpGeo, answers: results });
     }
   };
 
