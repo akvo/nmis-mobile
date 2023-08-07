@@ -2,12 +2,14 @@ import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { ListItem } from '@rneui/themed';
 
-import { FormState } from '../../store';
-import { cascades } from '../../lib';
+import { FormState, UIState } from '../../store';
+import { cascades, i18n } from '../../lib';
 import { BaseLayout } from '../../components';
 import FormDataNavigation from './FormDataNavigation';
 
 const SubtitleContent = ({ index, answers, type, id, source }) => {
+  const activeLang = UIState.useState((s) => s.lang);
+  const trans = i18n.text(activeLang);
   const [cascadeValue, setCascadeValue] = useState(null);
 
   const fetchCascade = useCallback(async () => {
@@ -28,18 +30,18 @@ const SubtitleContent = ({ index, answers, type, id, source }) => {
     case 'geo':
       return (
         <View testID={`text-type-geo-${index}`}>
-          <Text>Latitude: {answers?.[id]?.[0]}</Text>
-          <Text>Longitude: {answers?.[id]?.[1]}</Text>
+          <Text>
+            {trans.latitude}: {answers?.[id]?.[0]}
+          </Text>
+          <Text>
+            {trans.longitude}: {answers?.[id]?.[1]}
+          </Text>
         </View>
       );
-
-      break;
     case 'cascade':
       return <Text testID={`text-answer-${index}`}>{cascadeValue ? cascadeValue.name : '-'}</Text>;
-      break;
     default:
       return <Text testID={`text-answer-${index}`}>{answers?.[id] || '-'}</Text>;
-      break;
   }
 };
 
