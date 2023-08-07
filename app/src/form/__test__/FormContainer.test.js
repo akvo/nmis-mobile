@@ -315,7 +315,7 @@ describe('FormContainer component on submit', () => {
     );
 
     await waitFor(() => {
-      //        expect(handleOnSubmit).toHaveBeenCalledTimes(1)
+      expect(handleOnSubmit).toHaveBeenCalledTimes(1);
       expect(handleOnSubmit).toHaveBeenCalledWith(
         {
           name: 'John',
