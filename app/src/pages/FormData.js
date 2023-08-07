@@ -102,7 +102,8 @@ const FormData = ({ navigation, route }) => {
     const { json: valuesJSON, name: dataPointName } = findData || {};
 
     FormState.update((s) => {
-      s.currentValues = JSON.parse(JSON.parse(valuesJSON));
+      const valuesParsed = JSON.parse(valuesJSON);
+      s.currentValues = typeof valuesParsed === 'string' ? JSON.parse(valuesParsed) : valuesParsed;
     });
 
     navigation.navigate('FormDataDetails', { name: dataPointName });
