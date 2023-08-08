@@ -100,7 +100,7 @@ const syncFormSubmission = async () => {
         duration: Math.round(d.duration),
         submittedAt: d.submittedAt,
         submitter: user.name,
-        geo: geo,
+        geo: geo || [],
         answers: JSON.parse(d.json.replace(/''/g, "'")),
       };
       console.info('[syncFormSubmision] SyncData:', syncData);
