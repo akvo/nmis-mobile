@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { View, Text } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { FieldLabel } from '../support';
 import { styles } from '../styles';
 import { FormState, UIState } from '../../store';
-import { i18n } from '../../lib';
+import { i18n, cascades } from '../../lib';
 
 const TypeCascade = ({
   onChange,
@@ -60,8 +60,8 @@ const TypeCascade = ({
     onChange(id, finalValues);
     if (finalValues) {
       const { options: selectedOptions, value: selectedValue } = dropdownValues.pop();
-      const findSelected = selectedOptions?.find((o) => o.id === selectedValue) || [];
-      const cascadeName = findSelected?.name || null;
+      const findSelected = selectedOptions?.find((o) => o.id === selectedValue);
+      const cascadeName = findSelected?.name;
       FormState.update((s) => {
         s.cascades = { ...s.cascades, [id]: cascadeName };
       });
@@ -86,6 +86,27 @@ const TypeCascade = ({
       };
     });
   }, [dataSource, source, values, id]);
+
+  const fetchCascade = useCallback(async () => {
+    if (source && values?.[id]?.length) {
+      const cascadeID = values[id].slice(-1)[0];
+      const { rows } = await cascades.loadDataSource(source, cascadeID);
+      const { length: rowLength, _array: rowItems } = rows;
+      const csValue = rowLength ? rowItems[0] : null;
+      if (csValue) {
+        FormState.update((s) => {
+          s.cascades = {
+            ...s.cascades,
+            [id]: csValue.name,
+          };
+        });
+      }
+    }
+  }, [source, values, id]);
+
+  useEffect(() => {
+    fetchCascade();
+  }, [fetchCascade]);
 
   useEffect(() => {
     if (dropdownItems.length === 0 && initialDropdowns.length) {
