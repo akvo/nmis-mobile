@@ -1,14 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
+import { Field } from 'formik';
+import moment from 'moment';
 import { FieldLabel } from '../support';
 import { styles } from '../styles';
 import { Input } from '@rneui/themed';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 const TypeDate = ({ onChange, values, keyform, id, name, tooltip, required, requiredSign }) => {
-  const now = new Date();
-  const [showDatepicker, setShowDatePicker] = React.useState(false);
+  const [showDatepicker, setShowDatePicker] = useState(false);
 
+  const getDate = (value) => {
+    return typeof value === 'string' ? moment(value, 'YYYY-MM-DD').toDate() : value || new Date();
+  };
+
+  const datePickerValue = getDate(values?.[id]);
   return (
     <View>
       <FieldLabel
@@ -17,17 +23,26 @@ const TypeDate = ({ onChange, values, keyform, id, name, tooltip, required, requ
         tooltip={tooltip}
         requiredSign={required ? requiredSign : null}
       />
-      <Input
-        inputContainerStyle={styles.inputFieldContainer}
-        onPressIn={() => setShowDatePicker(true)}
-        showSoftInputOnFocus={false}
-        value={values?.[id]?.toLocaleDateString()}
-        testID="type-date"
-      />
+      <Field name={id}>
+        {({ field, meta }) => {
+          const dateValue = field?.value ? getDate(field.value).toLocaleDateString() : field?.value;
+          const fieldProps = { ...field, value: dateValue };
+          return (
+            <Input
+              inputContainerStyle={styles.inputFieldContainer}
+              onPressIn={() => setShowDatePicker(true)}
+              showSoftInputOnFocus={false}
+              testID="type-date"
+              errorMessage={meta.touched && meta.error ? meta.error : ''}
+              {...fieldProps}
+            />
+          );
+        }}
+      </Field>
       {showDatepicker && (
         <DateTimePicker
           testID="date-time-picker"
-          value={values?.[id] || now}
+          value={datePickerValue}
           mode="date"
           onChange={({ nativeEvent: val }) => {
             setShowDatePicker(false);
