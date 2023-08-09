@@ -23,15 +23,11 @@ const TypeOption = ({
   }, [option]);
   const activeLang = UIState.useState((s) => s.lang);
   const trans = i18n.text(activeLang);
+  const requiredValue = required ? requiredSign : null;
 
   return (
     <View style={styles.optionContainer}>
-      <FieldLabel
-        keyform={keyform}
-        name={name}
-        tooltip={tooltip}
-        requiredSign={required ? requiredSign : null}
-      />
+      <FieldLabel keyform={keyform} name={name} tooltip={tooltip} requiredSign={requiredValue} />
       {isRadioGroup ? (
         option.map((opt, opti) => (
           <CheckBox

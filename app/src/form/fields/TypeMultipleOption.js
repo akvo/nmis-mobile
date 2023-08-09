@@ -23,15 +23,11 @@ const TypeMultipleOption = ({
   }, [option]);
   const activeLang = UIState.useState((s) => s.lang);
   const trans = i18n.text(activeLang);
+  const requiredValue = required ? requiredSign : null;
 
   return (
     <View style={styles.multipleOptionContainer}>
-      <FieldLabel
-        keyform={keyform}
-        name={name}
-        tooltip={tooltip}
-        requiredSign={required ? requiredSign : null}
-      />
+      <FieldLabel keyform={keyform} name={name} tooltip={tooltip} requiredSign={requiredValue} />
       {isCheckBox ? (
         option.map((opt, opti) => (
           <CheckBox
