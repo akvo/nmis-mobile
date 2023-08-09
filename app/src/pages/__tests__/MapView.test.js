@@ -39,16 +39,6 @@ const mockSelectedForm = {
   name: 'Health Facilities',
 };
 
-//    const webViewEl = getByTestId('webview-map');
-//    // Mock the data that will be passed in the onMessage event
-//    const mockMarkerData = { lat: route.params.lat, lng: route.params.lng, distance: 21 };
-//    const mockEventData = JSON.stringify({ type: 'markerClicked', data: mockMarkerData });
-//
-//    // Trigger the onMessage event
-//    fireEvent(webViewEl, 'onMessage', {
-//      nativeEvent: { data: mockEventData },
-//    });
-
 describe('MapView', () => {
   beforeAll(() => {
     // update FormState to store selectedForm
@@ -181,6 +171,15 @@ describe('MapView', () => {
 
     const [markerData, setMarkerData] = result.current;
     const [visible, setVisible] = resultVisible.current;
+    const webViewEl = getByTestId('webview-map');
+    // Mock the data that will be passed in the onMessage event
+    const mockMarkerData = { lat: route.params.lat, lng: route.params.lng, distance: 21 };
+    const mockEventData = JSON.stringify({ type: 'markerClicked', data: mockMarkerData });
+
+    // Trigger the onMessage event
+    fireEvent(webViewEl, 'onMessage', {
+      nativeEvent: { data: mockEventData },
+    });
 
     const buttonEl = getByTestId('button-selected-loc');
     expect(buttonEl).toBeDefined();
