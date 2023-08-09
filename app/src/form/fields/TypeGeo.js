@@ -48,7 +48,7 @@ const TypeGeo = ({ onChange, values, keyform, id, name, tooltip, required, requi
            * accuracy number in meters, doc: https://docs.expo.dev/versions/latest/sdk/location/#locationgeocodedlocation
            */
           setGpsAccuracy(Math.floor(accuracy));
-          console.info('GPS accuracy:', accuracy, 'GPS Threshold:', gpsThreshold);
+          // console.info('GPS accuracy:', accuracy, 'GPS Threshold:', gpsThreshold);
           if ((accuracy <= gpsThreshold && !openMap) || openMap) {
             onChange(id, [lat, lng]);
             setLoading({
