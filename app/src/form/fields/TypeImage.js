@@ -4,7 +4,7 @@ import { Image, Button, Dialog } from '@rneui/themed';
 import * as ImagePicker from 'expo-image-picker';
 import { Stack } from '../../components';
 import { FieldLabel } from '../support';
-import { UIState } from '../../store';
+import { FormState } from '../../store';
 import { i18n } from '../../lib';
 
 // TODO: getImageBase64 (ARF)
@@ -13,7 +13,7 @@ import { i18n } from '../../lib';
 const TypeImage = ({ onChange, keyform, id, name, tooltip, required, requiredSign }) => {
   const [showDialog, setShowDialog] = React.useState(false);
   const [selectedImage, setSelectedImage] = React.useState(null);
-  const activeLang = UIState.useState((s) => s.lang);
+  const activeLang = FormState.useState((s) => s.lang);
   const trans = i18n.text(activeLang);
 
   React.useEffect(() => {
