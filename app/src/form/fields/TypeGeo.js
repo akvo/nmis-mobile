@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { View } from 'react-native';
 import { Text, Button } from '@rneui/themed';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -10,11 +10,12 @@ import { loc, i18n } from '../../lib';
 
 const TypeGeo = ({ onChange, values, keyform, id, name, tooltip, required, requiredSign }) => {
   const [errorMsg, setErrorMsg] = useState(null);
+  const [gpsAccuracy, setGpsAccuracy] = useState(null);
   const [loading, setLoading] = useState({ current: false, map: false });
   const currentValues = FormState.useState((s) => s.currentValues);
   const [latitude, longitude] = currentValues?.[id] || [];
 
-  const gpsAccuracy = BuildParamsState.useState((s) => s.gpsAccuracy);
+  const gpsThreshold = BuildParamsState.useState((s) => s.gpsThreshold);
   const isOnline = UIState.useState((s) => s.online);
   const activeLang = FormState.useState((s) => s.lang);
 
@@ -24,39 +25,59 @@ const TypeGeo = ({ onChange, values, keyform, id, name, tooltip, required, requi
   const route = useRoute();
   const requiredValue = required ? requiredSign : null;
 
-  const handleGetCurrLocation = async (openMap = false) => {
-    const loadingKey = openMap ? 'map' : 'current';
-    setLoading({
-      ...loading,
-      [loadingKey]: true,
-    });
-    await loc.getCurrentLocation(
-      ({ coords }) => {
-        const { latitude: lat, longitude: lng, accuracy } = coords;
-        /**
-         * accuracy number in meters, doc: https://docs.expo.dev/versions/latest/sdk/location/#locationgeocodedlocation
-         */
-        console.info('accuracy: ', accuracy, 'threshold:', gpsAccuracy, lat, lng);
-        onChange(id, [lat, lng]);
-        if (openMap) {
-          const params = { latitude: lat, longitude: lng, id };
-          navigation.navigate('MapView', { ...route?.params, ...params });
-        }
-
-        setLoading({
-          ...loading,
-          [loadingKey]: false,
-        });
-      },
-      ({ message }) => {
-        setLoading({
-          ...loading,
-          [loadingKey]: false,
-        });
-        setErrorMsg(message);
-      },
-    );
+  const handleOpenMap = () => {
+    if (latitude && longitude) {
+      const params = { latitude, longitude, id };
+      navigation.navigate('MapView', { ...route?.params, ...params });
+    } else {
+      handleGetCurrLocation(true);
+    }
   };
+
+  const handleGetCurrLocation = useCallback(
+    async (openMap = false) => {
+      const loadingKey = openMap ? 'map' : 'current';
+      setLoading({
+        ...loading,
+        [loadingKey]: true,
+      });
+      await loc.getCurrentLocation(
+        ({ coords }) => {
+          const { latitude: lat, longitude: lng, accuracy } = coords;
+          /**
+           * accuracy number in meters, doc: https://docs.expo.dev/versions/latest/sdk/location/#locationgeocodedlocation
+           */
+          setGpsAccuracy(Math.floor(accuracy));
+          console.info('GPS accuracy:', accuracy, 'GPS Threshold:', gpsThreshold);
+          if ((accuracy <= gpsThreshold && !openMap) || openMap) {
+            onChange(id, [lat, lng]);
+            setLoading({
+              ...loading,
+              [loadingKey]: false,
+            });
+          }
+          if (openMap) {
+            const params = { latitude: lat, longitude: lng, id };
+            navigation.navigate('MapView', { ...route?.params, ...params });
+          }
+        },
+        ({ message }) => {
+          setLoading({
+            ...loading,
+            [loadingKey]: false,
+          });
+          setErrorMsg(message);
+        },
+      );
+    },
+    [gpsThreshold],
+  );
+
+  useEffect(() => {
+    if (gpsAccuracy && gpsAccuracy >= gpsThreshold && loading.current) {
+      handleGetCurrLocation(false);
+    }
+  }, [handleGetCurrLocation, gpsAccuracy, gpsThreshold, loading.current]);
 
   return (
     <View>
@@ -77,14 +98,10 @@ const TypeGeo = ({ onChange, values, keyform, id, name, tooltip, required, requi
         )}
         <View style={styles.geoButtonGroup}>
           <Button onPress={() => handleGetCurrLocation(false)} testID="button-curr-location">
-            {loading.current ? trans.loadingText : trans.buttonCurrLocation}
+            {loading.current ? trans.fetchingLocation : trans.buttonCurrLocation}
           </Button>
           {isOnline && (
-            <Button
-              type="outline"
-              onPress={() => handleGetCurrLocation(true)}
-              testID="button-open-map"
-            >
+            <Button type="outline" onPress={handleOpenMap} testID="button-open-map">
               {loading.map ? trans.loadingText : trans.buttonOpenMap}
             </Button>
           )}
