@@ -12,14 +12,21 @@ import { Asset } from 'expo-asset';
 import * as FileSystem from 'expo-file-system';
 import { Button, Dialog, Text } from '@rneui/themed';
 import { FormState, UIState } from '../store';
-import { loc, i18n } from '../lib';
+import { i18n } from '../lib';
 
 const MapView = ({ navigation, route }) => {
+  const {
+    latitude: latParam,
+    longitude: lngParam,
+    id: questionID,
+    current_location: currentLocation,
+  } = route?.params;
   const [htmlContent, setHtmlContent] = useState(null);
   const [loading, setLoading] = useState(true);
+
   const [markerData, setMarkerData] = useState({
-    lat: null,
-    lng: null,
+    lat: latParam,
+    lng: lngParam,
   });
   const webViewRef = useRef(null);
   const selectedForm = FormState.useState((s) => s.form);
@@ -35,53 +42,39 @@ const MapView = ({ navigation, route }) => {
   };
 
   const handleCurrentLocation = () => {
-    setLoading(true);
-    loc.getCurrentLocation(
-      (res) => {
-        const { latitude: lat, longitude: lng } = res?.coords;
-        setMarkerData({
-          ...markerData,
-          lat,
-          lng,
-        });
-
-        const eventData = JSON.stringify({ type: 'changeMarker', data: { lat, lng } });
-        webViewRef.current.postMessage(eventData);
-        setLoading(false);
-        goBack();
-      },
-      (err) => {
-        setLoading(false);
-        setLocation({});
-        if (Platform.OS === 'android') {
-          ToastAndroid.show(err.message, ToastAndroid.SHORT);
-        }
-      },
-    );
+    setMarkerData(currentLocation);
+    FormState.update((s) => {
+      s.currentValues = {
+        ...s.currentValues,
+        [questionID]: [currentLocation.lat, currentLocation.lng],
+      };
+    });
+    const eventData = JSON.stringify({
+      type: 'changeMarker',
+      data: currentLocation,
+    });
+    webViewRef.current.postMessage(eventData);
+    goBack();
   };
 
   const loadHtml = async () => {
     const [{ localUri }] = await Asset.loadAsync(require('../../assets/map.html'));
-    let fileContents = await FileSystem.readAsStringAsync(localUri);
-    let { latitude: lat, longitude: lng } = route?.params;
-    lat = lat || 0;
-    lng = lng || 0;
-    fileContents = fileContents.replace(/{{latitude}}/g, lat).replace(/{{longitude}}/g, lng);
-    setHtmlContent(fileContents);
+    const fileContents = await FileSystem.readAsStringAsync(localUri);
+    const htmlContents = fileContents
+      .replace(/{{latitude}}/g, latParam)
+      .replace(/{{longitude}}/g, lngParam);
+    setHtmlContent(htmlContents);
   };
 
   const handleUseSelectedLocation = () => {
     const { lat, lng } = markerData;
-    const { id: questionID } = route?.params;
-    if (questionID) {
-      FormState.update((s) => {
-        s.currentValues = {
-          ...s.currentValues,
-          [questionID]: [lat, lng],
-        };
-      });
-      goBack();
-    }
+    FormState.update((s) => {
+      s.currentValues = {
+        ...s.currentValues,
+        [questionID]: [lat, lng],
+      };
+    });
+    goBack();
   };
 
   useEffect(() => {
