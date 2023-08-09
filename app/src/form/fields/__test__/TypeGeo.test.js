@@ -263,6 +263,10 @@ describe('TypeGeo', () => {
       const [latitude, longitude] = geoField || {};
 
       expect(mockNavigation.navigate).toHaveBeenCalledWith('MapView', {
+        current_location: {
+          lat: 35677,
+          lng: -7811,
+        },
         id: 'geoField',
         latitude,
         longitude,
@@ -273,13 +277,16 @@ describe('TypeGeo', () => {
   it('should open open map directly without fetching location when lat,long already exists', async () => {
     const latitude = 37.1234;
     const longitude = -112.6789;
-    act(() => {
-      FormState.update((s) => {
-        s.currentValues = {
-          geoField: [latitude, longitude],
-        };
+    Location.getCurrentPositionAsync.mockImplementation(() => {
+      return Promise.resolve({
+        coords: {
+          latitude,
+          longitude,
+          accuracy: 20,
+        },
       });
     });
+
     const mockNavigation = useNavigation();
     const { getByTestId, getByText, debug } = render(
       <TypeGeo
@@ -290,6 +297,16 @@ describe('TypeGeo', () => {
         navigation={mockNavigation}
       />,
     );
+    act(() => {
+      loc.getCurrentLocation(({ coords }) => {
+        FormState.update((s) => {
+          s.currentValues = {
+            ...s.currentValues,
+            geoField: [coords.latitude, coords.longitude],
+          };
+        });
+      });
+    });
 
     const buttonCurrLoc = getByTestId('button-open-map');
     expect(buttonCurrLoc).toBeDefined();
@@ -300,6 +317,10 @@ describe('TypeGeo', () => {
     await waitFor(() => {
       expect(mockGetCurrentLocation).toHaveBeenCalledTimes(0);
       expect(mockNavigation.navigate).toHaveBeenCalledWith('MapView', {
+        current_location: {
+          lat: latitude,
+          lng: longitude,
+        },
         id: 'geoField',
         latitude,
         longitude,
