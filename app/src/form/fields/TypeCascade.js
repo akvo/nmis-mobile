@@ -21,6 +21,7 @@ const TypeCascade = ({
   const [dropdownItems, setDropdownItems] = useState([]);
   const activeLang = UIState.useState((s) => s.lang);
   const trans = i18n.text(activeLang);
+  const requiredValue = required ? requiredSign : null;
 
   const groupBy = (array, property) => {
     const gd = array
@@ -116,12 +117,7 @@ const TypeCascade = ({
 
   return (
     <View testID="view-type-cascade">
-      <FieldLabel
-        keyform={keyform}
-        name={name}
-        tooltip={tooltip}
-        requiredSign={required ? requiredSign : null}
-      />
+      <FieldLabel keyform={keyform} name={name} tooltip={tooltip} requiredSign={requiredValue} />
       <Text testID="text-values" style={styles.cascadeValues}>
         {values[id]}
       </Text>

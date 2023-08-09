@@ -15,14 +15,10 @@ const TypeDate = ({ onChange, values, keyform, id, name, tooltip, required, requ
   };
 
   const datePickerValue = getDate(values?.[id]);
+  const requiredValue = required ? requiredSign : null;
   return (
     <View>
-      <FieldLabel
-        keyform={keyform}
-        name={name}
-        tooltip={tooltip}
-        requiredSign={required ? requiredSign : null}
-      />
+      <FieldLabel keyform={keyform} name={name} tooltip={tooltip} requiredSign={requiredValue} />
       <Field name={id}>
         {({ field, meta }) => {
           const dateValue = field?.value ? getDate(field.value).toLocaleDateString() : field?.value;
