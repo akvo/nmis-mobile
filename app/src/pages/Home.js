@@ -10,6 +10,7 @@ const Home = ({ navigation, route }) => {
   const params = route?.params || null;
   const [search, setSearch] = useState(null);
   const [data, setData] = useState([]);
+  const [appLang, setAppLang] = useState('en');
 
   const activeLang = UIState.useState((s) => s.lang);
   const trans = i18n.text(activeLang);
@@ -30,7 +31,8 @@ const Home = ({ navigation, route }) => {
   };
 
   useEffect(() => {
-    if (params || currentUserId) {
+    if (params || currentUserId || activeLang !== appLang) {
+      setAppLang(activeLang);
       FormState.update((s) => {
         s.form = {};
       });
@@ -47,7 +49,7 @@ const Home = ({ navigation, route }) => {
         setData(forms);
       });
     }
-  }, [currentUserId, params]);
+  }, [currentUserId, params, appLang, activeLang]);
 
   const filteredData = useMemo(() => {
     return data.filter(
