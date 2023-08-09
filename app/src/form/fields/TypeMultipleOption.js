@@ -55,7 +55,7 @@ const TypeMultipleOption = ({
           labelField="label"
           valueField="name"
           searchPlaceholder={trans.searchPlaceholder}
-          placeholder={trans.selectItem}
+          placeholder={trans.selectMultiItem}
           value={values?.[id] || []}
           onChange={(value) => {
             if (onChange) {

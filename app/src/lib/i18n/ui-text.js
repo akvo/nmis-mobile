@@ -84,6 +84,7 @@ const uiText = {
     loadingText: 'Loading...',
     buttonSelectedLoc: 'Use selected location',
     fetchingLocation: 'Fetching location...',
+    selectMultiItem: 'Select multiple item(s)',
   },
   fr: {
     latitude: 'Latitude',
@@ -171,6 +172,7 @@ const uiText = {
     loadingText: 'Chargement...',
     buttonSelectedLoc: "Utiliser l'emplacement sélectionné",
     fetchingLocation: "Récupération de l'emplacement...",
+    selectMultiItem: 'Sélectionnez plusieurs éléments',
   },
 };
 
