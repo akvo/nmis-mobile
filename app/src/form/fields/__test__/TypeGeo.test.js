@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import * as Location from 'expo-location';
 
 import TypeGeo from '../TypeGeo';
-import { UIState, FormState } from '../../../store';
+import { UIState, FormState, BuildParamsState } from '../../../store';
 import { loc } from '../../../lib';
 
 jest.mock('expo-location');
@@ -16,6 +16,9 @@ describe('TypeGeo', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     act(() => {
+      BuildParamsState.update((s) => {
+        s.gpsThreshold = 20;
+      });
       FormState.update((s) => {
         s.currentValues = {
           geoField: null,
@@ -264,6 +267,81 @@ describe('TypeGeo', () => {
         latitude,
         longitude,
       });
+    });
+  });
+
+  it('should open open map directly without fetching location when lat,long already exists', async () => {
+    const latitude = 37.1234;
+    const longitude = -112.6789;
+    act(() => {
+      FormState.update((s) => {
+        s.currentValues = {
+          geoField: [latitude, longitude],
+        };
+      });
+    });
+    const mockNavigation = useNavigation();
+    const { getByTestId, getByText, debug } = render(
+      <TypeGeo
+        onChange={() => jest.fn()}
+        values={{ geoField: null }}
+        id="geoField"
+        name="Geolocation"
+        navigation={mockNavigation}
+      />,
+    );
+
+    const buttonCurrLoc = getByTestId('button-open-map');
+    expect(buttonCurrLoc).toBeDefined();
+    fireEvent.press(buttonCurrLoc);
+
+    const mockGetCurrentLocation = jest.fn();
+
+    await waitFor(() => {
+      expect(mockGetCurrentLocation).toHaveBeenCalledTimes(0);
+      expect(mockNavigation.navigate).toHaveBeenCalledWith('MapView', {
+        id: 'geoField',
+        latitude,
+        longitude,
+      });
+    });
+  });
+
+  it('should loop fetching location when accuracy exceeded the threshold', async () => {
+    Location.requestForegroundPermissionsAsync.mockImplementation(() => {
+      return Promise.resolve({ status: 'granted' });
+    });
+    Location.getCurrentPositionAsync.mockImplementation(() => {
+      return Promise.resolve({
+        coords: {
+          latitude: 12.345,
+          longitude: -67.89,
+          accuracy: 200,
+        },
+      });
+    });
+
+    const values = { geoField: [] };
+    const mockedOnChange = jest.fn((fieldName, value) => {
+      values[fieldName] = value;
+    });
+
+    const { getByTestId, getByText, rerender } = render(
+      <TypeGeo id="geoField" name="Geolocation" onChange={mockedOnChange} values={values} />,
+    );
+
+    const buttonCurLocationEl = getByTestId('button-curr-location');
+    expect(buttonCurLocationEl).toBeDefined();
+    fireEvent.press(buttonCurLocationEl);
+
+    const mockGetCurrentLocation = jest.fn();
+
+    await Location.getCurrentPositionAsync();
+
+    await waitFor(() => {
+      expect(Location.getCurrentPositionAsync).toHaveBeenCalledTimes(2);
+      expect(getByText('Fetching location...')).toBeDefined();
+      expect(values.geoField).toEqual([]);
     });
   });
 });
