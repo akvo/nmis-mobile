@@ -12,7 +12,7 @@ export const requestForegroundPermissionsAsync = jest.fn().mockImplementation(()
   return Promise.resolve({ status: 'granted' });
 });
 
-export const Accuracy = { High: 4 };
+export const Accuracy = { High: 4, Highest: 5 };
 
 export const Location = {
   getCurrentPositionAsync,

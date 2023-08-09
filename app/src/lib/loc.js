@@ -4,7 +4,7 @@ const getCurrentLocation = async (success, error) => {
   const { status } = await Location.requestForegroundPermissionsAsync();
   if (status === 'granted') {
     const result = await Location.getCurrentPositionAsync({
-      accuracy: Location.Accuracy.High,
+      accuracy: Location.Accuracy.Highest,
     });
     success(result);
   } else {
