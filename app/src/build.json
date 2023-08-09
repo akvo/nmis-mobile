@@ -6,5 +6,6 @@
   "errorHandling": true,
   "loggingLevel": "verbose",
   "appVersion": "1.2.0",
-  "lang": "en"
+  "lang": "en",
+  "gpsThreshold": 20
 }

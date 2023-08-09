@@ -177,4 +177,8 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     gap: 8,
   },
+  errorText: {
+    color: 'red',
+    fontStyle: 'italic',
+  },
 });

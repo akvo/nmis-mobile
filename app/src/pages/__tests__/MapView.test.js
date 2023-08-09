@@ -77,8 +77,11 @@ describe('MapView', () => {
   });
 
   it('should use current location when the button clicked', async () => {
+    const curr_lat = 36.12345;
+    const curr_lng = -122.6789;
     const route = {
       params: {
+        current_location: { lat: curr_lat, lng: curr_lng },
         lat: 37.12345,
         lng: -122.6789,
       },
@@ -87,24 +90,17 @@ describe('MapView', () => {
     const mockNavigation = useNavigation();
     const { getByTestId } = render(<MapView route={route} navigation={mockNavigation} />);
     const { result: resMapState } = renderHook(() => FormState.useState((s) => s.currentValues));
-    const { result: resLoadingState } = renderHook(() => useState(false));
-
-    const [loading, setLoading] = resLoadingState.current;
 
     const buttonEl = getByTestId('button-get-current-loc');
     expect(buttonEl).toBeDefined();
     fireEvent.press(buttonEl);
 
     act(() => {
-      setLoading(true);
-      loc.getCurrentLocation(({ coords }) => {
-        FormState.update((s) => {
-          s.currentValues = {
-            ...s.currentValues,
-            geoField: [coords.latitude, coords.longitude],
-          };
-        });
-        setLoading(false);
+      FormState.update((s) => {
+        s.currentValues = {
+          ...s.currentValues,
+          geoField: [curr_lat, curr_lng],
+        };
       });
     });
 
@@ -112,10 +108,8 @@ describe('MapView', () => {
       const { geoField } = resMapState.current;
       const [latitude, longitude] = geoField || {};
 
-      expect(latitude).toBe(route.params.lat);
-      expect(longitude).toBe(route.params.lng);
-
-      expect(resLoadingState.current[0]).toBeFalsy();
+      expect(latitude).toBe(curr_lat);
+      expect(longitude).toBe(curr_lng);
     });
   });
 
@@ -166,50 +160,11 @@ describe('MapView', () => {
     const mockNavigation = useNavigation();
 
     const { getByTestId } = render(<MapView route={route} navigation={mockNavigation} />);
-    const { result } = renderHook(() => useState({ lat: null, lng: null, distance: 0 }));
+    const { result } = renderHook(() => useState({ lat: null, lng: null }));
     const { result: resultVisible } = renderHook(() => useState(false));
 
     const [markerData, setMarkerData] = result.current;
     const [visible, setVisible] = resultVisible.current;
-
-    const buttonEl = getByTestId('button-selected-loc');
-    expect(buttonEl).toBeDefined();
-    fireEvent.press(buttonEl);
-
-    act(() => {
-      setMarkerData({
-        lat: 36.12345,
-        lng: -122.6789,
-        distance: 5,
-      });
-    });
-
-    await waitFor(() => {
-      expect(result.current[0]).toEqual({
-        lat: 36.12345,
-        lng: -122.6789,
-        distance: 5,
-      });
-      expect(mockNavigation.navigate).toHaveBeenCalledWith('FormPage', mockSelectedForm);
-    });
-  });
-
-  it('should show out of ranges when selected location has distance greater than radius', async () => {
-    const route = {
-      params: {
-        lat: 37.12345,
-        lng: -122.6789,
-        id: 12,
-      },
-    };
-    const mockNavigation = useNavigation();
-
-    const { getByTestId, getByText, rerender } = render(
-      <MapView route={route} navigation={mockNavigation} />,
-    );
-    const { result } = renderHook(() => useState({ lat: null, lng: null, distance: 0 }));
-    const [markerData, setMarkerData] = result.current;
-
     const webViewEl = getByTestId('webview-map');
     // Mock the data that will be passed in the onMessage event
     const mockMarkerData = { lat: route.params.lat, lng: route.params.lng, distance: 21 };
@@ -220,34 +175,23 @@ describe('MapView', () => {
       nativeEvent: { data: mockEventData },
     });
 
-    act(() => {
-      setMarkerData({
-        lat: 36.12345,
-        lng: -122.6789,
-        distance: 21,
-      });
-    });
-
     const buttonEl = getByTestId('button-selected-loc');
     expect(buttonEl).toBeDefined();
     fireEvent.press(buttonEl);
 
-    rerender(<MapView route={route} navigation={mockNavigation} />);
+    act(() => {
+      setMarkerData({
+        lat: 36.12345,
+        lng: -122.6789,
+      });
+    });
 
     await waitFor(() => {
       expect(result.current[0]).toEqual({
         lat: 36.12345,
         lng: -122.6789,
-        distance: 21,
       });
-      const dialogEl = getByTestId('dialog-out-of-range');
-      expect(dialogEl).toBeDefined();
-
-      const textOutOfRangeEl = getByTestId('text-out-of-range');
-      expect(textOutOfRangeEl).toBeDefined();
-      expect(textOutOfRangeEl.props.children).toBe(
-        'Please select a geolocation within the circle boundary as it is currently out of range.',
-      );
+      expect(mockNavigation.navigate).toHaveBeenCalledWith('FormPage', mockSelectedForm);
     });
   });
 });

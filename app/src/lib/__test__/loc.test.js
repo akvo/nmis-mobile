@@ -1,4 +1,4 @@
-import { Location } from 'expo-location';
+import * as Location from 'expo-location';
 import loc from '../loc';
 
 jest.mock('expo-location');
@@ -8,6 +8,7 @@ describe('lib/loc.js', () => {
     loc.getCurrentLocation((res) => {
       expect(res).toEqual({
         coords: {
+          accuracy: 20,
           latitude: 37.12345,
           longitude: -122.6789,
         },

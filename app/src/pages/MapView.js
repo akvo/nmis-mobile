@@ -12,17 +12,22 @@ import { Asset } from 'expo-asset';
 import * as FileSystem from 'expo-file-system';
 import { Button, Dialog, Text } from '@rneui/themed';
 import { FormState, UIState } from '../store';
-import { loc, i18n } from '../lib';
+import { i18n } from '../lib';
 
-const MapView = ({ navigation, route, radius = 20 }) => {
+const MapView = ({ navigation, route }) => {
+  const {
+    latitude: latParam,
+    longitude: lngParam,
+    id: questionID,
+    current_location: currentLocation,
+  } = route?.params;
   const [htmlContent, setHtmlContent] = useState(null);
   const [loading, setLoading] = useState(true);
+
   const [markerData, setMarkerData] = useState({
-    lat: null,
-    lng: null,
-    distance: 0,
+    lat: latParam,
+    lng: lngParam,
   });
-  const [visibleDialog, setVisibleDialog] = useState(false);
   const webViewRef = useRef(null);
   const selectedForm = FormState.useState((s) => s.form);
   const activeLang = UIState.useState((s) => s.lang);
@@ -37,60 +42,39 @@ const MapView = ({ navigation, route, radius = 20 }) => {
   };
 
   const handleCurrentLocation = () => {
-    setLoading(true);
-    loc.getCurrentLocation(
-      (res) => {
-        const { latitude: lat, longitude: lng } = res?.coords;
-        setMarkerData({
-          ...markerData,
-          lat,
-          lng,
-        });
-
-        const eventData = JSON.stringify({ type: 'changeMarker', data: { lat, lng } });
-        webViewRef.current.postMessage(eventData);
-        setLoading(false);
-        goBack();
-      },
-      (err) => {
-        setLoading(false);
-        setLocation({});
-        if (Platform.OS === 'android') {
-          ToastAndroid.show(err.message, ToastAndroid.SHORT);
-        }
-      },
-    );
+    setMarkerData(currentLocation);
+    FormState.update((s) => {
+      s.currentValues = {
+        ...s.currentValues,
+        [questionID]: [currentLocation.lat, currentLocation.lng],
+      };
+    });
+    const eventData = JSON.stringify({
+      type: 'changeMarker',
+      data: currentLocation,
+    });
+    webViewRef.current.postMessage(eventData);
+    goBack();
   };
 
   const loadHtml = async () => {
     const [{ localUri }] = await Asset.loadAsync(require('../../assets/map.html'));
-    let fileContents = await FileSystem.readAsStringAsync(localUri);
-    let { latitude: lat, longitude: lng } = route?.params;
-    lat = lat || 0;
-    lng = lng || 0;
-    fileContents = fileContents
-      .replace(/{{latitude}}/g, lat)
-      .replace(/{{longitude}}/g, lng)
-      .replace(/{{radius}}/g, radius);
-    setHtmlContent(fileContents);
+    const fileContents = await FileSystem.readAsStringAsync(localUri);
+    const htmlContents = fileContents
+      .replace(/{{latitude}}/g, latParam)
+      .replace(/{{longitude}}/g, lngParam);
+    setHtmlContent(htmlContents);
   };
 
   const handleUseSelectedLocation = () => {
-    const { lat, lng, distance } = markerData;
-    const { id: questionID } = route?.params;
-    if (distance > radius) {
-      setVisibleDialog(true);
-      return;
-    }
-    if (questionID) {
-      FormState.update((s) => {
-        s.currentValues = {
-          ...s.currentValues,
-          [questionID]: [lat, lng],
-        };
-      });
-      goBack();
-    }
+    const { lat, lng } = markerData;
+    FormState.update((s) => {
+      s.currentValues = {
+        ...s.currentValues,
+        [questionID]: [lat, lng],
+      };
+    });
+    goBack();
   };
 
   useEffect(() => {
@@ -127,15 +111,6 @@ const MapView = ({ navigation, route, radius = 20 }) => {
           {trans.buttonSelectedLoc}
         </Button>
       </View>
-      <Dialog testID="dialog-out-of-range" visible={visibleDialog}>
-        <Text testID="text-out-of-range">{trans.outOfRangeText}</Text>
-        <Dialog.Actions>
-          <Dialog.Button
-            title={trans.buttonOk}
-            onPress={() => setVisibleDialog(false)}
-          ></Dialog.Button>
-        </Dialog.Actions>
-      </Dialog>
     </View>
   );
 };
