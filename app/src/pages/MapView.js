@@ -14,15 +14,13 @@ import { Button, Dialog, Text } from '@rneui/themed';
 import { FormState, UIState } from '../store';
 import { loc, i18n } from '../lib';
 
-const MapView = ({ navigation, route, radius = 20 }) => {
+const MapView = ({ navigation, route }) => {
   const [htmlContent, setHtmlContent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [markerData, setMarkerData] = useState({
     lat: null,
     lng: null,
-    distance: 0,
   });
-  const [visibleDialog, setVisibleDialog] = useState(false);
   const webViewRef = useRef(null);
   const selectedForm = FormState.useState((s) => s.form);
   const activeLang = UIState.useState((s) => s.lang);
@@ -68,20 +66,13 @@ const MapView = ({ navigation, route, radius = 20 }) => {
     let { latitude: lat, longitude: lng } = route?.params;
     lat = lat || 0;
     lng = lng || 0;
-    fileContents = fileContents
-      .replace(/{{latitude}}/g, lat)
-      .replace(/{{longitude}}/g, lng)
-      .replace(/{{radius}}/g, radius);
+    fileContents = fileContents.replace(/{{latitude}}/g, lat).replace(/{{longitude}}/g, lng);
     setHtmlContent(fileContents);
   };
 
   const handleUseSelectedLocation = () => {
-    const { lat, lng, distance } = markerData;
+    const { lat, lng } = markerData;
     const { id: questionID } = route?.params;
-    if (distance > radius) {
-      setVisibleDialog(true);
-      return;
-    }
     if (questionID) {
       FormState.update((s) => {
         s.currentValues = {
@@ -127,15 +118,6 @@ const MapView = ({ navigation, route, radius = 20 }) => {
           {trans.buttonSelectedLoc}
         </Button>
       </View>
-      <Dialog testID="dialog-out-of-range" visible={visibleDialog}>
-        <Text testID="text-out-of-range">{trans.outOfRangeText}</Text>
-        <Dialog.Actions>
-          <Dialog.Button
-            title={trans.buttonOk}
-            onPress={() => setVisibleDialog(false)}
-          ></Dialog.Button>
-        </Dialog.Actions>
-      </Dialog>
     </View>
   );
 };

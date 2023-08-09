@@ -39,6 +39,16 @@ const mockSelectedForm = {
   name: 'Health Facilities',
 };
 
+//    const webViewEl = getByTestId('webview-map');
+//    // Mock the data that will be passed in the onMessage event
+//    const mockMarkerData = { lat: route.params.lat, lng: route.params.lng, distance: 21 };
+//    const mockEventData = JSON.stringify({ type: 'markerClicked', data: mockMarkerData });
+//
+//    // Trigger the onMessage event
+//    fireEvent(webViewEl, 'onMessage', {
+//      nativeEvent: { data: mockEventData },
+//    });
+
 describe('MapView', () => {
   beforeAll(() => {
     // update FormState to store selectedForm
@@ -166,7 +176,7 @@ describe('MapView', () => {
     const mockNavigation = useNavigation();
 
     const { getByTestId } = render(<MapView route={route} navigation={mockNavigation} />);
-    const { result } = renderHook(() => useState({ lat: null, lng: null, distance: 0 }));
+    const { result } = renderHook(() => useState({ lat: null, lng: null }));
     const { result: resultVisible } = renderHook(() => useState(false));
 
     const [markerData, setMarkerData] = result.current;
@@ -180,7 +190,6 @@ describe('MapView', () => {
       setMarkerData({
         lat: 36.12345,
         lng: -122.6789,
-        distance: 5,
       });
     });
 
@@ -188,66 +197,8 @@ describe('MapView', () => {
       expect(result.current[0]).toEqual({
         lat: 36.12345,
         lng: -122.6789,
-        distance: 5,
       });
       expect(mockNavigation.navigate).toHaveBeenCalledWith('FormPage', mockSelectedForm);
-    });
-  });
-
-  it('should show out of ranges when selected location has distance greater than radius', async () => {
-    const route = {
-      params: {
-        lat: 37.12345,
-        lng: -122.6789,
-        id: 12,
-      },
-    };
-    const mockNavigation = useNavigation();
-
-    const { getByTestId, getByText, rerender } = render(
-      <MapView route={route} navigation={mockNavigation} />,
-    );
-    const { result } = renderHook(() => useState({ lat: null, lng: null, distance: 0 }));
-    const [markerData, setMarkerData] = result.current;
-
-    const webViewEl = getByTestId('webview-map');
-    // Mock the data that will be passed in the onMessage event
-    const mockMarkerData = { lat: route.params.lat, lng: route.params.lng, distance: 21 };
-    const mockEventData = JSON.stringify({ type: 'markerClicked', data: mockMarkerData });
-
-    // Trigger the onMessage event
-    fireEvent(webViewEl, 'onMessage', {
-      nativeEvent: { data: mockEventData },
-    });
-
-    act(() => {
-      setMarkerData({
-        lat: 36.12345,
-        lng: -122.6789,
-        distance: 21,
-      });
-    });
-
-    const buttonEl = getByTestId('button-selected-loc');
-    expect(buttonEl).toBeDefined();
-    fireEvent.press(buttonEl);
-
-    rerender(<MapView route={route} navigation={mockNavigation} />);
-
-    await waitFor(() => {
-      expect(result.current[0]).toEqual({
-        lat: 36.12345,
-        lng: -122.6789,
-        distance: 21,
-      });
-      const dialogEl = getByTestId('dialog-out-of-range');
-      expect(dialogEl).toBeDefined();
-
-      const textOutOfRangeEl = getByTestId('text-out-of-range');
-      expect(textOutOfRangeEl).toBeDefined();
-      expect(textOutOfRangeEl.props.children).toBe(
-        'Please select a geolocation within the circle boundary as it is currently out of range.',
-      );
     });
   });
 });
