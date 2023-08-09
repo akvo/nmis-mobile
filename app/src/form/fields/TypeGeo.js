@@ -11,6 +11,7 @@ import { loc, i18n } from '../../lib';
 const TypeGeo = ({ onChange, values, keyform, id, name, tooltip, required, requiredSign }) => {
   const [errorMsg, setErrorMsg] = useState(null);
   const [gpsAccuracy, setGpsAccuracy] = useState(null);
+  const [currLocation, setCurrLocation] = useState({ lat: null, lng: null });
   const [loading, setLoading] = useState({ current: false, map: false });
   const currentValues = FormState.useState((s) => s.currentValues);
   const [latitude, longitude] = currentValues?.[id] || [];
@@ -27,7 +28,7 @@ const TypeGeo = ({ onChange, values, keyform, id, name, tooltip, required, requi
 
   const handleOpenMap = () => {
     if (latitude && longitude) {
-      const params = { latitude, longitude, id };
+      const params = { latitude, longitude, id, current_location: currLocation };
       navigation.navigate('MapView', { ...route?.params, ...params });
     } else {
       handleGetCurrLocation(true);
@@ -50,6 +51,10 @@ const TypeGeo = ({ onChange, values, keyform, id, name, tooltip, required, requi
           setGpsAccuracy(Math.floor(accuracy));
           // console.info('GPS accuracy:', accuracy, 'GPS Threshold:', gpsThreshold);
           if ((accuracy <= gpsThreshold && !openMap) || openMap) {
+            setCurrLocation({
+              lat,
+              lng,
+            });
             onChange(id, [lat, lng]);
             setLoading({
               ...loading,
@@ -57,7 +62,7 @@ const TypeGeo = ({ onChange, values, keyform, id, name, tooltip, required, requi
             });
           }
           if (openMap) {
-            const params = { latitude: lat, longitude: lng, id };
+            const params = { latitude: lat, longitude: lng, id, current_location: { lat, lng } };
             navigation.navigate('MapView', { ...route?.params, ...params });
           }
         },
