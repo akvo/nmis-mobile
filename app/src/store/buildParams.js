@@ -13,6 +13,7 @@ const BuildParamsState = new Store({
   errorHandling: defaultBuildParams?.errorHandling || true,
   loggingLevel: defaultBuildParams?.loggingLevel || 'verbose',
   appVersion: defaultBuildParams?.appVersion || '1.0.0',
+  gpsAccuracy: defaultBuildParams?.gpsAccuracy || 20,
 });
 
 export default BuildParamsState;
