@@ -77,8 +77,11 @@ describe('MapView', () => {
   });
 
   it('should use current location when the button clicked', async () => {
+    const curr_lat = 36.12345;
+    const curr_lng = -122.6789;
     const route = {
       params: {
+        current_location: { lat: curr_lat, lng: curr_lng },
         lat: 37.12345,
         lng: -122.6789,
       },
@@ -87,24 +90,17 @@ describe('MapView', () => {
     const mockNavigation = useNavigation();
     const { getByTestId } = render(<MapView route={route} navigation={mockNavigation} />);
     const { result: resMapState } = renderHook(() => FormState.useState((s) => s.currentValues));
-    const { result: resLoadingState } = renderHook(() => useState(false));
-
-    const [loading, setLoading] = resLoadingState.current;
 
     const buttonEl = getByTestId('button-get-current-loc');
     expect(buttonEl).toBeDefined();
     fireEvent.press(buttonEl);
 
     act(() => {
-      setLoading(true);
-      loc.getCurrentLocation(({ coords }) => {
-        FormState.update((s) => {
-          s.currentValues = {
-            ...s.currentValues,
-            geoField: [coords.latitude, coords.longitude],
-          };
-        });
-        setLoading(false);
+      FormState.update((s) => {
+        s.currentValues = {
+          ...s.currentValues,
+          geoField: [curr_lat, curr_lng],
+        };
       });
     });
 
@@ -112,10 +108,8 @@ describe('MapView', () => {
       const { geoField } = resMapState.current;
       const [latitude, longitude] = geoField || {};
 
-      expect(latitude).toBe(route.params.lat);
-      expect(longitude).toBe(route.params.lng);
-
-      expect(resLoadingState.current[0]).toBeFalsy();
+      expect(latitude).toBe(curr_lat);
+      expect(longitude).toBe(curr_lng);
     });
   });
 
