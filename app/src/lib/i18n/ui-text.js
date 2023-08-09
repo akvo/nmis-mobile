@@ -85,6 +85,7 @@ const uiText = {
     buttonSelectedLoc: 'Use selected location',
     outOfRangeText:
       'Please select a geolocation within the circle boundary as it is currently out of range.',
+    selectMultiItem: 'Select multiple item(s)',
   },
   fr: {
     latitude: 'Latitude',
@@ -173,6 +174,7 @@ const uiText = {
     buttonSelectedLoc: "Utiliser l'emplacement sélectionné",
     outOfRangeText:
       'Veuillez sélectionner une géolocalisation dans les limites du cercle car elle est actuellement hors de portée.',
+    selectMultiItem: 'Sélectionnez plusieurs éléments',
   },
 };
 
