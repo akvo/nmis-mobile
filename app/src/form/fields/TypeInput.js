@@ -78,14 +78,10 @@ const TypeInput = ({
   required,
   requiredSign,
 }) => {
+  const requiredValue = required ? requiredSign : null;
   return (
     <View>
-      <FieldLabel
-        keyform={keyform}
-        name={name}
-        tooltip={tooltip}
-        requiredSign={required ? requiredSign : null}
-      />
+      <FieldLabel keyform={keyform} name={name} tooltip={tooltip} requiredSign={requiredValue} />
       <Input
         inputContainerStyle={styles.inputFieldContainer}
         onChangeText={(val) => {

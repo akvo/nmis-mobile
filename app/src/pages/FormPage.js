@@ -37,6 +37,16 @@ const FormPage = ({ navigation, route }) => {
   const [currentDataPoint, setCurrentDataPoint] = useState({});
   const [loading, setLoading] = useState(false);
 
+  const refreshForm = () => {
+    FormState.update((s) => {
+      s.currentValues = {};
+      s.questionGroupListCurrentValues = {};
+      s.visitedQuestionGroup = [];
+      s.cascades = {};
+      s.surveyDuration = 0;
+    });
+  };
+
   useEffect(() => {
     const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
       const values = onSaveFormParams?.values;
@@ -44,9 +54,7 @@ const FormPage = ({ navigation, route }) => {
         setShowDialogMenu(true);
         return true;
       }
-      if (onSaveFormParams?.refreshForm) {
-        onSaveFormParams.refreshForm();
-      }
+      refreshForm();
       return false;
     });
     return () => backHandler.remove();
@@ -78,8 +86,8 @@ const FormPage = ({ navigation, route }) => {
     return JSON.parse(selectedForm.json);
   }, [selectedForm]);
 
-  const onSaveCallback = useCallback((values, refreshForm) => {
-    const state = { values, refreshForm };
+  const onSaveCallback = useCallback((values) => {
+    const state = { values };
     setOnSaveFormParams(state);
   }, []);
 
@@ -89,14 +97,12 @@ const FormPage = ({ navigation, route }) => {
       setShowDialogMenu(true);
       return;
     }
-    if (onSaveFormParams?.refreshForm) {
-      onSaveFormParams.refreshForm();
-    }
+    refreshForm();
     return navigation.goBack();
   };
 
   const handleOnSaveAndExit = async () => {
-    const { values, refreshForm } = onSaveFormParams;
+    const { values } = onSaveFormParams;
     try {
       const saveData = {
         form: currentFormId,
@@ -118,9 +124,7 @@ const FormPage = ({ navigation, route }) => {
       if (Platform.OS === 'android') {
         ToastAndroid.show(trans.successSaveDatapoint, ToastAndroid.LONG);
       }
-      if (refreshForm) {
-        refreshForm();
-      }
+      refreshForm();
       navigation.navigate('Home', { ...route?.params });
     } catch (err) {
       console.error(err);
@@ -137,9 +141,7 @@ const FormPage = ({ navigation, route }) => {
   };
 
   const handleOnExit = () => {
-    if (onSaveFormParams?.refreshForm) {
-      onSaveFormParams.refreshForm();
-    }
+    refreshForm();
     return navigation.navigate('Home');
   };
 
@@ -183,15 +185,7 @@ const FormPage = ({ navigation, route }) => {
       if (Platform.OS === 'android') {
         ToastAndroid.show(trans.successSubmitted, ToastAndroid.LONG);
       }
-
-      FormState.update((s) => {
-        s.currentValues = {};
-        s.questionGroupListCurrentValues = {};
-        s.visitedQuestionGroup = [];
-        s.cascades = {};
-        s.surveyDuration = 0;
-      });
-
+      refreshForm();
       navigation.navigate('Home', { ...route?.params });
     } catch (err) {
       console.error(err);

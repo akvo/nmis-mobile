@@ -19,6 +19,7 @@ const TypeGeo = ({ onChange, values, keyform, id, name, tooltip, required, requi
 
   const navigation = useNavigation();
   const route = useRoute();
+  const requiredValue = required ? requiredSign : null;
 
   const handleGetCurrLocation = async (openMap = false) => {
     const loadingKey = openMap ? 'map' : 'current';
@@ -53,12 +54,7 @@ const TypeGeo = ({ onChange, values, keyform, id, name, tooltip, required, requi
 
   return (
     <View>
-      <FieldLabel
-        keyform={keyform}
-        name={name}
-        tooltip={tooltip}
-        requiredSign={required ? requiredSign : null}
-      />
+      <FieldLabel keyform={keyform} name={name} tooltip={tooltip} requiredSign={requiredValue} />
       <View style={styles.inputGeoContainer}>
         {errorMsg ? (
           <Text testID="text-error">{errorMsg}</Text>
