@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { FieldLabel } from '../support';
 import { styles } from '../styles';
-import { FormState, UIState } from '../../store';
+import { FormState } from '../../store';
 import { i18n, cascades } from '../../lib';
 
 const TypeCascade = ({
@@ -19,7 +19,7 @@ const TypeCascade = ({
   dataSource = [],
 }) => {
   const [dropdownItems, setDropdownItems] = useState([]);
-  const activeLang = UIState.useState((s) => s.lang);
+  const activeLang = FormState.useState((s) => s.lang);
   const trans = i18n.text(activeLang);
   const requiredValue = required ? requiredSign : null;
 

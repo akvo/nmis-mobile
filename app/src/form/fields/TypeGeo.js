@@ -13,7 +13,8 @@ const TypeGeo = ({ onChange, values, keyform, id, name, tooltip, required, requi
   const [loading, setLoading] = useState({ current: false, map: false });
   const currentValues = FormState.useState((s) => s.currentValues);
   const [latitude, longitude] = currentValues?.[id] || [];
-  const { online: isOnline, lang: activeLang } = UIState.useState((s) => s);
+  const isOnline = UIState.useState((s) => s.online);
+  const activeLang = FormState.useState((s) => s.lang);
 
   const trans = i18n.text(activeLang);
 

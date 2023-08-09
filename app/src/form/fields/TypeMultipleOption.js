@@ -4,7 +4,7 @@ import { FieldLabel } from '../support';
 import { styles } from '../styles';
 import { CheckBox } from '@rneui/themed';
 import { MultiSelect } from 'react-native-element-dropdown';
-import { UIState } from '../../store';
+import { FormState } from '../../store';
 import { i18n } from '../../lib';
 
 const TypeMultipleOption = ({
@@ -21,7 +21,7 @@ const TypeMultipleOption = ({
   const isCheckBox = React.useMemo(() => {
     return option.length <= 3;
   }, [option]);
-  const activeLang = UIState.useState((s) => s.lang);
+  const activeLang = FormState.useState((s) => s.lang);
   const trans = i18n.text(activeLang);
   const requiredValue = required ? requiredSign : null;
 
