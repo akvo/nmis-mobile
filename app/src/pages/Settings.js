@@ -13,6 +13,7 @@ const Settings = ({ navigation }) => {
   const activeLang = UIState.useState((s) => s.lang);
   const trans = i18n.text(activeLang);
   const nonEnglish = activeLang !== 'en';
+  const activeLangText = langConfig.options.find((o) => o.value === activeLang);
 
   const handleSaveLang = (value) => {
     UIState.update((s) => {
@@ -33,7 +34,7 @@ const Settings = ({ navigation }) => {
           <ListItem onPress={() => setShowLang(true)} testID="settings-lang" bottomDivider>
             <ListItem.Content>
               <ListItem.Title>{trans.langTitle}</ListItem.Title>
-              <ListItem.Subtitle>{activeLang}</ListItem.Subtitle>
+              <ListItem.Subtitle>{activeLangText?.label}</ListItem.Subtitle>
             </ListItem.Content>
             <ListItem.Chevron />
           </ListItem>
