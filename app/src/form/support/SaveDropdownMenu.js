@@ -4,16 +4,17 @@ import { Menu, MenuItem, MenuDivider } from 'react-native-material-menu';
 import { StyleSheet } from 'react-native';
 import { langConfig } from '../../pages/Settings/config';
 import DialogForm from '../../pages/Settings/DialogForm';
-import { UIState } from '../../store';
+import { FormState, UIState } from '../../store';
 import { i18n } from '../../lib';
 
 const SaveDropdownMenu = ({ anchor, visible, setVisible, handleOnSaveAndExit, handleOnExit }) => {
   const [showLanguageSelectionDialog, setShowLanguageSelectionDialog] = useState(false);
-  const activeLang = UIState.useState((s) => s.lang);
-  const trans = i18n.text(activeLang);
+  const activeLang = FormState.useState((s) => s.lang);
+  const appLang = UIState.useState((s) => s.lang);
+  const trans = i18n.text(appLang);
 
   const handleOnOk = (value) => {
-    UIState.update((s) => {
+    FormState.update((s) => {
       s.lang = value;
     });
     setShowLanguageSelectionDialog(false);
