@@ -5,7 +5,7 @@ import { ListItem, Divider } from '@rneui/themed';
 import { BaseLayout, LogoutButton } from '../components';
 import DialogForm from './Settings/DialogForm';
 import { config, langConfig } from './Settings/config';
-import { UIState } from '../store';
+import { UIState, FormState } from '../store';
 import { i18n } from '../lib';
 
 const Settings = ({ navigation }) => {
@@ -17,6 +17,9 @@ const Settings = ({ navigation }) => {
 
   const handleSaveLang = (value) => {
     UIState.update((s) => {
+      s.lang = value;
+    });
+    FormState.update((s) => {
       s.lang = value;
     });
     setShowLang(false);
@@ -65,6 +68,7 @@ const Settings = ({ navigation }) => {
             onCancel={() => setShowLang(false)}
             showDialog={showLang}
             edit={langConfig}
+            initValue={activeLang}
           />
         </View>
       </BaseLayout.Content>
