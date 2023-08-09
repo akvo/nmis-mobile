@@ -16,41 +16,36 @@ describe('TypeGeo', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     act(() => {
+      FormState.update((s) => {
+        s.currentValues = {
+          geoField: null,
+        };
+      });
       UIState.update((s) => {
         s.online = true;
       });
     });
   });
-  test('render and get current location successfully', async () => {
-    const { getByTestId, getByText, debug } = render(
-      <TypeGeo onChange={() => jest.fn()} values={{}} id="geoField" name="Geolocation" />,
+
+  it('should render TypeGeo correctly', () => {
+    const values = { geoField: null };
+    const mockedOnChange = jest.fn((fieldName, value) => {
+      values[fieldName] = value;
+    });
+
+    const { getByTestId } = render(
+      <TypeGeo id="geoField" name="Geolocation" onChange={mockedOnChange} values={values} />,
     );
 
-    const buttonCurrLoc = getByTestId('button-curr-location');
-    expect(buttonCurrLoc).toBeDefined();
-    fireEvent.press(buttonCurrLoc);
+    const buttonCurLocationEl = getByTestId('button-curr-location');
+    expect(buttonCurLocationEl).toBeDefined();
+    const buttonOpenMapEl = getByTestId('button-open-map');
+    expect(buttonOpenMapEl).toBeDefined();
 
-    act(() => {
-      loc.getCurrentLocation(({ coords }) => {
-        FormState.update((s) => {
-          s.currentValues = {
-            ...s.currentValues,
-            geoField: [coords.latitude, coords.longitude],
-          };
-        });
-      });
-    });
-
-    await waitFor(() => {
-      const { result } = renderHook(() => FormState.useState((s) => s.currentValues));
-      const { geoField } = result.current;
-      const [latitude, longitude] = geoField || {};
-
-      const latText = getByTestId('text-lat');
-      expect(latText.props.children).toEqual(['Latitude', ': ', latitude]);
-      const lngText = getByTestId('text-lng');
-      expect(lngText.props.children).toEqual(['Longitude', ': ', longitude]);
-    });
+    const latText = getByTestId('text-lat');
+    expect(latText.props.children).toEqual(['Latitude', ': ']);
+    const lngText = getByTestId('text-lng');
+    expect(lngText.props.children).toEqual(['Longitude', ': ']);
   });
 
   it('should not show required sign if required param is false and requiredSign is not defined', async () => {
@@ -210,6 +205,7 @@ describe('TypeGeo', () => {
         coords: {
           latitude: 35677,
           longitude: -7811,
+          accuracy: 20,
         },
       });
     });
@@ -237,7 +233,7 @@ describe('TypeGeo', () => {
     const { getByTestId, getByText, debug } = render(
       <TypeGeo
         onChange={() => jest.fn()}
-        values={{}}
+        values={{ geoField: null }}
         id="geoField"
         name="Geolocation"
         navigation={mockNavigation}
