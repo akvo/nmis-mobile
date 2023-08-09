@@ -6,7 +6,7 @@ import { styles } from './styles';
 import { FormNavigation, QuestionGroupList } from './support';
 import QuestionGroup from './components/QuestionGroup';
 import { transformForm, generateDataPointName } from './lib';
-import { FormState, UIState } from '../store';
+import { FormState } from '../store';
 
 // TODO:: Allow other not supported yet
 // TODO:: Repeat group not supported yet
@@ -41,7 +41,7 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave, setShowDia
     (s) => s.questionGroupListCurrentValues,
   );
   const cascades = FormState.useState((s) => s.cascades);
-  const activeLang = UIState.useState((s) => s.lang);
+  const activeLang = FormState.useState((s) => s.lang);
 
   useEffect(() => {
     if (onSave) {

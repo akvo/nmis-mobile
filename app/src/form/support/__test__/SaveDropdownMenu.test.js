@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, fireEvent, act, waitFor } from '@testing-library/react-native';
 import SaveDropdownMenu from '../SaveDropdownMenu';
-import UIState from '../../../store/ui';
+import FormState from '../../../store/forms';
 
 // According to the issue on @testing-library/react-native (for dropdown)
 import { View } from 'react-native';
@@ -163,7 +163,7 @@ describe('SaveDropdownMenu component', () => {
   });
 
   it('should update activeLang when select a language on Language selection popup', async () => {
-    UIState.update = jest.fn();
+    FormState.update = jest.fn();
 
     const wrapper = render(<SaveDropdownMenu visible={true} setVisible={jest.fn()} />);
 
@@ -189,7 +189,7 @@ describe('SaveDropdownMenu component', () => {
     const languageDropdownElement = wrapper.getByTestId('settings-form-dropdown');
     fireEvent.press(languageDropdownElement);
 
-    const choosedLang = wrapper.getByText('English');
+    const choosedLang = wrapper.getByTestId('English');
     await waitFor(() => {
       expect(choosedLang).toBeTruthy();
     });
@@ -199,7 +199,7 @@ describe('SaveDropdownMenu component', () => {
     fireEvent.press(okButtonElement);
 
     await waitFor(() => {
-      expect(UIState.update).toHaveBeenCalled();
+      expect(FormState.update).toHaveBeenCalled();
     });
   });
 });

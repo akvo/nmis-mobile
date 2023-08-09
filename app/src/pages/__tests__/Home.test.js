@@ -1,9 +1,9 @@
 import React from 'react';
-import { render, waitFor, fireEvent } from '@testing-library/react-native';
+import { render, waitFor, fireEvent, act } from '@testing-library/react-native';
 import HomePage from '../Home';
 import crudForms from '../../database/crud/crud-forms';
 import FormState from '../../store/forms';
-import { UserState } from '../../store';
+import { UserState, UIState } from '../../store';
 
 const mockDateNow = new Date().toISOString();
 const mockForms = [
@@ -47,20 +47,20 @@ const mockForms = [
 
 jest.mock('../../database/crud/crud-forms');
 jest.mock('../../store/forms');
+const mockNavigation = {
+  navigate: jest.fn(),
+};
 
 describe('Homepage', () => {
   beforeAll(() => {
     UserState.update((s) => {
       s.id = 1;
     });
+    const mockLatestFormVersion = mockForms.filter((form) => form.latest);
+    crudForms.selectLatestFormVersion.mockImplementation(() =>
+      Promise.resolve(mockLatestFormVersion),
+    );
   });
-  const mockNavigation = {
-    navigate: jest.fn(),
-  };
-  const mockLatestFormVersion = mockForms.filter((form) => form.latest);
-  crudForms.selectLatestFormVersion.mockImplementation(() =>
-    Promise.resolve(mockLatestFormVersion),
-  );
 
   test('renders correctly', async () => {
     const tree = render(<HomePage navigation={mockNavigation} />);
@@ -167,6 +167,31 @@ describe('Homepage', () => {
 
     await waitFor(() => {
       expect(mockNavigation.navigate).toHaveBeenCalledWith('Users');
+    });
+  });
+
+  it('should reset form and data when app language changed', async () => {
+    const { getByText, debug, queryByTestId } = render(<HomePage navigation={mockNavigation} />);
+
+    act(() => {
+      UIState.update((s) => {
+        s.lang = 'fr';
+      });
+      FormState.update((s) => {
+        s.form = {};
+      });
+    });
+
+    await waitFor(() => {
+      const listForm1 = queryByTestId('card-touchable-0');
+      expect(listForm1).toBeTruthy();
+
+      expect(listForm1.props.children[0].props.subTitles).toEqual([
+        'Version: 1.0.0',
+        'Soumis: 2',
+        'Brouillon: 0',
+        'Synchronisé: 2',
+      ]);
     });
   });
 });

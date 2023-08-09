@@ -5,7 +5,7 @@ import { ListItem, Divider } from '@rneui/themed';
 import { BaseLayout, LogoutButton } from '../components';
 import DialogForm from './Settings/DialogForm';
 import { config, langConfig } from './Settings/config';
-import { UIState } from '../store';
+import { UIState, FormState } from '../store';
 import { i18n } from '../lib';
 
 const Settings = ({ navigation }) => {
@@ -13,9 +13,13 @@ const Settings = ({ navigation }) => {
   const activeLang = UIState.useState((s) => s.lang);
   const trans = i18n.text(activeLang);
   const nonEnglish = activeLang !== 'en';
+  const activeLangText = langConfig.options.find((o) => o.value === activeLang);
 
   const handleSaveLang = (value) => {
     UIState.update((s) => {
+      s.lang = value;
+    });
+    FormState.update((s) => {
       s.lang = value;
     });
     setShowLang(false);
@@ -33,7 +37,7 @@ const Settings = ({ navigation }) => {
           <ListItem onPress={() => setShowLang(true)} testID="settings-lang" bottomDivider>
             <ListItem.Content>
               <ListItem.Title>{trans.langTitle}</ListItem.Title>
-              <ListItem.Subtitle>{activeLang}</ListItem.Subtitle>
+              <ListItem.Subtitle>{activeLangText?.label}</ListItem.Subtitle>
             </ListItem.Content>
             <ListItem.Chevron />
           </ListItem>
@@ -64,6 +68,7 @@ const Settings = ({ navigation }) => {
             onCancel={() => setShowLang(false)}
             showDialog={showLang}
             edit={langConfig}
+            initValue={activeLang}
           />
         </View>
       </BaseLayout.Content>

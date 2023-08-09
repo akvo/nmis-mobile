@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Dialog, Input, Slider } from '@rneui/themed';
 import { Dropdown } from 'react-native-element-dropdown';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { UIState } from '../../store';
 import { i18n } from '../../lib';
 
-const DialogForm = ({ onOk, onCancel, showDialog, edit }) => {
-  const [value, setValue] = React.useState(0);
+const DialogForm = ({ onOk, onCancel, showDialog, edit, initValue = 0 }) => {
+  const [value, setValue] = useState(initValue);
   const activeLang = UIState.useState((s) => s.lang);
   const trans = i18n.text(activeLang);
 
