@@ -83,6 +83,7 @@ const SaveDropdownMenu = ({ anchor, visible, setVisible, handleOnSaveAndExit, ha
         onCancel={() => setShowLanguageSelectionDialog(false)}
         showDialog={showLanguageSelectionDialog}
         edit={langConfig}
+        initValue={activeLang}
       />
     </>
   );

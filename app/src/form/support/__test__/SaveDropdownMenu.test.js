@@ -189,7 +189,7 @@ describe('SaveDropdownMenu component', () => {
     const languageDropdownElement = wrapper.getByTestId('settings-form-dropdown');
     fireEvent.press(languageDropdownElement);
 
-    const choosedLang = wrapper.getByText('English');
+    const choosedLang = wrapper.getByTestId('English');
     await waitFor(() => {
       expect(choosedLang).toBeTruthy();
     });
