@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { Text, Button } from '@rneui/themed';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-import { UIState, FormState } from '../../store';
+import { UIState, FormState, BuildParamsState } from '../../store';
 import { FieldLabel } from '../support';
 import { styles } from '../styles';
 import { loc, i18n } from '../../lib';
@@ -13,6 +13,8 @@ const TypeGeo = ({ onChange, values, keyform, id, name, tooltip, required, requi
   const [loading, setLoading] = useState({ current: false, map: false });
   const currentValues = FormState.useState((s) => s.currentValues);
   const [latitude, longitude] = currentValues?.[id] || [];
+
+  const gpsAccuracy = BuildParamsState.useState((s) => s.gpsAccuracy);
   const isOnline = UIState.useState((s) => s.online);
   const activeLang = FormState.useState((s) => s.lang);
 
@@ -30,14 +32,17 @@ const TypeGeo = ({ onChange, values, keyform, id, name, tooltip, required, requi
     });
     await loc.getCurrentLocation(
       ({ coords }) => {
-        if (coords) {
-          const { latitude: lat, longitude: lng } = coords;
-          onChange(id, [lat, lng]);
-          if (openMap) {
-            const params = { latitude: lat, longitude: lng, id };
-            navigation.navigate('MapView', { ...route?.params, ...params });
-          }
+        const { latitude: lat, longitude: lng, accuracy } = coords;
+        /**
+         * accuracy number in meters, doc: https://docs.expo.dev/versions/latest/sdk/location/#locationgeocodedlocation
+         */
+        console.info('accuracy: ', accuracy, 'threshold:', gpsAccuracy, lat, lng);
+        onChange(id, [lat, lng]);
+        if (openMap) {
+          const params = { latitude: lat, longitude: lng, id };
+          navigation.navigate('MapView', { ...route?.params, ...params });
         }
+
         setLoading({
           ...loading,
           [loadingKey]: false,
@@ -57,19 +62,19 @@ const TypeGeo = ({ onChange, values, keyform, id, name, tooltip, required, requi
     <View>
       <FieldLabel keyform={keyform} name={name} tooltip={tooltip} requiredSign={requiredValue} />
       <View style={styles.inputGeoContainer}>
-        {errorMsg ? (
-          <Text testID="text-error">{errorMsg}</Text>
-        ) : (
-          <View>
-            <Text testID="text-lat">
-              {trans.latitude}: {latitude}
-            </Text>
-            <Text testID="text-lng">
-              {trans.longitude}: {longitude}
-            </Text>
-          </View>
+        <View>
+          <Text testID="text-lat">
+            {trans.latitude}: {latitude}
+          </Text>
+          <Text testID="text-lng">
+            {trans.longitude}: {longitude}
+          </Text>
+        </View>
+        {errorMsg && (
+          <Text testID="text-error" style={styles.errorText}>
+            {errorMsg}
+          </Text>
         )}
-
         <View style={styles.geoButtonGroup}>
           <Button onPress={() => handleGetCurrLocation(false)} testID="button-curr-location">
             {loading.current ? trans.loadingText : trans.buttonCurrLocation}
