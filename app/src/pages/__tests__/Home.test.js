@@ -47,18 +47,6 @@ const mockForms = [
 
 jest.mock('../../database/crud/crud-forms');
 jest.mock('../../store/forms');
-/*
-jest.mock('../../lib', () => ({
-  i18n: {
-    text: jest.fn(() => ({
-             versionLabel: '',
-            `${trans.submittedLabel}${r.submitted}`,
-            `${trans.draftLabel}${r.draft}`,
-            `${trans.syncLabel}${r.synced}`,
-     })),
-  },
-}));
-*/
 const mockNavigation = {
   navigate: jest.fn(),
 };
