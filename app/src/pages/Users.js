@@ -91,7 +91,7 @@ const Users = ({ navigation, route }) => {
       }
     >
       <ScrollView>
-        {loading && <Skeleton animation="wave" />}
+        {loading && <Skeleton animation="wave" testID="loading-users" />}
         {users.map((user, index) => {
           return (
             <ListItem.Swipeable
@@ -105,12 +105,15 @@ const Users = ({ navigation, route }) => {
                   buttonStyle={{ minHeight: '100%', backgroundColor: 'red' }}
                 />
               )}
+              testID={`list-item-user-${user.id}`}
               bottomDivider
             >
               <ListItem.Content>
-                <ListItem.Title>{user.name}</ListItem.Title>
+                <ListItem.Title testID={`title-username-${user.id}`}>{user.name}</ListItem.Title>
               </ListItem.Content>
-              {user.active === 1 && <Icon name="checkmark" size={18} />}
+              {user.active === 1 && (
+                <Icon name="checkmark" size={18} testID={`icon-checkmark-${user.id}`} />
+              )}
             </ListItem.Swipeable>
           );
         })}
