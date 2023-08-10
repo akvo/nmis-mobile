@@ -222,7 +222,7 @@ exports[`UsersPage should match with snapshot 1`] = `
                 "opacity": 1,
               }
             }
-            testID="button-users"
+            testID="button-add-user"
           >
             <View
               style={
