@@ -5,7 +5,7 @@ import mockRNCNetInfo from '@react-native-community/netinfo/jest/netinfo-mock';
 import NetInfo from '@react-native-community/netinfo';
 
 import App from '../App';
-import { UIState } from 'store';
+import { UIState, BuildParamsState } from 'store';
 import { crudSessions, crudUsers, crudConfig } from '../src/database/crud';
 import { conn, query } from '../src/database';
 
@@ -15,15 +15,15 @@ jest.mock('expo-sqlite');
 
 jest.mock('../src/database/crud', () => ({
   crudSessions: {
-    selectLastSession: jest.fn(() => Promise.resolve({ rows: { length: 0, _array: [] } })),
+    selectLastSession: jest.fn(() => Promise.resolve({})),
     addSession: jest.fn(),
   },
   crudUsers: {
-    getActiveUser: jest.fn(() => Promise.resolve({ rows: { length: 0, _array: [] } })),
+    getActiveUser: jest.fn(() => Promise.resolve(false)),
     selectUserById: jest.fn(),
   },
   crudConfig: {
-    getConfig: jest.fn(() => Promise.resolve({ rows: { length: 0, _array: [] } })),
+    getConfig: jest.fn(() => Promise.resolve(false)),
     addConfig: jest.fn(),
     updateConfig: jest.fn(),
   },
@@ -34,11 +34,10 @@ const db = conn.init;
 describe('App', () => {
   beforeAll(() => {
     crudSessions.selectLastSession.mockImplementation(() =>
-      Promise.resolve({
-        rows: { length: 1, _array: [{ id: 1, token: 'secret', passcode: 'test123' }] },
-      }),
+      Promise.resolve({ id: 1, token: 'secret', passcode: 'test123' }),
     );
   });
+
   it('should update UIState on NetInfo change', async () => {
     // Render the component
     const { unmount } = await waitFor(() => render(<App />));
@@ -72,11 +71,10 @@ describe('App', () => {
       expect(currentPage).toBe('AddPage');
     });
   });
+
   it('should set Home for currentPage in UIState when the users exists', async () => {
     crudUsers.getActiveUser.mockImplementation(() =>
-      Promise.resolve({
-        rows: { length: 1, _array: [{ id: 1, name: 'John', active: 1 }] },
-      }),
+      Promise.resolve({ id: 1, name: 'John', active: 1 }),
     );
     UIState.useState.mockReturnValue('Home');
     render(<App />);
@@ -90,6 +88,69 @@ describe('App', () => {
       expect(currentPage).toBe('Home');
     });
   });
-  it.todo('should set UserState as active user when the user exists');
-  it.todo('should set serverUrl when its exists');
+
+  it('should not set API token when the session is false', async () => {
+    crudSessions.selectLastSession.mockImplementation(() => Promise.resolve(false));
+    render(<App />);
+    const mockApi = {
+      setToken: jest.fn(),
+    };
+
+    await waitFor(() => {
+      expect(mockApi.setToken).not.toHaveBeenCalled();
+    });
+  });
+
+  it('should create config when its not exists', async () => {
+    BuildParamsState.useState.mockReturnValue(null);
+    const serverUrl = BuildParamsState.useState((s) => s.serverURL);
+
+    render(<App />);
+    expect(serverUrl).toBeNull();
+    const mockAddConfig = jest.fn();
+    act(() => {
+      mockAddConfig();
+    });
+
+    crudConfig.getConfig.mockImplementation(() =>
+      Promise.resolve({
+        id: 1,
+        serverURL: null,
+      }),
+    );
+
+    await waitFor(async () => {
+      const config = await crudConfig.getConfig();
+      expect(mockAddConfig).toHaveBeenCalledTimes(1);
+      expect(config).toEqual({ id: 1, serverURL: null });
+    });
+  });
+
+  it('should set API serverURL when config is exists', async () => {
+    const serverURL = 'http://api.example.com';
+    crudConfig.getConfig.mockImplementation(() =>
+      Promise.resolve({
+        id: 1,
+        serverURL,
+      }),
+    );
+
+    render(<App />);
+    const mockApiSetServerURL = jest.fn();
+
+    act(() => {
+      mockApiSetServerURL();
+      BuildParamsState.update((s) => {
+        s.serverURL = serverURL;
+      });
+    });
+
+    BuildParamsState.useState.mockReturnValue(serverURL);
+
+    await waitFor(() => {
+      const serverURLState = BuildParamsState.useState((s) => s.serverURL);
+      expect(mockApiSetServerURL).toHaveBeenCalledTimes(1);
+      expect(serverURLState).toBe(serverURL);
+    });
+  });
 });
