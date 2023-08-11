@@ -1,9 +1,10 @@
-import React from 'react';
-import { render, waitFor, fireEvent } from '@testing-library/react-native';
+import React, { useState } from 'react';
+import { render, waitFor, fireEvent, act, renderHook } from '@testing-library/react-native';
 import FormDataPage from '../FormData';
 import crudDataPoints from '../../database/crud/crud-datapoints';
 import { useNavigation } from '@react-navigation/native';
 import { backgroundTask } from '../../lib';
+import { FormState, UIState } from '../../store';
 
 jest.mock('@react-navigation/native');
 jest.mock('../../database/crud/crud-datapoints');
@@ -403,5 +404,124 @@ describe('FormDataPage', () => {
     fireEvent.press(arrowBackEl);
 
     expect(mockNavigation.navigate).toHaveBeenCalledWith('ManageForm', mockRoute.params);
+  });
+
+  it('should set currentValues & go to FormDataDetails when showSubmitted is true', async () => {
+    const mockData = [
+      {
+        id: 1,
+        name: 'Datapoint 1',
+        createdAt: '2023-07-18T12:34:56.789Z',
+        duration: 145,
+        syncedAt: '2023-07-18T13:00:00.000Z',
+        submitted: 1,
+        json: '{"1": "John Doe"}',
+      },
+    ];
+
+    crudDataPoints.selectDataPointsByFormAndSubmitted.mockResolvedValue(mockData);
+
+    const mockNavigation = useNavigation();
+    const mockRoute = {
+      params: {
+        id: 123,
+        name: 'Form Name',
+        showSubmitted: true,
+      },
+    };
+    const { getByTestId } = render(<FormDataPage navigation={mockNavigation} route={mockRoute} />);
+
+    await waitFor(() => {
+      const list0 = getByTestId('card-touchable-0');
+      expect(list0).toBeDefined();
+      fireEvent.press(list0);
+    });
+
+    act(() => {
+      const { json: valuesJSON } = mockData[0];
+      FormState.update((s) => {
+        const valuesParsed = JSON.parse(valuesJSON);
+        s.currentValues =
+          typeof valuesParsed === 'string' ? JSON.parse(valuesParsed) : valuesParsed;
+      });
+    });
+
+    await waitFor(() => {
+      expect(mockNavigation.navigate).toHaveBeenCalledWith('FormDataDetails', {
+        name: 'Datapoint 1',
+      });
+    });
+  });
+
+  it('should be set isManualSynced true and syncedAt when the button sync clicked', async () => {
+    const mockData = [
+      {
+        id: 1,
+        name: 'Datapoint 1',
+        createdAt: '2023-07-18T12:34:56.789Z',
+        duration: 10,
+        syncedAt: null,
+        submitted: 1,
+        json: '{"1": "John Doe"}',
+      },
+    ];
+
+    crudDataPoints.selectDataPointsByFormAndSubmitted.mockResolvedValue(mockData);
+
+    const mockNavigation = useNavigation();
+    const mockRoute = {
+      params: {
+        id: 123,
+        name: 'Form Name',
+        showSubmitted: true,
+      },
+    };
+    const { getByTestId, queryByTestId, getByText, rerender, debug } = render(
+      <FormDataPage navigation={mockNavigation} route={mockRoute} />,
+    );
+
+    await waitFor(() => expect(getByText('Form Name')).toBeTruthy());
+
+    // check sync button rendered
+    const syncButtonEl = getByTestId('button-to-trigger-sync');
+    expect(syncButtonEl).toBeTruthy();
+    expect(syncButtonEl.props.accessibilityState.disabled).toBeFalsy();
+    fireEvent.press(syncButtonEl);
+
+    const syncedAt = '2023-07-18T12:40:00.789Z';
+    crudDataPoints.selectDataPointsByFormAndSubmitted.mockResolvedValue([
+      { ...mockData[0], syncedAt },
+    ]);
+
+    const dialogElement = queryByTestId('sync-confirmation-dialog');
+    expect(dialogElement).toBeTruthy();
+
+    await waitFor(() => expect(dialogElement.props.visible).toEqual(true));
+
+    const okButtonElement = queryByTestId('sync-confirmation-ok');
+    expect(okButtonElement).toBeTruthy();
+    fireEvent.press(okButtonElement);
+
+    const loadingElement = queryByTestId('sync-loading');
+
+    await waitFor(() => {
+      expect(loadingElement).toBeTruthy();
+    });
+
+    act(() => {
+      UIState.update((s) => {
+        s.isManualSynced = true;
+      });
+    });
+
+    await crudDataPoints.selectDataPointsByFormAndSubmitted();
+
+    rerender(<FormDataPage navigation={mockNavigation} route={mockRoute} />);
+
+    await waitFor(() => {
+      const { result } = renderHook(() => UIState.useState((s) => s.isManualSynced));
+      expect(result.current).toBeTruthy();
+      expect(getByText('Synced: 18/07/2023')).toBeDefined();
+    });
   });
 });
