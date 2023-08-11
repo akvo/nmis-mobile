@@ -371,16 +371,261 @@ exports[`Homepage renders correctly 1`] = `
       />
     </View>
   </View>
-  <View
-    style={
-      {
-        "backgroundColor": "#f9fafb",
-        "flex": 1,
-        "flexDirection": "row",
-        "flexWrap": "wrap",
-      }
-    }
-    testID="stack-container"
-  />
+  <RCTScrollView>
+    <View>
+      <View
+        style={
+          {
+            "backgroundColor": "#f9fafb",
+            "flex": 1,
+            "flexDirection": "row",
+            "flexWrap": "wrap",
+          }
+        }
+        testID="stack-container"
+      >
+        <View
+          accessibilityState={
+            {
+              "busy": undefined,
+              "checked": undefined,
+              "disabled": undefined,
+              "expanded": undefined,
+              "selected": undefined,
+            }
+          }
+          accessibilityValue={
+            {
+              "max": undefined,
+              "min": undefined,
+              "now": undefined,
+              "text": undefined,
+            }
+          }
+          accessible={true}
+          collapsable={false}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            {
+              "opacity": 1,
+              "width": "50%",
+            }
+          }
+          testID="card-touchable-0"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Form 1
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          accessibilityState={
+            {
+              "busy": undefined,
+              "checked": undefined,
+              "disabled": undefined,
+              "expanded": undefined,
+              "selected": undefined,
+            }
+          }
+          accessibilityValue={
+            {
+              "max": undefined,
+              "min": undefined,
+              "now": undefined,
+              "text": undefined,
+            }
+          }
+          accessible={true}
+          collapsable={false}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            {
+              "opacity": 1,
+              "width": "50%",
+            }
+          }
+          testID="card-touchable-1"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Form 2
+              </Text>
+            </View>
+          </View>
+        </View>
+        <View
+          accessibilityState={
+            {
+              "busy": undefined,
+              "checked": undefined,
+              "disabled": undefined,
+              "expanded": undefined,
+              "selected": undefined,
+            }
+          }
+          accessibilityValue={
+            {
+              "max": undefined,
+              "min": undefined,
+              "now": undefined,
+              "text": undefined,
+            }
+          }
+          accessible={true}
+          collapsable={false}
+          focusable={true}
+          onClick={[Function]}
+          onResponderGrant={[Function]}
+          onResponderMove={[Function]}
+          onResponderRelease={[Function]}
+          onResponderTerminate={[Function]}
+          onResponderTerminationRequest={[Function]}
+          onStartShouldSetResponder={[Function]}
+          style={
+            {
+              "opacity": 1,
+              "width": "50%",
+            }
+          }
+          testID="card-touchable-2"
+        >
+          <View
+            style={
+              {
+                "backgroundColor": "#ffffff",
+                "borderColor": "#e1e8ee",
+                "borderWidth": 1,
+                "margin": 15,
+                "marginBottom": 0,
+                "padding": 15,
+                "shadowColor": "rgba(0,0,0, .2)",
+                "shadowOffset": {
+                  "height": 0,
+                  "width": 0,
+                },
+                "shadowOpacity": 1,
+                "shadowRadius": 1,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "transparent",
+                }
+              }
+            >
+              <Text
+                accessibilityRole="text"
+                style={
+                  {
+                    "color": "#43484d",
+                    "fontSize": 18,
+                    "fontWeight": "bold",
+                    "marginBottom": 15,
+                    "textAlign": "left",
+                  }
+                }
+                testID="cardTitle"
+              >
+                Form 3
+              </Text>
+            </View>
+          </View>
+        </View>
+      </View>
+    </View>
+  </RCTScrollView>
 </View>
 `;
