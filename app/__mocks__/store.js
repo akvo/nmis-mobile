@@ -17,3 +17,8 @@ export const FormState = {
   update: jest.fn(),
   useState: jest.fn(),
 };
+
+export const BuildParamsState = {
+  update: jest.fn(),
+  useState: jest.fn(),
+};
