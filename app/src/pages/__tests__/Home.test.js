@@ -1,9 +1,8 @@
 import React from 'react';
-import { render, waitFor, fireEvent, act } from '@testing-library/react-native';
+import { render, waitFor, fireEvent, act, renderHook } from '@testing-library/react-native';
 import HomePage from '../Home';
 import crudForms from '../../database/crud/crud-forms';
-import FormState from '../../store/forms';
-import { UserState, UIState } from '../../store';
+import { UserState, UIState, FormState } from '../../store';
 
 const mockDateNow = new Date().toISOString();
 const mockForms = [
@@ -33,11 +32,11 @@ const mockForms = [
   },
   {
     id: 3,
-    formId: 9002,
+    formId: 9003,
     version: '1.0.0',
     latest: 0,
-    name: 'Form 2',
-    json: JSON.stringify({ id: 9002, name: 'Form 2', question_group: [] }),
+    name: 'Form 3',
+    json: JSON.stringify({ id: 9003, name: 'Form 3', question_group: [] }),
     createdAt: mockDateNow,
     submitted: 2,
     draft: 1,
@@ -46,7 +45,6 @@ const mockForms = [
 ];
 
 jest.mock('../../database/crud/crud-forms');
-jest.mock('../../store/forms');
 const mockNavigation = {
   navigate: jest.fn(),
 };
@@ -60,11 +58,13 @@ describe('Homepage', () => {
     crudForms.selectLatestFormVersion.mockImplementation(() =>
       Promise.resolve(mockLatestFormVersion),
     );
+    FormState.update((s) => {
+      s.allForms = mockForms;
+    });
   });
 
   test('renders correctly', async () => {
     const tree = render(<HomePage navigation={mockNavigation} />);
-
     await waitFor(() => expect(tree.toJSON()).toMatchSnapshot());
   });
 
