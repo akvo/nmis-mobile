@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavigationContainer, useNavigationContainerRef } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
@@ -20,7 +20,7 @@ import { BackHandler } from 'react-native';
 import * as TaskManager from 'expo-task-manager';
 import * as BackgroundFetch from 'expo-background-fetch';
 import * as Notifications from 'expo-notifications';
-import { backgroundTask, notification } from '../lib';
+import { backgroundTask, notification, i18n } from '../lib';
 import { LoadingDialog } from '../components';
 import { crudForms } from '../database/crud';
 
@@ -66,8 +66,10 @@ const RootNavigator = ({ setIsSyncForm }) => {
   const token = AuthState.useState((s) => s.token); // user already has session
   const userDefined = UserState.useState((s) => s.id);
   const syncInterval = BuildParamsState.useState((s) => s.dataSyncInterval);
+  const activeLang = UIState.useState((s) => s.lang);
+  const trans = i18n.text(activeLang);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
       if (!token || !preventHardwareBackPressFormPages.includes(currentPage)) {
         // Allow navigation if user is not logged in
@@ -79,7 +81,7 @@ const RootNavigator = ({ setIsSyncForm }) => {
     return () => backHandler.remove();
   }, [token, currentPage]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     backgroundTask.backgroundTaskStatus(SYNC_FORM_VERSION_TASK_NAME);
     backgroundTask.backgroundTaskStatus(SYNC_FORM_SUBMISSION_TASK_NAME, syncInterval);
 
@@ -94,7 +96,12 @@ const RootNavigator = ({ setIsSyncForm }) => {
         crudForms.selectLatestFormVersion().then((results) => {
           const forms = results.map((r) => ({
             ...r,
-            subtitles: [`Version: ${r.version}`, 'Submitted: 20', 'Draft: 1', 'Synced: 11'],
+            subtitles: [
+              `${trans.versionLabel}${r.version}`,
+              `${trans.submittedLabel}${r.submitted}`,
+              `${trans.draftLabel}${r.draft}`,
+              `${trans.syncLabel}${r.synced}`,
+            ],
           }));
           FormState.update((s) => {
             s.allForms = forms;
@@ -137,28 +144,10 @@ const RootNavigator = ({ setIsSyncForm }) => {
 };
 
 const Navigation = (props) => {
-  const navigationRef = useNavigationContainerRef();
   const [isSyncForm, setIsSyncForm] = useState(false);
 
-  const handleOnChangeNavigation = (state) => {
-    // listen to route change
-    const currentRoute = state.routes[state.routes.length - 1].name;
-    if (['Home', 'ManageForm'].includes(currentRoute)) {
-      // reset form values
-      FormState.update((s) => {
-        s.currentValues = {};
-        s.questionGroupListCurrentValues = {};
-        s.visitedQuestionGroup = [];
-        s.surveyDuration = 0;
-      });
-    }
-    UIState.update((s) => {
-      s.currentPage = currentRoute;
-    });
-  };
-
   return (
-    <NavigationContainer ref={navigationRef} onStateChange={handleOnChangeNavigation} {...props}>
+    <NavigationContainer {...props}>
       <RootNavigator setIsSyncForm={setIsSyncForm} />
       <LoadingDialog isVisible={isSyncForm} loadingText="Updating form, please wait." />
     </NavigationContainer>
