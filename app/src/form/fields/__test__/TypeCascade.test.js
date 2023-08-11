@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { render, fireEvent, act, waitFor, renderHook } from '@testing-library/react-native';
 import TypeCascade from '../TypeCascade';
 import { generateDataPointName } from '../../lib';
+import { cascades } from '../../../lib';
 import { FormState } from '../../../store';
 
 const dummyLocations = [
@@ -20,6 +21,29 @@ import { View } from 'react-native';
 jest.spyOn(View.prototype, 'measureInWindow').mockImplementation((cb) => {
   cb(18, 113, 357, 50);
 });
+jest.mock('expo-sqlite');
+jest.mock('../../../lib', () => ({
+  cascades: {
+    loadDataSource: jest.fn(async (source, id) => {
+      return id
+        ? { rows: { length: 1, _array: [{ id: 112, name: 'KAB. PURBALINGGA', parent: 111 }] } }
+        : {
+            rows: {
+              length: dummyLocations.length,
+              _array: dummyLocations,
+            },
+          };
+    }),
+  },
+  i18n: {
+    text: jest.fn(() => ({
+      latitude: 'Latitude',
+      longitude: 'Longitude',
+    })),
+  },
+
+  generateDataPointName: jest.fn(),
+}));
 
 describe('TypeCascade', () => {
   it('Should not show options when the data source is not set.', () => {
@@ -447,15 +471,6 @@ describe('TypeCascade', () => {
     /**
      * Set datapointName first
      */
-
-    act(() => {
-      FormState.update((s) => {
-        s.dataPointName = [
-          { type: 'cascade', value: null },
-          { type: 'text', value: 'Example' },
-        ];
-      });
-    });
     const fieldID = 'location';
     const fieldName = 'Location';
     const initialValue = null;
@@ -488,17 +503,9 @@ describe('TypeCascade', () => {
     act(() => {
       mockedOnChange(fieldID, [107, 109]);
       const cascadeName = 'Sabdodadi';
-      FormState.update((s) => {
-        s.dataPointName = s.dataPointName.map((dn) =>
-          dn.type === 'cascade' ? { ...dn, value: cascadeName } : dn,
-        );
-      });
     });
 
     await waitFor(() => {
-      const { result } = renderHook(() => FormState.useState((s) => s.dataPointName));
-      const { dpName } = generateDataPointName(result.current);
-      expect(dpName).toBe('Sabdodadi - Example');
       expect(values[fieldID]).toEqual([107, 109]);
     });
   });
@@ -507,11 +514,6 @@ describe('TypeCascade', () => {
     /**
      * Update datapointName first
      */
-    act(() => {
-      FormState.update((s) => {
-        s.dataPointName = [];
-      });
-    });
     const fieldID = 'location';
     const fieldName = 'Location';
     const initialValue = null;
@@ -543,28 +545,14 @@ describe('TypeCascade', () => {
     act(() => {
       mockedOnChange(fieldID, [107, 108]);
       const cascadeName = 'Bantul';
-      FormState.update((s) => {
-        s.dataPointName = s.dataPointName.map((dn) =>
-          dn.type === 'cascade' ? { ...dn, value: cascadeName } : dn,
-        );
-      });
     });
 
     await waitFor(() => {
-      const { result } = renderHook(() => FormState.useState((s) => s.dataPointName));
-      const { dpName } = generateDataPointName(result.current);
-      expect(dpName).toBe('');
       expect(values[fieldID]).toEqual([107, 108]);
     });
   });
 
   it('Should not get cascade name as datapoint name when there is no cascade type', async () => {
-    act(() => {
-      FormState.update((s) => {
-        s.dataPointName = [{ type: 'text', value: 'Example' }, { value: 'Data' }];
-      });
-    });
-
     const fieldID = 'location';
     const fieldName = 'Location';
     const initialValue = null;
@@ -596,18 +584,102 @@ describe('TypeCascade', () => {
     act(() => {
       mockedOnChange(fieldID, [107, 109]);
       const cascadeName = 'Sabdodadi';
+    });
+
+    await waitFor(() => {
+      expect(values[fieldID]).toEqual([107, 109]);
+    });
+  });
+
+  it('should set datapointname when input has data', async () => {
+    const fieldID = 'location';
+    const fieldName = 'Location';
+    const initialValue = [111, 112];
+    const values = { [fieldID]: initialValue };
+
+    const mockedOnChange = jest.fn((fieldName, value) => {
+      values[fieldName] = value;
+    });
+    act(() => {
       FormState.update((s) => {
-        s.dataPointName = s.dataPointName.map((dn) =>
-          dn.type === 'cascade' ? { ...dn, value: cascadeName } : dn,
-        );
+        s.currentValues = {
+          location: initialValue,
+        };
+      });
+    });
+
+    const questionSource = { file: 'file.sqlite', parent_id: 111 };
+    const { getByTestId, getByText, debug } = render(
+      <TypeCascade
+        onChange={mockedOnChange}
+        id={fieldID}
+        name={fieldName}
+        values={values}
+        dataSource={dummyLocations}
+        source={questionSource}
+      />,
+    );
+
+    act(() => {
+      FormState.update((s) => {
+        s.cascades = { location: 'KAB. PURBALINGGA' };
       });
     });
 
     await waitFor(() => {
-      const { result } = renderHook(() => FormState.useState((s) => s.dataPointName));
-      const { dpName } = generateDataPointName(result.current);
-      expect(dpName).toBe('Example - Data');
-      expect(values[fieldID]).toEqual([107, 109]);
+      const { result } = renderHook(() => FormState.useState((s) => s.currentValues));
+      const form = {
+        question_group: [
+          { name: 'Example', question: [{ type: 'cascade', meta: true, id: 'location' }] },
+        ],
+      };
+      const datapoint = generateDataPointName(form, result.current[0], {
+        location: 'KAB. PURBALINGGA',
+      });
+      expect(datapoint.dpName).toBe('KAB. PURBALINGGA');
+    });
+  });
+
+  it('should generate empty datapointName when selected value not match', async () => {
+    const fieldID = 'location';
+    const fieldName = 'Location';
+    const initialValue = [200];
+    const values = { [fieldID]: initialValue };
+
+    const mockedOnChange = jest.fn((fieldName, value) => {
+      values[fieldName] = value;
+    });
+    act(() => {
+      FormState.update((s) => {
+        s.currentValues = {
+          location: initialValue,
+        };
+      });
+    });
+
+    cascades.loadDataSource.mockReturnValue({ rows: { length: 0, _array: [] } });
+
+    const questionSource = { file: 'file.sqlite', parent_id: 0 };
+    const { getByTestId, getByText, debug } = render(
+      <TypeCascade
+        onChange={mockedOnChange}
+        id={fieldID}
+        name={fieldName}
+        values={values}
+        dataSource={dummyLocations}
+        source={questionSource}
+      />,
+    );
+
+    await waitFor(() => {
+      const { result } = renderHook(() => FormState.useState((s) => s.currentValues));
+      const form = {
+        question_group: [
+          { name: 'Example', question: [{ type: 'cascade', meta: true, id: 'location' }] },
+        ],
+      };
+      const datapoint = generateDataPointName(form, result.current[0], {});
+      expect(datapoint.dpName).toBe('');
     });
   });
 });

@@ -56,7 +56,7 @@ describe('SettingsPage', () => {
     });
 
     await waitFor(() => {
-      const frTextEl = getByText('fr');
+      const frTextEl = getByText('French');
       expect(frTextEl).toBeDefined();
     });
   });

@@ -386,4 +386,22 @@ describe('FormDataPage', () => {
       expect(crudDataPoints.selectDataPointsByFormAndSubmitted).toHaveBeenCalledTimes(2);
     });
   });
+
+  it('should go to ManageForm page when arrow back clicked', () => {
+    const mockNavigation = useNavigation();
+    const mockRoute = {
+      params: {
+        id: 123,
+        name: 'Form Name',
+        showSubmitted: false,
+      },
+    };
+
+    const { getByTestId } = render(<FormDataPage navigation={mockNavigation} route={mockRoute} />);
+    const arrowBackEl = getByTestId('arrow-back-button');
+    expect(arrowBackEl).toBeDefined();
+    fireEvent.press(arrowBackEl);
+
+    expect(mockNavigation.navigate).toHaveBeenCalledWith('ManageForm', mockRoute.params);
+  });
 });

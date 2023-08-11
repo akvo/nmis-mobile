@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { View } from 'react-native';
 import { Text, Divider } from '@rneui/themed';
 import QuestionGroupListItem from './QuestionGroupListItem';
-import { validateDependency, modifyDependency } from '../lib';
+import { validateDependency, modifyDependency, generateDataPointName } from '../lib';
 import { styles } from '../styles';
 import { FormState } from '../../store';
 
@@ -37,12 +37,15 @@ export const checkCompleteQuestionGroup = (form, values) => {
 const QuestionGroupList = ({
   form,
   values = {},
-  dataPointNameText = null,
   activeQuestionGroup,
   setActiveQuestionGroup,
   setShowQuestionGroupList,
 }) => {
+  const selectedForm = FormState.useState((s) => s.form);
+  const currentValues = FormState.useState((s) => s.currentValues);
   const visitedQuestionGroup = FormState.useState((s) => s.visitedQuestionGroup);
+  const cascades = FormState.useState((s) => s.cascades);
+  const forms = selectedForm?.json ? JSON.parse(selectedForm.json) : {};
 
   const completedQuestionGroup = useMemo(() => {
     return checkCompleteQuestionGroup(form, values);
@@ -52,6 +55,8 @@ const QuestionGroupList = ({
     setActiveQuestionGroup(questionGroupId);
     setShowQuestionGroupList(false);
   };
+
+  const dataPointNameText = generateDataPointName(forms, currentValues, cascades)?.dpName;
 
   return (
     <View style={styles.questionGroupListContainer}>

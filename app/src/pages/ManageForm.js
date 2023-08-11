@@ -3,19 +3,27 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { View } from 'react-native';
 import { ListItem } from '@rneui/themed';
 import { BaseLayout } from '../components';
-import { UIState } from '../store';
+import { UIState, FormState } from '../store';
 import { i18n } from '../lib';
+import { getCurrentTimestamp } from '../form/lib';
 
 const ManageForm = ({ navigation, route }) => {
   const activeLang = UIState.useState((s) => s.lang);
   const trans = i18n.text(activeLang);
+
+  const goToNewForm = () => {
+    FormState.update((s) => {
+      s.surveyStart = getCurrentTimestamp();
+    });
+    navigation.navigate('FormPage', { ...route?.params, newSubmission: true });
+  };
 
   const items = [
     {
       id: 1,
       text: trans.manageNewBlank,
       icon: 'add',
-      goTo: () => navigation.navigate('FormPage', { ...route?.params, newSubmission: true }),
+      goTo: goToNewForm,
     },
     {
       id: 2,

@@ -6,9 +6,11 @@ import { FormState, UserState, UIState } from '../store';
 import { crudForms } from '../database/crud';
 import { i18n } from '../lib';
 
-const Home = ({ navigation }) => {
+const Home = ({ navigation, route }) => {
+  const params = route?.params || null;
   const { id: currentUserId, name: currentUserName } = UserState.useState((s) => s);
   const [search, setSearch] = useState(null);
+  const [appLang, setAppLang] = useState('en');
   const allForms = FormState.useState((s) => s.allForms);
   const activeLang = UIState.useState((s) => s.lang);
 
@@ -30,24 +32,27 @@ const Home = ({ navigation }) => {
   };
 
   useEffect(() => {
-    FormState.update((s) => {
-      s.form = {};
-    });
-    crudForms.selectLatestFormVersion({ user: currentUserId }).then((results) => {
-      const forms = results.map((r) => ({
-        ...r,
-        subtitles: [
-          `${trans.versionLabel}${r.version}`,
-          `${trans.submittedLabel}${r.submitted}`,
-          `${trans.draftLabel}${r.draft}`,
-          `${trans.syncLabel}${r.synced}`,
-        ],
-      }));
+    if (params || currentUserId || activeLang !== appLang) {
+      setAppLang(activeLang);
       FormState.update((s) => {
-        s.allForms = forms;
+        s.form = {};
       });
-    });
-  }, [currentUserId]);
+      crudForms.selectLatestFormVersion({ user: currentUserId }).then((results) => {
+        const forms = results.map((r) => ({
+          ...r,
+          subtitles: [
+            `${trans.versionLabel}${r.version}`,
+            `${trans.submittedLabel}${r.submitted}`,
+            `${trans.draftLabel}${r.draft}`,
+            `${trans.syncLabel}${r.synced}`,
+          ],
+        }));
+        FormState.update((s) => {
+          s.allForms = forms;
+        });
+      });
+    }
+  }, [currentUserId, params, appLang, activeLang]);
 
   const filteredForms = useMemo(() => {
     return allForms.filter(

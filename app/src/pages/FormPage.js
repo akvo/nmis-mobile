@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   Platform,
   ToastAndroid,
@@ -12,27 +12,21 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { FormContainer } from '../form';
 import { SaveDialogMenu, SaveDropdownMenu } from '../form/support';
 import { BaseLayout } from '../components';
-import { FormState } from '../store';
 import { crudDataPoints } from '../database/crud';
-import { UserState, UIState } from '../store';
-import { generateDataPointName } from '../form/lib';
+import { UserState, UIState, FormState } from '../store';
+import { getDurationInMinutes } from '../form/lib';
 import { i18n } from '../lib';
 
-const convertDurationToMinutes = (currentDataPoint, newDataPoint) => {
-  const totalDuration = (currentDataPoint?.duration || 0) + newDataPoint.duration;
-  if (!totalDuration) {
-    return 0;
-  }
-  return totalDuration / 60;
-};
-
 const FormPage = ({ navigation, route }) => {
-  const { form: selectedForm, dataPointName, surveyDuration } = FormState.useState((s) => s);
+  const selectedForm = FormState.useState((s) => s.form);
+  const surveyDuration = FormState.useState((s) => s.surveyDuration);
+  const surveyStart = FormState.useState((s) => s.surveyStart);
+  const currentValues = FormState.useState((s) => s.currentValues);
   const userId = UserState.useState((s) => s.id);
-  const [onSaveFormParams, setOnSaveFormParams] = React.useState({});
-  const [showDialogMenu, setShowDialogMenu] = React.useState(false);
-  const [showDropdownMenu, setShowDropdownMenu] = React.useState(false);
-  const [showExitConfirmationDialog, setShowExitConfirmationDialog] = React.useState(false);
+  const [onSaveFormParams, setOnSaveFormParams] = useState({});
+  const [showDialogMenu, setShowDialogMenu] = useState(false);
+  const [showDropdownMenu, setShowDropdownMenu] = useState(false);
+  const [showExitConfirmationDialog, setShowExitConfirmationDialog] = useState(false);
   const activeLang = UIState.useState((s) => s.lang);
   const trans = i18n.text(activeLang);
 
@@ -40,65 +34,60 @@ const FormPage = ({ navigation, route }) => {
   // continue saved submission
   const savedDataPointId = route?.params?.dataPointId;
   const isNewSubmission = route?.params?.newSubmission;
-  const [initialValues, setInitialValues] = React.useState({});
-  const [currentDataPoint, setCurrentDataPoint] = React.useState({});
-  const [loading, setLoading] = React.useState(false);
+  const [currentDataPoint, setCurrentDataPoint] = useState({});
+  const [loading, setLoading] = useState(false);
 
-  React.useEffect(() => {
-    let counter = 0;
-    const timerInterval = setInterval(() => {
-      counter++;
-      FormState.update((s) => {
-        s.surveyDuration = counter;
-      });
-    }, 1000);
-    return () => {
-      clearInterval(timerInterval);
-    };
-  }, []);
+  const refreshForm = () => {
+    FormState.update((s) => {
+      s.currentValues = {};
+      s.questionGroupListCurrentValues = {};
+      s.visitedQuestionGroup = [];
+      s.cascades = {};
+      s.surveyDuration = 0;
+    });
+  };
 
-  React.useEffect(() => {
+  useEffect(() => {
     const backHandler = BackHandler.addEventListener('hardwareBackPress', () => {
       const values = onSaveFormParams?.values;
       if (values && Object.keys(values).length) {
         setShowDialogMenu(true);
         return true;
       }
-      if (onSaveFormParams?.refreshForm) {
-        onSaveFormParams.refreshForm();
-      }
+      refreshForm();
       return false;
     });
     return () => backHandler.remove();
   }, [onSaveFormParams]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (!isNewSubmission) {
       fetchSavedSubmission().catch((e) => console.error('[Fetch Data Point Failed]: ', e));
     }
   }, [isNewSubmission]);
 
-  const fetchSavedSubmission = React.useCallback(async () => {
+  const fetchSavedSubmission = useCallback(async () => {
     setLoading(true);
     const dpValue = await crudDataPoints.selectDataPointById({ id: savedDataPointId });
     setCurrentDataPoint(dpValue);
     if (dpValue?.json && Object.keys(dpValue.json)?.length) {
-      setInitialValues(dpValue.json);
+      FormState.update((s) => {
+        s.currentValues = dpValue.json;
+        s.questionGroupListCurrentValues = dpValue.json;
+      });
     }
     setLoading(false);
   }, [savedDataPointId]);
 
-  const formJSON = React.useMemo(() => {
+  const formJSON = useMemo(() => {
     if (!selectedForm?.json) {
       return {};
     }
     return JSON.parse(selectedForm.json);
   }, [selectedForm]);
 
-  const { dpName: subTitleText } = generateDataPointName(dataPointName);
-
-  const onSaveCallback = React.useCallback((values, refreshForm) => {
-    const state = { values, refreshForm };
+  const onSaveCallback = useCallback((values) => {
+    const state = { values };
     setOnSaveFormParams(state);
   }, []);
 
@@ -108,14 +97,12 @@ const FormPage = ({ navigation, route }) => {
       setShowDialogMenu(true);
       return;
     }
-    if (onSaveFormParams?.refreshForm) {
-      onSaveFormParams.refreshForm();
-    }
+    refreshForm();
     return navigation.goBack();
   };
 
   const handleOnSaveAndExit = async () => {
-    const { values, refreshForm } = onSaveFormParams;
+    const { values } = onSaveFormParams;
     try {
       const saveData = {
         form: currentFormId,
@@ -128,18 +115,17 @@ const FormPage = ({ navigation, route }) => {
       const dbCall = isNewSubmission
         ? crudDataPoints.saveDataPoint
         : crudDataPoints.updateDataPoint;
+      const duration = getDurationInMinutes(surveyStart) + surveyDuration;
       await dbCall({
         ...currentDataPoint,
         ...saveData,
-        duration: convertDurationToMinutes(currentDataPoint, saveData),
+        duration: duration === 0 ? 1 : duration,
       });
       if (Platform.OS === 'android') {
         ToastAndroid.show(trans.successSaveDatapoint, ToastAndroid.LONG);
       }
-      if (refreshForm) {
-        refreshForm();
-      }
-      navigation.navigate('ManageForm', { ...route?.params });
+      refreshForm();
+      navigation.navigate('Home', { ...route?.params });
     } catch (err) {
       console.error(err);
       if (Platform.OS === 'android') {
@@ -155,15 +141,12 @@ const FormPage = ({ navigation, route }) => {
   };
 
   const handleOnExit = () => {
-    if (onSaveFormParams?.refreshForm) {
-      onSaveFormParams.refreshForm();
-    }
+    refreshForm();
     return navigation.navigate('Home');
   };
 
-  const handleOnSubmitForm = async (values, refreshForm) => {
+  const handleOnSubmitForm = async (values) => {
     try {
-      // TODO:: Remove this, need to handle in Type Question component (geo)
       const answers = {};
       formJSON.question_group
         .flatMap((qg) => qg.question)
@@ -175,9 +158,6 @@ const FormPage = ({ navigation, route }) => {
           if (q.type === 'cascade') {
             val = val.slice(-1)[0];
           }
-          if (q.type === 'geo') {
-            val = [val.lat, val.lng];
-          }
           if (q.type === 'number') {
             val = parseFloat(val);
           }
@@ -187,7 +167,7 @@ const FormPage = ({ navigation, route }) => {
       const submitData = {
         form: currentFormId,
         user: userId,
-        name: values.name,
+        name: values?.name || trans.untitled,
         geo: values.geo,
         submitted: 1,
         duration: surveyDuration,
@@ -196,16 +176,17 @@ const FormPage = ({ navigation, route }) => {
       const dbCall = isNewSubmission
         ? crudDataPoints.saveDataPoint
         : crudDataPoints.updateDataPoint;
+      const duration = getDurationInMinutes(surveyStart) + surveyDuration;
       await dbCall({
         ...currentDataPoint,
         ...submitData,
-        duration: convertDurationToMinutes(currentDataPoint, submitData),
+        duration: duration === 0 ? 1 : duration,
       });
       if (Platform.OS === 'android') {
         ToastAndroid.show(trans.successSubmitted, ToastAndroid.LONG);
       }
       refreshForm();
-      navigation.navigate('ManageForm', { ...route?.params });
+      navigation.navigate('Home', { ...route?.params });
     } catch (err) {
       console.error(err);
       if (Platform.OS === 'android') {
@@ -217,7 +198,7 @@ const FormPage = ({ navigation, route }) => {
   return (
     <BaseLayout
       title={route?.params?.name}
-      subTitle={subTitleText}
+      subTitle="formPage"
       leftComponent={
         <Button type="clear" onPress={handleOnPressArrowBackButton} testID="arrow-back-button">
           <Icon name="arrow-back" size={18} />
@@ -244,9 +225,10 @@ const FormPage = ({ navigation, route }) => {
       {!loading ? (
         <FormContainer
           forms={formJSON}
-          initialValues={initialValues}
+          initialValues={currentValues}
           onSubmit={handleOnSubmitForm}
           onSave={onSaveCallback}
+          setShowDialogMenu={setShowDialogMenu}
         />
       ) : (
         <View style={styles.loadingContainer}>

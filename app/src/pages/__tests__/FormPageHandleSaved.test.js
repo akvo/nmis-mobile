@@ -4,6 +4,8 @@ import { render, fireEvent, waitFor, act } from '@testing-library/react-native';
 jest.useFakeTimers();
 import FormPage from '../FormPage';
 import crudDataPoints from '../../database/crud/crud-datapoints';
+import { FormState } from '../../store';
+import { getCurrentTimestamp } from '../../form/lib';
 
 const mockFormContainer = jest.fn();
 const mockRoute = {
@@ -25,7 +27,6 @@ const mockValues = {
     7: ['Fried Rice'],
   },
 };
-const mockRefreshForm = jest.fn();
 const mockOnSave = jest.fn();
 
 const exampleTestForm = {
@@ -245,44 +246,56 @@ jest.mock('../../form/FormContainer', () => ({ forms, initialValues, onSubmit, o
   mockFormContainer(forms, initialValues, onSubmit, onSave);
   return (
     <mock-FormContainer>
-      <button
-        onPress={() => mockOnSave(mockValues, mockRefreshForm)}
-        testID="mock-save-button-helper"
-      >
+      <button onPress={() => mockOnSave(mockValues)} testID="mock-save-button-helper">
         Save Trigger helper
       </button>
-      <button onPress={() => onSubmit(mockValues, mockRefreshForm)} testID="mock-submit-button">
+      <button onPress={() => onSubmit(mockValues)} testID="mock-submit-button">
         Submit
       </button>
     </mock-FormContainer>
   );
 });
 
-jest.mock('../../assets/administrations.db', () => {
-  return 'data';
-});
+jest.mock('react', () => ({
+  ...jest.requireActual('react'),
+  useState: jest.fn(),
+  useMemo: jest.fn(),
+}));
 
 describe('FormPage handleOnSaveForm', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    jest.spyOn(Date, 'now').mockReturnValue(1634123456789);
+    FormState.update((s) => {
+      s.surveyDuration = 0;
+    });
   });
 
   test('should render kebab menu and show dialog when kebab menu clicked', async () => {
-    const wrapper = render(<FormPage navigation={mockNavigation} route={mockRoute} />);
+    const mockSetOnSaveFormParams = jest.fn();
+    const mockOnSaveFormParams = { values: mockValues };
+    jest
+      .spyOn(React, 'useState')
+      .mockImplementation(() => [mockOnSaveFormParams, mockSetOnSaveFormParams]);
 
-    const kebabMenuElement = wrapper.queryByTestId('form-page-kebab-menu');
+    const mockSetShowDialogMenu = jest.fn();
+    jest.spyOn(React, 'useState').mockImplementation(() => [true, mockSetShowDialogMenu]);
+
+    const { queryByTestId } = render(<FormPage navigation={mockNavigation} route={mockRoute} />);
+
+    const kebabMenuElement = queryByTestId('form-page-kebab-menu');
     expect(kebabMenuElement).toBeTruthy();
     fireEvent.press(kebabMenuElement);
 
     await waitFor(() => {
-      const dropdownMenuElement = wrapper.queryByTestId('save-dropdown-menu');
+      const dropdownMenuElement = queryByTestId('save-dropdown-menu');
       expect(dropdownMenuElement).toBeTruthy();
     });
   });
 
   test('should show saved dialog menu when back button pressed', async () => {
     const mockSetOnSaveFormParams = jest.fn();
-    const mockOnSaveFormParams = { values: mockValues, refreshForm: mockRefreshForm };
+    const mockOnSaveFormParams = { values: mockValues };
     jest
       .spyOn(React, 'useState')
       .mockImplementation(() => [mockOnSaveFormParams, mockSetOnSaveFormParams]);
@@ -308,13 +321,19 @@ describe('FormPage handleOnSaveForm', () => {
     jest.spyOn(React, 'useMemo').mockReturnValue(exampleTestForm);
 
     const mockSetOnSaveFormParams = jest.fn();
-    const mockOnSaveFormParams = { values: mockValues, refreshForm: mockRefreshForm };
+    const mockOnSaveFormParams = { values: mockValues };
     jest
       .spyOn(React, 'useState')
       .mockImplementation(() => [mockOnSaveFormParams, mockSetOnSaveFormParams]);
 
     const mockSetShowDialogMenu = jest.fn();
     jest.spyOn(React, 'useState').mockImplementation(() => [true, mockSetShowDialogMenu]);
+
+    act(() => {
+      FormState.update((s) => {
+        s.surveyStart = getCurrentTimestamp();
+      });
+    });
 
     const wrapper = render(<FormPage navigation={mockNavigation} route={mockRoute} />);
 
@@ -329,11 +348,13 @@ describe('FormPage handleOnSaveForm', () => {
 
     const saveButtonElement = wrapper.queryByTestId('save-and-exit-button');
     expect(saveButtonElement).toBeTruthy();
-    act(() => fireEvent.press(saveButtonElement));
+    act(() => {
+      fireEvent.press(saveButtonElement);
+    });
 
     await waitFor(() => {
       expect(crudDataPoints.saveDataPoint).toHaveBeenCalledWith({
-        duration: 0,
+        duration: 1,
         form: 1,
         json: {},
         name: 'Untitled',
@@ -341,7 +362,7 @@ describe('FormPage handleOnSaveForm', () => {
         user: null,
       });
       expect(ToastAndroid.show).toHaveBeenCalledTimes(1);
-      expect(mockNavigation.navigate).toHaveBeenCalledWith('ManageForm', mockRoute.params);
+      expect(mockNavigation.navigate).toHaveBeenCalledWith('Home', mockRoute.params);
     });
   });
 
@@ -353,7 +374,7 @@ describe('FormPage handleOnSaveForm', () => {
     crudDataPoints.saveDataPoint.mockImplementation(() => Promise.reject('Error'));
 
     const mockSetOnSaveFormParams = jest.fn();
-    const mockOnSaveFormParams = { values: mockValues, refreshForm: mockRefreshForm };
+    const mockOnSaveFormParams = { values: mockValues };
     jest
       .spyOn(React, 'useState')
       .mockImplementation(() => [mockOnSaveFormParams, mockSetOnSaveFormParams]);
@@ -380,14 +401,13 @@ describe('FormPage handleOnSaveForm', () => {
       expect(crudDataPoints.saveDataPoint).toHaveBeenCalledTimes(1);
       expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
       expect(ToastAndroid.show).toHaveBeenCalledTimes(1);
-      expect(mockRefreshForm).not.toHaveBeenCalled();
       expect(mockNavigation.navigate).not.toHaveBeenCalled();
     });
   });
 
   test('should call handleOnExit and navigate to Home page when Exit without Saving button pressed', async () => {
     const mockSetOnSaveFormParams = jest.fn();
-    const mockOnSaveFormParams = { values: mockValues, refreshForm: mockRefreshForm };
+    const mockOnSaveFormParams = { values: mockValues };
     jest
       .spyOn(React, 'useState')
       .mockImplementation(() => [mockOnSaveFormParams, mockSetOnSaveFormParams]);

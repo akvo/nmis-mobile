@@ -17,7 +17,7 @@ const uiText = {
     errorSubmitted: 'Error! failed to submit data point',
     errorSaveDatapoint: 'Error! failed to save data point',
     usersSwitchTo: 'Switch to ',
-    getStartedSubTitle: 'Lorem Ipsum dolor sit amet dolor random',
+    getStartedSubTitle: 'Gather Information Anywhere, Anytime',
     getStartedTitle1: 'Get Started',
     getStartedTitle2: 'collecting data the',
     getStartedTitle3: 'smart way',
@@ -80,6 +80,11 @@ const uiText = {
     langDesc: 'Application language',
     confirmSync:
       'Are you sure to sync the submission to the server now? This might take some time.',
+    buttonCurrLocation: 'Use current location',
+    loadingText: 'Loading...',
+    buttonSelectedLoc: 'Use selected location',
+    fetchingLocation: 'Fetching location...',
+    selectMultiItem: 'Select multiple item(s)',
   },
   fr: {
     latitude: 'Latitude',
@@ -99,7 +104,7 @@ const uiText = {
     errorSubmitted: "Erreur! échec de l'envoi du point de données",
     errorSaveDatapoint: "Erreur! échec de l'enregistrement du point de données",
     usersSwitchTo: 'Passer à ',
-    getStartedSubTitle: "Embarquez dès aujourd'hui pour votre voyage vers les données!",
+    getStartedSubTitle: "Rassemblez des informations n'importe où, n'importe quand",
     getStartedTitle1: 'Commencer',
     getStartedTitle2: 'collecte des données le',
     getStartedTitle3: 'méthode intelligente',
@@ -134,6 +139,7 @@ const uiText = {
     manageViewSubmitted: 'Vue soumise',
     homeSearch: 'Formulaire de recherche',
     homePageTitle: 'Listes de formulaires',
+    settingsPageTitle: 'Paramètres',
     searchPlaceholder: 'Recherche...',
     formDataSearch: 'Rechercher le point de données',
     untitled: 'Sans titre',
@@ -162,6 +168,11 @@ const uiText = {
     langDesc: "Langue de l'application",
     confirmSync:
       'Êtes-vous sûr de synchroniser la soumission avec le serveur maintenant ? Cela peut prendre un certain temps.',
+    buttonCurrLocation: "Utiliser l'emplacement actuel",
+    loadingText: 'Chargement...',
+    buttonSelectedLoc: "Utiliser l'emplacement sélectionné",
+    fetchingLocation: "Récupération de l'emplacement...",
+    selectMultiItem: 'Sélectionnez plusieurs éléments',
   },
 };
 

@@ -6,7 +6,7 @@ import { act, render, renderHook, waitFor, fireEvent } from '@testing-library/re
 import mockBackHandler from 'react-native/Libraries/Utilities/__mocks__/BackHandler.js';
 
 import MapView from '../MapView';
-import { MapState, FormState } from '../../store';
+import { FormState } from '../../store';
 import { loc } from '../../lib';
 
 const loadHtml = require('map.html');
@@ -34,7 +34,20 @@ jest.mock('expo-file-system', () => {
 
 jest.mock('react-native/Libraries/Utilities/BackHandler', () => mockBackHandler);
 
+const mockSelectedForm = {
+  id: 1,
+  name: 'Health Facilities',
+};
+
 describe('MapView', () => {
+  beforeAll(() => {
+    // update FormState to store selectedForm
+    act(() => {
+      FormState.update((s) => {
+        s.form = mockSelectedForm;
+      });
+    });
+  });
   it('should render html on webview correctly', async () => {
     const route = {
       params: {
@@ -64,40 +77,39 @@ describe('MapView', () => {
   });
 
   it('should use current location when the button clicked', async () => {
+    const curr_lat = 36.12345;
+    const curr_lng = -122.6789;
     const route = {
       params: {
+        current_location: { lat: curr_lat, lng: curr_lng },
         lat: 37.12345,
         lng: -122.6789,
       },
     };
 
-    const { getByTestId } = render(<MapView route={route} />);
-    const { result: resMapState } = renderHook(() => MapState.useState());
-    const { result: resLoadingState } = renderHook(() => useState(false));
-
-    const [loading, setLoading] = resLoadingState.current;
+    const mockNavigation = useNavigation();
+    const { getByTestId } = render(<MapView route={route} navigation={mockNavigation} />);
+    const { result: resMapState } = renderHook(() => FormState.useState((s) => s.currentValues));
 
     const buttonEl = getByTestId('button-get-current-loc');
     expect(buttonEl).toBeDefined();
     fireEvent.press(buttonEl);
 
     act(() => {
-      setLoading(true);
-      loc.getCurrentLocation((res) => {
-        MapState.update((s) => {
-          s.latitude = res.coords.latitude;
-          s.longitude = res.coords.longitude;
-        });
-        setLoading(false);
+      FormState.update((s) => {
+        s.currentValues = {
+          ...s.currentValues,
+          geoField: [curr_lat, curr_lng],
+        };
       });
     });
 
     await waitFor(() => {
-      const { latitude, longitude } = resMapState.current;
-      expect(latitude).toBe(route.params.lat);
-      expect(longitude).toBe(route.params.lng);
+      const { geoField } = resMapState.current;
+      const [latitude, longitude] = geoField || {};
 
-      expect(resLoadingState.current[0]).toBeFalsy();
+      expect(latitude).toBe(curr_lat);
+      expect(longitude).toBe(curr_lng);
     });
   });
 
@@ -111,18 +123,6 @@ describe('MapView', () => {
     const navigation = useNavigation();
     navigation.canGoBack.mockReturnValue(true);
     expect(navigation.canGoBack()).toEqual(true);
-
-    const mockSelectedForm = {
-      id: 1,
-      name: 'Health Facilities',
-    };
-
-    // update FormState to store selectedForm
-    act(() => {
-      FormState.update((s) => {
-        s.form = mockSelectedForm;
-      });
-    });
 
     render(<MapView route={route} navigation={navigation} />);
 
@@ -146,6 +146,52 @@ describe('MapView', () => {
       const { form: formSelected } = result.current;
       expect(formSelected).toBe(mockSelectedForm);
       expect(navigation.navigate).toHaveBeenCalledWith('FormPage', mockSelectedForm);
+    });
+  });
+
+  it('should get values from selected location', async () => {
+    const route = {
+      params: {
+        lat: 37.12345,
+        lng: -122.6789,
+        id: 12,
+      },
+    };
+    const mockNavigation = useNavigation();
+
+    const { getByTestId } = render(<MapView route={route} navigation={mockNavigation} />);
+    const { result } = renderHook(() => useState({ lat: null, lng: null }));
+    const { result: resultVisible } = renderHook(() => useState(false));
+
+    const [markerData, setMarkerData] = result.current;
+    const [visible, setVisible] = resultVisible.current;
+    const webViewEl = getByTestId('webview-map');
+    // Mock the data that will be passed in the onMessage event
+    const mockMarkerData = { lat: route.params.lat, lng: route.params.lng, distance: 21 };
+    const mockEventData = JSON.stringify({ type: 'markerClicked', data: mockMarkerData });
+
+    // Trigger the onMessage event
+    fireEvent(webViewEl, 'onMessage', {
+      nativeEvent: { data: mockEventData },
+    });
+
+    const buttonEl = getByTestId('button-selected-loc');
+    expect(buttonEl).toBeDefined();
+    fireEvent.press(buttonEl);
+
+    act(() => {
+      setMarkerData({
+        lat: 36.12345,
+        lng: -122.6789,
+      });
+    });
+
+    await waitFor(() => {
+      expect(result.current[0]).toEqual({
+        lat: 36.12345,
+        lng: -122.6789,
+      });
+      expect(mockNavigation.navigate).toHaveBeenCalledWith('FormPage', mockSelectedForm);
     });
   });
 });

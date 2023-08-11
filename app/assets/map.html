@@ -31,10 +31,12 @@
     </script>
     <script>
       const selector = document.getElementById('map');
-      const map = L.map('map').fitWorld();
+      const map = L.map('map', { zoomControl: false }).fitWorld();
 
       L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        minZoom: 8,
         maxZoom: 19,
+        zoom: 13,
         attribution: '© OpenStreetMap',
       }).addTo(map);
 
@@ -42,13 +44,20 @@
       const lat = selector.getAttribute('data-lat');
       const lng = selector.getAttribute('data-lng');
 
-      map.setView([lat, lng], 13);
+      map.setView([lat, lng], 19);
       let marker = L.marker([lat, lng]).addTo(map);
+
+      L.control
+        .zoom({
+          position: 'bottomleft',
+        })
+        .addTo(map);
 
       map.on('click', (e) => {
         if (marker) {
           map.removeLayer(marker);
         }
+
         handleMapClick(e);
         map.invalidateSize();
 

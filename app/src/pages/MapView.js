@@ -3,7 +3,6 @@ import {
   View,
   StyleSheet,
   ActivityIndicator,
-  Button,
   Platform,
   ToastAndroid,
   BackHandler,
@@ -11,50 +10,71 @@ import {
 import { WebView } from 'react-native-webview';
 import { Asset } from 'expo-asset';
 import * as FileSystem from 'expo-file-system';
-import { MapState, FormState } from '../store';
-import { loc } from '../lib';
+import { Button, Dialog, Text } from '@rneui/themed';
+import { FormState, UIState } from '../store';
+import { i18n } from '../lib';
 
 const MapView = ({ navigation, route }) => {
+  const {
+    latitude: latParam,
+    longitude: lngParam,
+    id: questionID,
+    current_location: currentLocation,
+  } = route?.params;
   const [htmlContent, setHtmlContent] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const [markerData, setMarkerData] = useState({
+    lat: latParam,
+    lng: lngParam,
+  });
   const webViewRef = useRef(null);
   const selectedForm = FormState.useState((s) => s.form);
+  const activeLang = UIState.useState((s) => s.lang);
+  const trans = i18n.text(activeLang);
 
-  const updateMapState = (markerData) => {
-    const { lat, lng } = markerData;
-    MapState.update((s) => {
-      s.latitude = lat;
-      s.longitude = lng;
+  const goBack = () => {
+    navigation.navigate('FormPage', {
+      id: selectedForm?.id,
+      name: selectedForm?.name,
+      newSubmission: route?.params?.newSubmission,
     });
   };
 
   const handleCurrentLocation = () => {
-    setLoading(true);
-    loc.getCurrentLocation(
-      (res) => {
-        const { latitude: lat, longitude: lng } = res?.coords;
-        updateMapState({ lat, lng });
-
-        const eventData = JSON.stringify({ type: 'changeMarker', data: { lat, lng } });
-        webViewRef.current.postMessage(eventData);
-        setLoading(false);
-      },
-      (err) => {
-        setLoading(false);
-        setLocation({});
-        if (Platform.OS === 'android') {
-          ToastAndroid.show(err.message, ToastAndroid.SHORT);
-        }
-      },
-    );
+    setMarkerData(currentLocation);
+    FormState.update((s) => {
+      s.currentValues = {
+        ...s.currentValues,
+        [questionID]: [currentLocation.lat, currentLocation.lng],
+      };
+    });
+    const eventData = JSON.stringify({
+      type: 'changeMarker',
+      data: currentLocation,
+    });
+    webViewRef.current.postMessage(eventData);
+    goBack();
   };
 
   const loadHtml = async () => {
     const [{ localUri }] = await Asset.loadAsync(require('../../assets/map.html'));
-    let fileContents = await FileSystem.readAsStringAsync(localUri);
-    const { latitude: lat, longitude: lng } = route?.params;
-    fileContents = fileContents.replace(/{{latitude}}/g, lat).replace(/{{longitude}}/g, lng);
-    setHtmlContent(fileContents);
+    const fileContents = await FileSystem.readAsStringAsync(localUri);
+    const htmlContents = fileContents
+      .replace(/{{latitude}}/g, latParam)
+      .replace(/{{longitude}}/g, lngParam);
+    setHtmlContent(htmlContents);
+  };
+
+  const handleUseSelectedLocation = () => {
+    const { lat, lng } = markerData;
+    FormState.update((s) => {
+      s.currentValues = {
+        ...s.currentValues,
+        [questionID]: [lat, lng],
+      };
+    });
+    goBack();
   };
 
   useEffect(() => {
@@ -67,21 +87,6 @@ const MapView = ({ navigation, route }) => {
     }
   }, [loading, htmlContent]);
 
-  useEffect(() => {
-    const handleBackPress = () => {
-      navigation.navigate('FormPage', {
-        id: selectedForm?.id,
-        name: selectedForm?.name,
-        newSubmission: route?.params?.newSubmission,
-      });
-      return true;
-    };
-    const backHandler = BackHandler.addEventListener('hardwareBackPress', handleBackPress);
-    return () => {
-      backHandler.remove();
-    };
-  }, []);
-
   return (
     <View style={styles.container}>
       {loading && <ActivityIndicator />}
@@ -93,17 +98,18 @@ const MapView = ({ navigation, route }) => {
         onMessage={(event) => {
           const messageData = JSON.parse(event.nativeEvent.data);
           if (messageData.type === 'markerClicked') {
-            updateMapState(messageData.data);
+            setMarkerData(messageData.data);
           }
         }}
         testID="webview-map"
       />
       <View style={styles.buttonContainer}>
-        <Button
-          title="Use current location"
-          onPress={handleCurrentLocation}
-          testID="button-get-current-loc"
-        />
+        <Button onPress={handleCurrentLocation} testID="button-get-current-loc">
+          {trans.buttonCurrLocation}
+        </Button>
+        <Button onPress={handleUseSelectedLocation} type="outline" testID="button-selected-loc">
+          {trans.buttonSelectedLoc}
+        </Button>
       </View>
     </View>
   );
@@ -118,7 +124,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   buttonContainer: {
-    padding: 10,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 8,
+    padding: 8,
   },
 });
 

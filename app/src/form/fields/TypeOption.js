@@ -4,7 +4,7 @@ import { FieldLabel } from '../support';
 import { styles } from '../styles';
 import { CheckBox } from '@rneui/themed';
 import { Dropdown } from 'react-native-element-dropdown';
-import { UIState } from '../../store';
+import { FormState } from '../../store';
 import { i18n } from '../../lib';
 
 const TypeOption = ({
@@ -21,17 +21,13 @@ const TypeOption = ({
   const isRadioGroup = React.useMemo(() => {
     return option.length <= 3;
   }, [option]);
-  const activeLang = UIState.useState((s) => s.lang);
+  const activeLang = FormState.useState((s) => s.lang);
   const trans = i18n.text(activeLang);
+  const requiredValue = required ? requiredSign : null;
 
   return (
     <View style={styles.optionContainer}>
-      <FieldLabel
-        keyform={keyform}
-        name={name}
-        tooltip={tooltip}
-        requiredSign={required ? requiredSign : null}
-      />
+      <FieldLabel keyform={keyform} name={name} tooltip={tooltip} requiredSign={requiredValue} />
       {isRadioGroup ? (
         option.map((opt, opti) => (
           <CheckBox

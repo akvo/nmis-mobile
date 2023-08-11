@@ -13,6 +13,7 @@ import {
   AddUserPage,
   MapViewPage,
   UsersPage,
+  FormDataDetailsPage,
 } from '../pages';
 import { UIState, AuthState, UserState, FormState, BuildParamsState } from '../store';
 import { BackHandler } from 'react-native';
@@ -128,6 +129,7 @@ const RootNavigator = ({ setIsSyncForm }) => {
           <Stack.Screen name="MapView" component={MapViewPage} />
           <Stack.Screen name="AddUser" component={AddUserPage} />
           <Stack.Screen name="Users" component={UsersPage} />
+          <Stack.Screen name="FormDataDetails" component={FormDataDetailsPage} />
         </>
       )}
     </Stack.Navigator>
@@ -147,7 +149,6 @@ const Navigation = (props) => {
         s.currentValues = {};
         s.questionGroupListCurrentValues = {};
         s.visitedQuestionGroup = [];
-        s.dataPointName = [];
         s.surveyDuration = 0;
       });
     }

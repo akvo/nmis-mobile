@@ -37,12 +37,10 @@ const LogoutButton = () => {
 
     FormState.update((s) => {
       s.form = {};
-      s.questionGroups = [];
-      s.question = [];
       s.currentValues = {}; // answers
       s.questionGroupListCurrentValues = {}; // answers for question group list component
       s.visitedQuestionGroup = [];
-      s.dataPointName = [];
+      s.cascades = {};
       s.surveyDuration = 0;
     });
 

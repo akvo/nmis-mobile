@@ -6,7 +6,7 @@ import { styles } from './styles';
 import { FormNavigation, QuestionGroupList } from './support';
 import QuestionGroup from './components/QuestionGroup';
 import { transformForm, generateDataPointName } from './lib';
-import { FormState, UIState } from '../store';
+import { FormState } from '../store';
 
 // TODO:: Allow other not supported yet
 // TODO:: Repeat group not supported yet
@@ -32,45 +32,26 @@ const checkValuesBeforeCallback = (values) =>
     .filter((v) => v)
     .reduce((res, current) => ({ ...res, ...current }), {});
 
-const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave }) => {
+const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave, setShowDialogMenu }) => {
   const formRef = useRef();
   const [activeGroup, setActiveGroup] = useState(0);
   const [showQuestionGroupList, setShowQuestionGroupList] = useState(false);
-  const { currentValues, questionGroupListCurrentValues, dataPointName } = FormState.useState(
-    (s) => s,
+  const currentValues = FormState.useState((s) => s.currentValues);
+  const questionGroupListCurrentValues = FormState.useState(
+    (s) => s.questionGroupListCurrentValues,
   );
-  const activeLang = UIState.useState((s) => s.lang);
-
-  useEffect(() => {
-    if (!dataPointName?.length && forms?.question_group?.length) {
-      const meta = forms.question_group
-        .filter((qg) => !qg?.repeatable)
-        .flatMap((qg) => qg.question.filter((q) => q?.meta))
-        .map((q) => ({ id: q.id, type: q.type, value: null }));
-      FormState.update((s) => {
-        s.dataPointName = meta;
-      });
-    }
-  }, [forms, dataPointName]);
-
-  useEffect(() => {
-    const checkDataPointName = dataPointName.filter((x) => !x.value);
-    if (Object.keys(initialValues).length && checkDataPointName.length) {
-      FormState.update((s) => {
-        s.dataPointName = dataPointName.map((x) => ({ ...x, value: initialValues?.[x.id] }));
-      });
-    }
-  }, [initialValues, dataPointName]);
+  const cascades = FormState.useState((s) => s.cascades);
+  const activeLang = FormState.useState((s) => s.lang);
 
   useEffect(() => {
     if (onSave) {
       const results = checkValuesBeforeCallback(currentValues);
       if (!Object.keys(results).length) {
-        return onSave(null, refreshForm);
+        return onSave(null);
       }
-      const { dpName, dpGeo } = generateDataPointName(dataPointName);
+      const { dpName, dpGeo } = generateDataPointName(forms, currentValues, cascades);
       const values = { name: dpName, geo: dpGeo, answers: results };
-      return onSave(values, refreshForm);
+      return onSave(values);
     }
   }, [currentValues, onSave]);
 
@@ -86,33 +67,11 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave }) => {
     return formDefinition.question_group.find((qg) => qg.id === activeGroup);
   }, [formDefinition, activeGroup]);
 
-  const initialFormValues = useMemo(() => {
-    if (Object.keys(initialValues).length) {
-      FormState.update((s) => {
-        s.currentValues = initialValues;
-        s.questionGroupListCurrentValues = initialValues;
-      });
-      return initialValues;
-    }
-    return currentValues;
-  }, [initialValues, currentValues]);
-
-  const refreshForm = () => {
-    FormState.update((s) => {
-      s.currentValues = {};
-      s.questionGroupListCurrentValues = {};
-      s.visitedQuestionGroup = [];
-      s.dataPointName = [];
-      s.surveyDuration = 0;
-    });
-    formRef.current?.resetForm();
-  };
-
   const handleOnSubmitForm = (values) => {
     const results = checkValuesBeforeCallback(values);
     if (onSubmit) {
-      const { dpName, dpGeo } = generateDataPointName(dataPointName);
-      onSubmit({ name: dpName, geo: dpGeo, answers: results }, refreshForm);
+      const { dpName, dpGeo } = generateDataPointName(forms, currentValues, cascades);
+      onSubmit({ name: dpName, geo: dpGeo, answers: results });
     }
   };
 
@@ -123,7 +82,7 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave }) => {
           {!showQuestionGroupList ? (
             <Formik
               innerRef={formRef}
-              initialValues={initialFormValues}
+              initialValues={initialValues}
               onSubmit={handleOnSubmitForm}
               validateOnBlur={true}
               validateOnChange={true}
@@ -151,7 +110,6 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave }) => {
             <QuestionGroupList
               form={formDefinition}
               values={questionGroupListCurrentValues}
-              dataPointNameText={generateDataPointName(dataPointName)?.dpName}
               activeQuestionGroup={activeGroup}
               setActiveQuestionGroup={setActiveGroup}
               setShowQuestionGroupList={setShowQuestionGroupList}
@@ -173,6 +131,7 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave }) => {
           totalGroup={formDefinition?.question_group?.length || 0}
           showQuestionGroupList={showQuestionGroupList}
           setShowQuestionGroupList={setShowQuestionGroupList}
+          setShowDialogMenu={setShowDialogMenu}
         />
       </View>
     </>

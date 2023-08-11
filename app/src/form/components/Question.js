@@ -23,17 +23,6 @@ const Question = ({ group, setFieldValue, values }) => {
         }
         return null;
       }
-      return (
-        <View key={`question-${field.id}`} style={styles.questionContainer}>
-          <QuestionField
-            keyform={keyform}
-            field={field}
-            setFieldValue={setFieldValue}
-            values={values}
-            validate={(currentValue) => generateValidationSchemaFieldLevel(currentValue, field)}
-          />
-        </View>
-      );
     }
     return (
       <View key={`question-${field.id}`} style={styles.questionContainer}>

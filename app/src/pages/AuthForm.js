@@ -1,5 +1,6 @@
 import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { Asset } from 'expo-asset';
 import { View, StyleSheet, Platform, ToastAndroid } from 'react-native';
 import { Input, Button, Text } from '@rneui/themed';
 import { CenterLayout, Image } from '../components';
@@ -18,6 +19,7 @@ const ToggleEye = ({ hidden, onPress }) => {
 };
 
 const AuthForm = ({ navigation }) => {
+  const logo = Asset.fromModule(require('../assets/icon.png')).uri;
   const { online: isNetworkAvailable, lang: activeLang } = UIState.useState((s) => s);
   const [passcode, setPasscode] = React.useState(null);
   const [hidden, setHidden] = React.useState(true);
@@ -111,7 +113,7 @@ const AuthForm = ({ navigation }) => {
   const titles = [trans.authTitle1, trans.authTitle2, trans.authTitle3];
   return (
     <CenterLayout>
-      <Image />
+      <Image src={logo ? logo : null} />
       <CenterLayout.Titles items={titles} />
       <View style={styles.container}>
         <Input

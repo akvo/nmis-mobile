@@ -7,7 +7,8 @@ import { UserState } from '../store';
 import { BaseLayout } from '../components';
 import { crudDataPoints } from '../database/crud';
 import { i18n, backgroundTask } from '../lib';
-import { UIState } from '../store';
+import { UIState, FormState } from '../store';
+import { getCurrentTimestamp } from '../form/lib';
 
 const convertMinutesToHHMM = (minutes) => {
   const hours = Math.floor(minutes / 60);
@@ -96,11 +97,25 @@ const FormData = ({ navigation, route }) => {
     );
   }, [data, search]);
 
-  const handleFormDataListAction = (id) => {
-    if (showSubmitted) {
-      return null;
-    }
-    return navigation.navigate('FormPage', {
+  const goToDetails = (id) => {
+    const findData = filteredData.find((d) => d.id === id);
+    const { json: valuesJSON, name: dataPointName } = findData || {};
+
+    FormState.update((s) => {
+      const valuesParsed = JSON.parse(valuesJSON);
+      s.currentValues = typeof valuesParsed === 'string' ? JSON.parse(valuesParsed) : valuesParsed;
+    });
+
+    navigation.navigate('FormDataDetails', { name: dataPointName });
+  };
+
+  const goToEditForm = (id) => {
+    const selectedData = filteredData.find((d) => d.id === id);
+    FormState.update((s) => {
+      s.surveyStart = getCurrentTimestamp();
+      s.surveyDuration = selectedData?.duration;
+    });
+    navigation.navigate('FormPage', {
       ...route?.params,
       dataPointId: id,
       newSubmission: false,
@@ -115,14 +130,24 @@ const FormData = ({ navigation, route }) => {
     setShowConfirmationSyncDialog(true);
   };
 
-  const handleOnSync = async () => {
+  const handleOnSync = () => {
     setShowConfirmationSyncDialog(false);
     setData([]);
     setSyncing(true);
-    await backgroundTask.syncFormSubmission();
-    await fetchData();
-    setSyncing(false);
+    backgroundTask
+      .syncFormSubmission()
+      .then(async () => {
+        await fetchData();
+      })
+      .catch((e) => {
+        console.error('[Manual SyncFormSubmission]: ', e);
+      })
+      .finally(() => {
+        setSyncing(false);
+      });
   };
+
+  const handleOnAction = showSubmitted ? goToDetails : goToEditForm;
 
   return (
     <BaseLayout
@@ -150,11 +175,7 @@ const FormData = ({ navigation, route }) => {
           <ActivityIndicator />
         </View>
       ) : (
-        <BaseLayout.Content
-          data={filteredData}
-          action={handleFormDataListAction}
-          testID="data-point-list"
-        />
+        <BaseLayout.Content data={filteredData} action={handleOnAction} testID="data-point-list" />
       )}
 
       {/* confirmation dialog to sync */}

@@ -5,6 +5,7 @@ jest.useFakeTimers();
 import FormPage from '../FormPage';
 import crudDataPoints from '../../database/crud/crud-datapoints';
 import { UserState, FormState } from '../../store';
+import { getCurrentTimestamp } from '../../form/lib';
 
 const mockFormContainer = jest.fn();
 const mockRoute = {
@@ -28,7 +29,6 @@ const mockValues = {
     7: ['Fried Rice'],
   },
 };
-const mockRefreshForm = jest.fn();
 
 const exampleTestForm = {
   name: 'Testing Form',
@@ -247,22 +247,35 @@ jest.mock('../../form/FormContainer', () => ({ forms, initialValues, onSubmit })
   mockFormContainer(forms, initialValues, onSubmit);
   return (
     <mock-FormContainer>
-      <button onPress={() => onSubmit(mockValues, mockRefreshForm)} testID="mock-submit-button">
+      <button onPress={() => onSubmit(mockValues)} testID="mock-submit-button">
         Submit
       </button>
     </mock-FormContainer>
   );
 });
 
-jest.mock('../../assets/administrations.db', () => {
-  return 'data';
-});
+jest.mock('react', () => ({
+  ...jest.requireActual('react'),
+  useMemo: jest.fn(),
+}));
 
 describe('FormPage handleOnSubmitForm', () => {
+  beforeEach(() => {
+    jest.spyOn(Date, 'now').mockReturnValue(1634123456789);
+    FormState.update((s) => {
+      s.surveyDuration = 0;
+    });
+  });
+
   test('should call handleOnSubmitForm with the correct values when the form is submitted', async () => {
     Platform.OS = 'android';
     ToastAndroid.show = jest.fn();
     jest.spyOn(React, 'useMemo').mockReturnValue(exampleTestForm);
+    act(() => {
+      FormState.update((s) => {
+        s.surveyStart = getCurrentTimestamp() - 90;
+      });
+    });
 
     const wrapper = render(<FormPage navigation={mockNavigation} route={mockRoute} />);
 
@@ -283,7 +296,7 @@ describe('FormPage handleOnSubmitForm', () => {
     // save datapoint to database
     await waitFor(() => {
       expect(crudDataPoints.saveDataPoint).toHaveBeenCalledWith({
-        duration: 0.15, // in minutes
+        duration: 10,
         form: 1,
         json: {
           1: 'John',
@@ -302,9 +315,7 @@ describe('FormPage handleOnSubmitForm', () => {
     });
 
     expect(ToastAndroid.show).toHaveBeenCalledTimes(1);
-    // call refreshForm
-    expect(mockRefreshForm).toHaveBeenCalledTimes(1);
-    expect(mockNavigation.navigate).toHaveBeenCalledWith('ManageForm', mockRoute.params);
+    expect(mockNavigation.navigate).toHaveBeenCalledWith('Home', mockRoute.params);
   });
 
   test('should show ToastAndroid if handleOnSubmitForm throw an error', async () => {
@@ -323,7 +334,6 @@ describe('FormPage handleOnSubmitForm', () => {
       expect(crudDataPoints.saveDataPoint).toHaveBeenCalledTimes(1);
       expect(consoleErrorSpy).toHaveBeenCalledTimes(1);
       expect(ToastAndroid.show).toHaveBeenCalledTimes(1);
-      expect(mockRefreshForm).not.toHaveBeenCalled();
       expect(mockNavigation.navigate).not.toHaveBeenCalled();
     });
   });
