@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { ScrollView, BackHandler, Platform, ToastAndroid } from 'react-native';
 import { Button, ListItem, Skeleton } from '@rneui/themed';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -25,12 +25,12 @@ const Users = ({ navigation, route }) => {
     navigation.navigate('Home');
   };
 
-  const loadUsers = async () => {
+  const loadUsers = useCallback(async () => {
     const selectQuery = query.read('users');
     const { rows } = await conn.tx(db, selectQuery);
     setUsers(rows._array);
     setLoading(false);
-  };
+  }, []);
 
   const handleSelectUser = async (id, name) => {
     const currUserQuery = query.update('users', { id: currUserID }, { active: 0 });
@@ -63,7 +63,7 @@ const Users = ({ navigation, route }) => {
         setLoading(true);
       }
     }
-  }, [loading, route]);
+  }, [loading, route, loadUsers]);
 
   useEffect(() => {
     const handleBackPress = () => {
@@ -85,13 +85,13 @@ const Users = ({ navigation, route }) => {
         </Button>
       }
       rightComponent={
-        <Button type="clear" testID="button-users" onPress={goToCreate}>
+        <Button type="clear" testID="button-add-user" onPress={goToCreate}>
           <Icon name="add" size={18} />
         </Button>
       }
     >
       <ScrollView>
-        {loading && <Skeleton animation="wave" />}
+        {loading && <Skeleton animation="wave" testID="loading-users" />}
         {users.map((user, index) => {
           return (
             <ListItem.Swipeable
@@ -105,12 +105,15 @@ const Users = ({ navigation, route }) => {
                   buttonStyle={{ minHeight: '100%', backgroundColor: 'red' }}
                 />
               )}
+              testID={`list-item-user-${user.id}`}
               bottomDivider
             >
               <ListItem.Content>
-                <ListItem.Title>{user.name}</ListItem.Title>
+                <ListItem.Title testID={`title-username-${user.id}`}>{user.name}</ListItem.Title>
               </ListItem.Content>
-              {user.active === 1 && <Icon name="checkmark" size={18} />}
+              {user.active === 1 && (
+                <Icon name="checkmark" size={18} testID={`icon-checkmark-${user.id}`} />
+              )}
             </ListItem.Swipeable>
           );
         })}
