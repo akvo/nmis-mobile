@@ -12,6 +12,7 @@ const Home = ({ navigation, route }) => {
   const [data, setData] = useState([]);
   const [appLang, setAppLang] = useState('en');
 
+  const isManualSynced = UIState.useState((s) => s.isManualSynced);
   const activeLang = UIState.useState((s) => s.lang);
   const trans = i18n.text(activeLang);
 
@@ -31,10 +32,10 @@ const Home = ({ navigation, route }) => {
   };
 
   useEffect(() => {
-    if (params || currentUserId || activeLang !== appLang) {
+    if (params || currentUserId || activeLang !== appLang || isManualSynced) {
       setAppLang(activeLang);
-      FormState.update((s) => {
-        s.form = {};
+      UIState.update((s) => {
+        s.isManualSynced = false;
       });
       crudForms.selectLatestFormVersion({ user: currentUserId }).then((results) => {
         const forms = results.map((r) => ({
@@ -49,7 +50,7 @@ const Home = ({ navigation, route }) => {
         setData(forms);
       });
     }
-  }, [currentUserId, params, appLang, activeLang]);
+  }, [currentUserId, params, appLang, activeLang, isManualSynced]);
 
   const filteredData = useMemo(() => {
     return data.filter(
