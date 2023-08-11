@@ -8,13 +8,14 @@ import { i18n } from '../lib';
 
 const Home = ({ navigation, route }) => {
   const params = route?.params || null;
-  const { id: currentUserId, name: currentUserName } = UserState.useState((s) => s);
   const [search, setSearch] = useState(null);
   const [appLang, setAppLang] = useState('en');
   const allForms = FormState.useState((s) => s.allForms);
   const activeLang = UIState.useState((s) => s.lang);
-
   const trans = i18n.text(activeLang);
+
+  const currentUserId = UserState.useState((s) => s.id);
+  const currentUserName = UserState.useState((s) => s.name);
   const subTitleText = currentUserName ? `${trans.userLabel} ${currentUserName}` : null;
 
   const goToManageForm = (id) => {
