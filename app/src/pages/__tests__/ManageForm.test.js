@@ -3,10 +3,22 @@ import renderer from 'react-test-renderer';
 import { render, fireEvent } from '@testing-library/react-native';
 import { useNavigation } from '@react-navigation/native';
 import ManageFormPage from '../ManageForm';
+import { FormState } from '../../store/';
 
 jest.mock('@react-navigation/native');
 
 describe('ManageFormPage', () => {
+  beforeAll(() => {
+    FormState.update((s) => {
+      s.form = {
+        id: 1,
+        name: 'Example Form',
+        draft: 0,
+        submitted: 1,
+      };
+    });
+  });
+
   test('renders correctly', () => {
     const tree = renderer.create(<ManageFormPage />).toJSON();
     expect(tree).toMatchSnapshot();
@@ -32,7 +44,7 @@ describe('ManageFormPage', () => {
     expect(mockNavigation.navigate).toHaveBeenCalledWith('FormPage', mockParams.params);
   });
 
-  it('should navigate to FormPage with (Edit Saved Form) correct route params', () => {
+  it('should navigate to FormPage with (Edit Saved) correct route params', () => {
     const mockNavigation = useNavigation();
     const mockParams = {
       params: {
