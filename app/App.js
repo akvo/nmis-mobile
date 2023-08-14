@@ -26,13 +26,7 @@ const App = () => {
         .getActiveUser()
         .then((user) => {
           console.info('Users =>', user);
-          let page = null;
-          if (session && user?.id) {
-            page = 'Home';
-          }
-          if (session && (!user || !user?.id)) {
-            page = 'AddUser';
-          }
+          const page = session && user?.id ? 'Home' : 'AddUser';
           return { user, page };
         })
         .then(({ user, page }) => {
@@ -46,7 +40,7 @@ const App = () => {
             s.authenticationCode = session.passcode;
           });
           UIState.update((s) => {
-            s.currentPage = page ? page : s.currentPage;
+            s.currentPage = page;
           });
         });
     });
@@ -54,13 +48,9 @@ const App = () => {
 
   const handleInitConfig = async () => {
     const configExist = await crudConfig.getConfig();
-    const serverURL = configExist?.serverURL || serverURLState || null;
+    const serverURL = configExist?.serverURL || serverURLState;
     if (!configExist) {
-      if (serverURL) {
-        await crudConfig.addConfig({ serverURL });
-      } else {
-        await crudConfig.addConfig();
-      }
+      await crudConfig.addConfig({ serverURL });
     }
     if (serverURL) {
       BuildParamsState.update((s) => {
