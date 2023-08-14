@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Button, Dialog, Text } from '@rneui/themed';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -31,6 +31,8 @@ const syncButtonElement = ({
       rightComponent: false,
     };
   }
+  const iconName = disabled ? 'checkmark-done' : 'sync';
+  const iconColor = disabled ? 'dodgerblue' : 'black';
   return {
     rightComponent: (
       <Button
@@ -39,7 +41,7 @@ const syncButtonElement = ({
         onPress={handleSyncButtonOnPress}
         testID="button-to-trigger-sync"
       >
-        <Icon name="sync" size={18} />
+        <Icon name={iconName} color={iconColor} size={18} testID="icon-sync" />
       </Button>
     ),
   };
@@ -62,7 +64,7 @@ const FormData = ({ navigation, route }) => {
     navigation.navigate('ManageForm', { ...route?.params });
   };
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     const submitted = showSubmitted ? 1 : 0;
     let results = await crudDataPoints.selectDataPointsByFormAndSubmitted({
       form: formId,
@@ -85,11 +87,11 @@ const FormData = ({ navigation, route }) => {
       };
     });
     setData(results);
-  };
+  }, [showSubmitted, activeUserId]);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   const filteredData = useMemo(() => {
     return data.filter(
@@ -143,6 +145,9 @@ const FormData = ({ navigation, route }) => {
         console.error('[Manual SyncFormSubmission]: ', e);
       })
       .finally(() => {
+        UIState.update((s) => {
+          s.isManualSynced = true;
+        });
         setSyncing(false);
       });
   };

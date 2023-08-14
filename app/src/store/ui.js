@@ -7,6 +7,7 @@ const UIState = new Store({
   currentPage: 'GetStarted',
   online: false,
   networkType: null,
+  isManualSynced: false,
 });
 
 export default UIState;
