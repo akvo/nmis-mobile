@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { View, PermissionsAndroid, StyleSheet, ActivityIndicator } from 'react-native';
 import { Image, Button, Dialog } from '@rneui/themed';
 import * as ImagePicker from 'expo-image-picker';
@@ -7,101 +7,81 @@ import { FieldLabel } from '../support';
 import { FormState } from '../../store';
 import { i18n } from '../../lib';
 
-// TODO: getImageBase64 (ARF)
-// TODO: convertImageToBase64 (ARF)
-
-const TypeImage = ({ onChange, keyform, id, name, tooltip, required, requiredSign }) => {
-  const [showDialog, setShowDialog] = React.useState(false);
-  const [selectedImage, setSelectedImage] = React.useState(null);
+const TypeImage = ({ onChange, keyform, id, values, name, tooltip, required, requiredSign }) => {
+  const [showDialog, setShowDialog] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(values?.[id]);
+  const [granted, setGranted] = useState(true);
   const activeLang = FormState.useState((s) => s.lang);
   const trans = i18n.text(activeLang);
 
-  React.useEffect(() => {
-    if (onChange) {
-      onChange(id, selectedImage);
+  const checkPermissions = useCallback(async () => {
+    // Ask for Access
+    const askPermission = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+      {
+        title: trans.imageStoragePerm,
+        message: trans.imageCameraPerm,
+        buttonNeutral: trans.imageAskLater,
+        buttonNegative: trans.buttonCancel,
+        buttonPositive: trans.buttonOk,
+      },
+    );
+    if (askPermission !== PermissionsAndroid.RESULTS.GRANTED) {
+      setGranted(false);
     }
-  }, [selectedImage, onChange]);
+  }, []);
 
-  const checkPermissions = async () => {
-    try {
-      const result = await PermissionsAndroid.check(
-        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-      );
-
-      if (result) {
-        // Access granted
-        return true;
-      }
-
-      // Ask for Access
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-        {
-          title: trans.imageStoragePerm,
-          message: trans.imageCameraPerm,
-          buttonNeutral: trans.imageAskLater,
-          buttonNegative: trans.buttonCancel,
-          buttonPositive: trans.buttonOk,
-        },
-      );
-
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        console.info('You can use the camera');
-        return true;
-      }
-
-      console.info('Camera permission denied');
-      return false;
-    } catch (err) {
-      console.error(err);
-      return false;
-    }
-  };
-
-  async function handleShowDialog() {
-    const result = await checkPermissions();
-    if (result) {
+  const handleShowDialog = () => {
+    if (granted) {
       setShowDialog(true);
-      return true;
+      return;
     }
     console.info('Access not granted!');
-  }
+  };
 
-  async function selectFile() {
+  const handleOnChange = (dataResult) => {
+    const imageType = dataResult.assets[0].uri.split('.').slice(-1)[0];
+    const imageBs64 = dataResult.assets[0].base64;
+    const imageValue = `data:image/${imageType};base64,${imageBs64}`;
+    onChange(id, imageValue);
+    setSelectedImage(imageValue);
+  };
+
+  const selectFile = async () => {
     setShowDialog(false);
     try {
       const result = await ImagePicker.launchImageLibraryAsync({
         quality: 1,
+        base64: true,
       });
-      if (result?.canceled) {
-        console.info('You did not select any image.');
-        return false;
+      if (!result?.canceled) {
+        handleOnChange(result);
       }
-      setSelectedImage(result.assets[0]);
     } catch (err) {
       setSelectedImage(null);
       console.error(err);
-      return false;
     }
-  }
+  };
 
-  async function handleCamera() {
+  const handleCamera = async () => {
     setShowDialog(false);
     try {
       const result = await ImagePicker.launchCameraAsync({
         quality: 1,
+        base64: true,
       });
-      if (result?.canceled) {
-        console.info('You did not select any image.');
-        return false;
+      if (!result?.canceled) {
+        handleOnChange(result);
       }
-      setSelectedImage(result.assets[0]);
     } catch (err) {
       setSelectedImage(null);
       console.error(err);
-      return false;
     }
-  }
+  };
+
+  useEffect(() => {
+    checkPermissions();
+  }, [checkPermissions]);
 
   return (
     <View>
@@ -112,14 +92,14 @@ const TypeImage = ({ onChange, keyform, id, name, tooltip, required, requiredSig
         requiredSign={required ? requiredSign : null}
       />
       <View style={styles.fieldImageContainer}>
-        {selectedImage != null ? (
+        {selectedImage && typeof selectedImage === 'string' && (
           <Image
-            source={{ uri: selectedImage?.uri }}
+            source={{ uri: selectedImage }}
             containerStyle={styles.imagePreview}
             PlaceholderContent={<ActivityIndicator />}
             testID="image-preview"
           />
-        ) : null}
+        )}
         <Stack row columns={2}>
           <Button title="Select File" onPress={handleShowDialog} testID="btn-select-file" />
           <Button
