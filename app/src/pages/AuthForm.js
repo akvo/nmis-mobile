@@ -2,11 +2,12 @@ import React from 'react';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Asset } from 'expo-asset';
 import { View, StyleSheet, Platform, ToastAndroid } from 'react-native';
-import { Input, Button, Text, Dialog } from '@rneui/themed';
+import { Input, Button, Text } from '@rneui/themed';
 import { CenterLayout, Image } from '../components';
 import { api, cascades, i18n } from '../lib';
 import { AuthState, UserState, UIState } from '../store';
 import { crudSessions, crudForms, crudUsers, crudConfig } from '../database/crud';
+import { LoadingDialog } from '../components';
 
 const ToggleEye = ({ hidden, onPress }) => {
   const iconName = hidden ? 'eye' : 'eye-off';
@@ -139,10 +140,7 @@ const AuthForm = ({ navigation }) => {
         {trans.buttonLogin}
       </Button>
       {/* Loading dialog */}
-      <Dialog isVisible={loading} style={styles.dialogLoadingContainer}>
-        <Dialog.Loading />
-        <Text style={styles.dialogLoadingText}>{trans.fetchingData}</Text>
-      </Dialog>
+      <LoadingDialog isVisible={loading} loadingText="{trans.fetchingData}" />
     </CenterLayout>
   );
 };
@@ -159,13 +157,6 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   errorText: { color: 'red', fontStyle: 'italic', marginHorizontal: 10, marginTop: -8 },
-  dialogLoadingContainer: {
-    flex: 1,
-  },
-  dialogLoadingText: {
-    textAlign: 'center',
-    fontStyle: 'italic',
-  },
 });
 
 export default AuthForm;

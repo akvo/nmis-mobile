@@ -9,21 +9,23 @@ import { i18n } from '../lib';
 const Home = ({ navigation, route }) => {
   const params = route?.params || null;
   const [search, setSearch] = useState(null);
-  const [data, setData] = useState([]);
   const [appLang, setAppLang] = useState('en');
-
+  const allForms = FormState.useState((s) => s.allForms);
   const activeLang = UIState.useState((s) => s.lang);
   const trans = i18n.text(activeLang);
 
-  const { id: currentUserId, name: currentUserName } = UserState.useState((s) => s);
+  const currentUserId = UserState.useState((s) => s.id);
+  const currentUserName = UserState.useState((s) => s.name);
   const subTitleText = currentUserName ? `${trans.userLabel} ${currentUserName}` : null;
 
   const goToManageForm = (id) => {
-    const findForm = data.find((d) => d?.id === id);
+    const findForm = allForms.find((d) => d?.id === id);
     FormState.update((s) => {
       s.form = findForm;
     });
-    navigation.navigate('ManageForm', { id: id, name: findForm.name });
+    setTimeout(() => {
+      navigation.navigate('ManageForm', { id: id, name: findForm.name });
+    }, 100);
   };
 
   const goToUsers = () => {
@@ -46,16 +48,18 @@ const Home = ({ navigation, route }) => {
             `${trans.syncLabel}${r.synced}`,
           ],
         }));
-        setData(forms);
+        FormState.update((s) => {
+          s.allForms = forms;
+        });
       });
     }
   }, [currentUserId, params, appLang, activeLang]);
 
-  const filteredData = useMemo(() => {
-    return data.filter(
+  const filteredForms = useMemo(() => {
+    return allForms.filter(
       (d) => (search && d?.name?.toLowerCase().includes(search.toLowerCase())) || !search,
     );
-  }, [data, search]);
+  }, [allForms, search]);
 
   return (
     <BaseLayout
@@ -73,7 +77,7 @@ const Home = ({ navigation, route }) => {
         </Button>
       }
     >
-      <BaseLayout.Content data={filteredData} action={goToManageForm} columns={2} />
+      <BaseLayout.Content data={filteredForms} action={goToManageForm} columns={2} />
     </BaseLayout>
   );
 };

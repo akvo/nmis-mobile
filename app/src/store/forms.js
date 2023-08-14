@@ -1,6 +1,7 @@
 import { Store } from 'pullstate';
 
 const FormState = new Store({
+  allForms: [],
   form: {},
   currentValues: {}, // answers
   questionGroupListCurrentValues: {}, // answers for question group list component
