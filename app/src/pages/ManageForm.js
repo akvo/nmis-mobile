@@ -41,7 +41,7 @@ const ManageForm = ({ navigation, route }) => {
     },
   ];
   return (
-    <BaseLayout title={route?.params?.name}>
+    <BaseLayout title={route?.params?.name} rightComponent={false}>
       <BaseLayout.Content>
         <View
           style={{
