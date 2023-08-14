@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { ListItem } from '@rneui/themed';
+import moment from 'moment';
 
 import { FormState, UIState } from '../../store';
 import { cascades, i18n } from '../../lib';
@@ -40,6 +41,12 @@ const SubtitleContent = ({ index, answers, type, id, source }) => {
       );
     case 'cascade':
       return <Text testID={`text-answer-${index}`}>{cascadeValue ? cascadeValue.name : '-'}</Text>;
+    case 'date':
+      return (
+        <Text testID={`text-answer-${index}`}>
+          {answers?.[id] ? moment(answers[id]).format('YYYY-MM-DD') : '-'}
+        </Text>
+      );
     default:
       return <Text testID={`text-answer-${index}`}>{answers?.[id] || '-'}</Text>;
   }
