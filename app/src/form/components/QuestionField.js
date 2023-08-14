@@ -67,6 +67,7 @@ const QuestionField = ({ keyform, field: questionField, setFieldValue, values, v
           />
         );
       case 'image':
+      case 'photo':
         return (
           <TypeImage
             keyform={keyform}
