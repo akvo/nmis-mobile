@@ -177,7 +177,7 @@ exports[`ManageFormPage renders correctly 1`] = `
               }
               testID="listItemTitle"
             >
-              New Blank Form
+              Start New
             </Text>
           </View>
           <View
@@ -368,7 +368,7 @@ exports[`ManageFormPage renders correctly 1`] = `
               }
               testID="listItemTitle"
             >
-              Edit Saved Form
+              Edit Saved (0)
             </Text>
           </View>
           <View
@@ -559,7 +559,7 @@ exports[`ManageFormPage renders correctly 1`] = `
               }
               testID="listItemTitle"
             >
-              View Submitted
+              View Submitted (1)
             </Text>
           </View>
           <View
