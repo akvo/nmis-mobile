@@ -21,7 +21,7 @@ const TypeDate = ({ onChange, values, keyform, id, name, tooltip, required, requ
       <FieldLabel keyform={keyform} name={name} tooltip={tooltip} requiredSign={requiredValue} />
       <Field name={id}>
         {({ field, meta }) => {
-          const dateValue = field?.value ? getDate(field.value).toLocaleDateString() : field?.value;
+          const dateValue = field?.value ? moment(field?.value).format('YYYY-MM-DD') : field?.value;
           const fieldProps = { ...field, value: dateValue };
           return (
             <Input
