@@ -60,7 +60,7 @@ describe('TypeDate component', () => {
     const dateTimePicker = getByTestId('date-time-picker');
     fireEvent(dateTimePicker, 'change', { nativeEvent: { timestamp: 1624262400000 } });
 
-    expect(dateField.props.value).toBe('6/21/2021');
+    expect(dateField.props.value).toBe('2021-06-21');
   });
 
   test('should display correct initial value', () => {
@@ -76,7 +76,7 @@ describe('TypeDate component', () => {
     );
 
     const dateField = getByTestId('type-date');
-    expect(dateField.props.value).toBe(initialValue.toLocaleDateString());
+    expect(dateField.props.value).toBe('2021-06-21');
   });
 
   it('should not show required sign if required param is false and requiredSign is not defined', () => {
@@ -194,5 +194,20 @@ describe('TypeDate component', () => {
     await waitFor(() => {
       expect(getByText('Date is required')).toBeDefined();
     });
+  });
+
+  it('should accept string as initial value', () => {
+    const initialValue = '2022-12-22';
+    const initValues = { dateField: initialValue };
+    const { getByTestId } = render(
+      <Formik initialValues={initValues} onSubmit={() => {}}>
+        {({ setFieldValue, values }) => (
+          <TypeDate onChange={setFieldValue} values={values} id="dateField" name="Date Field" />
+        )}
+      </Formik>,
+    );
+
+    const dateField = getByTestId('type-date');
+    expect(dateField.props.value).toBe('2022-12-22');
   });
 });
