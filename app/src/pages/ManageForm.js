@@ -8,6 +8,8 @@ import { i18n } from '../lib';
 import { getCurrentTimestamp } from '../form/lib';
 
 const ManageForm = ({ navigation, route }) => {
+  const draftCount = FormState.useState((s) => s.form?.draft);
+  const submittedCount = FormState.useState((s) => s.form?.submitted);
   const activeLang = UIState.useState((s) => s.lang);
   const trans = i18n.text(activeLang);
 
@@ -27,13 +29,13 @@ const ManageForm = ({ navigation, route }) => {
     },
     {
       id: 2,
-      text: trans.manageEditSavedForm,
+      text: `${trans.manageEditSavedForm} (${draftCount})`,
       icon: 'folder-open',
       goTo: () => navigation.navigate('FormData', { ...route?.params, showSubmitted: false }),
     },
     {
       id: 3,
-      text: trans.manageViewSubmitted,
+      text: `${trans.manageViewSubmitted} (${submittedCount})`,
       icon: 'eye',
       goTo: () => navigation.navigate('FormData', { ...route?.params, showSubmitted: true }),
     },
