@@ -80,6 +80,21 @@ export const washInSchoolForm = {
             },
           ],
         },
+        {
+          id: 1681107334444,
+          order: 4,
+          questionGroupId: 1681103820974,
+          question: 'School registered date',
+          type: 'date',
+          required: true,
+          meta: true,
+          translations: [
+            {
+              language: 'fr',
+              name: "Date d'inscription à l'école",
+            },
+          ],
+        },
       ],
       translations: [
         {

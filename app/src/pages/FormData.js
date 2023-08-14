@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { Button, Dialog, Text } from '@rneui/themed';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import moment from 'moment';
 
 import { UserState } from '../store';
 import { BaseLayout } from '../components';
@@ -72,8 +73,8 @@ const FormData = ({ navigation, route }) => {
       user: activeUserId,
     });
     results = results.map((res) => {
-      const createdAt = new Date(res.createdAt).toLocaleDateString('en-GB');
-      const syncedAt = res.syncedAt ? new Date(res.syncedAt).toLocaleDateString('en-GB') : '-';
+      const createdAt = moment(res.createdAt).format('DD/MM/YYYY hh:mm A');
+      const syncedAt = res.syncedAt ? moment(res.syncedAt).format('DD/MM/YYYY hh:mm A') : '-';
       let subtitlesTemp = [
         `${trans.createdLabel}${createdAt}`,
         `${trans.surveyDurationLabel}${convertMinutesToHHMM(res.duration)}`,
