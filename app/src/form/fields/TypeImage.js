@@ -22,26 +22,16 @@ const TypeImage = ({ onChange, keyform, id, values, name, tooltip, required, req
   };
 
   const selectFile = async () => {
-    const isStorageGranted = await PermissionsAndroid.check(
-      PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-    );
-    let accessGranted = isStorageGranted;
-    if (!isStorageGranted) {
-      const askStoragePermission = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-      );
-      if (askStoragePermission !== PermissionsAndroid.RESULTS.GRANTED) {
-        accessGranted = false;
-      }
-    }
-    if (accessGranted) {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        quality: 1,
-        base64: true,
-      });
-      if (!result?.canceled) {
-        handleOnChange(result);
-      }
+    /**
+     * No permissions request is necessary for launching the image library
+     * Docs: https://docs.expo.dev/versions/latest/sdk/imagepicker/#usage
+     */
+    const result = await ImagePicker.launchImageLibraryAsync({
+      quality: 1,
+      base64: true,
+    });
+    if (!result?.canceled) {
+      handleOnChange(result);
     }
   };
 
