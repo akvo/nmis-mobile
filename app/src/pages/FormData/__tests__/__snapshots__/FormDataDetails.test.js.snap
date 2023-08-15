@@ -616,10 +616,179 @@ exports[`FormDataDetails should match with snapshot 1`] = `
               <Text
                 testID="text-answer-3"
               >
-                -
+                2021-12-22
               </Text>
             </Text>
           </View>
+        </View>
+      </View>
+      <View
+        style={
+          {
+            "backgroundColor": "white",
+            "borderBottomColor": "silver",
+            "borderLeftColor": "transparent",
+            "borderRightColor": "transparent",
+            "borderTopColor": "transparent",
+            "borderWidth": 1,
+            "display": "flex",
+            "flexDirection": "column",
+            "gap": 8,
+            "padding": 16,
+          }
+        }
+      >
+        <Text
+          style={
+            {
+              "fontSize": 14,
+              "fontWeight": 700,
+              "marginBottom": 4,
+            }
+          }
+          testID="text-question-4"
+        />
+        <View
+          accessibilityIgnoresInvertColors={true}
+          style={
+            {
+              "backgroundColor": "transparent",
+              "overflow": "hidden",
+              "position": "relative",
+            }
+          }
+        >
+          <Image
+            onLoad={[Function]}
+            source={
+              {
+                "uri": "data:image/jpeg;base64,dummyR0ndomb5e64",
+              }
+            }
+            style={
+              {
+                "aspectRatio": 1,
+                "bottom": 0,
+                "height": 200,
+                "left": 0,
+                "position": "absolute",
+                "right": 0,
+                "top": 0,
+                "width": "100%",
+              }
+            }
+            testID="image-answer-4"
+            theme={
+              {
+                "colors": {
+                  "background": "#ffffff",
+                  "black": "#242424",
+                  "disabled": "hsl(208, 8%, 90%)",
+                  "divider": "#bcbbc1",
+                  "error": "#ff190c",
+                  "grey0": "#393e42",
+                  "grey1": "#43484d",
+                  "grey2": "#5e6977",
+                  "grey3": "#86939e",
+                  "grey4": "#bdc6cf",
+                  "grey5": "#e1e8ee",
+                  "greyOutline": "#bbb",
+                  "platform": {
+                    "android": {
+                      "error": "#f44336",
+                      "grey": "rgba(0, 0, 0, 0.54)",
+                      "primary": "#2196f3",
+                      "searchBg": "#dcdce1",
+                      "secondary": "#9C27B0",
+                      "success": "#4caf50",
+                      "warning": "#ffeb3b",
+                    },
+                    "default": {
+                      "error": "#ff3b30",
+                      "grey": "#7d7d7d",
+                      "primary": "#007aff",
+                      "searchBg": "#dcdce1",
+                      "secondary": "#5856d6",
+                      "success": "#4cd964",
+                      "warning": "#ffcc00",
+                    },
+                    "ios": {
+                      "error": "#ff3b30",
+                      "grey": "#7d7d7d",
+                      "primary": "#007aff",
+                      "searchBg": "#dcdce1",
+                      "secondary": "#5856d6",
+                      "success": "#4cd964",
+                      "warning": "#ffcc00",
+                    },
+                    "web": {
+                      "error": "#ff190c",
+                      "grey": "#393e42",
+                      "primary": "#2089dc",
+                      "searchBg": "#303337",
+                      "secondary": "#ca71eb",
+                      "success": "#52c41a",
+                      "warning": "#faad14",
+                    },
+                  },
+                  "primary": "#2089dc",
+                  "searchBg": "#303337",
+                  "secondary": "#ad1457",
+                  "success": "#52c41a",
+                  "warning": "#faad14",
+                  "white": "#ffffff",
+                },
+                "spacing": {
+                  "lg": 12,
+                  "md": 8,
+                  "sm": 4,
+                  "xl": 24,
+                  "xs": 2,
+                },
+              }
+            }
+            transitionDuration={360}
+          />
+          <View
+            accessibilityElementsHidden={true}
+            collapsable={false}
+            importantForAccessibility="no-hide-descendants"
+            pointerEvents="none"
+            style={
+              {
+                "bottom": 0,
+                "left": 0,
+                "opacity": 1,
+                "position": "absolute",
+                "right": 0,
+                "top": 0,
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "alignItems": "center",
+                  "aspectRatio": 1,
+                  "backgroundColor": "#bdbdbd",
+                  "height": 200,
+                  "justifyContent": "center",
+                  "width": "100%",
+                }
+              }
+              testID="RNE__Image__placeholder"
+            />
+          </View>
+          <View
+            style={
+              {
+                "aspectRatio": 1,
+                "height": 200,
+                "width": "100%",
+              }
+            }
+            testID="RNE__Image__children__container"
+          />
         </View>
       </View>
     </View>
