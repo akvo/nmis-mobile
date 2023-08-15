@@ -77,33 +77,7 @@ describe('TypeImage component', () => {
     expect(imagePreview).toBeNull();
   });
 
-  it('should ask read storage permission when From Gallery button clicked', async () => {
-    PermissionsAndroid.check.mockResolvedValueOnce(false);
-    const fieldID = 'imageField';
-    const mockValues = { [fieldID]: null };
-    const mockOnChange = jest.fn(() => (fieldID, value) => {
-      mockValues[fieldID] = value;
-    });
-    const { getByTestId, queryByText, queryByTestId } = render(
-      <TypeImage
-        onChange={mockOnChange}
-        keyform={1}
-        values={mockValues}
-        id={fieldID}
-        name="Latrine photo"
-      />,
-    );
-
-    const buttonFromGallery = getByTestId('btn-from-gallery');
-    fireEvent.press(buttonFromGallery);
-    await act(async () => {
-      await PermissionsAndroid.request();
-    });
-
-    expect(PermissionsAndroid.request).toHaveBeenCalled();
-  });
-
-  it('should not ask read storage permission when its granted', async () => {
+  it('should not ask read storage permission when get image from gallery', async () => {
     const fieldID = 'imageField';
     const mockValues = { [fieldID]: null };
     const mockOnChange = jest.fn(() => (fieldID, value) => {
@@ -124,55 +98,18 @@ describe('TypeImage component', () => {
 
     await waitFor(() => {
       expect(PermissionsAndroid.request).not.toHaveBeenCalled();
-      expect(PermissionsAndroid.check).toHaveBeenCalledWith(
-        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-      );
-      expect(PermissionsAndroid.check).toBeTruthy();
 
       const imagePreview = queryByTestId('image-preview');
       expect(imagePreview).toBeDefined();
-    });
-  });
-
-  it('should not trigger onChange when read storage permission was denied', async () => {
-    PermissionsAndroid.check.mockResolvedValueOnce(false);
-    PermissionsAndroid.request.mockImplementation(() =>
-      Promise.resolve(PermissionsAndroid.RESULTS.DENIED),
-    );
-
-    const fieldID = 'imageField';
-    const mockValues = { [fieldID]: null };
-    const mockOnChange = jest.fn(() => (fieldID, value) => {
-      mockValues[fieldID] = value;
-    });
-    const { getByTestId, queryByText, queryByTestId } = render(
-      <TypeImage
-        onChange={mockOnChange}
-        keyform={1}
-        values={mockValues}
-        id={fieldID}
-        name="Latrine photo"
-      />,
-    );
-
-    const buttonFromGallery = getByTestId('btn-from-gallery');
-    fireEvent.press(buttonFromGallery);
-
-    let accessStatus = null;
-    await act(async () => {
-      accessStatus = await PermissionsAndroid.request();
-    });
-
-    await waitFor(() => {
-      expect(PermissionsAndroid.request).toHaveBeenCalledWith(
-        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-      );
-      expect(accessStatus).toEqual(PermissionsAndroid.RESULTS.DENIED);
-      expect(mockOnChange).not.toHaveBeenCalled();
+      expect(imagePreview.props.source.uri).toBe('data:image/jpg;base64,dummybase64');
     });
   });
 
   it('should be cancelable when the image set from the gallery', async () => {
+    ImagePicker.launchImageLibraryAsync.mockImplementation(() =>
+      Promise.resolve({ canceled: true }),
+    );
+
     const fieldID = 'imageField';
     const mockValues = { [fieldID]: null };
     const mockOnChange = jest.fn(() => (fieldID, value) => {
@@ -190,10 +127,6 @@ describe('TypeImage component', () => {
 
     const buttonFromGallery = getByTestId('btn-from-gallery');
     fireEvent.press(buttonFromGallery);
-
-    ImagePicker.launchImageLibraryAsync.mockImplementation(() =>
-      Promise.resolve({ canceled: true }),
-    );
 
     await act(async () => {
       await ImagePicker.launchImageLibraryAsync();
@@ -271,6 +204,7 @@ describe('TypeImage component', () => {
 
       const imagePreview = queryByTestId('image-preview');
       expect(imagePreview).toBeDefined();
+      expect(imagePreview.props.source.uri).toBe('data:image/jpeg;base64,dummyCamerabase64');
     });
   });
 
