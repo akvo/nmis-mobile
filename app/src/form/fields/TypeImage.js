@@ -1,43 +1,17 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { View, PermissionsAndroid, StyleSheet, ActivityIndicator } from 'react-native';
 import { Image, Button, Dialog } from '@rneui/themed';
 import * as ImagePicker from 'expo-image-picker';
-import { Stack } from '../../components';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { FieldLabel } from '../support';
 import { FormState } from '../../store';
 import { i18n } from '../../lib';
 
 const TypeImage = ({ onChange, keyform, id, values, name, tooltip, required, requiredSign }) => {
-  const [showDialog, setShowDialog] = useState(false);
   const [selectedImage, setSelectedImage] = useState(values?.[id]);
-  const [granted, setGranted] = useState(true);
   const activeLang = FormState.useState((s) => s.lang);
   const trans = i18n.text(activeLang);
-
-  const checkPermissions = useCallback(async () => {
-    // Ask for Access
-    const askPermission = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-      {
-        title: trans.imageStoragePerm,
-        message: trans.imageCameraPerm,
-        buttonNeutral: trans.imageAskLater,
-        buttonNegative: trans.buttonCancel,
-        buttonPositive: trans.buttonOk,
-      },
-    );
-    if (askPermission !== PermissionsAndroid.RESULTS.GRANTED) {
-      setGranted(false);
-    }
-  }, []);
-
-  const handleShowDialog = () => {
-    if (granted) {
-      setShowDialog(true);
-      return;
-    }
-    console.info('Access not granted!');
-  };
+  const requiredValue = required ? requiredSign : null;
 
   const handleOnChange = (dataResult) => {
     const imageType = dataResult.assets[0].uri.split('.').slice(-1)[0];
@@ -48,8 +22,19 @@ const TypeImage = ({ onChange, keyform, id, values, name, tooltip, required, req
   };
 
   const selectFile = async () => {
-    setShowDialog(false);
-    try {
+    const isStorageGranted = await PermissionsAndroid.check(
+      PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+    );
+    let accessGranted = isStorageGranted;
+    if (!isStorageGranted) {
+      const askStoragePermission = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+      );
+      if (askStoragePermission !== PermissionsAndroid.RESULTS.GRANTED) {
+        accessGranted = false;
+      }
+    }
+    if (accessGranted) {
       const result = await ImagePicker.launchImageLibraryAsync({
         quality: 1,
         base64: true,
@@ -57,15 +42,28 @@ const TypeImage = ({ onChange, keyform, id, values, name, tooltip, required, req
       if (!result?.canceled) {
         handleOnChange(result);
       }
-    } catch (err) {
-      setSelectedImage(null);
-      console.error(err);
     }
   };
 
   const handleCamera = async () => {
-    setShowDialog(false);
-    try {
+    const isCameraGranted = await PermissionsAndroid.check(PermissionsAndroid.PERMISSIONS.CAMERA);
+    let accessGranted = isCameraGranted;
+    if (!isCameraGranted) {
+      const askCameraPermission = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.CAMERA,
+        {
+          title: trans.imageStoragePerm,
+          message: trans.imageCameraPerm,
+          buttonNeutral: trans.imageAskLater,
+          buttonNegative: trans.buttonCancel,
+          buttonPositive: trans.buttonOk,
+        },
+      );
+      if (askCameraPermission !== PermissionsAndroid.RESULTS.GRANTED) {
+        accessGranted = false;
+      }
+    }
+    if (accessGranted) {
       const result = await ImagePicker.launchCameraAsync({
         quality: 1,
         base64: true,
@@ -73,63 +71,39 @@ const TypeImage = ({ onChange, keyform, id, values, name, tooltip, required, req
       if (!result?.canceled) {
         handleOnChange(result);
       }
-    } catch (err) {
-      setSelectedImage(null);
-      console.error(err);
     }
   };
 
-  useEffect(() => {
-    checkPermissions();
-  }, [checkPermissions]);
-
   return (
     <View>
-      <FieldLabel
-        keyform={keyform}
-        name={name}
-        tooltip={tooltip}
-        requiredSign={required ? requiredSign : null}
-      />
+      <FieldLabel keyform={keyform} name={name} tooltip={tooltip} requiredSign={requiredValue} />
       <View style={styles.fieldImageContainer}>
+        <Button type="outline" onPress={handleCamera} testID="btn-use-camera">
+          <Icon name="camera" size={18} color="dodgerblue" />
+          {` ${trans.buttonUseCamera}`}
+        </Button>
+        <Button type="outline" onPress={selectFile} testID="btn-from-gallery">
+          <Icon name="image" size={18} color="dodgerblue" />
+          {` ${trans.buttonFromGallery}`}
+        </Button>
         {selectedImage && typeof selectedImage === 'string' && (
-          <Image
-            source={{ uri: selectedImage }}
-            containerStyle={styles.imagePreview}
-            PlaceholderContent={<ActivityIndicator />}
-            testID="image-preview"
-          />
+          <View>
+            <Image
+              source={{ uri: selectedImage }}
+              style={styles.imagePreview}
+              PlaceholderContent={<ActivityIndicator />}
+              testID="image-preview"
+            />
+            <Button
+              containerStyle={styles.buttonRemoveFile}
+              title={trans.buttonRemove}
+              color="secondary"
+              onPress={() => setSelectedImage(null)}
+              disabled={!selectedImage}
+              testID="btn-remove"
+            />
+          </View>
         )}
-        <Stack row columns={2}>
-          <Button title="Select File" onPress={handleShowDialog} testID="btn-select-file" />
-          <Button
-            containerStyle={styles.buttonRemoveFile}
-            title={trans.buttonRemove}
-            color="secondary"
-            onPress={() => setSelectedImage(null)}
-            disabled={!selectedImage}
-            testID="btn-remove"
-          />
-        </Stack>
-        <Dialog
-          isVisible={showDialog}
-          onBackdropPress={() => setShowDialog(false)}
-          testID="popup-dialog"
-        >
-          <Button
-            title={trans.buttonUseCamera}
-            type="outline"
-            onPress={handleCamera}
-            testID="btn-use-camera"
-          />
-          <Button
-            containerStyle={styles.buttonFromGallery}
-            title={trans.buttonFromGallery}
-            type="outline"
-            onPress={selectFile}
-            testID="btn-from-gallery"
-          />
-        </Dialog>
       </View>
     </View>
   );
@@ -139,15 +113,14 @@ export default TypeImage;
 
 const styles = StyleSheet.create({
   fieldImageContainer: {
-    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
     justifyContent: 'center',
-    padding: 10,
+    gap: 8,
+    paddingHorizontal: 16,
   },
-  imagePreview: { aspectRatio: 1, width: '100%', flex: 1, marginBottom: 15 },
+  imagePreview: { width: '100%', height: 200, resizeMode: 'contain' },
   buttonRemoveFile: {
-    marginLeft: 12,
-  },
-  buttonFromGallery: {
-    marginTop: 12,
+    paddingVertical: 8,
   },
 });
