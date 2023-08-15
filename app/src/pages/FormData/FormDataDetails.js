@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
-import { ListItem } from '@rneui/themed';
+import { ListItem, Image } from '@rneui/themed';
 import moment from 'moment';
 
 import { FormState, UIState } from '../../store';
@@ -85,18 +85,31 @@ const FormDataDetails = ({ navigation, route }) => {
   return (
     <BaseLayout title={route?.params?.name} rightComponent={false}>
       <ScrollView>
-        {questions?.map((q, i) => (
-          <ListItem key={i} bottomDivider>
-            <ListItem.Content>
-              <ListItem.Title style={styles.title} testID={`text-question-${i}`}>
+        {questions?.map((q, i) =>
+          ['image', 'photo'].includes(q.type) ? (
+            <View key={i} style={styles.containerImage}>
+              <Text style={styles.title} testID={`text-question-${i}`}>
                 {q.name}
-              </ListItem.Title>
-              <ListItem.Subtitle>
-                <SubtitleContent index={i} answers={currentValues} {...q} />
-              </ListItem.Subtitle>
-            </ListItem.Content>
-          </ListItem>
-        ))}
+              </Text>
+              <Image
+                source={{ uri: currentValues?.[q.id] }}
+                testID={`image-answer-${i}`}
+                style={{ width: '100%', height: 200, aspectRatio: 1 }}
+              />
+            </View>
+          ) : (
+            <ListItem key={i} bottomDivider>
+              <ListItem.Content>
+                <ListItem.Title style={styles.title} testID={`text-question-${i}`}>
+                  {q.name}
+                </ListItem.Title>
+                <ListItem.Subtitle>
+                  <SubtitleContent index={i} answers={currentValues} {...q} />
+                </ListItem.Subtitle>
+              </ListItem.Content>
+            </ListItem>
+          ),
+        )}
       </ScrollView>
       <FormDataNavigation
         totalPage={totalPage}
@@ -112,6 +125,18 @@ const styles = StyleSheet.create({
     fontWeight: 700,
     fontSize: 14,
     marginBottom: 4,
+  },
+  containerImage: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 8,
+    padding: 16,
+    backgroundColor: 'white',
+    borderWidth: 1,
+    borderTopColor: 'transparent',
+    borderLeftColor: 'transparent',
+    borderRightColor: 'transparent',
+    borderBottomColor: 'silver',
   },
 });
 
