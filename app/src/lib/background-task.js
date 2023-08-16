@@ -79,7 +79,7 @@ const backgroundTaskStatus = async (TASK_NAME, minimumInterval = 86400) => {
   console.log(`[${TASK_NAME}] Status`, status, isRegistered, minimumInterval);
 };
 
-const syncFormSubmission = async () => {
+const syncFormSubmission = async (photos = []) => {
   try {
     console.info('[syncFormSubmision] SyncData started');
     // get token
@@ -94,6 +94,11 @@ const syncFormSubmission = async () => {
       const user = await crudUsers.selectUserById({ id: d.user });
       const form = await crudForms.selectFormById({ id: d.form });
       const geo = d.geo ? d.geo.split('|')?.map((x) => parseFloat(x)) : [];
+
+      const answerValues = JSON.parse(d.json.replace(/''/g, "'"));
+      photos?.forEach((pt) => {
+        answerValues[pt?.id] = pt?.value;
+      });
       const syncData = {
         formId: form.formId,
         name: d.name,
@@ -101,7 +106,7 @@ const syncFormSubmission = async () => {
         submittedAt: d.submittedAt,
         submitter: user.name,
         geo,
-        answers: JSON.parse(d.json.replace(/''/g, "'")),
+        answers: answerValues,
       };
       console.info('[syncFormSubmision] SyncData:', syncData);
       // sync data point
