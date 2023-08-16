@@ -138,7 +138,7 @@ const FormDataPage = ({ navigation, route }) => {
 
   const handleOnUploadPhotos = async () => {
     const data = await crudDataPoints.selectSubmissionToSync();
-    const AllPhotos = data.flatMap((d) => {
+    const AllPhotos = data?.flatMap((d) => {
       const answers = JSON.parse(d.json);
       const photos = questions
         .filter((q) => q.type === 'photo')
@@ -147,7 +147,7 @@ const FormDataPage = ({ navigation, route }) => {
       return photos;
     });
 
-    if (AllPhotos.length) {
+    if (AllPhotos?.length) {
       const uploads = AllPhotos.map((p) => {
         const fileType = p.split('.').slice(-1)[0];
         const formData = new FormData();
