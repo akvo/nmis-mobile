@@ -86,7 +86,7 @@ const FormDataDetails = ({ navigation, route }) => {
     <BaseLayout title={route?.params?.name} rightComponent={false}>
       <ScrollView>
         {questions?.map((q, i) =>
-          ['image', 'photo'].includes(q.type) ? (
+          q.type === 'photo' && currentValues?.[q.id] ? (
             <View key={i} style={styles.containerImage}>
               <Text style={styles.title} testID={`text-question-${i}`}>
                 {q.name}
