@@ -142,18 +142,18 @@ const FormDataPage = ({ navigation, route }) => {
       const answers = JSON.parse(d.json);
       const photos = questions
         .filter((q) => q.type === 'photo')
-        .map((q) => answers?.[q.id])
-        .filter((v) => v);
+        .map((q) => ({ id: q.id, value: answers?.[q.id] }))
+        .filter((p) => p.value);
       return photos;
     });
 
     if (AllPhotos?.length) {
       const uploads = AllPhotos.map((p) => {
-        const fileType = p.split('.').slice(-1)[0];
+        const fileType = p.value.split('.').slice(-1)[0];
         const formData = new FormData();
         formData.append('file', {
-          uri: p,
-          name: `photo_${formId}.${fileType}`,
+          uri: p.value,
+          name: `photo_${formId}_${p.id}.${fileType}`,
           type: `image/${fileType}`,
         });
         return api.post('/images', formData, {
@@ -166,8 +166,20 @@ const FormDataPage = ({ navigation, route }) => {
 
       axios
         .all(uploads)
-        .then(() => {
-          handleOnSync();
+        .then((responses) => {
+          const updatedPhotos = responses
+            .map(({ data: dataFile }) => {
+              const findPhoto = AllPhotos.find((p) => dataFile.file.includes(`${p.id}`));
+              if (findPhoto) {
+                return {
+                  ...findPhoto,
+                  value: dataFile.file,
+                };
+              }
+              return findPhoto;
+            })
+            .filter((d) => d);
+          handleOnSync(updatedPhotos);
         })
         .catch((err) => {
           console.error(err);
@@ -177,12 +189,12 @@ const FormDataPage = ({ navigation, route }) => {
     }
   };
 
-  const handleOnSync = () => {
+  const handleOnSync = (photos = []) => {
     setShowConfirmationSyncDialog(false);
     setData([]);
     setSyncing(true);
     backgroundTask
-      .syncFormSubmission()
+      .syncFormSubmission(photos)
       .then(async () => {
         await fetchData();
       })
