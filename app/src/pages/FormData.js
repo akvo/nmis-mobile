@@ -142,7 +142,7 @@ const FormDataPage = ({ navigation, route }) => {
       const answers = JSON.parse(d.json);
       const photos = questions
         .filter((q) => q.type === 'photo')
-        .map((q) => ({ id: q.id, value: answers?.[q.id] }))
+        .map((q) => ({ id: q.id, value: answers?.[q.id], dataID: d.id }))
         .filter((p) => p.value);
       return photos;
     });
@@ -153,7 +153,7 @@ const FormDataPage = ({ navigation, route }) => {
         const formData = new FormData();
         formData.append('file', {
           uri: p.value,
-          name: `photo_${formId}_${p.id}.${fileType}`,
+          name: `photo_${p.id}_${p.dataID}.${fileType}`,
           type: `image/${fileType}`,
         });
         return api.post('/images', formData, {
@@ -169,14 +169,12 @@ const FormDataPage = ({ navigation, route }) => {
         .then((responses) => {
           const updatedPhotos = responses
             .map(({ data: dataFile }) => {
-              const findPhoto = AllPhotos.find((p) => dataFile.file.includes(`${p.id}`));
-              if (findPhoto) {
-                return {
-                  ...findPhoto,
-                  value: dataFile.file,
-                };
-              }
-              return findPhoto;
+              const findPhoto =
+                AllPhotos.find((ap) => dataFile.file.includes(`${ap.id}_${ap.dataID}`)) || {};
+              return {
+                ...dataFile,
+                ...findPhoto,
+              };
             })
             .filter((d) => d);
           handleOnSync(updatedPhotos);
