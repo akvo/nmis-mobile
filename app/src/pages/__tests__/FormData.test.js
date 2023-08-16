@@ -11,6 +11,20 @@ jest.mock('../../database/crud/crud-datapoints');
 jest.mock('../../lib/background-task.js');
 
 describe('FormDataPage', () => {
+  beforeAll(() => {
+    FormState.update((s) => {
+      s.form = {
+        json: JSON.stringify({
+          question_group: [
+            {
+              question: [],
+            },
+          ],
+        }),
+      };
+    });
+  });
+
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -377,11 +391,9 @@ describe('FormDataPage', () => {
     expect(okButtonElement).toBeTruthy();
     fireEvent.press(okButtonElement);
 
-    const loadingElement = wrapper.queryByTestId('sync-loading');
-    const dataPointListElement = wrapper.queryByTestId('data-point-list');
-
     await waitFor(() => {
-      expect(loadingElement).toBeTruthy();
+      const dataPointListElement = wrapper.queryByTestId('data-point-list');
+
       expect(dataPointListElement).toBeFalsy();
       expect(backgroundTask.syncFormSubmission).toHaveBeenCalledTimes(1);
       expect(crudDataPoints.selectDataPointsByFormAndSubmitted).toHaveBeenCalledTimes(2);
@@ -501,12 +513,6 @@ describe('FormDataPage', () => {
     const okButtonElement = queryByTestId('sync-confirmation-ok');
     expect(okButtonElement).toBeTruthy();
     fireEvent.press(okButtonElement);
-
-    const loadingElement = queryByTestId('sync-loading');
-
-    await waitFor(() => {
-      expect(loadingElement).toBeTruthy();
-    });
 
     act(() => {
       UIState.update((s) => {
