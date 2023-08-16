@@ -96,9 +96,11 @@ const syncFormSubmission = async (photos = []) => {
       const geo = d.geo ? d.geo.split('|')?.map((x) => parseFloat(x)) : [];
 
       const answerValues = JSON.parse(d.json.replace(/''/g, "'"));
-      photos?.forEach((pt) => {
-        answerValues[pt?.id] = pt?.value;
-      });
+      photos
+        ?.filter((pt) => pt?.dataID === d.id)
+        ?.forEach((pt) => {
+          answerValues[pt?.id] = pt?.file;
+        });
       const syncData = {
         formId: form.formId,
         name: d.name,
