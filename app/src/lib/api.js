@@ -26,7 +26,18 @@ const API = () => {
   return {
     get: (url, config = {}) => axios({ url, ...getConfig(), ...config }),
     post: (url, data, config = {}) =>
-      axios({ url, method: 'POST', data, ...getConfig(), ...config }),
+      axios({
+        url,
+        method: 'POST',
+        data,
+        ...{
+          ...getConfig(),
+          headers: {
+            ...getConfig().headers,
+            ...config?.headers,
+          },
+        },
+      }),
     put: (url, data, config) => axios({ url, method: 'PUT', data, ...getConfig(), ...config }),
     patch: (url, data, config) => axios({ url, method: 'PATCH', data, ...getConfig(), ...config }),
     delete: (url) => axios({ url, method: 'DELETE', ...getConfig() }),
