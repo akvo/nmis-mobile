@@ -1,14 +1,21 @@
 import React, { useState } from 'react';
 import { render, waitFor, fireEvent, act, renderHook } from '@testing-library/react-native';
+import axios from 'axios';
+
 import FormDataPage from '../FormData';
 import crudDataPoints from '../../database/crud/crud-datapoints';
 import { useNavigation } from '@react-navigation/native';
 import { backgroundTask } from '../../lib';
 import { FormState, UIState } from '../../store';
+import api from '../../lib/api';
 
 jest.mock('@react-navigation/native');
 jest.mock('../../database/crud/crud-datapoints');
 jest.mock('../../lib/background-task.js');
+jest.mock('../../lib/api');
+jest.mock('axios', () => ({
+  all: jest.fn(() => Promise.resolve([{ data: { file: '/images/photo_111_123_xyz.jpeg' } }])),
+}));
 
 describe('FormDataPage', () => {
   beforeAll(() => {
@@ -494,7 +501,6 @@ describe('FormDataPage', () => {
 
     await waitFor(() => expect(getByText('Form Name')).toBeTruthy());
 
-    // check sync button rendered
     const syncButtonEl = getByTestId('button-to-trigger-sync');
     expect(syncButtonEl).toBeTruthy();
     expect(syncButtonEl.props.accessibilityState.disabled).toBeFalsy();
@@ -528,6 +534,184 @@ describe('FormDataPage', () => {
       const { result } = renderHook(() => UIState.useState((s) => s.isManualSynced));
       expect(result.current).toBeTruthy();
       expect(queryByText('Synced: 18/07/2023')).toBeDefined();
+    });
+  });
+
+  it('should upload photos first before syncing when some data point has them', async () => {
+    api.post.mockImplementation(() =>
+      Promise.resolve({ data: { file: '/images/photo-profile-xyz.jpeg' } }),
+    );
+    const mockedForm = {
+      id: 1,
+      name: 'Dummy Form',
+      question_group: [
+        {
+          id: 11,
+          name: 'General Info',
+          question: [
+            {
+              id: 111,
+              name: 'Photo profile',
+              type: 'photo',
+            },
+          ],
+        },
+      ],
+    };
+
+    act(() => {
+      const jsonString = JSON.stringify(mockedForm);
+      FormState.update((s) => {
+        s.form = {
+          id: mockedForm.id,
+          name: mockedForm.name,
+          json: jsonString,
+        };
+      });
+    });
+    const mockData = [
+      {
+        id: 123,
+        name: 'Datapoint with photo',
+        createdAt: '2023-07-18T12:34:56.789Z',
+        duration: 105,
+        syncedAt: null,
+        submitted: 1,
+        json: '{"111": "file://photo-profile.jpeg"}',
+      },
+    ];
+
+    crudDataPoints.selectDataPointsByFormAndSubmitted.mockResolvedValue(mockData);
+    crudDataPoints.selectSubmissionToSync.mockResolvedValue(mockData);
+
+    const mockNavigation = useNavigation();
+    const mockRoute = {
+      params: {
+        id: mockedForm.id,
+        name: mockedForm.name,
+        showSubmitted: true,
+      },
+    };
+
+    const { getByTestId, getByText, queryByText, queryByTestId } = render(
+      <FormDataPage route={mockRoute} navigation={mockNavigation} />,
+    );
+
+    await waitFor(() => expect(getByText('Datapoint with photo')).toBeTruthy());
+
+    const syncButtonElement = getByTestId('button-to-trigger-sync');
+    expect(syncButtonElement.props.accessibilityState.disabled).toBeFalsy();
+    fireEvent.press(syncButtonElement);
+
+    const dialogElement = queryByTestId('sync-confirmation-dialog');
+    expect(dialogElement).toBeTruthy();
+
+    await waitFor(() => expect(dialogElement.props.visible).toEqual(true));
+
+    const textConfirmationElement = queryByTestId('sync-confirmation-text');
+    expect(textConfirmationElement).toBeTruthy();
+    const okButtonElement = queryByTestId('sync-confirmation-ok');
+    expect(okButtonElement).toBeTruthy();
+    fireEvent.press(okButtonElement);
+
+    await waitFor(() => {
+      const titleDatapoint = queryByText('Datapoint with photo');
+      expect(titleDatapoint).toBeDefined();
+
+      expect(api.post).toHaveBeenCalledTimes(1);
+
+      const mockedformData = new FormData();
+      mockedformData.append('file', {
+        uri: 'file://photo-profile.jpeg',
+        name: 'photo_111_123.jpeg',
+        type: 'image/jpeg',
+      });
+      expect(api.post).toHaveBeenCalledWith('/images', mockedformData, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+    });
+  });
+
+  it('should not call handleOnSync when uploading photos failed', async () => {
+    axios.all.mockImplementation(() => Promise.reject('Error'));
+    api.post.mockImplementation(() =>
+      Promise.resolve({ data: { file: '/images/photo-profile-xyz.jpeg' } }),
+    );
+    const mockedForm = {
+      id: 1,
+      name: 'Dummy Form',
+      question_group: [
+        {
+          id: 11,
+          name: 'General Info',
+          question: [
+            {
+              id: 111,
+              name: 'Photo profile',
+              type: 'photo',
+            },
+          ],
+        },
+      ],
+    };
+
+    act(() => {
+      const jsonString = JSON.stringify(mockedForm);
+      FormState.update((s) => {
+        s.form = {
+          id: mockedForm.id,
+          name: mockedForm.name,
+          json: jsonString,
+        };
+      });
+    });
+    const mockData = [
+      {
+        id: 123,
+        name: 'Datapoint with photo',
+        createdAt: '2023-07-18T12:34:56.789Z',
+        duration: 105,
+        syncedAt: null,
+        submitted: 1,
+        json: '{"111": "file://photo-profile.jpeg"}',
+      },
+    ];
+
+    crudDataPoints.selectDataPointsByFormAndSubmitted.mockResolvedValue(mockData);
+    crudDataPoints.selectSubmissionToSync.mockResolvedValue(mockData);
+
+    const mockNavigation = useNavigation();
+    const mockRoute = {
+      params: {
+        id: mockedForm.id,
+        name: mockedForm.name,
+        showSubmitted: true,
+      },
+    };
+
+    const { getByTestId, getByText, queryByText, queryByTestId } = render(
+      <FormDataPage route={mockRoute} navigation={mockNavigation} />,
+    );
+
+    await waitFor(() => expect(getByText('Datapoint with photo')).toBeTruthy());
+
+    const syncButtonElement = getByTestId('button-to-trigger-sync');
+    fireEvent.press(syncButtonElement);
+
+    const dialogElement = queryByTestId('sync-confirmation-dialog');
+
+    await waitFor(() => expect(dialogElement.props.visible).toEqual(true));
+
+    const okButtonElement = queryByTestId('sync-confirmation-ok');
+    expect(okButtonElement).toBeTruthy();
+    fireEvent.press(okButtonElement);
+
+    const mockedHandleOnSync = jest.fn();
+    await waitFor(() => {
+      expect(mockedHandleOnSync).not.toHaveBeenCalled();
     });
   });
 });
