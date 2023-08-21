@@ -22,10 +22,10 @@ jest.mock('react-native/Libraries/PermissionsAndroid/PermissionsAndroid', () => 
 
 jest.mock('expo-image-picker', () => ({
   launchImageLibraryAsync: jest.fn(() =>
-    Promise.resolve({ assets: [{ uri: 'example.jpg', base64: 'dummybase64' }] }),
+    Promise.resolve({ assets: [{ uri: 'file://example.jpg', base64: 'dummybase64' }] }),
   ),
   launchCameraAsync: jest.fn(() =>
-    Promise.resolve({ assets: [{ uri: 'captured.jpeg', base64: 'dummyCamerabase64' }] }),
+    Promise.resolve({ assets: [{ uri: 'file://captured.jpeg', base64: 'dummyCamerabase64' }] }),
   ),
 }));
 
@@ -49,7 +49,7 @@ describe('TypeImage component', () => {
     jest.clearAllMocks();
   });
 
-  it('should render correctly', () => {
+  it('should render correctly by default', () => {
     const fieldID = 'imageField';
     const mockValues = { [fieldID]: null };
     const mockOnChange = jest.fn(() => (fieldID, value) => {
@@ -62,6 +62,32 @@ describe('TypeImage component', () => {
         values={mockValues}
         id={fieldID}
         name="Latrine photo"
+      />,
+    );
+    const questionText = queryByText('Latrine photo');
+    expect(questionText).toBeDefined();
+
+    const buttonUseCamera = getByTestId('btn-use-camera');
+    expect(buttonUseCamera).toBeDefined();
+
+    const imagePreview = queryByTestId('image-preview');
+    expect(imagePreview).toBeNull();
+  });
+
+  it('should render correctly when useGallery is true', () => {
+    const fieldID = 'imageField';
+    const mockValues = { [fieldID]: null };
+    const mockOnChange = jest.fn(() => (fieldID, value) => {
+      mockValues[fieldID] = value;
+    });
+    const { getByTestId, queryByText, queryByTestId } = render(
+      <TypeImage
+        onChange={mockOnChange}
+        keyform={1}
+        values={mockValues}
+        id={fieldID}
+        name="Latrine photo"
+        useGallery
       />,
     );
     const questionText = queryByText('Latrine photo');
@@ -90,6 +116,7 @@ describe('TypeImage component', () => {
         values={mockValues}
         id={fieldID}
         name="Latrine photo"
+        useGallery
       />,
     );
 
@@ -101,7 +128,7 @@ describe('TypeImage component', () => {
 
       const imagePreview = queryByTestId('image-preview');
       expect(imagePreview).toBeDefined();
-      expect(imagePreview.props.source.uri).toBe('data:image/jpg;base64,dummybase64');
+      expect(imagePreview.props.source.uri).toBe('file://example.jpg');
     });
   });
 
@@ -122,6 +149,7 @@ describe('TypeImage component', () => {
         values={mockValues}
         id={fieldID}
         name="Latrine photo"
+        useGallery
       />,
     );
 
@@ -204,7 +232,7 @@ describe('TypeImage component', () => {
 
       const imagePreview = queryByTestId('image-preview');
       expect(imagePreview).toBeDefined();
-      expect(imagePreview.props.source.uri).toBe('data:image/jpeg;base64,dummyCamerabase64');
+      expect(imagePreview.props.source.uri).toBe('file://captured.jpeg');
     });
   });
 
@@ -289,7 +317,7 @@ describe('TypeImage component', () => {
 
   it('should be able to remove image', () => {
     const fieldID = 'imageField';
-    const mockValues = { [fieldID]: 'data:image/jpeg;base64,dummyInitialbase64' };
+    const mockValues = { [fieldID]: '/images/initial.jpg' };
     const mockOnChange = jest.fn(() => (fieldID, value) => {
       mockValues[fieldID] = value;
     });

@@ -146,7 +146,7 @@ describe('backgroundTask', () => {
         createdAt: '2023-07-28T07:53:40.210Z',
         submittedAt: '2023-07-28T07:53:40.210Z',
         syncedAt: null,
-        json: JSON.stringify({ 101: 'Data point 1', 102: 1 }),
+        json: JSON.stringify({ 101: 'Data point 1', 102: 1, 103: 'file://photo_103_1.jpeg' }),
       },
     ];
     const mockUser = {
@@ -192,7 +192,7 @@ describe('backgroundTask', () => {
         expect(crudUsers.selectUserById).toHaveBeenCalled();
         expect(crudForms.selectFormById).toHaveBeenCalled();
         expect(api.post).toHaveBeenCalledWith('/sync', {
-          answers: { 101: 'Data point 1', 102: 1 },
+          answers: { 101: 'Data point 1', 102: 1, 103: 'file://photo_103_1.jpeg' },
           duration: 3,
           formId: 456,
           geo: [-8.676119, 115.4927994],
@@ -201,6 +201,41 @@ describe('backgroundTask', () => {
           submitter: 'John Doe',
         });
         expect(crudDataPoints.updateDataPoint).toHaveBeenCalled();
+      });
+    });
+
+    it('should replace photo question answer with file from photos', async () => {
+      crudSessions.selectLastSession.mockImplementation(() => Promise.resolve(mockSession));
+      crudDataPoints.selectSubmissionToSync.mockImplementation(() => Promise.resolve(dataPoints));
+      crudUsers.selectUserById.mockImplementation(() => Promise.resolve(mockUser));
+      crudForms.selectFormById.mockImplementation(() => Promise.resolve(mockForm));
+      crudDataPoints.updateDataPoint.mockImplementation(() => Promise.resolve({ rowsAffected: 1 }));
+
+      api.setToken.mockReturnValue({ token: mockSession.token });
+      api.post.mockImplementation(() =>
+        Promise.resolve({ status: 200, data: { id: 123, message: 'Success' } }),
+      );
+
+      const photos = [
+        {
+          id: 103,
+          value: 'file://photo_103_1.jpeg',
+          dataID: 1,
+          file: '/images/photo_103_1_xyz.jpeg',
+        },
+      ];
+      await backgroundTask.syncFormSubmission(photos);
+
+      await waitFor(() => {
+        expect(api.post).toHaveBeenCalledWith('/sync', {
+          answers: { 101: 'Data point 1', 102: 1, 103: '/images/photo_103_1_xyz.jpeg' },
+          duration: 3,
+          formId: 456,
+          geo: [-8.676119, 115.4927994],
+          name: 'Data point 1 name',
+          submittedAt: '2023-07-28T07:53:40.210Z',
+          submitter: 'John Doe',
+        });
       });
     });
   });

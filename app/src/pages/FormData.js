@@ -3,11 +3,12 @@ import { Button, Dialog, Text } from '@rneui/themed';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
+import axios from 'axios';
 
 import { UserState } from '../store';
 import { BaseLayout } from '../components';
 import { crudDataPoints } from '../database/crud';
-import { i18n, backgroundTask } from '../lib';
+import { i18n, backgroundTask, api } from '../lib';
 import { UIState, FormState } from '../store';
 import { getCurrentTimestamp } from '../form/lib';
 
@@ -48,7 +49,7 @@ const syncButtonElement = ({
   };
 };
 
-const FormData = ({ navigation, route }) => {
+const FormDataPage = ({ navigation, route }) => {
   const formId = route?.params?.id;
   const showSubmitted = route?.params?.showSubmitted || false;
   const { lang: activeLang, networkType } = UIState.useState((s) => s);
@@ -58,6 +59,8 @@ const FormData = ({ navigation, route }) => {
   const [data, setData] = useState([]);
   const [showConfirmationSyncDialog, setShowConfirmationSyncDialog] = useState(false);
   const [syncing, setSyncing] = useState(false);
+  const selectedForm = FormState.useState((s) => s.form);
+  const questions = JSON.parse(selectedForm.json)?.question_group?.flatMap((qg) => qg.question);
 
   const syncSettings = (networkType === 'wifi' && syncWifiOnly) || !syncWifiOnly;
 
@@ -133,12 +136,63 @@ const FormData = ({ navigation, route }) => {
     setShowConfirmationSyncDialog(true);
   };
 
-  const handleOnSync = () => {
+  const handleOnUploadPhotos = async () => {
+    const data = await crudDataPoints.selectSubmissionToSync();
+    const AllPhotos = data?.flatMap((d) => {
+      const answers = JSON.parse(d.json);
+      const photos = questions
+        .filter((q) => q.type === 'photo')
+        .map((q) => ({ id: q.id, value: answers?.[q.id], dataID: d.id }))
+        .filter((p) => p.value);
+      return photos;
+    });
+
+    if (AllPhotos?.length) {
+      const uploads = AllPhotos.map((p) => {
+        const fileType = p.value.split('.').slice(-1)[0];
+        const formData = new FormData();
+        formData.append('file', {
+          uri: p.value,
+          name: `photo_${p.id}_${p.dataID}.${fileType}`,
+          type: `image/${fileType}`,
+        });
+        return api.post('/images', formData, {
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+      });
+
+      axios
+        .all(uploads)
+        .then((responses) => {
+          const updatedPhotos = responses
+            .map(({ data: dataFile }) => {
+              const findPhoto =
+                AllPhotos.find((ap) => dataFile.file.includes(`${ap.id}_${ap.dataID}`)) || {};
+              return {
+                ...dataFile,
+                ...findPhoto,
+              };
+            })
+            .filter((d) => d);
+          handleOnSync(updatedPhotos);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    } else {
+      handleOnSync();
+    }
+  };
+
+  const handleOnSync = (photos = []) => {
     setShowConfirmationSyncDialog(false);
     setData([]);
     setSyncing(true);
     backgroundTask
-      .syncFormSubmission()
+      .syncFormSubmission(photos)
       .then(async () => {
         await fetchData();
       })
@@ -190,7 +244,7 @@ const FormData = ({ navigation, route }) => {
         <Dialog.Actions>
           <Dialog.Button
             title={trans.buttonOk}
-            onPress={handleOnSync}
+            onPress={handleOnUploadPhotos}
             testID="sync-confirmation-ok"
           />
           <Dialog.Button
@@ -212,4 +266,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FormData;
+export default FormDataPage;

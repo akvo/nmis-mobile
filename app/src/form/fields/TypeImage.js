@@ -7,18 +7,30 @@ import { FieldLabel } from '../support';
 import { FormState } from '../../store';
 import { i18n } from '../../lib';
 
-const TypeImage = ({ onChange, keyform, id, values, name, tooltip, required, requiredSign }) => {
+const TypeImage = ({
+  onChange,
+  keyform,
+  id,
+  values,
+  name,
+  tooltip,
+  required,
+  requiredSign,
+  useGallery = false,
+}) => {
   const [selectedImage, setSelectedImage] = useState(values?.[id]);
   const activeLang = FormState.useState((s) => s.lang);
   const trans = i18n.text(activeLang);
   const requiredValue = required ? requiredSign : null;
 
   const handleOnChange = (dataResult) => {
-    const imageType = dataResult.assets[0].uri.split('.').slice(-1)[0];
-    const imageBs64 = dataResult.assets[0].base64;
-    const imageValue = `data:image/${imageType};base64,${imageBs64}`;
-    onChange(id, imageValue);
-    setSelectedImage(imageValue);
+    const { uri: imageUri } = dataResult.assets[0];
+    /**
+     * Property fileName is only available for iOS
+     * docs: https://docs.expo.dev/versions/latest/sdk/imagepicker/#imagepickerasset
+     */
+    onChange(id, imageUri);
+    setSelectedImage(imageUri);
   };
 
   const selectFile = async () => {
@@ -72,10 +84,12 @@ const TypeImage = ({ onChange, keyform, id, values, name, tooltip, required, req
           <Icon name="camera" size={18} color="dodgerblue" />
           {` ${trans.buttonUseCamera}`}
         </Button>
-        <Button type="outline" onPress={selectFile} testID="btn-from-gallery">
-          <Icon name="image" size={18} color="dodgerblue" />
-          {` ${trans.buttonFromGallery}`}
-        </Button>
+        {useGallery && (
+          <Button type="outline" onPress={selectFile} testID="btn-from-gallery">
+            <Icon name="image" size={18} color="dodgerblue" />
+            {` ${trans.buttonFromGallery}`}
+          </Button>
+        )}
         {selectedImage && typeof selectedImage === 'string' && (
           <View>
             <Image
