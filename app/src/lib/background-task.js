@@ -37,7 +37,7 @@ const syncFormVersion = async ({
           console.info('[syncForm]Saved Forms...', form.id);
           return savedForm;
         });
-        Promise.all(promises).then(async (res) => {
+        Promise.all(promises).then((res) => {
           const exist = res.filter((x) => x);
           if (!exist.length || !showNotificationOnly) {
             return;

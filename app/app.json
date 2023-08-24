@@ -30,6 +30,20 @@
         "projectId": "d54da262-7b9b-4379-8538-9146753cbb31"
       }
     },
-    "owner": "akvo"
+    "owner": "akvo",
+    "backgroundFetch": {
+      "jobs": [
+        {
+          "jobName": "sync-form-version",
+          "minimumInterval": 86400,
+          "enabled": true
+        },
+        {
+          "jobName": "sync-form-submission",
+          "minimumInterval": 1,
+          "enabled": true
+        }
+      ]
+    }
   }
 }
