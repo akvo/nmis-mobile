@@ -82,6 +82,7 @@ const backgroundTaskStatus = async (TASK_NAME, minimumInterval = 86400) => {
 
 const syncFormSubmission = async (photos = []) => {
   try {
+    let sendNotification = false;
     console.info('[syncFormSubmision] SyncData started => ', new Date());
     // get token
     const session = await crudSessions.selectLastSession();
@@ -121,6 +122,7 @@ const syncFormSubmission = async (photos = []) => {
           ...d,
           syncedAt: new Date().toISOString(),
         });
+        sendNotification = true;
         console.info('[syncFormSubmision] updated data point syncedAt:', d.id);
       }
       return {
@@ -134,7 +136,10 @@ const syncFormSubmission = async (photos = []) => {
       })
       .then(() => {
         console.info('[syncFormSubmision] Finish: ', new Date());
-        notification.sendPushNotification('sync-form-submission');
+        if (sendNotification) {
+          notification.sendPushNotification('sync-form-submission');
+        }
+        sendNotification = false;
       });
   } catch (err) {
     console.error('[syncFormSubmission] Error: ', err);
