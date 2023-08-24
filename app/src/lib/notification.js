@@ -32,9 +32,9 @@ const registerForPushNotificationsAsync = async () => {
 
 const sendPushNotification = async (type = 'sync-form-version') => {
   const data = {
-    notificationType: type
-  }
-  let notificationBody = null
+    notificationType: type,
+  };
+  let notificationBody = null;
   switch (type) {
     case 'sync-form-submission':
       notificationBody = {
@@ -44,7 +44,7 @@ const sendPushNotification = async (type = 'sync-form-version') => {
           data: data,
         },
         trigger: null,
-      }
+      };
       break;
     default:
       notificationBody = {
@@ -54,7 +54,7 @@ const sendPushNotification = async (type = 'sync-form-version') => {
           data: data,
         },
         trigger: null,
-      }
+      };
       break;
   }
   return await Notifications.scheduleNotificationAsync(notificationBody);

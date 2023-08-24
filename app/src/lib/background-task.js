@@ -2,6 +2,7 @@ import { crudForms, crudSessions, crudDataPoints, crudUsers } from '../database/
 import api from './api';
 import * as BackgroundFetch from 'expo-background-fetch';
 import * as TaskManager from 'expo-task-manager';
+import notification from './notification';
 
 const syncFormVersion = async ({
   showNotificationOnly = true,
@@ -127,11 +128,14 @@ const syncFormSubmission = async (photos = []) => {
         status: res.status,
       };
     });
-    return Promise.all(syncProcess).then(async (res) => {
-      return res;
-    }).then(() => {
-      console.info('[syncFormSubmision] Finish: ', new Date());
-    });
+    return Promise.all(syncProcess)
+      .then(async (res) => {
+        return res;
+      })
+      .then(() => {
+        console.info('[syncFormSubmision] Finish: ', new Date());
+        notification.sendPushNotification('sync-form-submission');
+      });
   } catch (err) {
     console.error('[syncFormSubmission] Error: ', err);
   }

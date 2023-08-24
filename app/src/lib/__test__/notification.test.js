@@ -82,7 +82,7 @@ describe('notificationHandler', () => {
           title: 'New Form version available',
           body: 'Here is the notification body',
           data: {
-            notificationType: 'sync-form-version'
+            notificationType: 'sync-form-version',
           },
         },
         trigger: null,
@@ -100,7 +100,7 @@ describe('notificationHandler', () => {
           title: 'Sync submission completed',
           body: 'Here is the notification body',
           data: {
-            notificationType: 'sync-form-submission'
+            notificationType: 'sync-form-submission',
           },
         },
         trigger: null,

@@ -1,5 +1,6 @@
 import api from '../api';
 import backgroundTask from '../background-task';
+import notification from '../notification';
 import * as BackgroundFetch from 'expo-background-fetch';
 import * as TaskManager from 'expo-task-manager';
 import { crudForms, crudSessions, crudUsers, crudDataPoints } from '../../database/crud';
@@ -7,6 +8,7 @@ import { waitFor } from '@testing-library/react-native';
 
 jest.mock('../api');
 jest.mock('../../database/crud');
+jest.mock('../notification');
 jest.mock('expo-background-fetch');
 jest.mock('expo-task-manager');
 
@@ -168,7 +170,7 @@ describe('backgroundTask', () => {
     //   expect(consoleSpy).toHaveBeenCalledWith('[syncFormSubmission] Error: ', 'No connection');
     // });
 
-    it('should sync submission if any', async () => {
+    it('should sync submission if any and send push notification', async () => {
       const consoleSpy = jest.spyOn(console, 'error');
       // api.get.mockImplementation(() => Promise.resolve(true));
       crudSessions.selectLastSession.mockImplementation(() => Promise.resolve(mockSession));
@@ -176,6 +178,9 @@ describe('backgroundTask', () => {
       crudUsers.selectUserById.mockImplementation(() => Promise.resolve(mockUser));
       crudForms.selectFormById.mockImplementation(() => Promise.resolve(mockForm));
       crudDataPoints.updateDataPoint.mockImplementation(() => Promise.resolve({ rowsAffected: 1 }));
+      notification.sendPushNotification.mockImplementation(() =>
+        Promise.resolve('sync-form-submission'),
+      );
 
       api.setToken.mockReturnValue({ token: mockSession.token });
       api.post.mockImplementation(() =>
@@ -201,6 +206,7 @@ describe('backgroundTask', () => {
           submitter: 'John Doe',
         });
         expect(crudDataPoints.updateDataPoint).toHaveBeenCalled();
+        expect(notification.sendPushNotification).toHaveBeenCalledWith('sync-form-submission');
       });
     });
 
