@@ -81,7 +81,7 @@ const backgroundTaskStatus = async (TASK_NAME, minimumInterval = 86400) => {
 
 const syncFormSubmission = async (photos = []) => {
   try {
-    console.info('[syncFormSubmision] SyncData started');
+    console.info('[syncFormSubmision] SyncData started => ', new Date());
     // get token
     const session = await crudSessions.selectLastSession();
     // set token
@@ -113,7 +113,7 @@ const syncFormSubmission = async (photos = []) => {
       console.info('[syncFormSubmision] SyncData:', syncData);
       // sync data point
       const res = await api.post('/sync', syncData);
-      console.info('[syncFormSubmision] post sync data point:', res.status, res.data);
+      console.info('[syncFormSubmision] post sync data point:', res.status);
       if (res.status === 200) {
         // update data point
         await crudDataPoints.updateDataPoint({
