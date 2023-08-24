@@ -129,6 +129,8 @@ const syncFormSubmission = async (photos = []) => {
     });
     return Promise.all(syncProcess).then(async (res) => {
       return res;
+    }).then(() => {
+      console.info('[syncFormSubmision] Finish: ', new Date());
     });
   } catch (err) {
     console.error('[syncFormSubmission] Error: ', err);

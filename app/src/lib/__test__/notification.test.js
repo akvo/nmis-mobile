@@ -71,7 +71,7 @@ describe('notificationHandler', () => {
   });
 
   describe('sendPushNotification', () => {
-    it('should schedule a push notification', async () => {
+    it('should send a sync form version push notification if type not defined', async () => {
       const { scheduleNotificationAsync } = Notifications;
       scheduleNotificationAsync.mockResolvedValue();
 
@@ -81,7 +81,27 @@ describe('notificationHandler', () => {
         content: {
           title: 'New Form version available',
           body: 'Here is the notification body',
-          data: null,
+          data: {
+            notificationType: 'sync-form-version'
+          },
+        },
+        trigger: null,
+      });
+    });
+
+    it('should send a push notification by type defined', async () => {
+      const { scheduleNotificationAsync } = Notifications;
+      scheduleNotificationAsync.mockResolvedValue();
+
+      await notification.sendPushNotification('sync-form-submission');
+
+      expect(scheduleNotificationAsync).toHaveBeenCalledWith({
+        content: {
+          title: 'Sync submission completed',
+          body: 'Here is the notification body',
+          data: {
+            notificationType: 'sync-form-submission'
+          },
         },
         trigger: null,
       });
