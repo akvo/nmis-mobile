@@ -85,9 +85,16 @@ const RootNavigator = () => {
     const notificationListener = Notifications.addNotificationReceivedListener((notification) => {
       console.log('[Notification]Received Listener');
     });
-    const responseListener = Notifications.addNotificationResponseReceivedListener((response) => {
-      console.log('[Notification]Response Listener');
-      backgroundTask.syncFormVersion({ showNotificationOnly: false });
+    const responseListener = Notifications.addNotificationResponseReceivedListener((res) => {
+      const notificationBody = res?.notification?.request;
+      const notificationType = notificationBody?.content?.data?.notificationType;
+      console.log('[Notification]Response Listener', notificationBody);
+      if (notificationType === 'sync-form-version') {
+        backgroundTask.syncFormVersion({ showNotificationOnly: false });
+      }
+      if (notificationType === 'sync-form-submission') {
+        console.info('[Notification]Response Listener => ', notificationType);
+      }
     });
     return () => {
       Notifications.removeNotificationSubscription(notificationListener);
