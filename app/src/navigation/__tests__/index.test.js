@@ -3,9 +3,15 @@ import { render, act, waitFor } from '@testing-library/react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { AuthState, UIState } from '../../store';
 import { BackHandler } from 'react-native';
-import Navigation, { setNotificationHandler } from '../index';
+import Navigation, {
+  setNotificationHandler,
+  defineSyncFormVersionTask,
+  defineSyncFormSubmissionTask,
+} from '../index';
 import { backgroundTask, notification } from '../../lib';
 import * as Notifications from 'expo-notifications';
+import * as TaskManager from 'expo-task-manager';
+import * as BackgroundFetch from 'expo-background-fetch';
 
 jest.mock('expo-background-fetch', () => ({
   ...jest.requireActual('expo-background-fetch'),
@@ -18,20 +24,9 @@ jest.mock('expo-background-fetch', () => ({
 }));
 
 jest.mock('expo-notifications');
-
-Notifications.addNotificationReceivedListener.mockImplementation(() => jest.fn());
-Notifications.addNotificationResponseReceivedListener.mockImplementation(() => jest.fn());
-Notifications.removeNotificationSubscription.mockImplementation(() => jest.fn());
-
-jest.mock('../..//lib/background-task', () => ({
-  syncFormVersion: jest.fn(),
-  backgroundTaskStatus: jest.fn(),
-}));
-
-jest.mock('../../lib/notification', () => ({
-  sendPushNotification: jest.fn(),
-  registerForPushNotificationsAsync: jest.fn(),
-}));
+jest.mock('expo-task-manager');
+jest.mock('../../lib/background-task');
+jest.mock('../../lib/notification');
 
 describe('Navigation Component', () => {
   const mockAddEventListener = jest.fn(() => {
@@ -48,7 +43,7 @@ describe('Navigation Component', () => {
     jest.clearAllMocks();
   });
 
-  it('should call set notification handler', async () => {
+  it('should call set notification handler func', async () => {
     const mockHandleNotification = jest.fn().mockResolvedValue({
       shouldShowAlert: true,
       shouldPlaySound: true,
@@ -57,9 +52,70 @@ describe('Navigation Component', () => {
     Notifications.setNotificationHandler.mockImplementation(({ handleNotification }) => {
       handleNotification(mockHandleNotification);
     });
+
     await setNotificationHandler();
 
     expect(Notifications.setNotificationHandler).toHaveBeenCalledTimes(1);
+  });
+
+  it('should call define sync form version task func', async () => {
+    TaskManager.defineTask.mockImplementation((taskName, taskFn) => {
+      return taskFn();
+    });
+
+    await defineSyncFormVersionTask();
+
+    expect(TaskManager.defineTask).toHaveBeenCalledWith('sync-form-version', expect.any(Function));
+    expect(backgroundTask.syncFormVersion).toHaveBeenCalledWith({
+      sendPushNotification: notification.sendPushNotification,
+      showNotificationOnly: true,
+    });
+  });
+
+  it('should handle catch error when call define sync form version task func', async () => {
+    TaskManager.defineTask.mockImplementation(async (taskName, taskFn) => {
+      backgroundTask.syncFormVersion.mockRejectedValue(new Error('Simulated error'));
+
+      const result = await taskFn();
+
+      expect(TaskManager.defineTask).toHaveBeenCalledWith(
+        'sync-form-version',
+        expect.any(Function),
+      );
+      expect(result).toBe(BackgroundFetch.Result.Failed);
+    });
+
+    await defineSyncFormVersionTask();
+  });
+
+  it('should call define sync form submission task func', async () => {
+    TaskManager.defineTask.mockImplementation((taskName, taskFn) => {
+      return taskFn();
+    });
+
+    await defineSyncFormSubmissionTask();
+
+    expect(TaskManager.defineTask).toHaveBeenCalledWith(
+      'sync-form-submission',
+      expect.any(Function),
+    );
+    expect(backgroundTask.syncFormSubmission).toHaveBeenCalledTimes(1);
+  });
+
+  it('should handle catch error when call define sync form submission task func', async () => {
+    TaskManager.defineTask.mockImplementation(async (taskName, taskFn) => {
+      backgroundTask.syncFormSubmission.mockRejectedValue(new Error('Simulated error'));
+
+      const result = await taskFn();
+
+      expect(TaskManager.defineTask).toHaveBeenCalledWith(
+        'sync-form-submission',
+        expect.any(Function),
+      );
+      expect(result).toBe(BackgroundFetch.Result.Failed);
+    });
+
+    await defineSyncFormSubmissionTask();
   });
 
   it('should call set up hardware back press function listener', () => {
