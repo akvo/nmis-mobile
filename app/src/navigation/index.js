@@ -89,12 +89,12 @@ const RootNavigator = () => {
 
     notification.registerForPushNotificationsAsync();
     const notificationListener = Notifications.addNotificationReceivedListener((notification) => {
-      console.log('[Notification]Received Listener');
+      console.info('[Notification]Received Listener');
     });
     const responseListener = Notifications.addNotificationResponseReceivedListener((res) => {
       const notificationBody = res?.notification?.request;
       const notificationType = notificationBody?.content?.data?.notificationType;
-      console.log('[Notification]Response Listener', notificationBody);
+      // console.log('[Notification]Response Listener', notificationBody);
       if (notificationType === 'sync-form-version') {
         backgroundTask.syncFormVersion({ showNotificationOnly: false });
       }

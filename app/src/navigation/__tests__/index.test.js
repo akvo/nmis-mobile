@@ -29,14 +29,12 @@ jest.mock('../../lib/background-task');
 jest.mock('../../lib/notification');
 
 describe('Navigation Component', () => {
-  const mockAddEventListener = jest.fn(() => {
-    remove: jest.fn();
-  });
-  const mockRemoveEventListener = jest.fn(() => {
-    remove: jest.fn();
-  });
+  const mockAddEventListener = jest.fn();
+  const mockRemoveEventListener = jest.fn();
 
-  BackHandler.addEventListener = mockAddEventListener;
+  BackHandler.addEventListener = mockAddEventListener.mockImplementation(() => ({
+    remove: jest.fn(),
+  }));
   BackHandler.removeEventListener = mockRemoveEventListener;
 
   afterEach(() => {
@@ -118,7 +116,7 @@ describe('Navigation Component', () => {
     await defineSyncFormSubmissionTask();
   });
 
-  it('should call set up hardware back press function listener', () => {
+  it('should call set up hardware back press function listener and allow navigation if user not logged in', () => {
     const { unmount } = render(
       <NavigationContainer>
         <Navigation />
@@ -134,21 +132,113 @@ describe('Navigation Component', () => {
       });
     });
 
-    expect(BackHandler.addEventListener).toHaveBeenCalledTimes(1);
+    expect(BackHandler.addEventListener).toHaveBeenCalledWith(
+      'hardwareBackPress',
+      expect.any(Function),
+    );
     unmount();
   });
 
-  it('should call set up notification function', () => {
+  it('should call set up hardware back press function listener and not allow navigation if user logged in', () => {
     const { unmount } = render(
       <NavigationContainer>
         <Navigation />
       </NavigationContainer>,
     );
 
-    expect(backgroundTask.backgroundTaskStatus).toHaveBeenCalledTimes(2);
+    act(() => {
+      UIState.update((s) => {
+        s.currentPage = 'GetStarted';
+      });
+      AuthState.update((s) => {
+        s.token = 'eyj Token';
+      });
+    });
+
+    expect(BackHandler.addEventListener).toHaveBeenCalledWith(
+      'hardwareBackPress',
+      expect.any(Function),
+    );
+    unmount();
+  });
+
+  it('should call notification response received listener for sync form version', async () => {
+    const mockAddNotificationResponseReceivedListener = jest.fn();
+    const mockReceivedNotification = {
+      notification: {
+        request: {
+          content: {
+            title: 'Sync form version completed',
+            body: 'Here is the notification body',
+            data: {
+              notificationType: 'sync-form-version',
+            },
+          },
+          trigger: null,
+        },
+      },
+    };
+    Notifications.addNotificationResponseReceivedListener =
+      mockAddNotificationResponseReceivedListener;
+    backgroundTask.syncFormVersion.mockResolvedValue(() => jest.fn());
+
+    const { unmount } = render(
+      <NavigationContainer>
+        <Navigation />
+      </NavigationContainer>,
+    );
+
+    const responseListenerCallback = mockAddNotificationResponseReceivedListener.mock.calls[0][0];
+    responseListenerCallback(mockReceivedNotification);
+
+    expect(backgroundTask.backgroundTaskStatus).toHaveBeenCalledWith('sync-form-version');
+    expect(backgroundTask.backgroundTaskStatus).toHaveBeenCalledWith('sync-form-submission', 1);
+
     expect(notification.registerForPushNotificationsAsync).toHaveBeenCalledTimes(1);
     expect(Notifications.addNotificationReceivedListener).toHaveBeenCalledTimes(1);
     expect(Notifications.addNotificationResponseReceivedListener).toHaveBeenCalledTimes(1);
+    expect(backgroundTask.syncFormVersion).toHaveBeenCalledWith({ showNotificationOnly: false });
+
+    unmount();
+  });
+
+  it('should call notification response received listener for sync form submission', async () => {
+    const mockAddNotificationResponseReceivedListener = jest.fn();
+    const mockReceivedNotification = {
+      notification: {
+        request: {
+          content: {
+            title: 'Sync submission completed',
+            body: 'Here is the notification body',
+            data: {
+              notificationType: 'sync-form-submission',
+            },
+          },
+          trigger: null,
+        },
+      },
+    };
+    Notifications.addNotificationResponseReceivedListener =
+      mockAddNotificationResponseReceivedListener;
+    backgroundTask.syncFormVersion.mockResolvedValue(() => jest.fn());
+
+    const { unmount } = render(
+      <NavigationContainer>
+        <Navigation />
+      </NavigationContainer>,
+    );
+
+    const responseListenerCallback = mockAddNotificationResponseReceivedListener.mock.calls[0][0];
+    responseListenerCallback(mockReceivedNotification);
+
+    expect(backgroundTask.backgroundTaskStatus).toHaveBeenCalledWith('sync-form-version');
+    expect(backgroundTask.backgroundTaskStatus).toHaveBeenCalledWith('sync-form-submission', 1);
+
+    expect(notification.registerForPushNotificationsAsync).toHaveBeenCalledTimes(1);
+    expect(Notifications.addNotificationReceivedListener).toHaveBeenCalledTimes(1);
+    expect(Notifications.addNotificationResponseReceivedListener).toHaveBeenCalledTimes(1);
+    expect(backgroundTask.syncFormVersion).not.toHaveBeenCalled();
+
     unmount();
   });
 });
