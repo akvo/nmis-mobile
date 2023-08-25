@@ -89,7 +89,7 @@ const RootNavigator = () => {
 
     notification.registerForPushNotificationsAsync();
     const notificationListener = Notifications.addNotificationReceivedListener((notification) => {
-      console.info('[Notification]Received Listener');
+      // console.info('[Notification]Received Listener');
     });
     const responseListener = Notifications.addNotificationResponseReceivedListener((res) => {
       const notificationBody = res?.notification?.request;

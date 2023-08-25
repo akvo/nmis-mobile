@@ -29,7 +29,9 @@ jest.mock('../../lib/background-task');
 jest.mock('../../lib/notification');
 
 describe('Navigation Component', () => {
-  const mockAddEventListener = jest.fn();
+  const mockAddEventListener = jest.fn((taskName, taskFn) => {
+    taskFn();
+  });
   const mockRemoveEventListener = jest.fn();
 
   BackHandler.addEventListener = mockAddEventListener.mockImplementation(() => ({
