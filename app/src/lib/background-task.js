@@ -2,6 +2,7 @@ import { crudForms, crudSessions, crudDataPoints, crudUsers } from '../database/
 import api from './api';
 import * as BackgroundFetch from 'expo-background-fetch';
 import * as TaskManager from 'expo-task-manager';
+import notification from './notification';
 
 const syncFormVersion = async ({
   showNotificationOnly = true,
@@ -37,7 +38,7 @@ const syncFormVersion = async ({
           console.info('[syncForm]Saved Forms...', form.id);
           return savedForm;
         });
-        Promise.all(promises).then(async (res) => {
+        Promise.all(promises).then((res) => {
           const exist = res.filter((x) => x);
           if (!exist.length || !showNotificationOnly) {
             return;
@@ -81,7 +82,8 @@ const backgroundTaskStatus = async (TASK_NAME, minimumInterval = 86400) => {
 
 const syncFormSubmission = async (photos = []) => {
   try {
-    console.info('[syncFormSubmision] SyncData started');
+    let sendNotification = false;
+    console.info('[syncFormSubmision] SyncData started => ', new Date());
     // get token
     const session = await crudSessions.selectLastSession();
     // set token
@@ -113,13 +115,14 @@ const syncFormSubmission = async (photos = []) => {
       console.info('[syncFormSubmision] SyncData:', syncData);
       // sync data point
       const res = await api.post('/sync', syncData);
-      console.info('[syncFormSubmision] post sync data point:', res.status, res.data);
+      console.info('[syncFormSubmision] post sync data point:', res.status);
       if (res.status === 200) {
         // update data point
         await crudDataPoints.updateDataPoint({
           ...d,
           syncedAt: new Date().toISOString(),
         });
+        sendNotification = true;
         console.info('[syncFormSubmision] updated data point syncedAt:', d.id);
       }
       return {
@@ -127,9 +130,17 @@ const syncFormSubmission = async (photos = []) => {
         status: res.status,
       };
     });
-    return Promise.all(syncProcess).then(async (res) => {
-      return res;
-    });
+    return Promise.all(syncProcess)
+      .then(async (res) => {
+        return res;
+      })
+      .then(() => {
+        console.info('[syncFormSubmision] Finish: ', new Date());
+        if (sendNotification) {
+          notification.sendPushNotification('sync-form-submission');
+        }
+        sendNotification = false;
+      });
   } catch (err) {
     console.error('[syncFormSubmission] Error: ', err);
   }

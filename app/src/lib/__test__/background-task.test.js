@@ -1,5 +1,6 @@
 import api from '../api';
 import backgroundTask from '../background-task';
+import notification from '../notification';
 import * as BackgroundFetch from 'expo-background-fetch';
 import * as TaskManager from 'expo-task-manager';
 import { crudForms, crudSessions, crudUsers, crudDataPoints } from '../../database/crud';
@@ -7,6 +8,7 @@ import { waitFor } from '@testing-library/react-native';
 
 jest.mock('../api');
 jest.mock('../../database/crud');
+jest.mock('../notification');
 jest.mock('expo-background-fetch');
 jest.mock('expo-task-manager');
 
@@ -168,7 +170,65 @@ describe('backgroundTask', () => {
     //   expect(consoleSpy).toHaveBeenCalledWith('[syncFormSubmission] Error: ', 'No connection');
     // });
 
-    it('should sync submission if any', async () => {
+    it('should not sync submission and send push notification if data not available', async () => {
+      const consoleSpy = jest.spyOn(console, 'error');
+      // api.get.mockImplementation(() => Promise.resolve(true));
+      crudSessions.selectLastSession.mockImplementation(() => Promise.resolve(mockSession));
+      crudDataPoints.selectSubmissionToSync.mockImplementation(() => Promise.resolve([]));
+      api.setToken.mockReturnValue({ token: mockSession.token });
+
+      await backgroundTask.syncFormSubmission();
+      expect(consoleSpy).not.toHaveBeenCalled();
+
+      await waitFor(() => {
+        expect(crudSessions.selectLastSession).toHaveBeenCalled();
+        expect(api.setToken).toHaveBeenCalled();
+        expect(crudDataPoints.selectSubmissionToSync).toHaveBeenCalled();
+        expect(crudUsers.selectUserById).not.toHaveBeenCalled();
+        expect(crudForms.selectFormById).not.toHaveBeenCalled();
+        expect(api.post).not.toHaveBeenCalled();
+        expect(crudDataPoints.updateDataPoint).not.toHaveBeenCalled();
+        expect(notification.sendPushNotification).not.toHaveBeenCalled();
+      });
+    });
+
+    it('should not send push notification if sync to server failed', async () => {
+      const consoleSpy = jest.spyOn(console, 'error');
+      // api.get.mockImplementation(() => Promise.resolve(true));
+      crudSessions.selectLastSession.mockImplementation(() => Promise.resolve(mockSession));
+      crudDataPoints.selectSubmissionToSync.mockImplementation(() => Promise.resolve(dataPoints));
+      crudUsers.selectUserById.mockImplementation(() => Promise.resolve(mockUser));
+      crudForms.selectFormById.mockImplementation(() => Promise.resolve(mockForm));
+
+      api.setToken.mockReturnValue({ token: mockSession.token });
+      api.post.mockImplementation(() =>
+        Promise.resolve({ status: 500, data: { message: 'Failed to sync' } }),
+      );
+
+      await backgroundTask.syncFormSubmission();
+      expect(consoleSpy).not.toHaveBeenCalled();
+
+      await waitFor(() => {
+        expect(crudSessions.selectLastSession).toHaveBeenCalled();
+        expect(api.setToken).toHaveBeenCalled();
+        expect(crudDataPoints.selectSubmissionToSync).toHaveBeenCalled();
+        expect(crudUsers.selectUserById).toHaveBeenCalled();
+        expect(crudForms.selectFormById).toHaveBeenCalled();
+        expect(api.post).toHaveBeenCalledWith('/sync', {
+          answers: { 101: 'Data point 1', 102: 1, 103: 'file://photo_103_1.jpeg' },
+          duration: 3,
+          formId: 456,
+          geo: [-8.676119, 115.4927994],
+          name: 'Data point 1 name',
+          submittedAt: '2023-07-28T07:53:40.210Z',
+          submitter: 'John Doe',
+        });
+        expect(crudDataPoints.updateDataPoint).not.toHaveBeenCalled();
+        expect(notification.sendPushNotification).not.toHaveBeenCalledWith();
+      });
+    });
+
+    it('should sync submission if any and send push notification', async () => {
       const consoleSpy = jest.spyOn(console, 'error');
       // api.get.mockImplementation(() => Promise.resolve(true));
       crudSessions.selectLastSession.mockImplementation(() => Promise.resolve(mockSession));
@@ -176,6 +236,9 @@ describe('backgroundTask', () => {
       crudUsers.selectUserById.mockImplementation(() => Promise.resolve(mockUser));
       crudForms.selectFormById.mockImplementation(() => Promise.resolve(mockForm));
       crudDataPoints.updateDataPoint.mockImplementation(() => Promise.resolve({ rowsAffected: 1 }));
+      notification.sendPushNotification.mockImplementation(() =>
+        Promise.resolve('sync-form-submission'),
+      );
 
       api.setToken.mockReturnValue({ token: mockSession.token });
       api.post.mockImplementation(() =>
@@ -201,6 +264,7 @@ describe('backgroundTask', () => {
           submitter: 'John Doe',
         });
         expect(crudDataPoints.updateDataPoint).toHaveBeenCalled();
+        expect(notification.sendPushNotification).toHaveBeenCalledWith('sync-form-submission');
       });
     });
 

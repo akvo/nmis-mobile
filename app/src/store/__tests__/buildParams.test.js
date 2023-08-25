@@ -15,7 +15,7 @@ describe('BuildParamsState', () => {
     } = result.current;
     expect(authenticationType).toEqual(['code_assignment', 'username', 'password']);
     expect(debugMode).toBe(false);
-    expect(dataSyncInterval).toBe(30);
+    expect(dataSyncInterval).toBe(1);
     expect(errorHandling).toBe(true);
     expect(loggingLevel).toBe('verbose');
     expect(appVersion).toBe('1.2.0');

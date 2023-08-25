@@ -25,36 +25,42 @@ import { backgroundTask, notification } from '../lib';
 const SYNC_FORM_VERSION_TASK_NAME = 'sync-form-version';
 const SYNC_FORM_SUBMISSION_TASK_NAME = 'sync-form-submission';
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: true,
-  }),
-});
+export const setNotificationHandler = () =>
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: true,
+    }),
+  });
+setNotificationHandler();
 
-TaskManager.defineTask(SYNC_FORM_VERSION_TASK_NAME, async () => {
-  try {
-    await backgroundTask.syncFormVersion({
-      sendPushNotification: notification.sendPushNotification,
-      showNotificationOnly: true,
-    });
-    return BackgroundFetch.BackgroundFetchResult.NoData;
-  } catch (err) {
-    console.error(`[${SYNC_FORM_VERSION_TASK_NAME}] Define task manager failed`, err);
-    return BackgroundFetch.Result.Failed;
-  }
-});
+export const defineSyncFormVersionTask = () =>
+  TaskManager.defineTask(SYNC_FORM_VERSION_TASK_NAME, async () => {
+    try {
+      await backgroundTask.syncFormVersion({
+        sendPushNotification: notification.sendPushNotification,
+        showNotificationOnly: true,
+      });
+      return BackgroundFetch.BackgroundFetchResult.NewData;
+    } catch (err) {
+      console.error(`[${SYNC_FORM_VERSION_TASK_NAME}] Define task manager failed`, err);
+      return BackgroundFetch.Result.Failed;
+    }
+  });
+defineSyncFormVersionTask();
 
-TaskManager.defineTask(SYNC_FORM_SUBMISSION_TASK_NAME, async () => {
-  try {
-    await backgroundTask.syncFormSubmission();
-    return BackgroundFetch.BackgroundFetchResult.NewData;
-  } catch (err) {
-    console.error(`[${SYNC_FORM_SUBMISSION_TASK_NAME}] Define task manager failed`, err);
-    return BackgroundFetch.Result.Failed;
-  }
-});
+export const defineSyncFormSubmissionTask = () =>
+  TaskManager.defineTask(SYNC_FORM_SUBMISSION_TASK_NAME, async () => {
+    try {
+      await backgroundTask.syncFormSubmission();
+      return BackgroundFetch.BackgroundFetchResult.NewData;
+    } catch (err) {
+      console.error(`[${SYNC_FORM_SUBMISSION_TASK_NAME}] Define task manager failed`, err);
+      return BackgroundFetch.Result.Failed;
+    }
+  });
+defineSyncFormSubmissionTask();
 
 const Stack = createNativeStackNavigator();
 
@@ -83,11 +89,18 @@ const RootNavigator = () => {
 
     notification.registerForPushNotificationsAsync();
     const notificationListener = Notifications.addNotificationReceivedListener((notification) => {
-      console.log('[Notification]Received Listener');
+      // console.info('[Notification]Received Listener');
     });
-    const responseListener = Notifications.addNotificationResponseReceivedListener((response) => {
-      console.log('[Notification]Response Listener');
-      backgroundTask.syncFormVersion({ showNotificationOnly: false });
+    const responseListener = Notifications.addNotificationResponseReceivedListener((res) => {
+      const notificationBody = res?.notification?.request;
+      const notificationType = notificationBody?.content?.data?.notificationType;
+      // console.log('[Notification]Response Listener', notificationBody);
+      if (notificationType === 'sync-form-version') {
+        backgroundTask.syncFormVersion({ showNotificationOnly: false });
+      }
+      if (notificationType === 'sync-form-submission') {
+        console.info('[Notification]Response Listener => ', notificationType);
+      }
     });
     return () => {
       Notifications.removeNotificationSubscription(notificationListener);

@@ -30,15 +30,34 @@ const registerForPushNotificationsAsync = async () => {
   return token;
 };
 
-const sendPushNotification = async () => {
-  await Notifications.scheduleNotificationAsync({
-    content: {
-      title: 'New Form version available',
-      body: 'Here is the notification body',
-      data: null,
-    },
-    trigger: null,
-  });
+const sendPushNotification = async (type = 'sync-form-version') => {
+  const data = {
+    notificationType: type,
+  };
+  let notificationBody = null;
+  switch (type) {
+    case 'sync-form-submission':
+      notificationBody = {
+        content: {
+          title: 'Sync submission completed',
+          body: 'Here is the notification body',
+          data: data,
+        },
+        trigger: null,
+      };
+      break;
+    default:
+      notificationBody = {
+        content: {
+          title: 'New Form version available',
+          body: 'Here is the notification body',
+          data: data,
+        },
+        trigger: null,
+      };
+      break;
+  }
+  return await Notifications.scheduleNotificationAsync(notificationBody);
 };
 
 const notificationHandler = () => {
