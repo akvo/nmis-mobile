@@ -1,9 +1,9 @@
 import React from 'react';
-import { render, act } from '@testing-library/react-native';
+import { render, act, waitFor } from '@testing-library/react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { AuthState, UIState } from '../../store';
 import { BackHandler } from 'react-native';
-import Navigation from '../index';
+import Navigation, { setNotificationHandler } from '../index';
 import { backgroundTask, notification } from '../../lib';
 import * as Notifications from 'expo-notifications';
 
@@ -17,12 +17,11 @@ jest.mock('expo-background-fetch', () => ({
   },
 }));
 
-jest.mock('expo-notifications', () => ({
-  ...jest.requireActual('expo-notifications'),
-  addNotificationReceivedListener: jest.fn(),
-  addNotificationResponseReceivedListener: jest.fn(),
-  removeNotificationSubscription: jest.fn(),
-}));
+jest.mock('expo-notifications');
+
+Notifications.addNotificationReceivedListener.mockImplementation(() => jest.fn());
+Notifications.addNotificationResponseReceivedListener.mockImplementation(() => jest.fn());
+Notifications.removeNotificationSubscription.mockImplementation(() => jest.fn());
 
 jest.mock('../..//lib/background-task', () => ({
   syncFormVersion: jest.fn(),
@@ -47,6 +46,20 @@ describe('Navigation Component', () => {
 
   afterEach(() => {
     jest.clearAllMocks();
+  });
+
+  it('should call set notification handler', async () => {
+    const mockHandleNotification = jest.fn().mockResolvedValue({
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: true,
+    });
+    Notifications.setNotificationHandler.mockImplementation(({ handleNotification }) => {
+      handleNotification(mockHandleNotification);
+    });
+    await setNotificationHandler();
+
+    expect(Notifications.setNotificationHandler).toHaveBeenCalledTimes(1);
   });
 
   it('should call set up hardware back press function listener', () => {

@@ -25,13 +25,15 @@ import { backgroundTask, notification } from '../lib';
 const SYNC_FORM_VERSION_TASK_NAME = 'sync-form-version';
 const SYNC_FORM_SUBMISSION_TASK_NAME = 'sync-form-submission';
 
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: true,
-  }),
-});
+export const setNotificationHandler = () =>
+  Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: true,
+    }),
+  });
+setNotificationHandler();
 
 TaskManager.defineTask(SYNC_FORM_VERSION_TASK_NAME, async () => {
   try {
