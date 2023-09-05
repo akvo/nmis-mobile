@@ -7,3 +7,4 @@ export { default as TypeText } from './TypeText';
 export { default as TypeNumber } from './TypeNumber';
 export { default as TypeGeo } from './TypeGeo';
 export { default as TypeCascade } from './TypeCascade';
+export { default as TypeAutofield } from './TypeAutofield';
