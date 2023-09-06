@@ -161,4 +161,27 @@ describe('AuthFormPage', () => {
       expect(navigation.navigate).toHaveBeenCalledWith('Home');
     });
   });
+
+  it('it handle other network error', async () => {
+    const { result: navigationRef } = renderHook(() => useNavigation());
+    const navigation = navigationRef.current;
+    api.post.mockImplementation(() => Promise.reject({ response: { status: 500 } }));
+    const { getByTestId } = render(<AuthFormPage navigation={navigation} />);
+
+    act(() => {
+      UIState.update((s) => {
+        s.online = true;
+      });
+    });
+
+    const passcodeInput = getByTestId('auth-password-field');
+    const loginButton = getByTestId('auth-login-button');
+
+    fireEvent.changeText(passcodeInput, '123456');
+    fireEvent.press(loginButton);
+
+    expect(api.post).toHaveBeenCalledWith('/auth', expect.any(FormData), {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+  });
 });

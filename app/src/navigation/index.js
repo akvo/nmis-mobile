@@ -7,6 +7,7 @@ import {
   FormDataPage,
   GetStartedPage,
   AuthFormPage,
+  AuthByPassFormPage,
   SettingsPage,
   SettingsFormPage,
   FormPage,
@@ -114,6 +115,7 @@ const RootNavigator = () => {
         <>
           <Stack.Screen name="GetStarted" component={GetStartedPage} />
           <Stack.Screen name="AuthForm" component={AuthFormPage} />
+          <Stack.Screen name="AuthByPassForm" component={AuthByPassFormPage} />
         </>
       ) : !userDefined ? (
         <Stack.Screen name="AddUser" component={AddUserPage} />

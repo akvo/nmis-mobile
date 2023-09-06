@@ -43,6 +43,11 @@ curl -X POST -d "code=testing123" -s http://localhost:8080/auth | jq
       "id": 603050002,
       "url": "/forms/603050002",
       "version": "1.0.0"
+    },
+    {
+      "id": 995283921,
+      "url": "/forms/995283921",
+      "version": "1.0.0"
     }
   ],
   "syncToken": "eyjtoken"
@@ -73,7 +78,7 @@ curl -X POST -d "code=testing123" -s http://localhost:8080/auth | jq
 ,* Mark bundle as not supporting multiuse
 < HTTP/1.1 401 Unauthorized
 < Server: nginx/1.25.1
-< Date: Thu, 22 Jun 2023 07:27:20 GMT
+< Date: Wed, 06 Sep 2023 05:36:45 GMT
 < Content-Type: application/json
 < Transfer-Encoding: chunked
 < Connection: keep-alive
@@ -85,6 +90,52 @@ curl -X POST -d "code=testing123" -s http://localhost:8080/auth | jq
 #+end_example
 
 * Get Forms
+** Get List Form (Unauthorized Method)
+
+#+name: Example Get List of Form without authentication
+#+begin_src bash
+curl -s http://localhost:8080/forms | jq
+#+end_src
+
+#+RESULTS: Example Get List of Form without authentication
+#+begin_example
+{
+  "message": "Success",
+  "formsUrl": [
+    {
+      "id": 519630048,
+      "url": "/forms/519630048",
+      "version": "1.0.0"
+    },
+    {
+      "id": 533560002,
+      "url": "/forms/533560002",
+      "version": "1.0.0"
+    },
+    {
+      "id": 563350033,
+      "url": "/forms/563350033",
+      "version": "1.0.0"
+    },
+    {
+      "id": 567490004,
+      "url": "/forms/567490004",
+      "version": "1.0.0"
+    },
+    {
+      "id": 603050002,
+      "url": "/forms/603050002",
+      "version": "1.0.0"
+    },
+    {
+      "id": 995283921,
+      "url": "/forms/995283921",
+      "version": "1.0.0"
+    }
+  ]
+}
+#+end_example
+
 ** Get Form Success
 #+name: List of Forms
 #+begin_src bash
@@ -109,6 +160,10 @@ curl -s http://localhost:8080/forms/519630048 | jq
   "id": 519630048,
   "name": "Household",
   "version": "1.0.0",
+  "cascades": [
+    "/sqlite/cascade-296940912-v2.sqlite",
+    "/sqlite/kenya_organizations.sqlite"
+  ],
   "question_group": [
     {
       "name": "Introduction",
@@ -127,7 +182,11 @@ curl -s http://localhost:8080/forms/519630048 | jq
           "order": 2,
           "type": "cascade",
           "required": true,
-          "meta": false
+          "meta": true,
+          "source": {
+            "file": "kenya_organizations.sqlite",
+            "parent_id": 0
+          }
         },
         {
           "id": 517690051,
@@ -180,7 +239,11 @@ curl -s http://localhost:8080/forms/519630048 | jq
           "order": 2,
           "type": "cascade",
           "required": true,
-          "meta": true
+          "meta": true,
+          "source": {
+            "file": "cascade-296940912-v2.sqlite",
+            "parent_id": 273
+          }
         },
         {
           "id": 608880002,
@@ -2741,7 +2804,6 @@ curl -s http://localhost:8080/forms/519630048 | jq
 #+end_example
 
 ** Get Form Failed
-
 * Sync
 ** Sync Success
 
@@ -2795,7 +2857,7 @@ curl --verbose -s -X POST \
 ,* Mark bundle as not supporting multiuse
 < HTTP/1.1 403 Forbidden
 < Server: nginx/1.25.1
-< Date: Thu, 22 Jun 2023 02:00:23 GMT
+< Date: Wed, 06 Sep 2023 05:36:12 GMT
 < Content-Type: application/json
 < Transfer-Encoding: chunked
 < Connection: keep-alive
@@ -2819,12 +2881,12 @@ curl -s -I \
 #+begin_example
 HTTP/1.1 200 OK
 Server: nginx/1.25.1
-Date: Thu, 20 Jul 2023 10:51:54 GMT
+Date: Wed, 06 Sep 2023 05:36:27 GMT
 Content-Type: text/plain
 Content-Length: 44032
-Last-Modified: Thu, 20 Jul 2023 10:31:03 GMT
+Last-Modified: Thu, 20 Jul 2023 15:48:24 GMT
 Connection: keep-alive
-ETag: "64b90ce7-ac00"
+ETag: "64b95748-ac00"
 Accept-Ranges: bytes
 
 #+end_example
@@ -2843,3 +2905,4 @@ cd ..
 : updated ./backend/json/563350033.json
 : updated ./backend/json/567490004.json
 : updated ./backend/json/603050002.json
+: updated ./backend/json/995283921.json

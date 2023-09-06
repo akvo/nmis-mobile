@@ -11,6 +11,7 @@ const GetStarted = ({ navigation }) => {
   const [currentConfig, setCurrentConfig] = useState({});
   const [IPAddr, setIPAddr] = useState(null);
   const serverURLState = BuildParamsState.useState((s) => s.serverURL);
+  const authenticationType = BuildParamsState.useState((s) => s.authenticationType);
   const activeLang = UIState.useState((s) => s.lang);
   const trans = i18n.text(activeLang);
 
@@ -39,7 +40,11 @@ const GetStarted = ({ navigation }) => {
       await crudConfig.updateConfig({ serverURL: IPAddr });
     }
     setTimeout(() => {
-      navigation.navigate('AuthForm');
+      if (authenticationType.includes('code_assignment')) {
+        navigation.navigate('AuthForm');
+        return;
+      }
+      navigation.navigate('AuthByPassForm');
     }, 100);
   };
 
@@ -50,9 +55,13 @@ const GetStarted = ({ navigation }) => {
       <CenterLayout.Titles items={titles} />
       <Text>{trans.getStartedSubTitle}</Text>
       {!isServerURLDefined && (
-        <Input placeholder={trans.getStartedInputServer} onChangeText={setIPAddr} />
+        <Input
+          placeholder={trans.getStartedInputServer}
+          onChangeText={setIPAddr}
+          testID="server-url-field"
+        />
       )}
-      <Button title="primary" onPress={goToLogin}>
+      <Button title="primary" onPress={goToLogin} testID="get-started-button">
         {trans.buttonGetStarted}
       </Button>
     </CenterLayout>
