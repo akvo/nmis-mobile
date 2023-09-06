@@ -9,6 +9,7 @@ import {
   TypeNumber,
   TypeGeo,
   TypeCascade,
+  TypeAutofield,
 } from '../fields';
 import { useField } from 'formik';
 import { View, Text } from 'react-native';
@@ -130,7 +131,15 @@ const QuestionField = ({ keyform, field: questionField, setFieldValue, values, v
             dataSource={cascadeData}
           />
         );
-
+      case 'autofield':
+        return (
+          <TypeAutofield
+            keyform={keyform}
+            onChange={handleOnChangeField}
+            values={values}
+            {...questionField}
+          />
+        );
       default:
         return (
           <TypeInput

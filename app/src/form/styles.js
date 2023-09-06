@@ -65,6 +65,14 @@ export const styles = StyleSheet.create({
     paddingVertical: 5,
     marginBottom: 0,
   },
+  autoFieldContainer: {
+    paddingHorizontal: 10,
+    borderColor: 'grey',
+    borderWidth: 0.5,
+    borderRadius: 5,
+    borderBottomWidth: 0.5,
+    backgroundColor: '#f2f2f2',
+  },
   radioFieldText: {
     fontWeight: 'normal',
   },

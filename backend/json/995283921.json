@@ -1,0 +1,460 @@
+{
+  "id": 995283921,
+  "name": "Sanitation Outcome",
+  "version": "1.0.0",
+  "cascades": [
+    "/sqlite/cascade-296940912-v2.sqlite",
+    "/sqlite/households.sqlite"
+  ],
+  "question_group": [
+    {
+      "name": "Household",
+      "question": [
+        {
+          "id": 995283911,
+          "order": 1,
+          "name": "New household or update?",
+          "type": "option",
+          "required": true,
+          "option": [
+            {
+              "id": 995352851,
+              "code": null,
+              "name": "New",
+              "order": 1
+            },
+            {
+              "id": 995352852,
+              "code": null,
+              "name": "Update",
+              "order": 2
+            }
+          ]
+        },
+        {
+          "id": 995283912,
+          "order": 2,
+          "name": "Location",
+          "type": "cascade",
+          "required": true,
+          "source": {
+            "file": "cascade-296940912-v2.sqlite",
+            "parent_id": 273
+          },
+          "dependency": [
+            {
+              "id": 995283911,
+              "options": ["New"]
+            }
+          ]
+        },
+        {
+          "id": 995283913,
+          "order": 3,
+          "name": "Household GPS Location",
+          "type": "geo",
+          "required": true,
+          "dependency": [
+            {
+              "id": 995283911,
+              "options": ["New"]
+            }
+          ],
+          "center": {
+            "lat": -1.303036,
+            "lng": 36.7649956
+          }
+        },
+        {
+          "id": 995283914,
+          "order": 4,
+          "name": "Name of the head of the HH",
+          "type": "text",
+          "required": true,
+          "dependency": [
+            {
+              "id": 995283911,
+              "options": ["New"]
+            }
+          ]
+        },
+        {
+          "id": 995283916,
+          "order": 5,
+          "name": "Select Household",
+          "type": "cascade",
+          "option": "household",
+          "required": true,
+          "source": {
+            "file": "households.sqlite"
+          },
+          "dependency": [
+            {
+              "id": 995283911,
+              "options": ["Update"]
+            }
+          ]
+        },
+        {
+          "id": 995283915,
+          "order": 6,
+          "name": "Household ID",
+          "type": "autofield",
+          "required": false,
+          "meta": true,
+          "fn": {
+            "multiline": false,
+            "fnString": "function(){#995283912 && #995283913 ? #995283912.replace(\",\",\"-\") + \"-\" + #995283913.replace(\"-\",\"\").replace(\",\",\".\").split(\".\").reduce((x, y) => parseInt(x) + parseInt(y), 0).toString(32).substring(3,7) : null}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Functional toilet with privacy",
+      "question": [
+        {
+          "id": 995283923,
+          "order": 1,
+          "name": "Household toilet observed",
+          "type": "option",
+          "required": true,
+          "option": [
+            {
+              "id": 995352856,
+              "code": null,
+              "name": "G1 Toilet Observed",
+              "order": 1,
+              "color": "#38A15A"
+            },
+            {
+              "id": 995352857,
+              "code": null,
+              "name": "G0 No Toilet",
+              "order": 2,
+              "color": "#DB3B3B"
+            }
+          ]
+        },
+        {
+          "id": 995415008,
+          "order": 2,
+          "name": "Functional toilet",
+          "type": "option",
+          "required": true,
+          "option": [
+            {
+              "id": 995352856,
+              "code": null,
+              "name": "G1 Fully functional toilet",
+              "order": 1,
+              "color": "#38A15A"
+            },
+            {
+              "id": 995352857,
+              "code": null,
+              "name": "G0+ Partly functional toilet",
+              "order": 2,
+              "color": "#FFD966"
+            },
+            {
+              "id": 995457238,
+              "code": null,
+              "name": "G0 Non functional toilet",
+              "order": 3,
+              "color": "#DB3B3B"
+            }
+          ],
+          "dependency": [
+            {
+              "id": 995283923,
+              "options": ["G1 Toilet Observed"]
+            }
+          ]
+        },
+        {
+          "id": 995476002,
+          "order": 3,
+          "name": "Toilet privacy",
+          "type": "option",
+          "required": true,
+          "option": [
+            {
+              "id": 995352856,
+              "code": null,
+              "name": "G1 Good toilet privacy",
+              "order": 1,
+              "color": "#38A15A"
+            },
+            {
+              "id": 995352857,
+              "code": null,
+              "name": "G0+ Inadequate toilet privacy",
+              "order": 2,
+              "color": "#FFD966"
+            },
+            {
+              "id": 995457238,
+              "code": null,
+              "name": "G0 No toilet privacy",
+              "order": 3,
+              "color": "#DB3B3B"
+            }
+          ],
+          "dependency": [
+            {
+              "id": 995283923,
+              "options": ["G1 Toilet Observed"]
+            }
+          ]
+        },
+        {
+          "id": 996284308,
+          "order": 4,
+          "name": "Outcome result - Functional toilet with privacy",
+          "type": "autofield",
+          "required": false,
+          "fn": {
+            "multiline": false,
+            "fnString": "function(){#995283923.includes('G0') ? \"G0 Toilet non-functional or not private\" : #995283923.includes('G1') && #995415008.includes('G1') && #995476002.includes('G1') ? \"G1 Functional toilet with privacy\" : \"G0 Toilet non-functional or not private\";}",
+            "fnColor": {
+              "G1 Functional toilet with privacy": "#38A15A",
+              "G0 Toilet non-functional or not private": "#DB3B3B"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Flyproof toilet type",
+      "question": [
+        {
+          "id": 996491347,
+          "order": 1,
+          "name": "Toilet interface",
+          "type": "option",
+          "required": true,
+          "option": [
+            {
+              "id": 996524367,
+              "code": null,
+              "name": "G1 Flush or pour-flush pan",
+              "order": 1,
+              "color": "#38A15A"
+            },
+            {
+              "id": 996524368,
+              "code": null,
+              "name": "G1 SATO pan",
+              "order": 2,
+              "color": "#38A15A"
+            },
+            {
+              "id": 996576384,
+              "code": null,
+              "name": "G1 VIP drophole with vent pipe",
+              "order": 3,
+              "color": "#38A15A"
+            },
+            {
+              "id": 996585980,
+              "code": null,
+              "name": "G1 Dry latrine with drophole",
+              "order": 4,
+              "color": "#38A15A"
+            },
+            {
+              "id": 996594638,
+              "code": null,
+              "name": "G1 Other pit latrine",
+              "order": 5,
+              "color": "#38A15A"
+            },
+            {
+              "id": 996603628,
+              "code": null,
+              "name": "G0 No toilet",
+              "order": 6,
+              "color": "#DB3B3B"
+            }
+          ]
+        },
+        {
+          "id": 996630948,
+          "order": 2,
+          "name": "Containment system",
+          "type": "option",
+          "required": true,
+          "option": [
+            {
+              "id": 996524367,
+              "code": null,
+              "name": "G1 Sewer connection",
+              "order": 1,
+              "color": "#38A15A"
+            },
+            {
+              "id": 996524368,
+              "code": null,
+              "name": "G1 Septic tank",
+              "order": 2,
+              "color": "#38A15A"
+            },
+            {
+              "id": 996576384,
+              "code": null,
+              "name": "G1 Single toilet pit",
+              "order": 3,
+              "color": "#38A15A"
+            },
+            {
+              "id": 996585980,
+              "code": null,
+              "name": "G1 Double toilet pit",
+              "order": 4,
+              "color": "#38A15A"
+            },
+            {
+              "id": 996594638,
+              "code": null,
+              "name": "G1 Toilet vault (above ground)",
+              "order": 5,
+              "color": "#38A15A"
+            },
+            {
+              "id": 996603628,
+              "code": null,
+              "name": "G1 Other pit or tank",
+              "order": 6,
+              "color": "#38A15A"
+            },
+            {
+              "id": 996681237,
+              "code": null,
+              "name": "G0 Open pit (large openings)",
+              "order": 7,
+              "color": "#DB3B3B"
+            },
+            {
+              "id": 996687562,
+              "code": null,
+              "name": "G0 No pit (open pipe)",
+              "order": 8,
+              "color": "#DB3B3B"
+            }
+          ],
+          "dependency": [
+            {
+              "id": 996491347,
+              "options": [
+                "G1 Flush or pour-flush pan",
+                "G1 SATO pan",
+                "G1 VIP drophole with vent pipe",
+                "G1 Dry latrine with drophole",
+                "G1 Other pit latrine"
+              ]
+            }
+          ]
+        },
+        {
+          "id": 996700187,
+          "order": 3,
+          "name": "Flyproof Toilet",
+          "type": "option",
+          "required": true,
+          "option": [
+            {
+              "id": 996715385,
+              "code": null,
+              "name": "G1 Functional water seal (with water)",
+              "order": 1,
+              "color": "#38A15A"
+            },
+            {
+              "id": 996715386,
+              "code": null,
+              "name": "G1 Functional SATO flap",
+              "order": 2,
+              "color": "#38A15A"
+            },
+            {
+              "id": 996725983,
+              "code": null,
+              "name": "G1 VIP vent pipe with insect screen",
+              "order": 3,
+              "color": "#38A15A"
+            },
+            {
+              "id": 996736592,
+              "code": null,
+              "name": "G1 Tight-fitting drophole cover (in place)",
+              "order": 4,
+              "color": "#38A15A"
+            },
+            {
+              "id": 996742044,
+              "code": null,
+              "name": "G0 Broken water seal (no water)",
+              "order": 5,
+              "color": "#DB3B3B"
+            },
+            {
+              "id": 996747114,
+              "code": null,
+              "name": "G0 Broken SATO flap",
+              "order": 6,
+              "color": "#DB3B3B"
+            },
+            {
+              "id": 996751659,
+              "code": null,
+              "name": "G0 VIP vent pipe without screen",
+              "order": 7,
+              "color": "#DB3B3B"
+            },
+            {
+              "id": 996757150,
+              "code": null,
+              "name": "G0 Inadequate or missing drophole cover",
+              "order": 8,
+              "color": "#DB3B3B"
+            },
+            {
+              "id": 996764256,
+              "code": null,
+              "name": "G0 Other non-flyproof toilet",
+              "order": 9,
+              "color": "#DB3B3B"
+            }
+          ],
+          "dependency": [
+            {
+              "id": 996491347,
+              "options": [
+                "G1 Flush or pour-flush pan",
+                "G1 SATO pan",
+                "G1 VIP drophole with vent pipe",
+                "G1 Dry latrine with drophole",
+                "G1 Other pit latrine"
+              ]
+            }
+          ]
+        },
+        {
+          "id": 996740556,
+          "order": 4,
+          "name": "Outcome result - Flyproof Toilet Type",
+          "type": "autofield",
+          "required": false,
+          "fn": {
+            "multiline": false,
+            "fnString": "function(){#996491347.includes('G1') && #996630948.includes('G1') && #996700187.includes('G1') && #996491347.includes('G1') && #996630948.includes('G1') && #996700187.includes('G1') ? \"G1 Flyproof Toilet\" : \"G0 Non-flyproof Toilet\"}",
+            "fnColor": {
+              "G1 Flyproof Toilet": "#38A15A",
+              "G0 Non-flyproof Toilet": "#DB3B3B"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
