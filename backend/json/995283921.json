@@ -44,7 +44,9 @@
           "dependency": [
             {
               "id": 995283911,
-              "options": ["New"]
+              "options": [
+                "New"
+              ]
             }
           ]
         },
@@ -57,7 +59,9 @@
           "dependency": [
             {
               "id": 995283911,
-              "options": ["New"]
+              "options": [
+                "New"
+              ]
             }
           ],
           "center": {
@@ -74,7 +78,9 @@
           "dependency": [
             {
               "id": 995283911,
-              "options": ["New"]
+              "options": [
+                "New"
+              ]
             }
           ]
         },
@@ -91,7 +97,9 @@
           "dependency": [
             {
               "id": 995283911,
-              "options": ["Update"]
+              "options": [
+                "Update"
+              ]
             }
           ]
         },
@@ -167,7 +175,9 @@
           "dependency": [
             {
               "id": 995283923,
-              "options": ["G1 Toilet Observed"]
+              "options": [
+                "G1 Toilet Observed"
+              ]
             }
           ]
         },
@@ -203,7 +213,9 @@
           "dependency": [
             {
               "id": 995283923,
-              "options": ["G1 Toilet Observed"]
+              "options": [
+                "G1 Toilet Observed"
+              ]
             }
           ]
         },
