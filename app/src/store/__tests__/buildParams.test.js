@@ -1,5 +1,6 @@
 import { renderHook, act } from '@testing-library/react-native';
 import BuildParamsState from '../buildParams';
+import * as buildJson from '../../build.json';
 
 describe('BuildParamsState', () => {
   it('should initialize with the correct default state from build.json', () => {
@@ -13,9 +14,9 @@ describe('BuildParamsState', () => {
       loggingLevel,
       appVersion,
     } = result.current;
-    expect(authenticationType).toEqual(['code_assignment', 'username', 'password']);
+    expect(authenticationType).toEqual(buildJson.default.authenticationType);
     expect(debugMode).toBe(false);
-    expect(dataSyncInterval).toBe(1);
+    expect(dataSyncInterval).toBe(buildJson.default.dataSyncInterval);
     expect(errorHandling).toBe(true);
     expect(loggingLevel).toBe('verbose');
     expect(appVersion).toBe('1.2.0');
