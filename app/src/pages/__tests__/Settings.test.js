@@ -5,7 +5,7 @@ import { render, renderHook, fireEvent, act, waitFor } from '@testing-library/re
 import { useNavigation } from '@react-navigation/native';
 
 import SettingsPage from '../Settings';
-import { UIState } from '../../store';
+import { UIState, BuildParamsState } from '../../store';
 
 jest.spyOn(View.prototype, 'measureInWindow').mockImplementation((cb) => {
   cb(18, 113, 357, 50);
@@ -102,10 +102,35 @@ describe('SettingsPage', () => {
     expect(navigation.navigate).toHaveBeenCalledWith('SettingsForm', { id: 1, name: 'Advanced' });
   });
 
-  it('should have add new form list', () => {
+  it('should not have add new form list if code_assigment set as auth type in build params', async () => {
     const { result: navigationRef } = renderHook(() => useNavigation());
     const navigation = navigationRef.current;
+
+    const { queryByTestId } = render(<SettingsPage navigation={navigation} />);
+
+    act(() => {
+      BuildParamsState.update((s) => {
+        s.authenticationType = ['code_assignment', 'username', 'password'];
+      });
+    });
+
+    await waitFor(() => {
+      const addForm = queryByTestId('add-more-forms');
+      expect(addForm).toBeFalsy();
+    });
+  });
+
+  it('should have add new form list if code_assigment set as auth type in build params', () => {
+    const { result: navigationRef } = renderHook(() => useNavigation());
+    const navigation = navigationRef.current;
+
     const { getByTestId } = render(<SettingsPage navigation={navigation} />);
+
+    act(() => {
+      BuildParamsState.update((s) => {
+        s.authenticationType = ['username', 'password'];
+      });
+    });
 
     const addForm = getByTestId('add-more-forms');
     expect(addForm).toBeTruthy();

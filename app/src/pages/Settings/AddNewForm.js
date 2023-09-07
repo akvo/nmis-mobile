@@ -43,7 +43,7 @@ const AddNewForm = ({ navigation }) => {
             });
           }
           setTimeout(() => {
-            navigation.navigate("Home");
+            navigation.navigate('Home');
           }, 100);
         } catch (err) {
           console.error(err);
@@ -58,7 +58,7 @@ const AddNewForm = ({ navigation }) => {
         }
       })
       .finally(() => setLoading(false));
-  }
+  };
 
   return (
     <BaseLayout title={trans.settingAddNewFormPageTitle} rightComponent={false}>
