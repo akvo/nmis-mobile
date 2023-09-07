@@ -1,5 +1,5 @@
 {
-  "authenticationType": ["code_assignment", "username", "password"],
+  "authenticationType": ["username", "password"],
   "serverURL": null,
   "debugMode": false,
   "dataSyncInterval": 1,
