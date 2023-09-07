@@ -30,6 +30,10 @@ const Settings = ({ navigation }) => {
     navigation.navigate('SettingsForm', { id, name: findConfig?.name });
   };
 
+  const goToAddForm = () => {
+    navigation.navigate('AddNewForm', {});
+  };
+
   return (
     <BaseLayout title={trans.settingsPageTitle} rightComponent={false}>
       <BaseLayout.Content>
@@ -62,6 +66,14 @@ const Settings = ({ navigation }) => {
               </ListItem>
             );
           })}
+          <Divider width={8} color="#f9fafb" />
+          <ListItem onPress={goToAddForm} testID="add-more-forms" bottomDivider>
+            <ListItem.Content>
+              <ListItem.Title>{trans.settingAddFormTitle}</ListItem.Title>
+              <ListItem.Subtitle>{trans.settingAddFormDesc}</ListItem.Subtitle>
+            </ListItem.Content>
+            <ListItem.Chevron />
+          </ListItem>
           <LogoutButton />
           <DialogForm
             onOk={handleSaveLang}

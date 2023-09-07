@@ -60,6 +60,7 @@ describe('SettingsPage', () => {
       expect(frTextEl).toBeDefined();
     });
   });
+
   it('should close dialog when click cancel on language settings', () => {
     const { result: navigationRef } = renderHook(() => useNavigation());
     const navigation = navigationRef.current;
@@ -99,5 +100,14 @@ describe('SettingsPage', () => {
     fireEvent.press(advancedItem);
 
     expect(navigation.navigate).toHaveBeenCalledWith('SettingsForm', { id: 1, name: 'Advanced' });
+  });
+
+  it('should have add new form list', () => {
+    const { result: navigationRef } = renderHook(() => useNavigation());
+    const navigation = navigationRef.current;
+    const { getByTestId } = render(<SettingsPage navigation={navigation} />);
+
+    const addForm = getByTestId('add-more-forms');
+    expect(addForm).toBeTruthy();
   });
 });
