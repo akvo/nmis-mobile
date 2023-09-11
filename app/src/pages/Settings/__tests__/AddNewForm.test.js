@@ -1,33 +1,29 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import AuthByPassFormPage from '../AuthByPassForm';
-import api from '../../lib/api';
-import cascades from '../../lib/cascades';
-import { UIState, UserState } from '../../store';
-import { render, fireEvent, act, renderHook, waitFor } from '@testing-library/react-native';
-import { Platform } from 'react-native';
+import { render, renderHook, fireEvent, act, waitFor } from '@testing-library/react-native';
 import { useNavigation } from '@react-navigation/native';
-import { crudUsers } from '../../database/crud';
+import { Platform } from 'react-native';
+import api from '../../../lib/api';
+import cascades from '../../../lib/cascades';
 
-jest.mock('../../lib/api');
-jest.mock('../../database/crud');
-jest.mock('../../lib/cascades');
-// mock console error
-global.console.error = jest.fn();
+import AddNewForm from '../AddNewForm';
+import { UIState } from '../../../store';
 
-describe('AuthByPassForm', () => {
-  test('it renders correctly', () => {
-    const { result: navigationRef } = renderHook(() => useNavigation());
-    const navigation = navigationRef.current;
-    const tree = renderer.create(<AuthByPassFormPage navigation={navigation} />).toJSON();
+jest.mock('../../../lib/api');
+jest.mock('../../../lib/cascades');
+jest.mock('../../../database/crud');
+
+describe('AddNewForm Page', () => {
+  test('renders correctly', () => {
+    const tree = renderer.create(<AddNewForm />).toJSON();
     expect(tree).toMatchSnapshot();
   });
 
-  test('it should have form id input and download button', () => {
+  it('should show input form id and download button', () => {
     const { result: navigationRef } = renderHook(() => useNavigation());
     const navigation = navigationRef.current;
 
-    const wrapper = render(<AuthByPassFormPage navigation={navigation} />);
+    const wrapper = render(<AddNewForm navigation={navigation} />);
 
     const fidInput = wrapper.getByTestId('input-form-id');
     expect(fidInput).toBeDefined();
@@ -35,13 +31,13 @@ describe('AuthByPassForm', () => {
     expect(downloadButton).toBeDefined();
   });
 
-  it('it should not download forms when offline', async () => {
+  it('should not fetch form if network not available', async () => {
     Platform.OS = 'android';
     const { result: navigationRef } = renderHook(() => useNavigation());
     const navigation = navigationRef.current;
     api.post.mockImplementation(() => Promise.resolve({ data: { formsUrl: [] } }));
 
-    const wrapper = render(<AuthByPassFormPage navigation={navigation} />);
+    const wrapper = render(<AddNewForm navigation={navigation} />);
 
     act(() => {
       UIState.update((s) => {
@@ -55,15 +51,17 @@ describe('AuthByPassForm', () => {
     fireEvent.changeText(fidInput, '1');
     fireEvent.press(downloadButton);
 
-    expect(api.get).not.toHaveBeenCalled();
+    await waitFor(() => {
+      expect(api.get).not.toHaveBeenCalled();
+    });
   });
 
-  it('it should download forms when online', async () => {
+  it('should fetch form if network available', async () => {
     const { result: navigationRef } = renderHook(() => useNavigation());
     const navigation = navigationRef.current;
-    api.get.mockImplementation(() => Promise.resolve({ data: { id: 1, name: 'Test' } }));
+    api.get.mockImplementation(() => Promise.resolve({ data: { formsUrl: [] } }));
 
-    const wrapper = render(<AuthByPassFormPage navigation={navigation} />);
+    const wrapper = render(<AddNewForm navigation={navigation} />);
 
     act(() => {
       UIState.update((s) => {
@@ -77,10 +75,12 @@ describe('AuthByPassForm', () => {
     fireEvent.changeText(fidInput, '1');
     fireEvent.press(downloadButton);
 
-    expect(api.get).toHaveBeenCalledWith('/forms/1');
+    await waitFor(() => {
+      expect(api.get).toHaveBeenCalledWith('/forms/1');
+    });
   });
 
-  it('it should navigate to add user if no user defined after form downloaded', async () => {
+  it('it should navigate to home page after form downloaded', async () => {
     const { result: navigationRef } = renderHook(() => useNavigation());
     const navigation = navigationRef.current;
     // url: /forms/1
@@ -104,7 +104,7 @@ describe('AuthByPassForm', () => {
       }
     });
 
-    const wrapper = render(<AuthByPassFormPage navigation={navigation} />);
+    const wrapper = render(<AddNewForm navigation={navigation} />);
 
     act(() => {
       UIState.update((s) => {
@@ -125,60 +125,18 @@ describe('AuthByPassForm', () => {
         '/cascades/1.sqlite',
       );
     });
-    await waitFor(() => expect(navigation.navigate).toHaveBeenCalledWith('AddUser'));
+    await waitFor(() => expect(navigation.navigate).toHaveBeenCalledWith('Home'));
   });
 
-  it('it should navigate to home if user defined after form downloaded', async () => {
+  it('should show error text if fetch form error', async () => {
     const { result: navigationRef } = renderHook(() => useNavigation());
     const navigation = navigationRef.current;
-    const mockGetData = {
-      id: 1,
-      name: 'Household',
-      version: '1.0.0',
-      cascades: ['/cascades/1.sqlite'],
-      question_group: [],
-    };
-    const mockUser = { id: 1, name: 'John Doe', password: 'qwerty' };
-    api.get.mockImplementation(() => Promise.resolve({ data: mockGetData }));
-    crudUsers.getActiveUser.mockImplementation(() => Promise.resolve(mockUser));
-    const { result: userStateRef } = renderHook(() => UserState.useState((s) => s));
-
-    const wrapper = render(<AuthByPassFormPage navigation={navigation} />);
-
-    act(() => {
-      UIState.update((s) => {
-        s.online = true;
-      });
-    });
-
-    const fidInput = wrapper.getByTestId('input-form-id');
-    const downloadButton = wrapper.getByTestId('button-download-form');
-
-    fireEvent.changeText(fidInput, '1');
-    fireEvent.press(downloadButton);
-
-    expect(api.get).toHaveBeenCalledWith('/forms/1');
-    await waitFor(() => {
-      const {
-        id: userIdState,
-        name: userNameState,
-        password: userPasswordState,
-      } = userStateRef.current;
-      expect(userIdState).toEqual(mockUser.id);
-      expect(userNameState).toEqual(mockUser.name);
-      expect(userPasswordState).toEqual(mockUser.password);
-      expect(navigation.navigate).toHaveBeenCalledWith('Home');
-    });
-  });
-
-  it('it should be error 400', async () => {
-    const { result: navigationRef } = renderHook(() => useNavigation());
-    const navigation = navigationRef.current;
+    const mockErrorData = { message: 'Failed' };
     api.get.mockImplementation(() =>
-      Promise.reject({ response: { message: 'Failed', status: 400 } }),
+      Promise.reject({ response: { ...mockErrorData, status: 400 } }),
     );
 
-    const wrapper = render(<AuthByPassFormPage navigation={navigation} />);
+    const wrapper = render(<AddNewForm navigation={navigation} />);
 
     act(() => {
       UIState.update((s) => {
@@ -199,14 +157,14 @@ describe('AuthByPassForm', () => {
     });
   });
 
-  it('it should be error 500', async () => {
+  it('should be error 500', async () => {
     const { result: navigationRef } = renderHook(() => useNavigation());
     const navigation = navigationRef.current;
     api.get.mockImplementation(() =>
       Promise.reject({ response: { message: 'Failed', status: 500 } }),
     );
 
-    const wrapper = render(<AuthByPassFormPage navigation={navigation} />);
+    const wrapper = render(<AddNewForm navigation={navigation} />);
 
     act(() => {
       UIState.update((s) => {

@@ -15,6 +15,7 @@ import {
   MapViewPage,
   UsersPage,
   FormDataDetailsPage,
+  AddNewForm,
 } from '../pages';
 import { UIState, AuthState, UserState, FormState, BuildParamsState } from '../store';
 import { BackHandler } from 'react-native';
@@ -131,6 +132,7 @@ const RootNavigator = () => {
           <Stack.Screen name="AddUser" component={AddUserPage} />
           <Stack.Screen name="Users" component={UsersPage} />
           <Stack.Screen name="FormDataDetails" component={FormDataDetailsPage} />
+          <Stack.Screen name="AddNewForm" component={AddNewForm} />
         </>
       )}
     </Stack.Navigator>

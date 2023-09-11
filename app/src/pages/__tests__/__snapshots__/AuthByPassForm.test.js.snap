@@ -153,35 +153,140 @@ exports[`AuthByPassForm it renders correctly 1`] = `
     <View
       style={
         {
-          "alignItems": "center",
-          "flexDirection": "row",
-          "justifyContent": "center",
+          "paddingHorizontal": 10,
+          "width": "100%",
         }
       }
+      testID="RNE__Input__view-wrapper"
     >
-      <ActivityIndicator
-        color="#2089dc"
-        size="large"
+      <View
+        collapsable={false}
         style={
           {
-            "marginVertical": 20,
+            "alignItems": "center",
+            "borderBottomWidth": 1,
+            "borderColor": "#86939e",
+            "flexDirection": "row",
+            "transform": [
+              {
+                "translateX": 0,
+              },
+            ],
+            "width": "75%",
           }
         }
-        testID="Dialog__Loading"
+      >
+        <TextInput
+          autoFocus={true}
+          editable={true}
+          keyboardType="numeric"
+          onChangeText={[Function]}
+          placeholder="Form ID"
+          placeholderTextColor="#86939e"
+          style={
+            {
+              "color": "#242424",
+              "flex": 1,
+              "fontSize": 18,
+              "minHeight": 40,
+            }
+          }
+          testID="input-form-id"
+          underlineColorAndroid="transparent"
+          value={null}
+        />
+      </View>
+      <Text
+        style={
+          {
+            "color": "#ff190c",
+            "fontSize": 12,
+            "margin": 5,
+          }
+        }
       />
     </View>
-    <Text
-      accessibilityRole="text"
+    <View
       style={
-        {
-          "color": "#242424",
-          "fontStyle": "italic",
-          "textAlign": "center",
-        }
+        [
+          {
+            "overflow": "hidden",
+          },
+          {
+            "borderRadius": 2,
+          },
+          undefined,
+          false,
+        ]
       }
+      testID="RNE_BUTTON_WRAPPER"
     >
-      Fetching data
-    </Text>
+      <View
+        accessibilityRole="button"
+        accessibilityState={
+          {
+            "busy": false,
+            "checked": undefined,
+            "disabled": false,
+            "expanded": undefined,
+            "selected": undefined,
+          }
+        }
+        accessibilityValue={
+          {
+            "max": undefined,
+            "min": undefined,
+            "now": undefined,
+            "text": undefined,
+          }
+        }
+        accessible={true}
+        collapsable={false}
+        focusable={true}
+        onClick={[Function]}
+        onResponderGrant={[Function]}
+        onResponderMove={[Function]}
+        onResponderRelease={[Function]}
+        onResponderTerminate={[Function]}
+        onResponderTerminationRequest={[Function]}
+        onStartShouldSetResponder={[Function]}
+        style={
+          {
+            "opacity": 1,
+          }
+        }
+        testID="button-download-form"
+      >
+        <View
+          style={
+            {
+              "alignItems": "center",
+              "backgroundColor": "#2089dc",
+              "borderColor": "#2089dc",
+              "borderRadius": 2,
+              "borderWidth": 0,
+              "flexDirection": "row",
+              "justifyContent": "center",
+              "padding": 8,
+              "paddingHorizontal": 10,
+            }
+          }
+        >
+          <Text
+            style={
+              {
+                "color": "white",
+                "fontSize": 18,
+                "paddingVertical": 1,
+                "textAlign": "center",
+              }
+            }
+          >
+            Download Form
+          </Text>
+        </View>
+      </View>
+    </View>
   </View>
 </View>
 `;

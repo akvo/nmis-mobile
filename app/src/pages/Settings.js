@@ -5,7 +5,7 @@ import { ListItem, Divider } from '@rneui/themed';
 import { BaseLayout, LogoutButton } from '../components';
 import DialogForm from './Settings/DialogForm';
 import { config, langConfig } from './Settings/config';
-import { UIState, FormState } from '../store';
+import { UIState, FormState, BuildParamsState } from '../store';
 import { i18n } from '../lib';
 
 const Settings = ({ navigation }) => {
@@ -14,6 +14,7 @@ const Settings = ({ navigation }) => {
   const trans = i18n.text(activeLang);
   const nonEnglish = activeLang !== 'en';
   const activeLangText = langConfig.options.find((o) => o.value === activeLang);
+  const authenticationType = BuildParamsState.useState((s) => s.authenticationType);
 
   const handleSaveLang = (value) => {
     UIState.update((s) => {
@@ -28,6 +29,10 @@ const Settings = ({ navigation }) => {
   const goToForm = (id) => {
     const findConfig = config.find((c) => c?.id === id);
     navigation.navigate('SettingsForm', { id, name: findConfig?.name });
+  };
+
+  const goToAddForm = () => {
+    navigation.navigate('AddNewForm', {});
   };
 
   return (
@@ -62,6 +67,19 @@ const Settings = ({ navigation }) => {
               </ListItem>
             );
           })}
+          {/* Show this only if no code_assignment in auth type */}
+          {!authenticationType.includes('code_assignment') && (
+            <>
+              <Divider width={8} color="#f9fafb" />
+              <ListItem onPress={goToAddForm} testID="add-more-forms" bottomDivider>
+                <ListItem.Content>
+                  <ListItem.Title>{trans.settingAddFormTitle}</ListItem.Title>
+                  <ListItem.Subtitle>{trans.settingAddFormDesc}</ListItem.Subtitle>
+                </ListItem.Content>
+                <ListItem.Chevron />
+              </ListItem>
+            </>
+          )}
           <LogoutButton />
           <DialogForm
             onOk={handleSaveLang}

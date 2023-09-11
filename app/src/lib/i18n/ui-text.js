@@ -85,6 +85,11 @@ const uiText = {
     buttonSelectedLoc: 'Use selected location',
     fetchingLocation: 'Fetching location...',
     selectMultiItem: 'Select multiple item(s)',
+    inputFormID: 'Form ID',
+    downloadFormButton: 'Download Form',
+    settingAddFormTitle: 'Add Form',
+    settingAddFormDesc: 'Add/download more forms to apps',
+    settingAddNewFormPageTitle: 'Add New Form',
   },
   fr: {
     latitude: 'Latitude',
@@ -173,6 +178,11 @@ const uiText = {
     buttonSelectedLoc: "Utiliser l'emplacement sélectionné",
     fetchingLocation: "Récupération de l'emplacement...",
     selectMultiItem: 'Sélectionnez plusieurs éléments',
+    inputFormID: 'ID du formulaire',
+    downloadFormButton: 'Télécharger le formulaire',
+    settingAddFormTitle: 'Ajouter un formulaire',
+    settingAddFormDesc: "Ajouter/télécharger plus de formulaires dans l'application",
+    settingAddNewFormPageTitle: 'Ajouter un nouveau formulaire',
   },
 };
 

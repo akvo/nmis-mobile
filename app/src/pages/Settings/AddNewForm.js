@@ -1,21 +1,17 @@
-import React, { useEffect } from 'react';
-import { Asset } from 'expo-asset';
+import React, { useState } from 'react';
+import { BaseLayout } from '../../components';
 import { View, StyleSheet, Platform, ToastAndroid } from 'react-native';
 import { Input, Button, Text, Dialog } from '@rneui/themed';
-import { CenterLayout, Image } from '../components';
-import { api, cascades, i18n } from '../lib';
-import { AuthState, UserState, UIState } from '../store';
-import { crudSessions, crudForms, crudUsers } from '../database/crud';
+import { i18n, api, cascades } from '../../lib';
+import { UIState } from '../../store';
+import { crudForms } from '../../database/crud';
 
-const AuthByPassForm = ({ navigation }) => {
-  const logo = Asset.fromModule(require('../assets/icon.png')).uri;
+const AddNewForm = ({ navigation }) => {
   const { online: isNetworkAvailable, lang: activeLang } = UIState.useState((s) => s);
-  const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState(null);
-  const [formId, setFormId] = React.useState(null);
   const trans = i18n.text(activeLang);
-
-  const goTo = (page) => navigation.navigate(page);
+  const [loading, setLoading] = useState(false);
+  const [formId, setFormId] = useState(null);
+  const [error, setError] = useState(null);
 
   const handleDownloadForm = () => {
     if (!isNetworkAvailable) {
@@ -31,13 +27,6 @@ const AuthByPassForm = ({ navigation }) => {
       .then(async (res) => {
         try {
           const { data } = res;
-          // save session
-          const bearerToken = 'NO TOKEN';
-          const lastSession = await crudSessions.selectLastSession();
-          if (!lastSession && lastSession?.token !== bearerToken) {
-            console.info('Saving tokens...');
-            await crudSessions.addSession({ token: bearerToken, passcode: 'NO PASSCODE' });
-          }
           await cascades.createSqliteDir();
           // save forms
           const savedForm = await crudForms.addForm({
@@ -53,23 +42,9 @@ const AuthByPassForm = ({ navigation }) => {
               cascades.download(downloadUrl, cascadeFile);
             });
           }
-          // check users exist
-          const activeUser = await crudUsers.getActiveUser();
-          // update auth state
-          AuthState.update((s) => {
-            s.authenticationCode = 'NO PASSCODE';
-            s.token = bearerToken;
-          });
-          if (!activeUser || !activeUser?.id) {
-            goTo('AddUser');
-          } else {
-            UserState.update((s) => {
-              s.id = activeUser.id;
-              s.name = activeUser.name;
-              s.password = activeUser.password;
-            });
-            goTo('Home');
-          }
+          setTimeout(() => {
+            navigation.navigate('Home');
+          }, 100);
         } catch (err) {
           console.error(err);
         }
@@ -86,15 +61,9 @@ const AuthByPassForm = ({ navigation }) => {
   };
 
   return (
-    <CenterLayout>
-      <Image src={logo ? logo : null} />
-      {loading ? (
-        <View>
-          <Dialog.Loading />
-          <Text style={styles.dialogLoadingText}>{trans.fetchingData}</Text>
-        </View>
-      ) : (
-        <View>
+    <BaseLayout title={trans.settingAddNewFormPageTitle} rightComponent={false}>
+      <BaseLayout.Content>
+        <View style={styles.container}>
           <Input
             placeholder={trans.inputFormID}
             testID="input-form-id"
@@ -107,14 +76,19 @@ const AuthByPassForm = ({ navigation }) => {
           <Button testID="button-download-form" onPress={handleDownloadForm}>
             {trans.downloadFormButton}
           </Button>
+          {error && (
+            <Text style={styles.errorText} testID="fetch-error-text">
+              {error}
+            </Text>
+          )}
         </View>
-      )}
-      {error && (
-        <Text style={styles.errorText} testID="fetch-error-text">
-          {error}
-        </Text>
-      )}
-    </CenterLayout>
+      </BaseLayout.Content>
+      {/* Loading dialog */}
+      <Dialog isVisible={loading} style={styles.dialogLoadingContainer}>
+        <Dialog.Loading />
+        <Text style={styles.dialogLoadingText}>{trans.fetchingData}</Text>
+      </Dialog>
+    </BaseLayout>
   );
 };
 
@@ -122,10 +96,12 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     paddingHorizontal: 16,
+    paddingTop: 24,
   },
-  text: {
-    marginLeft: 8,
+  inputFormId: {
+    width: '100%',
   },
+  errorText: { color: 'red', fontStyle: 'italic', marginHorizontal: 10, marginTop: 8 },
   dialogLoadingContainer: {
     flex: 1,
   },
@@ -133,10 +109,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontStyle: 'italic',
   },
-  inputFormId: {
-    width: '75%',
-  },
-  errorText: { color: 'red', fontStyle: 'italic', marginHorizontal: 10, marginTop: -8 },
 });
 
-export default AuthByPassForm;
+export default AddNewForm;
