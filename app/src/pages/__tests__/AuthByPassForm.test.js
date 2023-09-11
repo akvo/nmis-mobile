@@ -198,5 +198,11 @@ describe('AuthByPassForm', () => {
       const errorText = wrapper.getByTestId('fetch-error-text');
       expect(errorText).toBeTruthy();
     });
+
+    // ERROR 500
+    api.get.mockImplementation(() =>
+      Promise.reject({ response: { ...mockErrorData, status: 500 } }),
+    );
+    render(<AuthByPassFormPage navigation={navigation} />);
   });
 });

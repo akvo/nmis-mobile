@@ -120,7 +120,7 @@ describe('SettingsPage', () => {
     });
   });
 
-  it('should have add new form list if code_assigment set as auth type in build params', () => {
+  it('should have add new form list if code_assigment set as auth type in build params', async () => {
     const { result: navigationRef } = renderHook(() => useNavigation());
     const navigation = navigationRef.current;
 
@@ -134,5 +134,10 @@ describe('SettingsPage', () => {
 
     const addForm = getByTestId('add-more-forms');
     expect(addForm).toBeTruthy();
+    fireEvent.press(addForm);
+
+    await waitFor(() => {
+      expect(navigation.navigate).toHaveBeenCalledWith('AddNewForm', {});
+    });
   });
 });
