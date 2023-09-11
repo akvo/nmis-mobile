@@ -102,7 +102,7 @@ describe('SettingsPage', () => {
     expect(navigation.navigate).toHaveBeenCalledWith('SettingsForm', { id: 1, name: 'Advanced' });
   });
 
-  it('should not have add new form list if code_assigment set as auth type in build params', async () => {
+  it('should not have add new form list if code_assignment set as auth type in build params', async () => {
     const { result: navigationRef } = renderHook(() => useNavigation());
     const navigation = navigationRef.current;
 
@@ -120,7 +120,7 @@ describe('SettingsPage', () => {
     });
   });
 
-  it('should have add new form list if code_assigment set as auth type in build params', async () => {
+  it('should have add new form list if code_assignment set as auth type in build params', async () => {
     const { result: navigationRef } = renderHook(() => useNavigation());
     const navigation = navigationRef.current;
 
