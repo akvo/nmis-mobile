@@ -171,12 +171,11 @@ describe('AuthByPassForm', () => {
     });
   });
 
-  it('it should be error', async () => {
+  it('it should be error 400', async () => {
     const { result: navigationRef } = renderHook(() => useNavigation());
     const navigation = navigationRef.current;
-    const mockErrorData = { message: 'Failed' };
     api.get.mockImplementation(() =>
-      Promise.reject({ response: { ...mockErrorData, status: 400 } }),
+      Promise.reject({ response: { message: 'Failed', status: 400 } }),
     );
 
     const wrapper = render(<AuthByPassFormPage navigation={navigation} />);
@@ -198,11 +197,31 @@ describe('AuthByPassForm', () => {
       const errorText = wrapper.getByTestId('fetch-error-text');
       expect(errorText).toBeTruthy();
     });
+  });
 
-    // ERROR 500
+  it('it should be error 500', async () => {
+    const { result: navigationRef } = renderHook(() => useNavigation());
+    const navigation = navigationRef.current;
     api.get.mockImplementation(() =>
-      Promise.reject({ response: { ...mockErrorData, status: 500 } }),
+      Promise.reject({ response: { message: 'Failed', status: 500 } }),
     );
-    render(<AuthByPassFormPage navigation={navigation} />);
+
+    const wrapper = render(<AuthByPassFormPage navigation={navigation} />);
+
+    act(() => {
+      UIState.update((s) => {
+        s.online = true;
+      });
+    });
+
+    const fidInput = wrapper.getByTestId('input-form-id');
+    const downloadButton = wrapper.getByTestId('button-download-form');
+
+    fireEvent.changeText(fidInput, '1');
+    fireEvent.press(downloadButton);
+
+    await waitFor(() => {
+      expect(api.get).toHaveBeenCalledWith('/forms/1');
+    });
   });
 });

@@ -155,11 +155,31 @@ describe('AddNewForm Page', () => {
       const errorText = wrapper.getByTestId('fetch-error-text');
       expect(errorText).toBeTruthy();
     });
+  });
 
-    // ERROR 500
+  it('should be error 500', async () => {
+    const { result: navigationRef } = renderHook(() => useNavigation());
+    const navigation = navigationRef.current;
     api.get.mockImplementation(() =>
-      Promise.reject({ response: { ...mockErrorData, status: 500 } }),
+      Promise.reject({ response: { message: 'Failed', status: 500 } }),
     );
-    render(<AddNewForm navigation={navigation} />);
+
+    const wrapper = render(<AddNewForm navigation={navigation} />);
+
+    act(() => {
+      UIState.update((s) => {
+        s.online = true;
+      });
+    });
+
+    const fidInput = wrapper.getByTestId('input-form-id');
+    const downloadButton = wrapper.getByTestId('button-download-form');
+
+    fireEvent.changeText(fidInput, '1');
+    fireEvent.press(downloadButton);
+
+    await waitFor(() => {
+      expect(api.get).toHaveBeenCalledWith('/forms/1');
+    });
   });
 });
