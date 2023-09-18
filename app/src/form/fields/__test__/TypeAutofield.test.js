@@ -24,7 +24,7 @@ describe('TypeAutofield component', () => {
 
     const autoField = getByTestId('type-autofield');
     expect(autoField).toBeDefined();
-    expect(autoField.props.value).toBe(6);
+    expect(autoField.props.value).toBe('6');
     expect(onChangeMock).toHaveBeenCalledTimes(2);
   });
 
@@ -44,7 +44,7 @@ describe('TypeAutofield component', () => {
     );
     const autoField = getByTestId('type-autofield');
     expect(autoField).toBeDefined();
-    expect(autoField.props.value).toBe(2);
+    expect(autoField.props.value).toBe('2');
   });
 
   test('it gives corect geo location and option value', () => {
@@ -99,7 +99,7 @@ describe('TypeAutofield component', () => {
     );
     const autoField = getByTestId('type-autofield');
     expect(autoField).toBeDefined();
-    expect(autoField.props.value).toBe(undefined);
+    expect(autoField.props.value).toBe(null);
   });
 
   test('it gives error when function error', () => {
@@ -115,6 +115,6 @@ describe('TypeAutofield component', () => {
     );
     const autoField = getByTestId('type-autofield');
     expect(autoField).toBeDefined();
-    expect(autoField.props.value).toBe(undefined);
+    expect(autoField.props.value).toBe(null);
   });
 });
