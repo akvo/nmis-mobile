@@ -149,7 +149,7 @@ const TypeAutofield = ({ onChange, values, keyform, id, name, tooltip, fn }) => 
       <FieldLabel keyform={keyform} name={name} tooltip={tooltip} />
       <Input
         inputContainerStyle={styles.autoFieldContainer}
-        value={value ? value.toString() : null}
+        value={value ? (value === NaN ? null : value.toString()) : null}
         testID="type-autofield"
         disabled
       />
