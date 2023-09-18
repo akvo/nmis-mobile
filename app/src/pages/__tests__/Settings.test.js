@@ -13,7 +13,14 @@ jest.spyOn(View.prototype, 'measureInWindow').mockImplementation((cb) => {
 
 describe('SettingsPage', () => {
   test('renders correctly', () => {
+    act(() => {
+      BuildParamsState.update((s) => {
+        s.authenticationType = ['code_assignment', 'username', 'password'];
+      });
+    });
+
     const tree = renderer.create(<SettingsPage />).toJSON();
+
     expect(tree).toMatchSnapshot();
   });
 
