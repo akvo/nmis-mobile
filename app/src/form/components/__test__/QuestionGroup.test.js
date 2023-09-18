@@ -1,6 +1,6 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import { render, waitFor } from '@testing-library/react-native';
+import { render, waitFor, fireEvent } from '@testing-library/react-native';
 import QuestionGroup from '../QuestionGroup';
 import { useField } from 'formik';
 
@@ -54,7 +54,7 @@ describe('QuestionGroup', () => {
     const tree = renderer
       .create(
         <QuestionGroup
-          index={1}
+          index={0}
           group={questionGroup}
           setFieldValue={() => jest.fn()}
           values={null}
@@ -67,7 +67,7 @@ describe('QuestionGroup', () => {
   it('should render question group name', async () => {
     const wrapper = render(
       <QuestionGroup
-        index={1}
+        index={0}
         group={questionGroup}
         setFieldValue={() => jest.fn()}
         values={null}
@@ -86,7 +86,7 @@ describe('QuestionGroup', () => {
     };
     const wrapper = render(
       <QuestionGroup
-        index={1}
+        index={0}
         group={questionGroupTmp}
         setFieldValue={() => jest.fn()}
         values={null}
@@ -102,7 +102,7 @@ describe('QuestionGroup', () => {
   it('should render question group description if any', async () => {
     const wrapper = render(
       <QuestionGroup
-        index={1}
+        index={0}
         group={questionGroup}
         setFieldValue={() => jest.fn()}
         values={null}
@@ -136,6 +136,8 @@ describe('QuestionGroup', () => {
     const questionGroupTmp = {
       ...questionGroup,
       repeatable: true,
+      repeat: 2,
+      repeats: [0, 1],
     };
     const wrapper = render(
       <QuestionGroup
@@ -146,14 +148,67 @@ describe('QuestionGroup', () => {
       />,
     );
 
-    const repeatTitle = wrapper.queryByTestId('repeat-title');
+    const repeatTitle = wrapper.queryByTestId('repeat-title-0');
     expect(repeatTitle).toBeTruthy();
-    const repeatDelete = wrapper.queryByTestId('repeat-delete-button');
-    expect(repeatDelete).toBeFalsy();
     const repeatAddMore = wrapper.queryByTestId('repeat-add-more-button');
     expect(repeatAddMore).toBeTruthy();
+
+    await waitFor(() => {
+      const repeatDelete = wrapper.queryByTestId('repeat-delete-button-0');
+      expect(repeatDelete).toBeTruthy();
+    });
   });
 
-  it.todo('should render more question group if add more button pressed');
-  it.todo('should remove a repeatable question group if delete button pressed');
+  it('should call updateRepeat function if add more button pressed', async () => {
+    const questionGroupTmp = {
+      ...questionGroup,
+      repeatable: true,
+    };
+    const mockUpdateRepeat = jest.fn();
+
+    const wrapper = render(
+      <QuestionGroup
+        index={0}
+        group={questionGroupTmp}
+        setFieldValue={() => jest.fn()}
+        values={null}
+        updateRepeat={mockUpdateRepeat}
+      />,
+    );
+
+    const repeatAddMore = wrapper.queryByTestId('repeat-add-more-button');
+    expect(repeatAddMore).toBeTruthy();
+    fireEvent.press(repeatAddMore);
+
+    await waitFor(() => {
+      expect(mockUpdateRepeat).toHaveBeenCalledWith(0, 1, 'add');
+    });
+  });
+
+  it('should call updateRepeat function if delete button pressed', async () => {
+    const questionGroupTmp = {
+      ...questionGroup,
+      repeatable: true,
+      repeat: 2,
+      repeats: [0, 1],
+    };
+    const mockUpdateRepeat = jest.fn();
+
+    const wrapper = render(
+      <QuestionGroup
+        index={0}
+        group={questionGroupTmp}
+        setFieldValue={() => jest.fn()}
+        values={null}
+        updateRepeat={mockUpdateRepeat}
+      />,
+    );
+
+    await waitFor(() => {
+      const repeatDelete = wrapper.queryByTestId('repeat-delete-button-0');
+      expect(repeatDelete).toBeTruthy();
+      fireEvent.press(repeatDelete);
+      expect(mockUpdateRepeat).toHaveBeenCalledWith(0, 1, 'delete-selected', 0);
+    });
+  });
 });

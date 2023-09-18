@@ -42,6 +42,7 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave, setShowDia
   );
   const cascades = FormState.useState((s) => s.cascades);
   const activeLang = FormState.useState((s) => s.lang);
+  const [updatedQuestionGroup, setUpdatedQuestionGroup] = useState([]);
 
   useEffect(() => {
     if (onSave) {
@@ -56,12 +57,18 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave, setShowDia
   }, [currentValues, onSave]);
 
   const formDefinition = useMemo(() => {
-    const transformedForm = transformForm(forms, activeLang);
+    let transformedForm = transformForm(forms, activeLang);
     FormState.update((s) => {
       s.visitedQuestionGroup = [transformedForm.question_group[0].id];
     });
+    if (updatedQuestionGroup.length) {
+      transformedForm = {
+        ...transformedForm,
+        question_group: updatedQuestionGroup,
+      };
+    }
     return transformedForm;
-  }, [forms, activeLang]);
+  }, [forms, activeLang, updatedQuestionGroup]);
 
   const currentGroup = useMemo(() => {
     return formDefinition.question_group.find((qg) => qg.id === activeGroup);
@@ -73,6 +80,28 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave, setShowDia
       const { dpName, dpGeo } = generateDataPointName(forms, currentValues, cascades);
       onSubmit({ name: dpName, geo: dpGeo, answers: results });
     }
+  };
+
+  const updateRepeat = (index, value, operation, repeatIndex = null) => {
+    const updated = formDefinition.question_group.map((x, xi) => {
+      const isRepeatsAvailable = x?.repeats && x?.repeats?.length;
+      const repeatNumber = isRepeatsAvailable ? x.repeats[x.repeats.length - 1] + 1 : value - 1;
+      let repeats = isRepeatsAvailable ? x.repeats : [0];
+      if (xi === index) {
+        if (operation === 'add') {
+          repeats = [...repeats, repeatNumber];
+        }
+        if (operation === 'delete') {
+          repeats.pop();
+        }
+        if (operation === 'delete-selected' && repeatIndex !== null) {
+          repeats = repeats.filter((r) => r !== repeatIndex);
+        }
+        return { ...x, repeat: value, repeats: repeats };
+      }
+      return x;
+    });
+    setUpdatedQuestionGroup(updated);
   };
 
   return (
@@ -100,6 +129,7 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave, setShowDia
                         group={group}
                         setFieldValue={setFieldValue}
                         values={values}
+                        updateRepeat={updateRepeat}
                       />
                     );
                   })}

@@ -25,7 +25,7 @@ exports[`QuestionGroup renders correctly 1`] = `
         }
         testID="text-name"
       >
-        2. Group 1
+        1. Group 1
       </Text>
     </View>
     <View

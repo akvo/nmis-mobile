@@ -26,6 +26,7 @@ export const styles = StyleSheet.create({
   },
   repeatAddMoreButtonContainer: {
     paddingHorizontal: 20,
+    marginBottom: 20,
   },
   repeatAddMoreIcon: {
     marginRight: 15,
