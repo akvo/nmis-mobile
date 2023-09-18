@@ -6,6 +6,7 @@ import { modifyDependency, validateDependency, generateValidationSchemaFieldLeve
 
 const Question = ({ group, setFieldValue, values }) => {
   const fields = group?.question || [];
+
   return fields.map((field, keyform) => {
     if (field?.dependency) {
       const repeat = 0;
