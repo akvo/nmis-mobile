@@ -131,12 +131,14 @@ describe('FormContainer with repeatable question group', () => {
     const wrapper = render(<FormContainer forms={exampleTestForm} onSave={handleOnSave} />);
 
     await waitFor(() => {
+      // add repeat group by press add more button
       const repeatAddMoreButton = wrapper.queryByTestId('repeat-add-more-button');
       expect(repeatAddMoreButton).toBeTruthy();
       fireEvent.press(repeatAddMoreButton);
     });
 
     await waitFor(() => {
+      // remove repeat group
       const repeatDeleteButton0 = wrapper.queryByTestId('repeat-delete-button-0');
       expect(repeatDeleteButton0).toBeTruthy();
       fireEvent.press(repeatDeleteButton0);
@@ -151,6 +153,142 @@ describe('FormContainer with repeatable question group', () => {
       expect(repeatTitle1).toBeFalsy();
       const repeatDeleteButton1 = wrapper.queryByTestId('repeat-delete-button-1');
       expect(repeatDeleteButton1).toBeFalsy();
+    });
+  });
+
+  it('should handle repeat group submission', async () => {
+    const handleOnSave = jest.fn();
+    const handleOnSubmit = jest.fn();
+    const modifiedInitialValues = {
+      1: 'John',
+      2: '31',
+      3: ['Male'],
+      '1-1': 'Jane',
+      '2-1': '28',
+      '3-1': ['Female'],
+    };
+    act(() => {
+      FormState.update((s) => {
+        s.currentValues = modifiedInitialValues;
+      });
+    });
+
+    const wrapper = render(
+      <FormContainer
+        forms={exampleTestForm}
+        onSave={handleOnSave}
+        initialValues={modifiedInitialValues}
+        onSubmit={handleOnSubmit}
+      />,
+    );
+
+    await waitFor(() => {
+      const repeatTitle0 = wrapper.queryByTestId('repeat-title-0');
+      expect(repeatTitle0).toBeTruthy();
+      const repeatDeleteButton0 = wrapper.queryByTestId('repeat-delete-button-0');
+      expect(repeatDeleteButton0).toBeTruthy();
+      const repeatTitle1 = wrapper.queryByTestId('repeat-title-1');
+      expect(repeatTitle1).toBeTruthy();
+      const repeatDeleteButton1 = wrapper.queryByTestId('repeat-delete-button-1');
+      expect(repeatDeleteButton1).toBeTruthy();
+      expect(handleOnSave).toHaveBeenCalledTimes(1);
+      expect(handleOnSave).toHaveBeenCalledWith({
+        name: '',
+        geo: null,
+        answers: modifiedInitialValues
+      });
+      // submit
+      const formSubmitBtn = wrapper.queryByTestId('form-btn-submit');
+      expect(formSubmitBtn).toBeTruthy();
+      fireEvent.press(formSubmitBtn);
+    });
+
+    await waitFor(() => {
+      expect(handleOnSubmit).toHaveBeenCalledTimes(1);
+      expect(handleOnSubmit).toHaveBeenCalledWith({
+        name: '',
+        geo: null,
+        answers: modifiedInitialValues
+      });
+    });
+  });
+
+  it('should handle remove repeat group with value then handle submission', async () => {
+    const handleOnSave = jest.fn();
+    const handleOnSubmit = jest.fn();
+    const modifiedInitialValues = {
+      1: 'John',
+      2: '31',
+      3: ['Male'],
+      '1-1': 'Jane',
+      '2-1': '28',
+      '3-1': ['Female'],
+    };
+    act(() => {
+      FormState.update((s) => {
+        s.currentValues = modifiedInitialValues;
+      });
+    });
+
+    const wrapper = render(
+      <FormContainer
+        forms={exampleTestForm}
+        onSave={handleOnSave}
+        initialValues={modifiedInitialValues}
+        onSubmit={handleOnSubmit}
+      />,
+    );
+
+    await waitFor(() => {
+      const repeatTitle0 = wrapper.queryByTestId('repeat-title-0');
+      expect(repeatTitle0).toBeTruthy();
+      const repeatDeleteButton0 = wrapper.queryByTestId('repeat-delete-button-0');
+      expect(repeatDeleteButton0).toBeTruthy();
+      const repeatTitle1 = wrapper.queryByTestId('repeat-title-1');
+      expect(repeatTitle1).toBeTruthy();
+      const repeatDeleteButton1 = wrapper.queryByTestId('repeat-delete-button-1');
+      expect(repeatDeleteButton1).toBeTruthy();
+      expect(handleOnSave).toHaveBeenCalledTimes(1);
+      expect(handleOnSave).toHaveBeenCalledWith({
+        name: '',
+        geo: null,
+        answers: modifiedInitialValues
+      });
+    });
+
+    await waitFor(() => {
+      // remove repeat group
+      const repeatDeleteButton0 = wrapper.queryByTestId('repeat-delete-button-0');
+      expect(repeatDeleteButton0).toBeTruthy();
+      fireEvent.press(repeatDeleteButton0);
+    });
+
+    await waitFor(() => {
+      const repeatTitle0 = wrapper.queryByTestId('repeat-title-0');
+      expect(repeatTitle0).toBeTruthy();
+      const repeatDeleteButton0 = wrapper.queryByTestId('repeat-delete-button-0');
+      expect(repeatDeleteButton0).toBeFalsy();
+      const repeatTitle1 = wrapper.queryByTestId('repeat-title-1');
+      expect(repeatTitle1).toBeFalsy();
+      const repeatDeleteButton1 = wrapper.queryByTestId('repeat-delete-button-1');
+      expect(repeatDeleteButton1).toBeFalsy();
+      // submit
+      const formSubmitBtn = wrapper.queryByTestId('form-btn-submit');
+      expect(formSubmitBtn).toBeTruthy();
+      fireEvent.press(formSubmitBtn);
+    });
+
+    await waitFor(() => {
+      expect(handleOnSubmit).toHaveBeenCalledTimes(1);
+      expect(handleOnSubmit).toHaveBeenCalledWith({
+        name: '',
+        geo: null,
+        answers: {
+          1: 'Jane',
+          2: '28',
+          3: ['Female'],
+        },
+      });
     });
   });
 });

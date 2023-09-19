@@ -148,6 +148,7 @@ const FormContainer = ({ forms, initialValues = {}, onSubmit, onSave, setShowDia
                 [newKey]: updatedCurrentValues[key],
               };
               formRef.current.setFieldValue(newKey, updatedCurrentValues[key]);
+              formRef.current.setFieldValue(key, null);
               delete updatedCurrentValues[key];
             }
           }
