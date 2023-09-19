@@ -52,7 +52,6 @@ const QuestionGroup = ({ index, group, setFieldValue, values, updateRepeat }) =>
 
   const repeatable = group?.repeatable || false;
   const repeats = group?.repeats || [0];
-  // const repeatText = group?.repeatText || `Number of ${name}`;
 
   return (
     <View>
@@ -62,7 +61,7 @@ const QuestionGroup = ({ index, group, setFieldValue, values, updateRepeat }) =>
           {repeatable && (
             <RepeatTitle index={index} repeat={r} group={group} updateRepeat={updateRepeat} />
           )}
-          <Question group={group} setFieldValue={setFieldValue} values={values} />
+          <Question group={group} repeat={r} setFieldValue={setFieldValue} values={values} />
         </View>
       ))}
       {repeatable && (
