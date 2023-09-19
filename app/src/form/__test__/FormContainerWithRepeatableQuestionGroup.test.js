@@ -195,7 +195,7 @@ describe('FormContainer with repeatable question group', () => {
       expect(handleOnSave).toHaveBeenCalledWith({
         name: '',
         geo: null,
-        answers: modifiedInitialValues
+        answers: modifiedInitialValues,
       });
       // submit
       const formSubmitBtn = wrapper.queryByTestId('form-btn-submit');
@@ -208,7 +208,7 @@ describe('FormContainer with repeatable question group', () => {
       expect(handleOnSubmit).toHaveBeenCalledWith({
         name: '',
         geo: null,
-        answers: modifiedInitialValues
+        answers: modifiedInitialValues,
       });
     });
   });
@@ -252,7 +252,7 @@ describe('FormContainer with repeatable question group', () => {
       expect(handleOnSave).toHaveBeenCalledWith({
         name: '',
         geo: null,
-        answers: modifiedInitialValues
+        answers: modifiedInitialValues,
       });
     });
 
