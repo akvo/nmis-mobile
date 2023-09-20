@@ -86,9 +86,13 @@ const syncFormSubmission = async (photos = []) => {
     console.info('[syncFormSubmision] SyncData started => ', new Date());
     // get token
     const session = await crudSessions.selectLastSession();
-    // set token
-    api.setToken(session.token);
+    console.info('[syncFormSubmision] Session => ', session);
+    if (session) {
+      // set token
+      api.setToken(session.token);
+    }
     // get all datapoints to sync
+    // TODO Select submission to sync should be align with active user on app
     const data = await crudDataPoints.selectSubmissionToSync();
     console.info('[syncFormSubmision] data point to sync:', data.length);
     const syncProcess = data.map(async (d) => {

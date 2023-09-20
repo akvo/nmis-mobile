@@ -90,6 +90,7 @@ const uiText = {
     settingAddFormTitle: 'Add Form',
     settingAddFormDesc: 'Add/download more forms to apps',
     settingAddNewFormPageTitle: 'Add New Form',
+    addAnother: 'Add Another',
   },
   fr: {
     latitude: 'Latitude',
@@ -183,6 +184,7 @@ const uiText = {
     settingAddFormTitle: 'Ajouter un formulaire',
     settingAddFormDesc: "Ajouter/télécharger plus de formulaires dans l'application",
     settingAddNewFormPageTitle: 'Ajouter un nouveau formulaire',
+    addAnother: 'Ajouter un autre',
   },
 };
 

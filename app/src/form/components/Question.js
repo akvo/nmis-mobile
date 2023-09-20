@@ -4,11 +4,20 @@ import QuestionField from './QuestionField';
 import { styles } from '../styles';
 import { modifyDependency, validateDependency, generateValidationSchemaFieldLevel } from '../lib';
 
-const Question = ({ group, setFieldValue, values }) => {
-  const fields = group?.question || [];
+const Question = ({ group, repeat, setFieldValue, values }) => {
+  let fields = group?.question || [];
+  fields = fields.map((field) => {
+    if (repeat) {
+      return {
+        ...field,
+        id: `${field.id}-${repeat}`,
+      };
+    }
+    return field;
+  });
+
   return fields.map((field, keyform) => {
     if (field?.dependency) {
-      const repeat = 0;
       const modifiedDependency = modifyDependency(group, field, repeat);
       const unmatches = modifiedDependency
         .map((x) => {

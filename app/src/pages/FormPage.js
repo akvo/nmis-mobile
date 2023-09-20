@@ -148,21 +148,29 @@ const FormPage = ({ navigation, route }) => {
   const handleOnSubmitForm = async (values) => {
     try {
       const answers = {};
-      formJSON.question_group
-        .flatMap((qg) => qg.question)
-        .forEach((q) => {
-          let val = values.answers?.[q.id];
-          if (!val && val !== 0) {
-            return;
-          }
-          if (q.type === 'cascade') {
-            val = val.slice(-1)[0];
-          }
-          if (q.type === 'number') {
-            val = parseFloat(val);
-          }
-          answers[q.id] = val;
-        });
+      // TODO :: REMEMBER THIS HANDLE SUBMIT TRANSFORMED VALUE
+      const questions = formJSON.question_group.flatMap((qg) => qg.question);
+      Object.keys(values.answers).forEach((key) => {
+        let qid = key;
+        let repeat = 0;
+        if (key.includes('-')) {
+          const tmp = key.split('-');
+          qid = tmp[0];
+          repeat = tmp[1];
+        }
+        const findQuestion = questions.find((q) => parseInt(q.id) === parseInt(qid));
+        let val = values.answers?.[key];
+        if (!val && val !== 0) {
+          return;
+        }
+        if (findQuestion.type === 'cascade') {
+          val = val.slice(-1)[0];
+        }
+        if (findQuestion.type === 'number') {
+          val = parseFloat(val);
+        }
+        answers[key] = val;
+      });
       // TODO:: submittedAt still null
       const submitData = {
         form: currentFormId,

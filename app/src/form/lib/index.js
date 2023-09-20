@@ -12,6 +12,15 @@ const intersection = (array1, array2) => {
   return result;
 };
 
+export const range = (end) => {
+  const start = 0;
+  const result = [];
+  for (let i = start; i < end; i++) {
+    result.push(i);
+  }
+  return result;
+};
+
 const getDependencyAncestors = (questions, current, dependencies) => {
   const ids = dependencies.map((x) => x.id);
   const ancestors = questions.filter((q) => ids.includes(q.id)).filter((q) => q?.dependency);

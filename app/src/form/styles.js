@@ -4,6 +4,34 @@ export const styles = StyleSheet.create({
   formContainer: {
     flex: 1,
   },
+  repeatTitleContainer: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: '#f2f2f2',
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  repeatDeleteButton: {
+    height: 20,
+  },
+  repeatTitleStart: {
+    flex: 1,
+    alignItems: 'flex-start',
+  },
+  repeatTitleEnd: {
+    flex: 1,
+    alignItems: 'flex-end',
+  },
+  repeatAddMoreButtonContainer: {
+    paddingHorizontal: 20,
+    marginBottom: 20,
+  },
+  repeatAddMoreIcon: {
+    marginRight: 15,
+  },
+  repeatAddMoreButton: {},
   questionGroupContainer: {
     marginBottom: 20,
   },

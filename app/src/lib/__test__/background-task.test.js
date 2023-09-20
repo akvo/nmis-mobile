@@ -302,5 +302,79 @@ describe('backgroundTask', () => {
         });
       });
     });
+
+    it('should sync submission with repeat group', async () => {
+      const dataPointsWithRepeatedGroup = [
+        {
+          id: 1,
+          form: 123,
+          user: 1,
+          name: 'Data point 1 name',
+          geo: '-8.676119|115.4927994',
+          submitted: 1,
+          duration: 2.5,
+          createdAt: '2023-07-28T07:53:40.210Z',
+          submittedAt: '2023-07-28T07:53:40.210Z',
+          syncedAt: null,
+          json: JSON.stringify({
+            101: 'Data point 1',
+            102: 1,
+            103: 'file://photo_103_1.jpeg',
+            '101-1': 'Data point 2',
+            '102-1': 2,
+            '103-1': 'file://photo_103_2.jpeg',
+          }),
+        },
+      ];
+
+      crudSessions.selectLastSession.mockImplementation(() => Promise.resolve(mockSession));
+      crudDataPoints.selectSubmissionToSync.mockImplementation(() =>
+        Promise.resolve(dataPointsWithRepeatedGroup),
+      );
+      crudUsers.selectUserById.mockImplementation(() => Promise.resolve(mockUser));
+      crudForms.selectFormById.mockImplementation(() => Promise.resolve(mockForm));
+      crudDataPoints.updateDataPoint.mockImplementation(() => Promise.resolve({ rowsAffected: 1 }));
+
+      api.setToken.mockReturnValue({ token: mockSession.token });
+      api.post.mockImplementation(() =>
+        Promise.resolve({ status: 200, data: { id: 123, message: 'Success' } }),
+      );
+
+      const photos = [
+        {
+          id: 103,
+          value: 'file://photo_103_1.jpeg',
+          dataID: 1,
+          file: '/images/photo_103_1_xyz.jpeg',
+        },
+        {
+          id: '103-1',
+          value: 'file://photo_103_2.jpeg',
+          dataID: 1,
+          file: '/images/photo_103_2_xyz.jpeg',
+        },
+      ];
+
+      await backgroundTask.syncFormSubmission(photos);
+
+      await waitFor(() => {
+        expect(api.post).toHaveBeenCalledWith('/sync', {
+          answers: {
+            101: 'Data point 1',
+            102: 1,
+            103: '/images/photo_103_1_xyz.jpeg',
+            '101-1': 'Data point 2',
+            '102-1': 2,
+            '103-1': '/images/photo_103_2_xyz.jpeg',
+          },
+          duration: 3,
+          formId: 456,
+          geo: [-8.676119, 115.4927994],
+          name: 'Data point 1 name',
+          submittedAt: '2023-07-28T07:53:40.210Z',
+          submitter: 'John Doe',
+        });
+      });
+    });
   });
 });
